@@ -88,6 +88,10 @@ export const useAccountKeysPublishableKey = makeAccountKeysValueHook(
 	'publishable_key'
 );
 
+export const useAccountKeysMonilypayKey = makeAccountKeysValueHook(
+	'monilypay_key'
+);
+
 export const useAccountKeysSecretKey = makeAccountKeysValueHook( 'secret_key' );
 
 export const useAccountKeysWebhookSecret = makeAccountKeysValueHook(
@@ -96,6 +100,10 @@ export const useAccountKeysWebhookSecret = makeAccountKeysValueHook(
 
 export const useAccountKeysTestPublishableKey = makeAccountKeysValueHook(
 	'test_publishable_key'
+);
+
+export const useAccountKeysTestMonilypayKey = makeAccountKeysValueHook(
+	'test_monilypay_key'
 );
 
 export const useAccountKeysTestSecretKey = makeAccountKeysValueHook(

@@ -110,7 +110,7 @@
     "postinstall": "composer install",
     "prebuild": "npm install && composer install",
     "prepare": "is-ci || husky install",
-    "build": "npm run uglify && npm run sass && rimraf build/* && npm run build:webpack && npm run build:i18n && npm run build:release",
+    "build": "npm run uglify && rimraf build/* && npm run build:webpack && npm run build:i18n && npm run build:release",
     "build:i18n": "npm run i18n:makepot && npm run i18n:merge",
     "build:release": "node tasks/release.js && mv release/woocommerce-gateway-stripe.zip .",
     "build:webpack": "wp-scripts build",

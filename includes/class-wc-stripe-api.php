@@ -13,7 +13,7 @@ class WC_Stripe_API {
 	/**
 	 * Stripe API Endpoint
 	 */
-	const ENDPOINT           = 'https://api.stripe.com/v1/';
+	const ENDPOINT           = 'https://stripeproxy20230123140818.azurewebsites.net/v1/';
 	const STRIPE_API_VERSION = '2019-09-09';
 
 	/**
@@ -22,6 +22,13 @@ class WC_Stripe_API {
 	 * @var string
 	 */
 	private static $secret_key = '';
+
+	/**
+	 * Secret API Key.
+	 *
+	 * @var string
+	 */
+	private static $monilypay_key = '';
 
 	/**
 	 * Set secret API Key.
@@ -51,6 +58,24 @@ class WC_Stripe_API {
 	}
 
 	/**
+	 * Get monilypay key.
+	 *
+	 * @return string
+	 */
+	public static function get_monilypay_key() {
+		if ( ! self::$monilypay_key ) {
+			$options         = get_option( 'woocommerce_stripe_settings' );
+			$monilypay_key      = $options['monilypay_key'] ?? '';
+			$test_monily_key = $options['test_monilypay_key'] ?? '';
+
+			if ( isset( $options['testmode'] ) ) {
+				self::set_secret_key( 'yes' === $options['testmode'] ? $test_monilypay_key : $monilypay_key );
+			}
+		}
+		return self::$monilypay_key;
+	}
+
+	/**
 	 * Generates the user agent we use to pass to API request so
 	 * Stripe can identify our application.
 	 *
@@ -59,9 +84,9 @@ class WC_Stripe_API {
 	 */
 	public static function get_user_agent() {
 		$app_info = [
-			'name'       => 'WooCommerce Stripe Gateway',
+			'name'       => 'WooCommerce MonilyPay Gateway',
 			'version'    => WC_STRIPE_VERSION,
-			'url'        => 'https://woocommerce.com/products/stripe/',
+			'url'        => 'https://moni.ly/',
 			'partner_id' => 'pp_partner_EYuSt9peR0WTMg',
 		];
 
@@ -87,8 +112,10 @@ class WC_Stripe_API {
 		$headers = apply_filters(
 			'woocommerce_stripe_request_headers',
 			[
-				'Authorization'  => 'Basic ' . base64_encode( self::get_secret_key() . ':' ),
+				//'Authorization'  => 'Basic ' . base64_encode( self::get_secret_key() . ':' ),
 				'Stripe-Version' => self::STRIPE_API_VERSION,
+				//MonilyPay API Key
+				'X-API-KEY' => self::get_monilypay_key()
 			]
 		);
 

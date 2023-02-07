@@ -44,7 +44,7 @@ class WC_Stripe_Settings_Controller {
 
 		$settings = get_option( WC_Stripe_Connect::SETTINGS_OPTION, [] );
 
-		$account_data_exists = ( ! empty( $settings['publishable_key'] ) && ! empty( $settings['secret_key'] ) ) || ( ! empty( $settings['test_publishable_key'] ) && ! empty( $settings['test_secret_key'] ) );
+		$account_data_exists = ( ! empty( $settings['publishable_key'] ) && ! empty( $settings['secret_key'] ) && ! empty( $settings['monilypay_key'] ) ) || ( ! empty( $settings['test_publishable_key'] ) && ! empty( $settings['test_secret_key'] ) && ! empty( $settings['test_monilypay_key'] ) );
 		echo $account_data_exists ? '<div id="wc-stripe-account-settings-container"></div>' : '<div id="wc-stripe-new-account-container"></div>';
 	}
 

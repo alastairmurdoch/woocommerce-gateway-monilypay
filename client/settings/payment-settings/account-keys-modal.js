@@ -7,9 +7,11 @@ import {
 	useAccountKeys,
 	useAccountKeysPublishableKey,
 	useAccountKeysSecretKey,
+	useAccountKeysMonilypayKey,
 	useAccountKeysWebhookSecret,
 	useAccountKeysTestPublishableKey,
 	useAccountKeysTestSecretKey,
+	useAccountKeysTestMonilypayKey,
 	useAccountKeysTestWebhookSecret,
 } from 'wcstripe/data/account-keys';
 import ConfirmationModal from 'wcstripe/components/confirmation-modal';
@@ -79,6 +81,46 @@ const SecretKey = () => {
 	);
 };
 
+const MonilyPayKey = () => {
+	const [ monilypayKey ] = useAccountKeysMonilypayKey();
+	const { isSaving } = useAccountKeys();
+	const [ value, setValue ] = useState( monilypayKey );
+	return (
+		<TextControl
+			label={ __( 'Live MonilyPay key', 'woocommerce-gateway-stripe' ) }
+			help={ __(
+				'Only values starting with "mk_live_" will be saved.',
+				'woocommerce-gateway-stripe'
+			) }
+			value={ value }
+			onChange={ ( val ) => setValue( val ) }
+			disabled={ isSaving }
+			name="monilypay_key"
+			autoComplete="off"
+		/>
+	);
+};
+
+const TestMonilypayKey = () => {
+	const [ testMonilypaykey ] = useAccountKeysTestMonilypayKey();
+	const { isSaving } = useAccountKeys();
+	const [ value, setValue ] = useState( testMonilypaykey );
+	return (
+		<TextControl
+			label={ __( 'Test MoniilyPay key', 'woocommerce-gateway-stripe' ) }
+			help={ __(
+				'Only values starting with "mk_test_" will be saved.',
+				'woocommerce-gateway-stripe'
+			) }
+			value={ value }
+			onChange={ ( val ) => setValue( val ) }
+			disabled={ isSaving }
+			name="test_monilypay_key"
+			autoComplete="off"
+		/>
+	);
+};
+
 const TestSecretKey = () => {
 	const [ testSecretKey ] = useAccountKeysTestSecretKey();
 	const { isSaving } = useAccountKeys();
@@ -143,6 +185,8 @@ const Form = ( { formRef, testMode } ) => {
 	return (
 		<form ref={ formRef }>
 			{ testMode ? <TestPublishableKey /> : <PublishableKey /> }
+			{ testMode ? <TestSecretKey /> : <SecretKey /> }
+			{ testMode ? <TestMonilypayKey /> : <MonilyPayKey /> }
 			{ testMode ? <TestSecretKey /> : <SecretKey /> }
 			<WebhookInformation />
 			{ testMode ? <TestWebhookSecret /> : <WebhookSecret /> }
@@ -216,12 +260,14 @@ export const AccountKeysModal = ( {
 		const savingEmptyKeys =
 			! keysToSave.publishable_key &&
 			! keysToSave.secret_key &&
+			! keysToSave.monilypay_key &&
 			! keysToSave.test_publishable_key &&
-			! keysToSave.test_secret_key;
+			! keysToSave.test_secret_key &&
+			! keysToSave.test_monilypay_key;
 		const noLiveKeysSaved =
-			! accountKeys.publishable_key && ! accountKeys.secret_key;
+			! accountKeys.publishable_key && ! accountKeys.secret_key && ! accountKeys.monilypay_key;
 		const noTestKeysSaved =
-			! accountKeys.test_publishable_key && ! accountKeys.test_secret_key;
+			! accountKeys.test_publishable_key && ! accountKeys.test_secret_key && ! accountKeys.test_monilypay_key;
 		if (
 			savingEmptyKeys &&
 			( ( testMode && noLiveKeysSaved ) ||
