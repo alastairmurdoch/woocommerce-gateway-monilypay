@@ -74,6 +74,11 @@ class WC_REST_Stripe_Account_Keys_Controller extends WC_Stripe_REST_Base_Control
 						'type'              => 'string',
 						'validate_callback' => [ $this, 'validate_monilypay_key' ],
 					],
+					'monilypay_account_id'           => [
+						'description'       => __( 'Your MonilyPay AccountID, obtained from your MonilyPay dashboard.', 'woocommerce-gateway-stripe' ),
+						'type'              => 'string',
+						'validate_callback' => [ $this, 'validate_monilypay_account_id' ],
+					],
 					'webhook_secret'       => [
 						'description'       => __( 'Your Stripe webhook endpoint URL, obtained from your Stripe dashboard.', 'woocommerce-gateway-stripe' ),
 						'type'              => 'string',
@@ -94,6 +99,11 @@ class WC_REST_Stripe_Account_Keys_Controller extends WC_Stripe_REST_Base_Control
 						'type'              => 'string',
 						'validate_callback' => [ $this, 'validate_test_monilypay_key' ],
 					],
+					'test_monilypay_account_id'      => [
+						'description'       => __( 'Your MonilyPay testing Account ID, obtained from your MonilyPay dashboard.', 'woocommerce-gateway-stripe' ),
+						'type'              => 'string',
+						'validate_callback' => [ $this, 'validate_test_monilypay_account_id' ],
+					],
 					'test_webhook_secret'  => [
 						'description'       => __( 'Your Stripe testing webhook endpoint URL, obtained from your Stripe dashboard.', 'woocommerce-gateway-stripe' ),
 						'type'              => 'string',
@@ -110,7 +120,7 @@ class WC_REST_Stripe_Account_Keys_Controller extends WC_Stripe_REST_Base_Control
 	 * @return WP_REST_Response
 	 */
 	public function get_account_keys() {
-		$allowed_params  = [ 'publishable_key', 'secret_key', 'monilypay_key', 'webhook_secret', 'test_publishable_key', 'test_secret_key', 'test_monilypay_key', 'test_webhook_secret' ];
+		$allowed_params  = [ 'publishable_key', 'secret_key', 'monilypay_key', 'webhook_secret', 'test_publishable_key', 'test_secret_key', 'test_monilypay_key', 'test_webhook_secret', 'monilypay_account_id', 'test_monilypay_account_id' ];
 		$stripe_settings = get_option( self::STRIPE_GATEWAY_SETTINGS_OPTION_NAME, [] );
 		// Filter only the fields we want to return
 		$account_keys = array_intersect_key( $stripe_settings, array_flip( $allowed_params ) );
@@ -211,6 +221,30 @@ class WC_REST_Stripe_Account_Keys_Controller extends WC_Stripe_REST_Base_Control
 		);
 	}
 
+	public function validate_monilypay_account_id( $param, $request, $key ) {
+		return $this->validate_stripe_param(
+			$param,
+			$request,
+			$key,
+			[
+				'regex'         => '/^acct_/',
+				'error_message' => __( 'The "MonilyPay Account Id" should start with "acct_", enter the correct key.', 'woocommerce-gateway-stripe' ),
+			]
+		);
+	}
+
+	public function validate_test_monilypay_account_id( $param, $request, $key ) {
+		return $this->validate_stripe_param(
+			$param,
+			$request,
+			$key,
+			[
+				'regex'         => '/^acct_/',
+				'error_message' => __( 'The "Test MonilyPay Key" should start with "acct_", enter the correct key.', 'woocommerce-gateway-stripe' ),
+			]
+		);
+	}
+
 	/**
 	 * Update the data.
 	 *
@@ -220,10 +254,12 @@ class WC_REST_Stripe_Account_Keys_Controller extends WC_Stripe_REST_Base_Control
 		$publishable_key      = $request->get_param( 'publishable_key' );
 		$secret_key           = $request->get_param( 'secret_key' );
 		$monilypay_key           = $request->get_param( 'monilypay_key' );
+		$monilypay_account_id  = $request->get_param( 'monilypay_account_id' );
 		$webhook_secret       = $request->get_param( 'webhook_secret' );
 		$test_publishable_key = $request->get_param( 'test_publishable_key' );
 		$test_secret_key      = $request->get_param( 'test_secret_key' );
 		$test_monilypay_key      = $request->get_param( 'test_monilypay_key' );
+		$test_monilypay_account_id  = $request->get_param( 'test_monilypay_account_id' );
 		$test_webhook_secret  = $request->get_param( 'test_webhook_secret' );
 
 		$settings = get_option( self::STRIPE_GATEWAY_SETTINGS_OPTION_NAME, [] );
@@ -232,24 +268,30 @@ class WC_REST_Stripe_Account_Keys_Controller extends WC_Stripe_REST_Base_Control
 		$new_account = ! trim( $settings['publishable_key'] )
 					&& ! trim( $settings['secret_key'] )
 					&& ! trim( $settings['monilypay_key'] )
+					&& ! trim( $settings['monilypay_account_id'] )
 					&& ! trim( $settings['test_publishable_key'] )
 					&& ! trim( $settings['test_secret_key'] )
-					&& ! trim( $settings['test_monilypay_key'] );
+					&& ! trim( $settings['test_monilypay_key'] )
+					&& ! trim( $settings['test_monilypay_account_id'] );
 		// If all new keys are empty, then account is being disconnected. We should disable the payment gateway.
 		$is_deleting_account = ! trim( $publishable_key )
 							&& ! trim( $secret_key )
 							&& ! trim( $monilypay_key )
+							&& ! trim( $monilypay_account_id )
 							&& ! trim( $test_publishable_key )
 							&& ! trim( $test_secret_key )
-							&& ! trim( $test_monilypay_key );
+							&& ! trim( $test_monilypay_key )
+							&& ! trim( $test_monilypay_kaccount_id );
 
 		$settings['publishable_key']      = is_null( $publishable_key ) ? $settings['publishable_key'] : $publishable_key;
 		$settings['secret_key']           = is_null( $secret_key ) ? $settings['secret_key'] : $secret_key;
 		$settings['monilypay_key']           = is_null( $monilypay_key ) ? $settings['monilypay_key'] : $monilypay_key;
+		$settings['monilypay_account_id']           = is_null( $monilypay_account_id ) ? $settings['monilypay_account_id'] : $monilypay_account_id;
 		$settings['webhook_secret']       = is_null( $webhook_secret ) ? $settings['webhook_secret'] : $webhook_secret;
 		$settings['test_publishable_key'] = is_null( $test_publishable_key ) ? $settings['test_publishable_key'] : $test_publishable_key;
 		$settings['test_secret_key']      = is_null( $test_secret_key ) ? $settings['test_secret_key'] : $test_secret_key;
 		$settings['test_monilypay_key']      = is_null( $test_monilypay_key ) ? $settings['test_monilypay_key'] : $test_monilypay_key;
+		$settings['test_monilypay_account_id']      = is_null( $test_monilypay_account_id ) ? $settings['test_monilypay_account_id'] : $test_monilypay_account_id;
 		$settings['test_webhook_secret']  = is_null( $test_webhook_secret ) ? $settings['test_webhook_secret'] : $test_webhook_secret;
 
 		if ( $new_account ) {
@@ -259,6 +301,8 @@ class WC_REST_Stripe_Account_Keys_Controller extends WC_Stripe_REST_Base_Control
 			} elseif ( trim( $settings['test_publishable_key'] ) && trim( $settings['test_secret_key'] ) ) {
 				$settings['testmode'] = 'yes';
 			}elseif ( trim( $settings['test_monilypay_key'] ) && trim( $settings['test_monilypay_key'] ) ) {
+				$settings['testmode'] = 'yes';
+			}elseif ( trim( $settings['test_monilypay_account_id'] ) && trim( $settings['test_monilypay_account_id'] ) ) {
 				$settings['testmode'] = 'yes';
 			}
 		} elseif ( $is_deleting_account ) {

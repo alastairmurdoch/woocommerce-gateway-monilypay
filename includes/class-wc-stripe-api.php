@@ -29,6 +29,12 @@ class WC_Stripe_API {
 	 * @var string
 	 */
 	private static $monilypay_key = '';
+	/**
+	 * Secret API Key.
+	 *
+	 * @var string
+	 */
+	private static $monilypay_account_id = '';
 
 	/**
 	 * Set secret API Key.
@@ -41,6 +47,10 @@ class WC_Stripe_API {
 
 	public static function set_monilypay_key( $monilypay_key ) {
 		self::$monilypay_key = $monilypay_key;
+	}
+
+	public static function set_monilypay_account_id( $monilypay_account_id ) {
+		self::$monilypay_account_id = $monilypay_account_id;
 	}
 
 	/**
@@ -77,6 +87,24 @@ class WC_Stripe_API {
 			}
 		}
 		return self::$monilypay_key;
+	}
+
+	/**
+	 * Get monilypay key.
+	 *
+	 * @return string
+	 */
+	public static function get_monilypay_accout_id() {
+		if ( ! self::$monilypay_key ) {
+			$options         = get_option( 'woocommerce_monilypay_settings' );
+			$monilypay_account_id      = $options['monilypay_account_id'] ?? '';			
+			$test_monilypay_account_id = $options['test_monilypay_account_id'] ?? '';
+
+			if ( isset( $options['testmode'] ) ) {
+				self::set_monilypay_account_id( 'yes' === $options['testmode'] ? $test_monilypay_account_id : $monilypay_account_id );
+			}
+		}
+		return self::$monilypay_account_id;
 	}
 
 

@@ -55,6 +55,13 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 	public $monilypay_key;
 
 	/**
+	 * MonilyPay Account Key
+	 *
+	 * @var string
+	 */
+	public $monilypay_account_id;
+
+	/**
 	 * Do we accept Payment Request?
 	 *
 	 * @var bool
@@ -115,6 +122,8 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 		$this->secret_key           = $this->testmode ? $this->get_validated_option( 'test_secret_key' ) : $this->get_validated_option( 'secret_key' );
 		$this->publishable_key      = $this->testmode ? $this->get_validated_option( 'test_publishable_key' ) : $this->get_validated_option( 'publishable_key' );
 		$this->monilypay_key		= $this->testmode ? $this->get_validated_option( 'test_monilypay_key' ) : $this->get_validated_option( 'monilypay_key' );
+		$this->monilypay_account_id		= $this->testmode ? $this->get_validated_option( 'test_monilypay_account_id' ) : $this->get_validated_option( 'monilypay_account_id' );
+		
 		$this->payment_request      = 'yes' === $this->get_option( 'payment_request', 'yes' );
 
 		WC_Stripe_API::set_secret_key( $this->secret_key );
@@ -971,9 +980,11 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 		$old_publishable_key      = $this->get_option( 'publishable_key' );
 		$old_secret_key           = $this->get_option( 'secret_key' );
 		$old_monilypay_key		  = $this->get_opyion( 'monilypay_key' );
+		$old_monilypay_account_id		  = $this->get_opyion( 'monilypay_account_id' );
 		$old_test_publishable_key = $this->get_option( 'test_publishable_key' );
 		$old_test_secret_key      = $this->get_option( 'test_secret_key' );
 		$old_test_monilypay_key		  = $this->get_opyion( 'test_monilypay_key' );
+		$old_test_monilypay_account_id		  = $this->get_opyion( 'test_monilypay_account_id' );
 
 		parent::process_admin_options();
 
@@ -981,9 +992,10 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 		$new_publishable_key      = $this->get_option( 'publishable_key' );
 		$new_secret_key           = $this->get_option( 'secret_key' );
 		$new_monilypay_key           = $this->get_option( 'monilypay_key' );
+		$new_monilypay_account_id           = $this->get_option( 'monilypay_account_id' );
 		$new_test_publishable_key = $this->get_option( 'test_publishable_key' );
 		$new_test_secret_key      = $this->get_option( 'test_secret_key' );
-		$new_test_monilypay_key           = $this->get_option( 'test_monilypay_key' );
+		$new_test_monilypay_account_id           = $this->get_option( 'test_monilypay_account_id' );
 
 		// Checks whether a value has transitioned from a non-empty value to a new one.
 		$has_changed = function( $old_value, $new_value ) {
@@ -998,6 +1010,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 			|| $has_changed( $old_test_secret_key, $new_test_secret_key )
 			|| $has_changed( $old_test_monilypay_key, $new_test_monilypay_key )
 			|| $has_changed( $old_monilypay_key, $new_monilypay_key )
+			|| $has_changed( $old_monilypay_account_id, $new_monilypay_account_id )
 		) {
 			update_option( 'wc_stripe_show_changed_keys_notice', 'yes' );
 		}
@@ -1027,6 +1040,14 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 		return $value;
 	}
 
+	public function validate_monilypay_account_id_field( $key, $value ) {
+		$value = $this->validate_text_field( $key, $value );
+		if ( ! empty( $value ) && ! preg_match( '/^acct_/', $value ) ) {
+			return '';
+		}
+		return $value;
+	}
+
 	public function validate_test_publishable_key_field( $key, $value ) {
 		$value = $this->validate_text_field( $key, $value );
 		if ( ! empty( $value ) && ! preg_match( '/^pk_test_/', $value ) ) {
@@ -1046,6 +1067,14 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 	public function validate_test_monilypay_key_field( $key, $value ) {
 		$value = $this->validate_text_field( $key, $value );
 		if ( ! empty( $value ) && ! preg_match( '/^mp_test_/', $value ) ) {
+			return '';
+		}
+		return $value;
+	}
+
+	public function validate_test_monilypay_account_id_field( $key, $value ) {
+		$value = $this->validate_text_field( $key, $value );
+		if ( ! empty( $value ) && ! preg_match( '/^acct_/', $value ) ) {
 			return '';
 		}
 		return $value;
@@ -1156,7 +1185,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 	 * @return array Array of setting keys used for setup.
 	 */
 	public function get_required_settings_keys() {
-		return [ 'publishable_key', 'secret_key', 'monilypay_key' ];
+		return [ 'publishable_key', 'secret_key', 'monilypay_key', 'monilypay_account_id' ];
 	}
 
 	/**
@@ -1193,7 +1222,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 	 * @return bool
 	 */
 	public function needs_setup() {
-		return ! $this->get_option( 'publishable_key' ) || ! $this->get_option( 'secret_key' ) || ! $this->get_option( 'monilypay_key' );
+		return ! $this->get_option( 'publishable_key' ) || ! $this->get_option( 'secret_key' ) || ! $this->get_option( 'monilypay_key' ) || ! $this->get_option( 'monilypay_account_id' );
 	}
 
 	/**
@@ -1219,14 +1248,16 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 			return;
 		}
 
-		if ( ! empty( $settings['publishable_key'] ) && ! empty( $settings['secret_key'] )  && ! empty( $settings['monilypay_key'] ) ) {
-			if ( strpos( $settings['publishable_key'], 'pk_test_' ) === 0 || strpos( $settings['secret_key'], 'sk_test_' ) === 0 || strpos( $settings['monilypay_key'], 'mp_test_' ) === 0 ) {
+		if ( ! empty( $settings['publishable_key'] ) && ! empty( $settings['secret_key'] )  && ! empty( $settings['monilypay_key'] ) && ! empty( $settings['monilypay_account_id'] ) ) {
+			if ( strpos( $settings['publishable_key'], 'pk_test_' ) === 0 || strpos( $settings['secret_key'], 'sk_test_' ) === 0 || strpos( $settings['monilypay_key'], 'mp_test_' ) === 0|| strpos( $settings['monilypay_account_id'], 'acct_' ) === 0 ) {
 				$settings['test_publishable_key'] = $settings['publishable_key'];
 				$settings['test_secret_key']      = $settings['secret_key'];
 				$settings['test_monilypay_key']      = $settings['monilypay_key'];
+				$settings['test_monilypay_account_id']      = $settings['monilypay_account_id'];
 				unset( $settings['publishable_key'] );
 				unset( $settings['secret_key'] );
 				unset( $settings['monilypay_key'] );
+				unset( $settings['monilypay_account_id'] );
 				$settings['testmode'] = 'yes';
 			} else {
 				$settings['testmode'] = 'no';

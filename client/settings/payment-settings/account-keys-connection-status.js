@@ -54,6 +54,8 @@ export const AccountKeysConnectionStatus = ( { formRef } ) => {
 
 		let publishableKey;
 		let secretKey;
+		let monilypayKey;
+		let monilypayAccountId;
 
 		const isTestingLiveConnection =
 			keysToSave.publishable_key && keysToSave.secret_key;
@@ -61,7 +63,10 @@ export const AccountKeysConnectionStatus = ( { formRef } ) => {
 			keysToSave.test_publishable_key && keysToSave.test_secret_key;
 		if ( isTestingLiveConnection ) {
 			publishableKey = keysToSave.publishable_key;
-			secretKey = keysToSave.secret_key;
+			secretKey = keysToSave.secret_key;		
+			monilypayKey = keysToSave.test_monilypay_key
+			monilypayAccountId = keysToSave.test_monilypay_account_id
+				
 			if (
 				! publishableKey.startsWith( 'pk_live_' ) ||
 				! (
@@ -83,6 +88,9 @@ export const AccountKeysConnectionStatus = ( { formRef } ) => {
 		} else if ( isTestingTestConnection ) {
 			publishableKey = keysToSave.test_publishable_key;
 			secretKey = keysToSave.test_secret_key;
+			monilypayKey = keysToSave.test_monilypay_key
+			monilypayAccountId = keysToSave.test_monilypay_account_id
+
 			if (
 				! publishableKey.startsWith( 'pk_test_' ) ||
 				! (
@@ -108,7 +116,8 @@ export const AccountKeysConnectionStatus = ( { formRef } ) => {
 		}
 
 		try {
-			const stripe = await loadStripe( publishableKey );
+			//TODO: need to pull account ID from somewhere
+			const stripe = await loadStripe( publishableKey, {stripeAccount: monilypayAccountId} );
 			const createTokenResult = await stripe.createToken( 'pii', {
 				personal_id_number: 'connection_test',
 			} );
@@ -119,7 +128,8 @@ export const AccountKeysConnectionStatus = ( { formRef } ) => {
 				updateIsValidAccountKeys( false );
 				return;
 			}
-
+			
+			//TODO: replace this witgh MK_ key api call
 			const tokenResult = await apiFetch( {
 				path: `${ NAMESPACE }/tokens/${ tokenId }`,
 				method: 'GET',

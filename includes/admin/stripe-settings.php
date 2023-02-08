@@ -69,6 +69,13 @@ $stripe_settings = apply_filters(
 			'default'     => '',
 			'desc_tip'    => true,
 		],
+		'test_monilypay_account_id'                     => [
+			'title'       => __( 'Test Monilypay Account Id', 'woocommerce-gateway-stripe' ),
+			'type'        => 'password',
+			'description' => __( 'Get your Account ID from your Monilypay account. Invalid values will be rejected. Only values starting with "acct_test_" will be saved.', 'woocommerce-gateway-stripe' ),
+			'default'     => '',
+			'desc_tip'    => true,
+		],
 		'publishable_key'                     => [
 			'title'       => __( 'Live Publishable Key', 'woocommerce-gateway-stripe' ),
 			'type'        => 'text',
@@ -87,6 +94,13 @@ $stripe_settings = apply_filters(
 			'title'       => __( 'Live MonilyPay Key', 'woocommerce-gateway-stripe' ),
 			'type'        => 'password',
 			'description' => __( 'Get your API keys from your MonilyPay account. Invalid values will be rejected. Only values starting with "sk_live_" or "rk_live_" will be saved.', 'woocommerce-gateway-stripe' ),
+			'default'     => '',
+			'desc_tip'    => true,
+		],
+		'monilypay_account_id'                     => [
+			'title'       => __( 'Monilypay Account Id', 'woocommerce-gateway-stripe' ),
+			'type'        => 'password',
+			'description' => __( 'Get your Account ID from your Monilypay account. Invalid values will be rejected. Only values starting with "acct_test_" will be saved.', 'woocommerce-gateway-stripe' ),
 			'default'     => '',
 			'desc_tip'    => true,
 		],

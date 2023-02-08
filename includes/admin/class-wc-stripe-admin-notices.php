@@ -125,9 +125,11 @@ class WC_Stripe_Admin_Notices {
 		$test_pub_key        = isset( $options['test_publishable_key'] ) ? $options['test_publishable_key'] : '';
 		$test_secret_key     = isset( $options['test_secret_key'] ) ? $options['test_secret_key'] : '';
 		$test_monilypay_key     = isset( $options['test_monilypay_key'] ) ? $options['test_monilypay_key'] : '';
+		$test_monilypay_account_id     = isset( $options['test_monilypay_account_id'] ) ? $options['test_monilypay_account_id'] : '';
 		$live_pub_key        = isset( $options['publishable_key'] ) ? $options['publishable_key'] : '';
 		$live_secret_key     = isset( $options['secret_key'] ) ? $options['secret_key'] : '';
 		$live_monilypay_key     = isset( $options['monilypay_key'] ) ? $options['monilypay_key'] : '';
+		$live_monilypay_account_id     = isset( $options['monilypay_account_id'] ) ? $options['monilypay_account_id'] : '';
 		$three_d_secure      = isset( $options['three_d_secure'] ) && 'yes' === $options['three_d_secure'];
 
 		if ( isset( $options['enabled'] ) && 'yes' === $options['enabled'] ) {

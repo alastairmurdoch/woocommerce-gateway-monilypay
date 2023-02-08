@@ -137,6 +137,7 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 		$this->publishable_key      = ! empty( $main_settings['publishable_key'] ) ? $main_settings['publishable_key'] : '';
 		$this->secret_key           = ! empty( $main_settings['secret_key'] ) ? $main_settings['secret_key'] : '';
 		$this->monilypay_key           = ! empty( $main_settings['monilypay_key'] ) ? $main_settings['monilypay_key'] : '';
+		$this->monilypay_account_id           = ! empty( $main_settings['monilypay_account_id'] ) ? $main_settings['monilypay_account_id'] : '';
 		$this->statement_descriptor = ! empty( $main_settings['statement_descriptor'] ) ? $main_settings['statement_descriptor'] : '';
 
 		$enabled_at_checkout_payment_methods = $this->get_upe_enabled_at_checkout_payment_method_ids();
@@ -157,6 +158,7 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 			$this->publishable_key = ! empty( $main_settings['test_publishable_key'] ) ? $main_settings['test_publishable_key'] : '';
 			$this->secret_key      = ! empty( $main_settings['test_secret_key'] ) ? $main_settings['test_secret_key'] : '';
 			$this->monilypay_key      = ! empty( $main_settings['test_monilypay_key'] ) ? $main_settings['test_monilypay_key'] : '';
+			$this->monilypay_account_id      = ! empty( $main_settings['test_monilypay_account_id'] ) ? $main_settings['test_monilypay_account_id'] : '';
 		}
 
 		add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, [ $this, 'process_admin_options' ] );

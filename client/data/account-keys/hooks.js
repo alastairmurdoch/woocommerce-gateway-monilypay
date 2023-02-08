@@ -106,6 +106,15 @@ export const useAccountKeysTestMonilypayKey = makeAccountKeysValueHook(
 	'test_monilypay_key'
 );
 
+export const useAccountKeysTestMonilypayAccountId = makeAccountKeysValueHook(
+	'test_monilypay_account_id'
+);
+
+export const useAccountKeysMonilypayAccountId = makeAccountKeysValueHook(
+	'monilypay_account_id'
+);
+
+
 export const useAccountKeysTestSecretKey = makeAccountKeysValueHook(
 	'test_secret_key'
 );
