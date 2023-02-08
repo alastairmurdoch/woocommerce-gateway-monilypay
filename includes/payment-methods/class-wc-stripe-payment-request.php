@@ -69,7 +69,7 @@ class WC_Stripe_Payment_Request {
 	 */
 	public function __construct() {
 		self::$_this           = $this;
-		$this->stripe_settings = get_option( 'woocommerce_stripe_settings', [] );
+		$this->stripe_settings = get_option( 'woocommerce_monilypay_settings', [] );
 		$this->testmode        = ( ! empty( $this->stripe_settings['testmode'] ) && 'yes' === $this->stripe_settings['testmode'] ) ? true : false;
 		$this->publishable_key = ! empty( $this->stripe_settings['publishable_key'] ) ? $this->stripe_settings['publishable_key'] : '';
 		$this->secret_key      = ! empty( $this->stripe_settings['secret_key'] ) ? $this->stripe_settings['secret_key'] : '';
@@ -761,7 +761,7 @@ class WC_Stripe_Payment_Request {
 		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
 		wp_register_script( 'stripe', 'https://js.stripe.com/v3/', '', '3.0', true );
-		wp_register_script( 'wc_stripe_payment_request', plugins_url( 'assets/js/stripe-payment-request' . $suffix . '.js', WC_STRIPE_MAIN_FILE ), [ 'jquery', 'stripe' ], WC_STRIPE_VERSION, true );
+		wp_register_script( 'wc_stripe_payment_request', plugins_url( 'assets/js/stripe-payment-request' . $suffix . '.js', WC_STRIPE_MAIN_FILE ), [ 'jquery', 'stripe' ], wc_monilypay_stripe_version, true );
 
 		wp_localize_script(
 			'wc_stripe_payment_request',

@@ -523,9 +523,9 @@ class WC_REST_Stripe_Settings_Controller extends WC_Stripe_REST_Base_Controller 
 			return;
 		}
 
-		$settings = get_option( 'woocommerce_stripe_settings', [] );
+		$settings = get_option( 'woocommerce_monilypay_settings', [] );
 		$settings[ WC_Stripe_Feature_Flags::UPE_CHECKOUT_FEATURE_ATTRIBUTE_NAME ] = $is_upe_enabled ? 'yes' : 'disabled';
-		update_option( 'woocommerce_stripe_settings', $settings );
+		update_option( 'woocommerce_monilypay_settings', $settings );
 
 		// including the class again because otherwise it's not present.
 		if ( WC_Stripe_Inbox_Notes::are_inbox_notes_supported() ) {

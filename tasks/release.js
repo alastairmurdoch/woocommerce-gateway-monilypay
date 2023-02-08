@@ -6,7 +6,7 @@ const colors = require( 'colors' );
 const archiver = require( 'archiver' );
 const fs = require( 'fs' );
 
-const pluginSlug = 'woocommerce-gateway-stripe';
+const pluginSlug = 'woocommerce-gateway-monilypay';
 
 // some config
 const releaseFolder = 'release';
@@ -17,7 +17,7 @@ const filesToCopy = [
 	'includes',
 	'languages',
 	'templates',
-	'woocommerce-gateway-stripe.php',
+	'woocommerce-gateway-monilypay.php',
 	'changelog.txt',
 	'readme.txt',
 	'SECURITY.md',

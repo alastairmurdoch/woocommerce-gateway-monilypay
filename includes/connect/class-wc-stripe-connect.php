@@ -10,7 +10,7 @@ if ( ! class_exists( 'WC_Stripe_Connect' ) ) {
 	 */
 	class WC_Stripe_Connect {
 
-		const SETTINGS_OPTION = 'woocommerce_stripe_settings';
+		const SETTINGS_OPTION = 'woocommerce_monilypay_settings';
 
 		/**
 		 * Stripe connect api.

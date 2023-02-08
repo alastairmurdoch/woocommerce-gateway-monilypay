@@ -80,7 +80,7 @@ class WC_Stripe_Settings_Controller {
 			? require $script_asset_path
 			: [
 				'dependencies' => [],
-				'version'      => WC_STRIPE_VERSION,
+				'version'      => wc_monilypay_stripe_version,
 			];
 
 		wp_register_script(

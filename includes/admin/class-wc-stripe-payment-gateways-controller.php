@@ -17,7 +17,7 @@ class WC_Stripe_Payment_Gateways_Controller {
 	 */
 	public function __construct() {
 		// If UPE is enabled and there are enabled payment methods, we need to load the disable Stripe confirmation modal.
-		$stripe_settings              = get_option( 'woocommerce_stripe_settings', [] );
+		$stripe_settings              = get_option( 'woocommerce_monilypay_settings', [] );
 		$enabled_upe_payment_methods  = isset( $stripe_settings['upe_checkout_experience_accepted_payments'] ) ? $stripe_settings['upe_checkout_experience_accepted_payments'] : [];
 		$upe_payment_requests_enabled = 'yes' === $stripe_settings['payment_request'];
 
@@ -33,7 +33,7 @@ class WC_Stripe_Payment_Gateways_Controller {
 			? require_once $payment_gateways_script_asset_path
 			: [
 				'dependencies' => [],
-				'version'      => WC_STRIPE_VERSION,
+				'version'      => wc_monilypay_stripe_version,
 			];
 
 		wp_register_script(

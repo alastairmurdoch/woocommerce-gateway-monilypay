@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Required minimums and constants
  */
-define( 'WC_STRIPE_VERSION', '7.0.2' ); // WRCS: DEFINED_VERSION.
+define( 'wc_monilypay_stripe_version', '7.0.2' ); // WRCS: DEFINED_VERSION.
 define( 'WC_STRIPE_MIN_PHP_VER', '7.3.0' );
 define( 'WC_STRIPE_MIN_WC_VER', '6.9' );
 define( 'WC_STRIPE_FUTURE_MIN_WC_VER', '7.1' );
@@ -239,7 +239,7 @@ function woocommerce_gateway_stripe() {
 				require_once dirname( __FILE__ ) . '/includes/deprecated/class-wc-stripe-apple-pay.php';
 
 				add_filter( 'woocommerce_payment_gateways', [ $this, 'add_gateways' ] );
-				add_filter( 'pre_update_option_woocommerce_stripe_settings', [ $this, 'gateway_settings_update' ], 10, 2 );
+				add_filter( 'pre_update_option_woocommerce_monilypay_settings', [ $this, 'gateway_settings_update' ], 10, 2 );
 				add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), [ $this, 'plugin_action_links' ] );
 				add_filter( 'plugin_row_meta', [ $this, 'plugin_row_meta' ], 10, 2 );
 
@@ -265,8 +265,8 @@ function woocommerce_gateway_stripe() {
 			 * @version 4.0.0
 			 */
 			public function update_plugin_version() {
-				delete_option( 'wc_stripe_version' );
-				update_option( 'wc_stripe_version', WC_STRIPE_VERSION );
+				delete_option( 'wc_monilypay_stripe_version' );
+				update_option( 'wc_monilypay_stripe_version', wc_monilypay_stripe_version );
 			}
 
 			/**
@@ -280,7 +280,7 @@ function woocommerce_gateway_stripe() {
 					return;
 				}
 
-				if ( ! defined( 'IFRAME_REQUEST' ) && ( WC_STRIPE_VERSION !== get_option( 'wc_stripe_version' ) ) ) {
+				if ( ! defined( 'IFRAME_REQUEST' ) && ( wc_monilypay_stripe_version !== get_option( 'wc_monilypay_stripe_version' ) ) ) {
 					do_action( 'woocommerce_stripe_updated' );
 
 					if ( ! defined( 'WC_STRIPE_INSTALLING' ) ) {
@@ -308,7 +308,7 @@ function woocommerce_gateway_stripe() {
 			 * @version 5.5.0
 			 */
 			public function update_prb_location_settings() {
-				$stripe_settings = get_option( 'woocommerce_stripe_settings', [] );
+				$stripe_settings = get_option( 'woocommerce_monilypay_settings', [] );
 				$prb_locations   = isset( $stripe_settings['payment_request_button_locations'] )
 					? $stripe_settings['payment_request_button_locations']
 					: [];
@@ -334,7 +334,7 @@ function woocommerce_gateway_stripe() {
 					}
 
 					$stripe_settings['payment_request_button_locations'] = $new_prb_locations;
-					update_option( 'woocommerce_stripe_settings', $stripe_settings );
+					update_option( 'woocommerce_monilypay_settings', $stripe_settings );
 				}
 			}
 

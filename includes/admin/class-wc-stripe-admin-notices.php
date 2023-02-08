@@ -112,15 +112,15 @@ class WC_Stripe_Admin_Notices {
 	 */
 	public function stripe_check_environment() {
 		$show_style_notice   = get_option( 'wc_stripe_show_style_notice' );
-		$show_ssl_notice     = get_option( 'wc_stripe_show_ssl_notice' );
-		$show_keys_notice    = get_option( 'wc_stripe_show_keys_notice' );
+		$show_ssl_notice     = get_option( 'wc_monilypay_show_ssl_notice' );
+		$show_keys_notice    = get_option( 'wc_monilypay_show_keys_notice' );
 		$show_3ds_notice     = get_option( 'wc_stripe_show_3ds_notice' );
 		$show_phpver_notice  = get_option( 'wc_stripe_show_phpver_notice' );
 		$show_wcver_notice   = get_option( 'wc_stripe_show_wcver_notice' );
 		$show_curl_notice    = get_option( 'wc_stripe_show_curl_notice' );
 		$show_sca_notice     = get_option( 'wc_stripe_show_sca_notice' );
 		$changed_keys_notice = get_option( 'wc_stripe_show_changed_keys_notice' );
-		$options             = get_option( 'woocommerce_stripe_settings' );
+		$options             = get_option( 'woocommerce_monilypay_settings' );
 		$testmode            = ( isset( $options['testmode'] ) && 'yes' === $options['testmode'] ) ? true : false;
 		$test_pub_key        = isset( $options['test_publishable_key'] ) ? $options['test_publishable_key'] : '';
 		$test_secret_key     = isset( $options['test_secret_key'] ) ? $options['test_secret_key'] : '';
@@ -363,40 +363,40 @@ class WC_Stripe_Admin_Notices {
 					update_option( 'wc_stripe_show_curl_notice', 'no' );
 					break;
 				case 'ssl':
-					update_option( 'wc_stripe_show_ssl_notice', 'no' );
+					update_option( 'wc_monilypay_show_ssl_notice', 'no' );
 					break;
 				case 'keys':
-					update_option( 'wc_stripe_show_keys_notice', 'no' );
+					update_option( 'wc_monilypay_show_keys_notice', 'no' );
 					break;
 				case '3ds':
 					update_option( 'wc_stripe_show_3ds_notice', 'no' );
 					break;
 				case 'alipay':
-					update_option( 'wc_stripe_show_alipay_notice', 'no' );
+					update_option( 'wc_monilypay_show_alipay_notice', 'no' );
 					break;
 				case 'bancontact':
-					update_option( 'wc_stripe_show_bancontact_notice', 'no' );
+					update_option( 'wc_monilypay_show_bancontact_notice', 'no' );
 					break;
 				case 'eps':
-					update_option( 'wc_stripe_show_eps_notice', 'no' );
+					update_option( 'wc_monilypay_show_eps_notice', 'no' );
 					break;
 				case 'giropay':
-					update_option( 'wc_stripe_show_giropay_notice', 'no' );
+					update_option( 'wc_monilypay_show_giropay_notice', 'no' );
 					break;
 				case 'ideal':
-					update_option( 'wc_stripe_show_ideal_notice', 'no' );
+					update_option( 'wc_monilypay_show_ideal_notice', 'no' );
 					break;
 				case 'multibanco':
-					update_option( 'wc_stripe_show_multibanco_notice', 'no' );
+					update_option( 'wc_monilypay_show_multibanco_notice', 'no' );
 					break;
 				case 'p24':
-					update_option( 'wc_stripe_show_p24_notice', 'no' );
+					update_option( 'wc_monilypay_show_p24_notice', 'no' );
 					break;
 				case 'sepa':
-					update_option( 'wc_stripe_show_sepa_notice', 'no' );
+					update_option( 'wc_monilypay_show_sepa_notice', 'no' );
 					break;
 				case 'sofort':
-					update_option( 'wc_stripe_show_sofort_notice', 'no' );
+					update_option( 'wc_monilypay_show_sofort_notice', 'no' );
 					break;
 				case 'sca':
 					update_option( 'wc_stripe_show_sca_notice', 'no' );
@@ -430,7 +430,7 @@ class WC_Stripe_Admin_Notices {
 	 * @since 4.3.0
 	 */
 	public function stripe_updated() {
-		$previous_version = get_option( 'wc_stripe_version' );
+		$previous_version = get_option( 'wc_monilypay_stripe_version' );
 
 		// Only show the style notice if the plugin was installed and older than 4.1.4.
 		if ( empty( $previous_version ) || version_compare( $previous_version, '4.1.4', 'ge' ) ) {

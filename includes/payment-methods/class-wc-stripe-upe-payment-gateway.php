@@ -128,7 +128,7 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 		// Check if pre-orders are enabled and add support for them.
 		$this->maybe_init_pre_orders();
 
-		$main_settings              = get_option( 'woocommerce_stripe_settings' );
+		$main_settings              = get_option( 'woocommerce_monilypay_settings' );
 		$this->title                = ! empty( $this->get_option( 'title_upe' ) ) ? $this->get_option( 'title_upe' ) : $this->form_fields['title_upe']['default'];
 		$this->description          = '';
 		$this->enabled              = $this->get_option( 'enabled' );
@@ -222,7 +222,7 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 		}
 
 		$asset_path   = WC_STRIPE_PLUGIN_PATH . '/build/checkout_upe.asset.php';
-		$version      = WC_STRIPE_VERSION;
+		$version      = wc_monilypay_stripe_version;
 		$dependencies = [];
 		if ( file_exists( $asset_path ) ) {
 			$asset        = require $asset_path;
@@ -270,7 +270,7 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 		wp_enqueue_script( 'wc-stripe-upe-classic' );
 		wp_enqueue_style( 'wc-stripe-upe-classic' );
 
-		wp_register_style( 'stripelink_styles', plugins_url( 'assets/css/stripe-link.css', WC_STRIPE_MAIN_FILE ), [], WC_STRIPE_VERSION );
+		wp_register_style( 'stripelink_styles', plugins_url( 'assets/css/stripe-link.css', WC_STRIPE_MAIN_FILE ), [], wc_monilypay_stripe_version );
 		wp_enqueue_style( 'stripelink_styles' );
 	}
 

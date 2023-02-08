@@ -284,7 +284,7 @@ export const setupStripe = ( page, baseUrl ) =>
 			try {
 				// Clean up previous Stripe settings.
 				await sshExecCommands( [
-					'wp option delete woocommerce_stripe_settings',
+					'wp option delete woocommerce_monilypay_settings',
 				] );
 
 				const stripeClient = stripe( process.env.STRIPE_SECRET_KEY );

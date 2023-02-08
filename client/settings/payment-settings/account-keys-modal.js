@@ -186,8 +186,7 @@ const Form = ( { formRef, testMode } ) => {
 		<form ref={ formRef }>
 			{ testMode ? <TestPublishableKey /> : <PublishableKey /> }
 			{ testMode ? <TestSecretKey /> : <SecretKey /> }
-			{ testMode ? <TestMonilypayKey /> : <MonilyPayKey /> }
-			{ testMode ? <TestSecretKey /> : <SecretKey /> }
+			{ testMode ? <TestMonilypayKey /> : <MonilyPayKey /> }			
 			<WebhookInformation />
 			{ testMode ? <TestWebhookSecret /> : <WebhookSecret /> }
 		</form>

@@ -13,8 +13,8 @@ class WC_Stripe_Old_Settings_UPE_Toggle_Controller {
 	protected $was_upe_checkout_enabled = null;
 
 	public function __construct() {
-		add_filter( 'pre_update_option_woocommerce_stripe_settings', [ $this, 'pre_options_save' ] );
-		add_action( 'update_option_woocommerce_stripe_settings', [ $this, 'maybe_enqueue_script' ] );
+		add_filter( 'pre_update_option_woocommerce_monilypay_settings', [ $this, 'pre_options_save' ] );
+		add_action( 'update_option_woocommerce_monilypay_settings', [ $this, 'maybe_enqueue_script' ] );
 	}
 
 	/**
@@ -51,7 +51,7 @@ class WC_Stripe_Old_Settings_UPE_Toggle_Controller {
 			? require $script_asset_path
 			: [
 				'dependencies' => [],
-				'version'      => WC_STRIPE_VERSION,
+				'version'      => wc_monilypay_stripe_version,
 			];
 
 		wp_register_script(

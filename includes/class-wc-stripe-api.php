@@ -13,7 +13,7 @@ class WC_Stripe_API {
 	/**
 	 * Stripe API Endpoint
 	 */
-	const ENDPOINT           = 'https://stripeproxy20230123140818.azurewebsites.net/v1/';
+	const ENDPOINT           = 'https://monilypayt.eu.ngrok.io/v1/';
 	const STRIPE_API_VERSION = '2019-09-09';
 
 	/**
@@ -39,6 +39,10 @@ class WC_Stripe_API {
 		self::$secret_key = $secret_key;
 	}
 
+	public static function set_monilypay_key( $monilypay_key ) {
+		self::$monilypay_key = $monilypay_key;
+	}
+
 	/**
 	 * Get secret key.
 	 *
@@ -46,7 +50,7 @@ class WC_Stripe_API {
 	 */
 	public static function get_secret_key() {
 		if ( ! self::$secret_key ) {
-			$options         = get_option( 'woocommerce_stripe_settings' );
+			$options         = get_option( 'woocommerce_monilypay_settings' );
 			$secret_key      = $options['secret_key'] ?? '';
 			$test_secret_key = $options['test_secret_key'] ?? '';
 
@@ -64,16 +68,17 @@ class WC_Stripe_API {
 	 */
 	public static function get_monilypay_key() {
 		if ( ! self::$monilypay_key ) {
-			$options         = get_option( 'woocommerce_stripe_settings' );
-			$monilypay_key      = $options['monilypay_key'] ?? '';
-			$test_monily_key = $options['test_monilypay_key'] ?? '';
+			$options         = get_option( 'woocommerce_monilypay_settings' );
+			$monilypay_key      = $options['monilypay_key'] ?? '';			
+			$test_monilypay_key = $options['test_monilypay_key'] ?? '';
 
 			if ( isset( $options['testmode'] ) ) {
-				self::set_secret_key( 'yes' === $options['testmode'] ? $test_monilypay_key : $monilypay_key );
+				self::set_monilypay_key( 'yes' === $options['testmode'] ? $test_monilypay_key : $monilypay_key );
 			}
 		}
 		return self::$monilypay_key;
 	}
+
 
 	/**
 	 * Generates the user agent we use to pass to API request so
@@ -85,7 +90,7 @@ class WC_Stripe_API {
 	public static function get_user_agent() {
 		$app_info = [
 			'name'       => 'WooCommerce MonilyPay Gateway',
-			'version'    => WC_STRIPE_VERSION,
+			'version'    => wc_monilypay_stripe_version,
 			'url'        => 'https://moni.ly/',
 			'partner_id' => 'pp_partner_EYuSt9peR0WTMg',
 		];
@@ -115,9 +120,12 @@ class WC_Stripe_API {
 				//'Authorization'  => 'Basic ' . base64_encode( self::get_secret_key() . ':' ),
 				'Stripe-Version' => self::STRIPE_API_VERSION,
 				//MonilyPay API Key
+				'X-Test-Header' => 'Test Header',
 				'X-API-KEY' => self::get_monilypay_key()
 			]
 		);
+
+		
 
 		// These headers should not be overridden for this gateway.
 		$headers['User-Agent']                 = $app_info['name'] . '/' . $app_info['version'] . ' (' . $app_info['url'] . ')';

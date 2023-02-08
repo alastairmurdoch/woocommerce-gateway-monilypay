@@ -19,12 +19,12 @@ class WC_Stripe_Account_Test extends WP_UnitTestCase {
 	public function set_up() {
 		parent::set_up();
 
-		$stripe_settings                         = get_option( 'woocommerce_stripe_settings' );
+		$stripe_settings                         = get_option( 'woocommerce_monilypay_settings' );
 		$stripe_settings['enabled']              = 'yes';
 		$stripe_settings['testmode']             = 'yes';
 		$stripe_settings['test_publishable_key'] = 'pk_test_key';
 		$stripe_settings['test_secret_key']      = 'sk_test_key';
-		update_option( 'woocommerce_stripe_settings', $stripe_settings );
+		update_option( 'woocommerce_monilypay_settings', $stripe_settings );
 
 		$this->mock_connect = $this->getMockBuilder( 'WC_Stripe_Connect' )
 									->disableOriginalConstructor()
@@ -42,7 +42,7 @@ class WC_Stripe_Account_Test extends WP_UnitTestCase {
 	public function tear_down() {
 		delete_transient( 'wcstripe_account_data_test' );
 		delete_transient( 'wcstripe_account_data_live' );
-		delete_option( 'woocommerce_stripe_settings' );
+		delete_option( 'woocommerce_monilypay_settings' );
 
 		parent::tear_down();
 	}

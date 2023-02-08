@@ -363,14 +363,14 @@ class WC_Stripe_Order_Handler extends WC_Stripe_Payment_Gateway {
 
 		// Due diligence done. Collect the metadata.
 		$is_live         = true;
-		$stripe_settings = get_option( 'woocommerce_stripe_settings', [] );
+		$stripe_settings = get_option( 'woocommerce_monilypay_settings', [] );
 		if ( array_key_exists( 'testmode', $stripe_settings ) ) {
 			$is_live = 'no' === $stripe_settings['testmode'];
 		}
 
 		$properties['admin_email']                        = get_option( 'admin_email' );
 		$properties['is_live']                            = $is_live;
-		$properties['woocommerce_gateway_stripe_version'] = WC_STRIPE_VERSION;
+		$properties['woocommerce_gateway_stripe_version'] = wc_monilypay_stripe_version;
 		$properties['woocommerce_default_country']        = get_option( 'woocommerce_default_country' );
 
 		return $properties;

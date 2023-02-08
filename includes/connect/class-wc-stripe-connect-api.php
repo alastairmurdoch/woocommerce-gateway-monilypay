@@ -211,7 +211,7 @@ if ( ! class_exists( 'WC_Stripe_Connect_API' ) ) {
 					'base_state'     => WC()->countries->get_base_state(),
 					'base_postcode'  => WC()->countries->get_base_postcode(),
 					'currency'       => get_woocommerce_currency(),
-					'stripe_version' => WC_STRIPE_VERSION,
+					'stripe_version' => wc_monilypay_stripe_version,
 					'wc_version'     => WC()->version,
 					'wp_version'     => get_bloginfo( 'version' ),
 				]

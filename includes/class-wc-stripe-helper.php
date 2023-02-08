@@ -332,7 +332,7 @@ class WC_Stripe_Helper {
 	 * @param string $setting The name of the setting to get.
 	 */
 	public static function get_settings( $method = null, $setting = null ) {
-		$all_settings = null === $method ? get_option( 'woocommerce_stripe_settings', [] ) : get_option( 'woocommerce_stripe_' . $method . '_settings', [] );
+		$all_settings = null === $method ? get_option( 'woocommerce_monilypay_settings', [] ) : get_option( 'woocommerce_stripe_' . $method . '_settings', [] );
 
 		if ( null === $setting ) {
 			return $all_settings;

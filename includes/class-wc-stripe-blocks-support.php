@@ -42,7 +42,7 @@ final class WC_Stripe_Blocks_Support extends AbstractPaymentMethodType {
 	 * Initializes the payment method type.
 	 */
 	public function initialize() {
-		$this->settings = get_option( 'woocommerce_stripe_settings', [] );
+		$this->settings = get_option( 'woocommerce_monilypay_settings', [] );
 	}
 
 	/**
@@ -83,7 +83,7 @@ final class WC_Stripe_Blocks_Support extends AbstractPaymentMethodType {
 	 */
 	private function register_upe_payment_method_script_handles() {
 		$asset_path   = WC_STRIPE_PLUGIN_PATH . '/build/upe_blocks.asset.php';
-		$version      = WC_STRIPE_VERSION;
+		$version      = wc_monilypay_stripe_version;
 		$dependencies = [];
 		if ( file_exists( $asset_path ) ) {
 			$asset        = require $asset_path;
@@ -120,7 +120,7 @@ final class WC_Stripe_Blocks_Support extends AbstractPaymentMethodType {
 	 */
 	private function register_legacy_payment_method_script_handles() {
 		$asset_path   = WC_STRIPE_PLUGIN_PATH . '/build/index.asset.php';
-		$version      = WC_STRIPE_VERSION;
+		$version      = wc_monilypay_stripe_version;
 		$dependencies = [];
 		if ( file_exists( $asset_path ) ) {
 			$asset        = require $asset_path;
