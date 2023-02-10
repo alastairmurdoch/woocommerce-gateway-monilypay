@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 
-	const ID = 'stripe';
+	const ID = 'monilypay';
 
 	/**
 	 * Should we capture Credit cards
@@ -109,6 +109,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 
 		// Check if pre-orders are enabled and add support for them.
 		$this->maybe_init_pre_orders();
+	
 
 		// Get setting values.
 		$this->title                = $this->get_validated_option( 'title' );
@@ -979,12 +980,12 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 		// Load all old values before the new settings get saved.
 		$old_publishable_key      = $this->get_option( 'publishable_key' );
 		$old_secret_key           = $this->get_option( 'secret_key' );
-		$old_monilypay_key		  = $this->get_opyion( 'monilypay_key' );
-		$old_monilypay_account_id		  = $this->get_opyion( 'monilypay_account_id' );
+		$old_monilypay_key		  = $this->get_option( 'monilypay_key' );
+		$old_monilypay_account_id		  = $this->get_option( 'monilypay_account_id' );
 		$old_test_publishable_key = $this->get_option( 'test_publishable_key' );
 		$old_test_secret_key      = $this->get_option( 'test_secret_key' );
-		$old_test_monilypay_key		  = $this->get_opyion( 'test_monilypay_key' );
-		$old_test_monilypay_account_id		  = $this->get_opyion( 'test_monilypay_account_id' );
+		$old_test_monilypay_key		  = $this->get_option( 'test_monilypay_key' );
+		$old_test_monilypay_account_id		  = $this->get_option( 'test_monilypay_account_id' );
 
 		parent::process_admin_options();
 

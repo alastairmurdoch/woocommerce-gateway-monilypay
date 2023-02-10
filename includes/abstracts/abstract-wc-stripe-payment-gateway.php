@@ -1840,7 +1840,7 @@ abstract class WC_Stripe_Payment_Gateway extends WC_Payment_Gateway_CC {
 	public function javascript_params() {
 		global $wp;
 
-		$order_id = absint( get_query_var( 'order-pay' ) );
+		$order_id = absint( get_query_var( 'order-pay' ) );	
 
 		$stripe_params = [
 			'title'                    => $this->title,
@@ -1851,7 +1851,7 @@ abstract class WC_Stripe_Payment_Gateway extends WC_Payment_Gateway_CC {
 			'updatePaymentIntentNonce' => wp_create_nonce( 'wc_stripe_update_payment_intent_nonce' ),
 			'orderId'                  => $order_id,
 			'checkout_url'             => WC_AJAX::get_endpoint( 'checkout' ),
-			'stripeAccount'			   => 'acct_1MPnRoPvflpYen2R'
+			'stripeAccount'			   => $this->monilypay_account_id
 		];
 
 		// If we're on the pay page we need to pass stripe.js the address of the order.

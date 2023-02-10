@@ -13,7 +13,7 @@ class WC_Stripe_API {
 	/**
 	 * Stripe API Endpoint
 	 */
-	const ENDPOINT           = 'https://monilypayt.eu.ngrok.io/v1/';
+	const ENDPOINT           = 'https://monilystripeproxy.azurewebsites.net/v1/';
 	const STRIPE_API_VERSION = '2019-09-09';
 
 	/**
@@ -94,7 +94,7 @@ class WC_Stripe_API {
 	 *
 	 * @return string
 	 */
-	public static function get_monilypay_accout_id() {
+	public static function get_monilypay_account_id() {
 		if ( ! self::$monilypay_key ) {
 			$options         = get_option( 'woocommerce_monilypay_settings' );
 			$monilypay_account_id      = $options['monilypay_account_id'] ?? '';			

@@ -87,6 +87,13 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 	 */
 	public $publishable_key;
 
+		/**
+	 * Monilypay Account Id
+	 *
+	 * @var string
+	 */
+	public $monilypay_account_id;
+
 	/**
 	 * Array mapping payment method string IDs to classes
 	 *
@@ -289,7 +296,7 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 			'isUPEEnabled' => true,
 			'key'          => $this->publishable_key,
 			'locale'       => WC_Stripe_Helper::convert_wc_locale_to_stripe_locale( get_locale() ),
-			'stripeAccount' => 'acct_1MPnRoPvflpYen2R'
+			'stripeAccount' => $this->monilypay_account_id . "test123"
 		];
 
 		$enabled_billing_fields = [];
