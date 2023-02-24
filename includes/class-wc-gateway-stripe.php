@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 
-	const ID = 'monilypay';
+	const ID = 'stripe';
 
 	/**
 	 * Should we capture Credit cards
