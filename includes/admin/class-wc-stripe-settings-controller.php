@@ -39,7 +39,7 @@ class WC_Stripe_Settings_Controller {
 		$hide_save_button = true;
 
 		echo '<h2>' . esc_html( $gateway->get_method_title() );
-		wc_back_link( __( 'Return to payments', 'woocommerce-gateway-stripe' ), admin_url( 'admin.php?page=wc-settings&tab=checkout' ) );
+		wc_back_link( __( 'Return to payments', 'woocommerce-gateway-monilypay' ), admin_url( 'admin.php?page=wc-settings&tab=checkout' ) );
 		echo '</h2>';
 
 		$settings = get_option( WC_Stripe_Connect::SETTINGS_OPTION, [] );
@@ -57,7 +57,7 @@ class WC_Stripe_Settings_Controller {
 		}
 
 		// TODO: refactor this to a regex approach, we will need to touch `should_enqueue_in_current_tab_section` to support it
-		if ( ! ( WC_Stripe_Helper::should_enqueue_in_current_tab_section( 'checkout', 'stripe' )
+		if ( ! ( WC_Stripe_Helper::should_enqueue_in_current_tab_section( 'checkout', 'monilypay' )
 			|| WC_Stripe_Helper::should_enqueue_in_current_tab_section( 'checkout', 'stripe_sepa' )
 			|| WC_Stripe_Helper::should_enqueue_in_current_tab_section( 'checkout', 'stripe_giropay' )
 			|| WC_Stripe_Helper::should_enqueue_in_current_tab_section( 'checkout', 'stripe_ideal' )
@@ -104,7 +104,7 @@ class WC_Stripe_Settings_Controller {
 
 		$message = sprintf(
 		/* translators: 1) Html strong opening tag 2) Html strong closing tag */
-			esc_html__( '%1$sWarning:%2$s your site\'s time does not match the time on your browser and may be incorrect. Some payment methods depend on webhook verification and verifying webhooks with a signing secret depends on your site\'s time being correct, so please check your site\'s time before setting a webhook secret. You may need to contact your site\'s hosting provider to correct the site\'s time.', 'woocommerce-gateway-stripe' ),
+			esc_html__( '%1$sWarning:%2$s your site\'s time does not match the time on your browser and may be incorrect. Some payment methods depend on webhook verification and verifying webhooks with a signing secret depends on your site\'s time being correct, so please check your site\'s time before setting a webhook secret. You may need to contact your site\'s hosting provider to correct the site\'s time.', 'woocommerce-gateway-monilypay' ),
 			'<strong>',
 			'</strong>'
 		);
@@ -122,7 +122,7 @@ class WC_Stripe_Settings_Controller {
 		);
 		wp_set_script_translations(
 			'woocommerce_stripe_admin',
-			'woocommerce-gateway-stripe'
+			'woocommerce-gateway-monilypay'
 		);
 
 		wp_enqueue_script( 'woocommerce_stripe_admin' );

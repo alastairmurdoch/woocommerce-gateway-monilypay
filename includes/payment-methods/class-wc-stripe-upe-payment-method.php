@@ -314,10 +314,10 @@ abstract class WC_Stripe_UPE_Payment_Method {
 		$messages = [];
 
 		if ( ! empty( $stripe_method_status ) && 'active' !== $stripe_method_status ) {
-			$text            = __( 'Pending activation', 'woocommerce-gateway-stripe' );
+			$text            = __( 'Pending activation', 'woocommerce-gateway-monilypay' );
 			$tooltip_content = sprintf(
 				/* translators: %1: Payment method name */
-				esc_attr__( '%1$s won\'t be visible to your customers until you provide the required information. Follow the instructions Stripe has sent to your e-mail address.', 'woocommerce-gateway-stripe' ),
+				esc_attr__( '%1$s won\'t be visible to your customers until you provide the required information. Follow the instructions Stripe has sent to your e-mail address.', 'woocommerce-gateway-monilypay' ),
 				$this->get_label()
 			);
 			$messages[] = $text . '<span class="tips" data-tip="' . $tooltip_content . '"><span class="woocommerce-help-tip" style="margin-top: 0;"></span></span>';
@@ -326,8 +326,8 @@ abstract class WC_Stripe_UPE_Payment_Method {
 		$currencies = $this->get_supported_currencies();
 		if ( ! empty( $currencies ) && ! in_array( get_woocommerce_currency(), $currencies, true ) ) {
 			/* translators: %s: List of comma-separated currencies. */
-			$tooltip_content = sprintf( esc_attr__( 'In order to be used at checkout, the payment method requires the store currency to be set to one of: %s', 'woocommerce-gateway-stripe' ), implode( ', ', $currencies ) );
-			$text            = __( 'Requires currency', 'woocommerce-gateway-stripe' );
+			$tooltip_content = sprintf( esc_attr__( 'In order to be used at checkout, the payment method requires the store currency to be set to one of: %s', 'woocommerce-gateway-monilypay' ), implode( ', ', $currencies ) );
+			$text            = __( 'Requires currency', 'woocommerce-gateway-monilypay' );
 
 			$messages[] = $text . '<span class="tips" data-tip="' . $tooltip_content . '"><span class="woocommerce-help-tip" style="margin-top: 0;"></span></span>';
 		}

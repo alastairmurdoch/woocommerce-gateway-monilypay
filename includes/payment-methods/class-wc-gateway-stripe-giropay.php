@@ -61,10 +61,10 @@ class WC_Gateway_Stripe_Giropay extends WC_Stripe_Payment_Gateway {
 	 */
 	public function __construct() {
 		$this->id                 = self::ID;
-		$this->method_title       = __( 'Stripe giropay', 'woocommerce-gateway-stripe' );
+		$this->method_title       = __( 'Stripe giropay', 'woocommerce-gateway-monilypay' );
 		$this->method_description = sprintf(
 		/* translators: 1) HTML anchor open tag 2) HTML anchor closing tag */
-			__( 'All other general Stripe settings can be adjusted %1$shere%2$s.', 'woocommerce-gateway-stripe' ),
+			__( 'All other general Stripe settings can be adjusted %1$shere%2$s.', 'woocommerce-gateway-monilypay' ),
 			'<a href="' . esc_url( admin_url( 'admin.php?page=wc-settings&tab=checkout&section=stripe' ) ) . '">',
 			'</a>'
 		);
@@ -181,7 +181,7 @@ class WC_Gateway_Stripe_Giropay extends WC_Stripe_Payment_Gateway {
 		}
 
 		if ( is_add_payment_method_page() ) {
-			$pay_button_text = __( 'Add Payment', 'woocommerce-gateway-stripe' );
+			$pay_button_text = __( 'Add Payment', 'woocommerce-gateway-monilypay' );
 			$total           = '';
 		} else {
 			$pay_button_text = '';

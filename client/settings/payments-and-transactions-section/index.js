@@ -24,7 +24,7 @@ const TooltipBankStatementHelp = () => (
 	<Tooltip
 		content={ __(
 			'The bank statement must contain only Latin characters, be between 5 and 22 characters, and not contain any of the special characters: \' " * < >',
-			'woocommerce-gateway-stripe'
+			'woocommerce-gateway-monilypay'
 		) }
 	>
 		<span>
@@ -60,8 +60,8 @@ const PaymentsAndTransactionsSection = () => {
 		?.details?.short_statement_descriptor?.message;
 
 	const translatedFullBankPreviewTitle = isShortAccountStatementEnabled
-		? __( 'All Other Payment Methods', 'woocommerce-gateway-stripe' )
-		: __( 'All Payment Methods', 'woocommerce-gateway-stripe' );
+		? __( 'All Other Payment Methods', 'woocommerce-gateway-monilypay' )
+		: __( 'All Payment Methods', 'woocommerce-gateway-monilypay' );
 
 	const { data } = useAccount();
 	const statementDescriptorPlaceholder =
@@ -71,18 +71,18 @@ const PaymentsAndTransactionsSection = () => {
 		<Card className="transactions-and-payouts">
 			<CardBody>
 				<h4>
-					{ __( 'Payments settings', 'woocommerce-gateway-stripe' ) }
+					{ __( 'Payments settings', 'woocommerce-gateway-monilypay' ) }
 				</h4>
 				<CheckboxControl
 					checked={ isSavedCardsEnabled }
 					onChange={ setIsSavedCardsEnabled }
 					label={ __(
 						'Enable payments via saved cards',
-						'woocommerce-gateway-stripe'
+						'woocommerce-gateway-monilypay'
 					) }
 					help={ __(
 						'If enabled, users will be able to pay with a saved card during checkout. Card details are saved on Stripe servers, not on your store.',
-						'woocommerce-gateway-stripe'
+						'woocommerce-gateway-monilypay'
 					) }
 				/>
 				{ ! isUpeEnabled && (
@@ -91,25 +91,25 @@ const PaymentsAndTransactionsSection = () => {
 						onChange={ setIsSeparateCardFormEnabled }
 						label={ __(
 							'Enable separate credit card form',
-							'woocommerce-gateway-stripe'
+							'woocommerce-gateway-monilypay'
 						) }
 						help={ __(
 							'If enabled, the credit card form will display separate credit card number field, expiry date field and CVC field.',
-							'woocommerce-gateway-stripe'
+							'woocommerce-gateway-monilypay'
 						) }
 					/>
 				) }
 				<h4>
 					{ __(
 						'Transaction preferences',
-						'woocommerce-gateway-stripe'
+						'woocommerce-gateway-monilypay'
 					) }
 				</h4>
 				<ManualCaptureControl />
 				<h4>
 					{ __(
 						'Customer bank statement',
-						'woocommerce-gateway-stripe'
+						'woocommerce-gateway-monilypay'
 					) }
 				</h4>
 				{ statementDescriptorErrorMessage && (
@@ -129,11 +129,11 @@ const PaymentsAndTransactionsSection = () => {
 					<TextControl
 						help={ __(
 							'Enter the name your customers will see on their transactions. Use a recognizable name – e.g. the legal entity name or website address – to avoid potential disputes and chargebacks.',
-							'woocommerce-gateway-stripe'
+							'woocommerce-gateway-monilypay'
 						) }
 						label={ __(
 							'Full bank statement',
-							'woocommerce-gateway-stripe'
+							'woocommerce-gateway-monilypay'
 						) }
 						value={ accountStatementDescriptor }
 						onChange={ setAccountStatementDescriptor }
@@ -147,11 +147,11 @@ const PaymentsAndTransactionsSection = () => {
 					onChange={ setIsShortAccountStatementEnabled }
 					label={ __(
 						'Add customer order number to the bank statement',
-						'woocommerce-gateway-stripe'
+						'woocommerce-gateway-monilypay'
 					) }
 					help={ __(
 						"When enabled, we'll include the order number for card and express checkout transactions.",
-						'woocommerce-gateway-stripe'
+						'woocommerce-gateway-monilypay'
 					) }
 				/>
 				{ isShortAccountStatementEnabled && (
@@ -177,11 +177,11 @@ const PaymentsAndTransactionsSection = () => {
 							<TextControl
 								help={ __(
 									"We'll use the short version in combination with the customer order number.",
-									'woocommerce-gateway-stripe'
+									'woocommerce-gateway-monilypay'
 								) }
 								label={ __(
 									'Shortened customer bank statement',
-									'woocommerce-gateway-stripe'
+									'woocommerce-gateway-monilypay'
 								) }
 								value={ shortAccountStatementDescriptor }
 								onChange={ setShortAccountStatementDescriptor }
@@ -196,7 +196,7 @@ const PaymentsAndTransactionsSection = () => {
 							icon="creditCard"
 							title={ __(
 								'Cards & Express Checkouts',
-								'woocommerce-gateway-stripe'
+								'woocommerce-gateway-monilypay'
 							) }
 							text={ `${ shortAccountStatementDescriptor }* #123456` }
 							className="shortened-bank-statement"

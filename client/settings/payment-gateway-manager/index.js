@@ -22,7 +22,7 @@ const GatewayDescription = () => {
 				>
 					{ __(
 						'Activate in your Stripe Dashboard',
-						'woocommerce-gateway-stripe'
+						'woocommerce-gateway-monilypay'
 					) }
 				</ExternalLink>
 			</p>
@@ -30,7 +30,7 @@ const GatewayDescription = () => {
 				<ExternalLink href={ info.guide } target="_blank">
 					{ __(
 						'Payment Method Guide',
-						'woocommerce-gateway-stripe'
+						'woocommerce-gateway-monilypay'
 					) }
 				</ExternalLink>
 			</p>

@@ -17,7 +17,7 @@ const PaymentMethodFeesPill = ( { id, ...restProps } ) => {
 			{ ...restProps }
 			aria-label={ sprintf(
 				/* translators: %s: Transaction fee text. */
-				__( 'Base transaction fees: %s', 'woocommerce-gateway-stripe' ),
+				__( 'Base transaction fees: %s', 'woocommerce-gateway-monilypay' ),
 				fees
 			) }
 		>

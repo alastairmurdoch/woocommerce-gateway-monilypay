@@ -16,7 +16,7 @@ const PaymentMethodsDescription = () => {
 			<h2>
 				{ __(
 					'Payments accepted on checkout',
-					'woocommerce-gateway-stripe'
+					'woocommerce-gateway-monilypay'
 				) }
 			</h2>
 
@@ -26,7 +26,7 @@ const PaymentMethodsDescription = () => {
 						'Select payments available to customers at checkout. ' +
 							'Based on their device type, location, and purchase history, ' +
 							'your customers will only see the most relevant payment methods.',
-						'woocommerce-gateway-stripe'
+						'woocommerce-gateway-monilypay'
 					) }
 				</p>
 			) }
@@ -36,15 +36,15 @@ const PaymentMethodsDescription = () => {
 
 const PaymentRequestDescription = () => (
 	<>
-		<h2>{ __( 'Express checkouts', 'woocommerce-gateway-stripe' ) }</h2>
+		<h2>{ __( 'Express checkouts', 'woocommerce-gateway-monilypay' ) }</h2>
 		<p>
 			{ __(
 				'Let your customers use their favorite express payment methods and digital wallets for faster, more secure checkouts across different parts of your store.',
-				'woocommerce-gateway-stripe'
+				'woocommerce-gateway-monilypay'
 			) }
 		</p>
 		<ExternalLink href="https://woocommerce.com/document/stripe/#express-checkouts">
-			{ __( 'Learn more', 'woocommerce-gateway-stripe' ) }
+			{ __( 'Learn more', 'woocommerce-gateway-monilypay' ) }
 		</ExternalLink>
 	</>
 );

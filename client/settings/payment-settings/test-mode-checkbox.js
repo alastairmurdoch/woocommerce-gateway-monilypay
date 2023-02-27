@@ -16,11 +16,11 @@ const TestModeCheckbox = () => {
 			<CheckboxControl
 				checked={ isTestModeEnabled }
 				onChange={ handleCheckboxChange }
-				label={ __( 'Enable test mode', 'woocommerce-gateway-stripe' ) }
+				label={ __( 'Enable test mode', 'woocommerce-gateway-monilypay' ) }
 				help={ interpolateComponents( {
 					mixedString: __(
 						'Use {{testCardNumbersLink}}test card numbers{{/testCardNumbersLink}} to simulate various transactions. {{learnMoreLink}}Learn more{{/learnMoreLink}}',
-						'woocommerce-gateway-stripe'
+						'woocommerce-gateway-monilypay'
 					),
 					components: {
 						testCardNumbersLink: (

@@ -36,18 +36,18 @@ export default class WCStripeAPI {
 			case 'timeout':
 				return __(
 					'A timeout occurred while connecting to the server. Please try again.',
-					'woocommerce-gateway-stripe'
+					'woocommerce-gateway-monilypay'
 				);
 			case 'abort':
 				return __(
 					'The connection to the server was aborted. Please try again.',
-					'woocommerce-gateway-stripe'
+					'woocommerce-gateway-monilypay'
 				);
 			case 'error':
 			default:
 				return __(
 					'An error occurred while connecting to the server. Please try again.',
-					'woocommerce-gateway-stripe'
+					'woocommerce-gateway-monilypay'
 				);
 		}
 	}

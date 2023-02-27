@@ -30,11 +30,11 @@ const PaymentsSection = () => {
 
 	return (
 		<div className="account-details__row">
-			<p>{ __( 'Payments:', 'woocommerce-gateway-stripe' ) }</p>
+			<p>{ __( 'Payments:', 'woocommerce-gateway-monilypay' ) }</p>
 			<SectionStatus isEnabled={ isEnabled }>
 				{ isEnabled
-					? __( 'Enabled', 'woocommerce-gateway-stripe' )
-					: __( 'Disabled', 'woocommerce-gateway-stripe' ) }
+					? __( 'Enabled', 'woocommerce-gateway-monilypay' )
+					: __( 'Disabled', 'woocommerce-gateway-monilypay' ) }
 			</SectionStatus>
 		</div>
 	);
@@ -45,11 +45,11 @@ const PayoutsSection = () => {
 
 	return (
 		<div className="account-details__row">
-			<p>{ __( 'Payouts:', 'woocommerce-gateway-stripe' ) }</p>
+			<p>{ __( 'Payouts:', 'woocommerce-gateway-monilypay' ) }</p>
 			<SectionStatus isEnabled={ isEnabled }>
 				{ isEnabled
-					? __( 'Enabled', 'woocommerce-gateway-stripe' )
-					: __( 'Disabled', 'woocommerce-gateway-stripe' ) }
+					? __( 'Enabled', 'woocommerce-gateway-monilypay' )
+					: __( 'Disabled', 'woocommerce-gateway-monilypay' ) }
 			</SectionStatus>
 		</div>
 	);
@@ -70,13 +70,13 @@ const WebhooksSection = () => {
 	return (
 		<>
 			<div className="account-details__row">
-				<p>{ __( 'Webhooks:', 'woocommerce-gateway-stripe' ) }</p>
+				<p>{ __( 'Webhooks:', 'woocommerce-gateway-monilypay' ) }</p>
 				<SectionStatus isEnabled={ isWebhookSecretEntered }>
 					{ isWebhookSecretEntered
-						? __( 'Enabled', 'woocommerce-gateway-stripe' )
+						? __( 'Enabled', 'woocommerce-gateway-monilypay' )
 						: __(
 								'Please enter the webhook secret key for this to work properly',
-								'woocommerce-gateway-stripe'
+								'woocommerce-gateway-monilypay'
 						  ) }
 				</SectionStatus>
 			</div>
@@ -90,7 +90,7 @@ const WebhooksSection = () => {
 						isBusy={ requestStatus === 'pending' }
 						isLink
 					>
-						{ __( 'Refresh', 'woocommerce-gateway-stripe' ) }
+						{ __( 'Refresh', 'woocommerce-gateway-monilypay' ) }
 					</Button>
 				</p>
 			</div>
@@ -112,7 +112,7 @@ const MissingAccountDetailsDescription = () => {
 				/* translators: <a> - dashboard login URL */
 				__(
 					'Payments/payouts may be disabled for this account until missing business information is updated. <a>Update now</a>',
-					'woocommerce-gateway-stripe'
+					'woocommerce-gateway-monilypay'
 				),
 				{
 					a: (
@@ -137,7 +137,7 @@ const AccountDetails = () => {
 						? interpolateComponents( {
 								mixedString: __(
 									"Seems like the test keys we've saved for you are no longer valid. If you recently updated them, enter the new test keys from your {{accountLink}}Stripe Account{{/accountLink}}.",
-									'woocommerce-gateway-stripe'
+									'woocommerce-gateway-monilypay'
 								),
 								components: {
 									accountLink: (
@@ -148,7 +148,7 @@ const AccountDetails = () => {
 						: interpolateComponents( {
 								mixedString: __(
 									"Seems like the live keys we've saved for you are no longer valid. If you recently updated them, enter the new live keys from your {{accountLink}}Stripe Account{{/accountLink}}.",
-									'woocommerce-gateway-stripe'
+									'woocommerce-gateway-monilypay'
 								),
 								components: {
 									accountLink: (

@@ -49,7 +49,7 @@ class WC_Gateway_Stripe_Oxxo extends WC_Stripe_Payment_Gateway_Voucher {
 	 * @since 5.8.0
 	 */
 	public function __construct() {
-		$this->method_title = __( 'Stripe OXXO', 'woocommerce-gateway-stripe' );
+		$this->method_title = __( 'Stripe OXXO', 'woocommerce-gateway-monilypay' );
 		parent::__construct();
 
 		add_filter( 'wc_stripe_allowed_payment_processing_statuses', [ $this, 'add_allowed_payment_processing_statuses' ], 10, 2 );
@@ -99,10 +99,10 @@ class WC_Gateway_Stripe_Oxxo extends WC_Stripe_Payment_Gateway_Voucher {
 
 		if ( $amount < 10.00 ) {
 			/* translators: 1) amount (including currency symbol) */
-			throw new WC_Stripe_Exception( sprintf( __( 'Sorry, the minimum allowed order total is %1$s to use this payment method.', 'woocommerce-gateway-stripe' ), wc_price( 10.0 ) ) );
+			throw new WC_Stripe_Exception( sprintf( __( 'Sorry, the minimum allowed order total is %1$s to use this payment method.', 'woocommerce-gateway-monilypay' ), wc_price( 10.0 ) ) );
 		} elseif ( $amount > 10000.00 ) {
 			/* translators: 1) amount (including currency symbol) */
-			throw new WC_Stripe_Exception( sprintf( __( 'Sorry, the maximum allowed order total is %1$s to use this payment method.', 'woocommerce-gateway-stripe' ), wc_price( 10000.00 ) ) );
+			throw new WC_Stripe_Exception( sprintf( __( 'Sorry, the maximum allowed order total is %1$s to use this payment method.', 'woocommerce-gateway-monilypay' ), wc_price( 10000.00 ) ) );
 		}
 	}
 

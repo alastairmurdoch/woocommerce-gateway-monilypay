@@ -52,14 +52,14 @@ const DisableUpeConfirmationModal = ( { onClose } ) => {
 				createSuccessNotice(
 					__(
 						'🤔 What made you disable the new payments experience?',
-						'woocommerce-gateway-stripe'
+						'woocommerce-gateway-monilypay'
 					),
 					{
 						actions: [
 							{
 								label: __(
 									'Share feedback (1 min)',
-									'woocommerce-gateway-stripe'
+									'woocommerce-gateway-monilypay'
 								),
 								url:
 									'https://woocommerce.survey.fm/woocommerce-stripe-upe-opt-out-survey',
@@ -72,7 +72,7 @@ const DisableUpeConfirmationModal = ( { onClose } ) => {
 				createErrorNotice(
 					__(
 						'There was an error disabling the new payment methods.',
-						'woocommerce-gateway-stripe'
+						'woocommerce-gateway-monilypay'
 					)
 				);
 			}
@@ -99,7 +99,7 @@ const DisableUpeConfirmationModal = ( { onClose } ) => {
 					<AlertTitle
 						title={ __(
 							'Disable the new payments experience',
-							'woocommerce-gateway-stripe'
+							'woocommerce-gateway-monilypay'
 						) }
 					/>
 				}
@@ -111,7 +111,7 @@ const DisableUpeConfirmationModal = ( { onClose } ) => {
 							disabled={ status === 'pending' }
 							onClick={ onClose }
 						>
-							{ __( 'Cancel', 'woocommerce-gateway-stripe' ) }
+							{ __( 'Cancel', 'woocommerce-gateway-monilypay' ) }
 						</Button>
 						<Button
 							isPrimary
@@ -120,7 +120,7 @@ const DisableUpeConfirmationModal = ( { onClose } ) => {
 							disabled={ status === 'pending' }
 							onClick={ handleConfirmation }
 						>
-							{ __( 'Disable', 'woocommerce-gateway-stripe' ) }
+							{ __( 'Disable', 'woocommerce-gateway-monilypay' ) }
 						</Button>
 					</>
 				}
@@ -128,7 +128,7 @@ const DisableUpeConfirmationModal = ( { onClose } ) => {
 				<p>
 					{ __(
 						'Without the new payments experience, your customers will only be able to pay using credit card / debit card. You will not be able to add other sales-boosting payment methods anymore.',
-						'woocommerce-gateway-stripe'
+						'woocommerce-gateway-monilypay'
 					) }
 				</p>
 
@@ -137,7 +137,7 @@ const DisableUpeConfirmationModal = ( { onClose } ) => {
 						<p>
 							{ __(
 								'Payment methods that require the new payments experience:',
-								'woocommerce-gateway-stripe'
+								'woocommerce-gateway-monilypay'
 							) }
 						</p>
 						<DeactivatingPaymentMethodsList>
@@ -164,14 +164,14 @@ const DisableUpeConfirmationModal = ( { onClose } ) => {
 					{ interpolateComponents( {
 						mixedString: __(
 							'Need help? Visit {{ docsLink /}} or {{supportLink /}}.',
-							'woocommerce-gateway-stripe'
+							'woocommerce-gateway-monilypay'
 						),
 						components: {
 							docsLink: (
 								<ExternalLink href="https://woocommerce.com/document/stripe/">
 									{ __(
 										'Stripe plugin docs',
-										'woocommerce-gateway-stripe'
+										'woocommerce-gateway-monilypay'
 									) }
 								</ExternalLink>
 							),
@@ -179,7 +179,7 @@ const DisableUpeConfirmationModal = ( { onClose } ) => {
 								<ExternalLink href="https://woocommerce.com/contact-us/">
 									{ __(
 										'contact support',
-										'woocommerce-gateway-stripe'
+										'woocommerce-gateway-monilypay'
 									) }
 								</ExternalLink>
 							),

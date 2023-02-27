@@ -13,7 +13,7 @@ const SectionFooter = () => (
 			>
 				{ __(
 					'Get more payment methods',
-					'woocommerce-gateway-stripe'
+					'woocommerce-gateway-monilypay'
 				) }
 			</ExternalLink>
 			<PaymentMethodsUnavailableList />

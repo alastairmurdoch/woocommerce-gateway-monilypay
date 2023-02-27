@@ -60,52 +60,52 @@ class WC_REST_Stripe_Account_Keys_Controller extends WC_Stripe_REST_Base_Control
 				'permission_callback' => [ $this, 'check_permission' ],
 				'args'                => [
 					'publishable_key'      => [
-						'description'       => __( 'Your Stripe API Publishable key, obtained from your Stripe dashboard.', 'woocommerce-gateway-stripe' ),
+						'description'       => __( 'Your Stripe API Publishable key, obtained from your Stripe dashboard.', 'woocommerce-gateway-monilypay' ),
 						'type'              => 'string',
 						'validate_callback' => [ $this, 'validate_publishable_key' ],
 					],
 					'secret_key'           => [
-						'description'       => __( 'Your Stripe API Secret, obtained from your Stripe dashboard.', 'woocommerce-gateway-stripe' ),
+						'description'       => __( 'Your Stripe API Secret, obtained from your Stripe dashboard.', 'woocommerce-gateway-monilypay' ),
 						'type'              => 'string',
 						'validate_callback' => [ $this, 'validate_secret_key' ],
 					],
 					'monilypay_key'           => [
-						'description'       => __( 'Your MonilyPay API Secret, obtained from your MonilyPay dashboard.', 'woocommerce-gateway-stripe' ),
+						'description'       => __( 'Your MonilyPay API Secret, obtained from your MonilyPay dashboard.', 'woocommerce-gateway-monilypay' ),
 						'type'              => 'string',
 						'validate_callback' => [ $this, 'validate_monilypay_key' ],
 					],
 					'monilypay_account_id'           => [
-						'description'       => __( 'Your MonilyPay AccountID, obtained from your MonilyPay dashboard.', 'woocommerce-gateway-stripe' ),
+						'description'       => __( 'Your MonilyPay AccountID, obtained from your MonilyPay dashboard.', 'woocommerce-gateway-monilypay' ),
 						'type'              => 'string',
 						'validate_callback' => [ $this, 'validate_monilypay_account_id' ],
 					],
 					'webhook_secret'       => [
-						'description'       => __( 'Your Stripe webhook endpoint URL, obtained from your Stripe dashboard.', 'woocommerce-gateway-stripe' ),
+						'description'       => __( 'Your Stripe webhook endpoint URL, obtained from your Stripe dashboard.', 'woocommerce-gateway-monilypay' ),
 						'type'              => 'string',
 						'validate_callback' => 'rest_validate_request_arg',
 					],
 					'test_publishable_key' => [
-						'description'       => __( 'Your Stripe testing API Publishable key, obtained from your Stripe dashboard.', 'woocommerce-gateway-stripe' ),
+						'description'       => __( 'Your Stripe testing API Publishable key, obtained from your Stripe dashboard.', 'woocommerce-gateway-monilypay' ),
 						'type'              => 'string',
 						'validate_callback' => [ $this, 'validate_test_publishable_key' ],
 					],
 					'test_secret_key'      => [
-						'description'       => __( 'Your Stripe testing API Secret, obtained from your Stripe dashboard.', 'woocommerce-gateway-stripe' ),
+						'description'       => __( 'Your Stripe testing API Secret, obtained from your Stripe dashboard.', 'woocommerce-gateway-monilypay' ),
 						'type'              => 'string',
 						'validate_callback' => [ $this, 'validate_test_secret_key' ],
 					],
 					'test_monilypay_key'      => [
-						'description'       => __( 'Your MonilyPay testing API Secret, obtained from your MonilyPay dashboard.', 'woocommerce-gateway-stripe' ),
+						'description'       => __( 'Your MonilyPay testing API Secret, obtained from your MonilyPay dashboard.', 'woocommerce-gateway-monilypay' ),
 						'type'              => 'string',
 						'validate_callback' => [ $this, 'validate_test_monilypay_key' ],
 					],
 					'test_monilypay_account_id'      => [
-						'description'       => __( 'Your MonilyPay testing Account ID, obtained from your MonilyPay dashboard.', 'woocommerce-gateway-stripe' ),
+						'description'       => __( 'Your MonilyPay testing Account ID, obtained from your MonilyPay dashboard.', 'woocommerce-gateway-monilypay' ),
 						'type'              => 'string',
 						'validate_callback' => [ $this, 'validate_test_monilypay_account_id' ],
 					],
 					'test_webhook_secret'  => [
-						'description'       => __( 'Your Stripe testing webhook endpoint URL, obtained from your Stripe dashboard.', 'woocommerce-gateway-stripe' ),
+						'description'       => __( 'Your Stripe testing webhook endpoint URL, obtained from your Stripe dashboard.', 'woocommerce-gateway-monilypay' ),
 						'type'              => 'string',
 						'validate_callback' => 'rest_validate_request_arg',
 					],
@@ -156,7 +156,7 @@ class WC_REST_Stripe_Account_Keys_Controller extends WC_Stripe_REST_Base_Control
 			$key,
 			[
 				'regex'         => '/^pk_live_/',
-				'error_message' => __( 'The "Live Publishable Key" should start with "pk_live", enter the correct key.', 'woocommerce-gateway-stripe' ),
+				'error_message' => __( 'The "Live Publishable Key" should start with "pk_live", enter the correct key.', 'woocommerce-gateway-monilypay' ),
 			]
 		);
 	}
@@ -168,7 +168,7 @@ class WC_REST_Stripe_Account_Keys_Controller extends WC_Stripe_REST_Base_Control
 			$key,
 			[
 				'regex'         => '/^[rs]k_live_/',
-				'error_message' => __( 'The "Live Secret Key" should start with "sk_live" or "rk_live", enter the correct key.', 'woocommerce-gateway-stripe' ),
+				'error_message' => __( 'The "Live Secret Key" should start with "sk_live" or "rk_live", enter the correct key.', 'woocommerce-gateway-monilypay' ),
 			]
 		);
 	}
@@ -180,7 +180,7 @@ class WC_REST_Stripe_Account_Keys_Controller extends WC_Stripe_REST_Base_Control
 			$key,
 			[
 				'regex'         => '/^mk_live_/',
-				'error_message' => __( 'The "Live MonilyPay Key" should start with "mk_live", enter the correct key.', 'woocommerce-gateway-stripe' ),
+				'error_message' => __( 'The "Live MonilyPay Key" should start with "mk_live", enter the correct key.', 'woocommerce-gateway-monilypay' ),
 			]
 		);
 	}
@@ -192,7 +192,7 @@ class WC_REST_Stripe_Account_Keys_Controller extends WC_Stripe_REST_Base_Control
 			$key,
 			[
 				'regex'         => '/^pk_test_/',
-				'error_message' => __( 'The "Test Publishable Key" should start with "pk_test", enter the correct key.', 'woocommerce-gateway-stripe' ),
+				'error_message' => __( 'The "Test Publishable Key" should start with "pk_test", enter the correct key.', 'woocommerce-gateway-monilypay' ),
 			]
 		);
 	}
@@ -204,7 +204,7 @@ class WC_REST_Stripe_Account_Keys_Controller extends WC_Stripe_REST_Base_Control
 			$key,
 			[
 				'regex'         => '/^[rs]k_test_/',
-				'error_message' => __( 'The "Test Secret Key" should start with "sk_test" or "rk_test", enter the correct key.', 'woocommerce-gateway-stripe' ),
+				'error_message' => __( 'The "Test Secret Key" should start with "sk_test" or "rk_test", enter the correct key.', 'woocommerce-gateway-monilypay' ),
 			]
 		);
 	}
@@ -216,7 +216,7 @@ class WC_REST_Stripe_Account_Keys_Controller extends WC_Stripe_REST_Base_Control
 			$key,
 			[
 				'regex'         => '/^mk_test_/',
-				'error_message' => __( 'The "Test MonilyPay Key" should start with "sk_test" or "rk_test", enter the correct key.', 'woocommerce-gateway-stripe' ),
+				'error_message' => __( 'The "Test MonilyPay Key" should start with "sk_test" or "rk_test", enter the correct key.', 'woocommerce-gateway-monilypay' ),
 			]
 		);
 	}
@@ -228,7 +228,7 @@ class WC_REST_Stripe_Account_Keys_Controller extends WC_Stripe_REST_Base_Control
 			$key,
 			[
 				'regex'         => '/^acct_/',
-				'error_message' => __( 'The "MonilyPay Account Id" should start with "acct_", enter the correct key.', 'woocommerce-gateway-stripe' ),
+				'error_message' => __( 'The "MonilyPay Account Id" should start with "acct_", enter the correct key.', 'woocommerce-gateway-monilypay' ),
 			]
 		);
 	}
@@ -240,7 +240,7 @@ class WC_REST_Stripe_Account_Keys_Controller extends WC_Stripe_REST_Base_Control
 			$key,
 			[
 				'regex'         => '/^acct_/',
-				'error_message' => __( 'The "Test MonilyPay Key" should start with "acct_", enter the correct key.', 'woocommerce-gateway-stripe' ),
+				'error_message' => __( 'The "Test MonilyPay Key" should start with "acct_", enter the correct key.', 'woocommerce-gateway-monilypay' ),
 			]
 		);
 	}

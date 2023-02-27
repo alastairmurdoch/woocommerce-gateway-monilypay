@@ -209,7 +209,7 @@ const UPEField = ( {
 						type: 'error',
 						message: __(
 							'Your payment information is incomplete.',
-							'woocommerce-gateway-stripe'
+							'woocommerce-gateway-monilypay'
 						),
 					};
 				}
@@ -229,7 +229,7 @@ const UPEField = ( {
 						type: 'error',
 						message: __(
 							'This payment method can not be saved for future use.',
-							'woocommerce-gateway-stripe'
+							'woocommerce-gateway-monilypay'
 						),
 					};
 				}
@@ -387,7 +387,7 @@ export const UPEPaymentForm = ( { api, ...props } ) => {
 					error?.message ??
 						__(
 							'There was an error loading the payment gateway',
-							'woocommerce-gateway-stripe'
+							'woocommerce-gateway-monilypay'
 						)
 				);
 			}

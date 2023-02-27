@@ -16,14 +16,14 @@ class WC_Stripe_UPE_Payment_Method_Link extends WC_Stripe_UPE_Payment_Method {
 	public function __construct() {
 		parent::__construct();
 		$this->stripe_id            = self::STRIPE_ID;
-		$this->title                = __( 'Pay with Link', 'woocommerce-gateway-stripe' );
+		$this->title                = __( 'Pay with Link', 'woocommerce-gateway-monilypay' );
 		$this->is_reusable          = true;
 		$this->supported_currencies = [ 'USD' ];
-		$this->label                = __( 'Stripe Link', 'woocommerce-gateway-stripe' );
+		$this->label                = __( 'Stripe Link', 'woocommerce-gateway-monilypay' );
 		$this->description          = __(
 			'Link is a payment method that allows customers to save payment information  and use the payment details
 			for further payments.',
-			'woocommerce-gateway-stripe'
+			'woocommerce-gateway-monilypay'
 		);
 	}
 

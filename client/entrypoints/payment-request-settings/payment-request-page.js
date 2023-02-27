@@ -21,7 +21,7 @@ const EnableDescription = () => (
 					'their web browser and their wallet configurations, ' +
 					'your customers will see either Apple Pay or Google Pay, ' +
 					'but not both.',
-				'woocommerce-gateway-stripe'
+				'woocommerce-gateway-monilypay'
 			) }
 		</p>
 	</>
@@ -29,11 +29,11 @@ const EnableDescription = () => (
 
 const SettingsDescription = () => (
 	<>
-		<h2>{ __( 'Settings', 'woocommerce-gateway-stripe' ) }</h2>
+		<h2>{ __( 'Settings', 'woocommerce-gateway-monilypay' ) }</h2>
 		<p>
 			{ __(
 				'Configure the display of Apple Pay and Google Pay buttons on your store.',
-				'woocommerce-gateway-stripe'
+				'woocommerce-gateway-monilypay'
 			) }
 		</p>
 	</>

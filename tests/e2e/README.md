@@ -4,7 +4,7 @@ We use [Playwright](https://playwright.dev/) as our test runner.
 
 ## Table of contents
 
-- [WooCommerce Gateway Stripe End to End Tests](#woocommerce-gateway-stripe-end-to-end-tests)
+- [WooCommerce Gateway Stripe End to End Tests](#woocommerce-gateway-monilypay-end-to-end-tests)
   - [Table of contents](#table-of-contents)
   - [Running E2E Tests](#running-e2e-tests)
     - [Pre-requisites](#pre-requisites)

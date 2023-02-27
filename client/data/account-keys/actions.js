@@ -67,8 +67,8 @@ export function* saveAccountKeys( accountKeys ) {
 
 		yield dispatch( 'core/notices' ).createSuccessNotice(
 			isDisconnecting
-				? __( 'Account disconnected.', 'woocommerce-gateway-stripe' )
-				: __( 'Account keys saved.', 'woocommerce-gateway-stripe' )
+				? __( 'Account disconnected.', 'woocommerce-gateway-monilypay' )
+				: __( 'Account keys saved.', 'woocommerce-gateway-monilypay' )
 		);
 	} catch ( e ) {
 		error = e;
@@ -76,11 +76,11 @@ export function* saveAccountKeys( accountKeys ) {
 			isDisconnecting
 				? __(
 						'Error disconnecting account.',
-						'woocommerce-gateway-stripe'
+						'woocommerce-gateway-monilypay'
 				  )
 				: __(
 						'Error saving account keys.',
-						'woocommerce-gateway-stripe'
+						'woocommerce-gateway-monilypay'
 				  )
 		);
 	} finally {

@@ -90,7 +90,7 @@ class WC_Stripe_Order_Handler extends WC_Stripe_Payment_Gateway {
 			}
 
 			if ( 'failed' === $source_info->status || 'canceled' === $source_info->status ) {
-				throw new WC_Stripe_Exception( print_r( $source_info, true ), __( 'Unable to process this payment, please try again or use alternative method.', 'woocommerce-gateway-stripe' ) );
+				throw new WC_Stripe_Exception( print_r( $source_info, true ), __( 'Unable to process this payment, please try again or use alternative method.', 'woocommerce-gateway-monilypay' ) );
 			}
 
 			// If already consumed, then ignore request.
@@ -132,7 +132,7 @@ class WC_Stripe_Order_Handler extends WC_Stripe_Payment_Gateway {
 					// Source param wrong? The CARD may have been deleted on stripe's end. Remove token and show message.
 					$wc_token = WC_Payment_Tokens::get( $prepared_source->token_id );
 					$wc_token->delete();
-					$localized_message = __( 'This card is no longer available and has been removed.', 'woocommerce-gateway-stripe' );
+					$localized_message = __( 'This card is no longer available and has been removed.', 'woocommerce-gateway-monilypay' );
 					$order->add_order_note( $localized_message );
 					throw new WC_Stripe_Exception( print_r( $response, true ), $localized_message );
 				}
@@ -150,7 +150,7 @@ class WC_Stripe_Order_Handler extends WC_Stripe_Payment_Gateway {
 						$this->retry_interval++;
 						return $this->process_redirect_payment( $order_id, true, $response->error );
 					} else {
-						$localized_message = __( 'Sorry, we are unable to process your payment at this time. Please retry later.', 'woocommerce-gateway-stripe' );
+						$localized_message = __( 'Sorry, we are unable to process your payment at this time. Please retry later.', 'woocommerce-gateway-monilypay' );
 						$order->add_order_note( $localized_message );
 						throw new WC_Stripe_Exception( print_r( $response, true ), $localized_message );
 					}
@@ -182,7 +182,7 @@ class WC_Stripe_Order_Handler extends WC_Stripe_Payment_Gateway {
 			do_action( 'wc_gateway_stripe_process_redirect_payment_error', $e, $order );
 
 			/* translators: error message */
-			$order->update_status( 'failed', sprintf( __( 'Stripe payment failed: %s', 'woocommerce-gateway-stripe' ), $e->getLocalizedMessage() ) );
+			$order->update_status( 'failed', sprintf( __( 'Stripe payment failed: %s', 'woocommerce-gateway-monilypay' ), $e->getLocalizedMessage() ) );
 
 			wc_add_notice( $e->getLocalizedMessage(), 'error' );
 			wp_safe_redirect( wc_get_checkout_url() );
@@ -234,7 +234,7 @@ class WC_Stripe_Order_Handler extends WC_Stripe_Payment_Gateway {
 					// If the order has a Payment Intent, then the Intent itself must be captured, not the Charge
 					if ( ! empty( $intent->error ) ) {
 						/* translators: error message */
-						$order->add_order_note( sprintf( __( 'Unable to capture charge! %s', 'woocommerce-gateway-stripe' ), $intent->error->message ) );
+						$order->add_order_note( sprintf( __( 'Unable to capture charge! %s', 'woocommerce-gateway-monilypay' ), $intent->error->message ) );
 					} elseif ( 'requires_capture' === $intent->status ) {
 						$level3_data = $this->get_level3_data_from_order( $order );
 						$result      = WC_Stripe_API::request_with_level3_data(
@@ -249,7 +249,7 @@ class WC_Stripe_Order_Handler extends WC_Stripe_Payment_Gateway {
 
 						if ( ! empty( $result->error ) ) {
 							/* translators: error message */
-							$order->update_status( 'failed', sprintf( __( 'Unable to capture charge! %s', 'woocommerce-gateway-stripe' ), $result->error->message ) );
+							$order->update_status( 'failed', sprintf( __( 'Unable to capture charge! %s', 'woocommerce-gateway-monilypay' ), $result->error->message ) );
 						} else {
 							$is_stripe_captured = true;
 							$result             = end( $result->charges->data );
@@ -265,7 +265,7 @@ class WC_Stripe_Order_Handler extends WC_Stripe_Payment_Gateway {
 
 					if ( ! empty( $result->error ) ) {
 						/* translators: error message */
-						$order->add_order_note( sprintf( __( 'Unable to capture charge! %s', 'woocommerce-gateway-stripe' ), $result->error->message ) );
+						$order->add_order_note( sprintf( __( 'Unable to capture charge! %s', 'woocommerce-gateway-monilypay' ), $result->error->message ) );
 					} elseif ( false === $result->captured ) {
 						$level3_data = $this->get_level3_data_from_order( $order );
 						$result      = WC_Stripe_API::request_with_level3_data(
@@ -280,7 +280,7 @@ class WC_Stripe_Order_Handler extends WC_Stripe_Payment_Gateway {
 
 						if ( ! empty( $result->error ) ) {
 							/* translators: error message */
-							$order->update_status( 'failed', sprintf( __( 'Unable to capture charge! %s', 'woocommerce-gateway-stripe' ), $result->error->message ) );
+							$order->update_status( 'failed', sprintf( __( 'Unable to capture charge! %s', 'woocommerce-gateway-monilypay' ), $result->error->message ) );
 						} else {
 							$is_stripe_captured = true;
 						}
@@ -291,7 +291,7 @@ class WC_Stripe_Order_Handler extends WC_Stripe_Payment_Gateway {
 
 				if ( $is_stripe_captured ) {
 					/* translators: transaction id */
-					$order->add_order_note( sprintf( __( 'Stripe charge complete (Charge ID: %s)', 'woocommerce-gateway-stripe' ), $result->id ) );
+					$order->add_order_note( sprintf( __( 'Stripe charge complete (Charge ID: %s)', 'woocommerce-gateway-monilypay' ), $result->id ) );
 					$order->update_meta_data( '_stripe_charge_captured', 'yes' );
 
 					// Store other data such as fees

@@ -15,7 +15,7 @@
 	</testsuites>
 	<filter>
 		<whitelist>
-			<file>./woocommerce-gateway-stripe.php</file>
+			<file>./woocommerce-gateway-monilypay.php</file>
 			<directory>./includes</directory>
 		</whitelist>
 	</filter>

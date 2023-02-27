@@ -13,7 +13,7 @@ const RemoveMethodConfirmationModal = ( { method, onClose, onConfirm } ) => {
 		/* translators: %1: payment method name (e.g.: giropay, EPS, Sofort, etc). */
 		__(
 			'Are you sure you want to remove <strong>%1$s</strong>? Your customers will no longer be able to pay using <strong>%1$s</strong>.',
-			'woocommerce-gateway-stripe'
+			'woocommerce-gateway-monilypay'
 		),
 		label
 	);
@@ -26,7 +26,7 @@ const RemoveMethodConfirmationModal = ( { method, onClose, onConfirm } ) => {
 						/* translators: %s: payment method name (e.g.: giropay, EPS, Sofort, etc). */
 						__(
 							'Remove %s from checkout',
-							'woocommerce-gateway-stripe'
+							'woocommerce-gateway-monilypay'
 						),
 						label
 					) }
@@ -36,10 +36,10 @@ const RemoveMethodConfirmationModal = ( { method, onClose, onConfirm } ) => {
 			actions={
 				<>
 					<Button isPrimary isDestructive onClick={ onConfirm }>
-						{ __( 'Remove', 'woocommerce-gateway-stripe' ) }
+						{ __( 'Remove', 'woocommerce-gateway-monilypay' ) }
 					</Button>
 					<Button isSecondary onClick={ onClose }>
-						{ __( 'Cancel', 'woocommerce-gateway-stripe' ) }
+						{ __( 'Cancel', 'woocommerce-gateway-monilypay' ) }
 					</Button>
 				</>
 			}
@@ -52,7 +52,7 @@ const RemoveMethodConfirmationModal = ( { method, onClose, onConfirm } ) => {
 			<p>
 				{ __(
 					'You can add it again at any time in Stripe settings.',
-					'woocommerce-gateway-stripe'
+					'woocommerce-gateway-monilypay'
 				) }
 			</p>
 		</ConfirmationModal>

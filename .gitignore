@@ -14,8 +14,8 @@ sftp-config.json
 vendor
 release/
 build/
-woocommerce-gateway-stripe.zip
-languages/woocommerce-gateway-stripe.pot
+woocommerce-gateway-monilypay.zip
+languages/woocommerce-gateway-monilypay.pot
 *.env
 *.tmp
 *.zip

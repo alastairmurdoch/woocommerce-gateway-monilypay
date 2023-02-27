@@ -25,26 +25,26 @@ import { useAccount } from 'wcstripe/data/account';
 
 const GeneralSettingsDescription = () => (
 	<>
-		<h2>{ __( 'General', 'woocommerce-gateway-stripe' ) }</h2>
+		<h2>{ __( 'General', 'woocommerce-gateway-monilypay' ) }</h2>
 		<p>
 			{ __(
 				'Enable or disable Stripe on your store, enter ' +
 					'activation keys, and turn on test mode ' +
 					'to simulate transactions.',
-				'woocommerce-gateway-stripe'
+				'woocommerce-gateway-monilypay'
 			) }
 		</p>
 		<p>
 			<ExternalLink href="https://woocommerce.com/document/stripe/">
 				{ __(
 					'View Stripe plugin docs',
-					'woocommerce-gateway-stripe'
+					'woocommerce-gateway-monilypay'
 				) }
 			</ExternalLink>
 		</p>
 		<p>
 			<ExternalLink href="https://woocommerce.com/contact-us/">
-				{ __( 'Get support', 'woocommerce-gateway-stripe' ) }
+				{ __( 'Get support', 'woocommerce-gateway-monilypay' ) }
 			</ExternalLink>
 		</p>
 	</>
@@ -52,11 +52,11 @@ const GeneralSettingsDescription = () => (
 
 const AccountDetailsDescription = () => (
 	<>
-		<h2>{ __( 'Account details', 'woocommerce-gateway-stripe' ) }</h2>
+		<h2>{ __( 'Account details', 'woocommerce-gateway-monilypay' ) }</h2>
 		<p>
 			{ __(
 				'View account overview and edit business details.',
-				'woocommerce-gateway-stripe'
+				'woocommerce-gateway-monilypay'
 			) }
 		</p>
 	</>
@@ -65,18 +65,18 @@ const AccountDetailsDescription = () => (
 const PaymentsAndTransactionsDescription = () => (
 	<>
 		<h2>
-			{ __( 'Payments & transactions', 'woocommerce-gateway-stripe' ) }
+			{ __( 'Payments & transactions', 'woocommerce-gateway-monilypay' ) }
 		</h2>
 		<p>
 			{ __(
 				'Configure optional payment settings and transaction details.',
-				'woocommerce-gateway-stripe'
+				'woocommerce-gateway-monilypay'
 			) }
 		</p>
 		<ExternalLink href="https://woocommerce.com/document/stripe/#faq">
 			{ __(
 				'View Frequently Asked Questions',
-				'woocommerce-gateway-stripe'
+				'woocommerce-gateway-monilypay'
 			) }
 		</ExternalLink>
 	</>
@@ -100,19 +100,19 @@ const AccountSettingsDropdownMenu = ( {
 				icon={ moreVertical }
 				label={ __(
 					'Edit details or disconnect account',
-					'woocommerce-gateway-stripe'
+					'woocommerce-gateway-monilypay'
 				) }
 				controls={ [
 					{
 						title: __(
 							'Edit account keys',
-							'woocommerce-gateway-stripe'
+							'woocommerce-gateway-monilypay'
 						),
 						onClick: () =>
 							setModalType( isTestModeEnabled ? 'test' : 'live' ),
 					},
 					{
-						title: __( 'Disconnect', 'woocommerce-gateway-stripe' ),
+						title: __( 'Disconnect', 'woocommerce-gateway-monilypay' ),
 						onClick: () => setIsConfirmationModalVisible( true ),
 					},
 				] }
@@ -143,7 +143,7 @@ const AccountDetailsSection = ( { setModalType, setKeepModalContent } ) => {
 					) }
 					{ isTestModeEnabled && (
 						<Pill>
-							{ __( 'Test Mode', 'woocommerce-gateway-stripe' ) }
+							{ __( 'Test Mode', 'woocommerce-gateway-monilypay' ) }
 						</Pill>
 					) }
 				</div>

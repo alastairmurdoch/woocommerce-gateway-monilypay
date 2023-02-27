@@ -20,14 +20,14 @@ domReady( () => {
 		dispatch( 'core/notices' ).createSuccessNotice(
 			__(
 				'🤔 What made you disable the new payments experience?',
-				'woocommerce-gateway-stripe'
+				'woocommerce-gateway-monilypay'
 			),
 			{
 				actions: [
 					{
 						label: __(
 							'Share feedback (1 min)',
-							'woocommerce-gateway-stripe'
+							'woocommerce-gateway-monilypay'
 						),
 						url:
 							'https://woocommerce.survey.fm/woocommerce-stripe-upe-opt-out-survey',

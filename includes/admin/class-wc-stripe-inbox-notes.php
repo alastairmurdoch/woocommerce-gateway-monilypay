@@ -64,10 +64,10 @@ class WC_Stripe_Inbox_Notes {
 
 	public static function get_success_title() {
 		if ( time() < self::get_campaign_2020_cutoff() ) {
-			return __( 'Boost sales this holiday season with Apple Pay!', 'woocommerce-gateway-stripe' );
+			return __( 'Boost sales this holiday season with Apple Pay!', 'woocommerce-gateway-monilypay' );
 		}
 
-		return __( 'Boost sales with Apple Pay!', 'woocommerce-gateway-stripe' );
+		return __( 'Boost sales with Apple Pay!', 'woocommerce-gateway-monilypay' );
 	}
 
 	/**
@@ -146,13 +146,13 @@ class WC_Stripe_Inbox_Notes {
 			$admin_note_class = WC_Stripe_Woo_Compat_Utils::get_note_class();
 			$note             = new $admin_note_class();
 			$note->set_title( self::get_success_title() );
-			$note->set_content( __( 'Now that you accept Apple Pay® with Stripe, you can increase conversion rates by letting your customers know that Apple Pay is available. Here’s a marketing guide to help you get started.', 'woocommerce-gateway-stripe' ) );
+			$note->set_content( __( 'Now that you accept Apple Pay® with Stripe, you can increase conversion rates by letting your customers know that Apple Pay is available. Here’s a marketing guide to help you get started.', 'woocommerce-gateway-monilypay' ) );
 			$note->set_type( $admin_note_class::E_WC_ADMIN_NOTE_MARKETING );
 			$note->set_name( self::SUCCESS_NOTE_NAME );
-			$note->set_source( 'woocommerce-gateway-stripe' );
+			$note->set_source( 'woocommerce-gateway-monilypay' );
 			$note->add_action(
 				'marketing-guide',
-				__( 'See marketing guide', 'woocommerce-gateway-stripe' ),
+				__( 'See marketing guide', 'woocommerce-gateway-monilypay' ),
 				'https://developer.apple.com/apple-pay/marketing/'
 			);
 			$note->save();
@@ -166,14 +166,14 @@ class WC_Stripe_Inbox_Notes {
 		try {
 			$admin_note_class = WC_Stripe_Woo_Compat_Utils::get_note_class();
 			$note             = new $admin_note_class();
-			$note->set_title( __( 'Apple Pay domain verification needed', 'woocommerce-gateway-stripe' ) );
-			$note->set_content( __( 'The WooCommerce Stripe Gateway extension attempted to perform domain verification on behalf of your store, but was unable to do so. This must be resolved before Apple Pay can be offered to your customers.', 'woocommerce-gateway-stripe' ) );
+			$note->set_title( __( 'Apple Pay domain verification needed', 'woocommerce-gateway-monilypay' ) );
+			$note->set_content( __( 'The WooCommerce Stripe Gateway extension attempted to perform domain verification on behalf of your store, but was unable to do so. This must be resolved before Apple Pay can be offered to your customers.', 'woocommerce-gateway-monilypay' ) );
 			$note->set_type( $admin_note_class::E_WC_ADMIN_NOTE_INFORMATIONAL );
 			$note->set_name( self::FAILURE_NOTE_NAME );
-			$note->set_source( 'woocommerce-gateway-stripe' );
+			$note->set_source( 'woocommerce-gateway-monilypay' );
 			$note->add_action(
 				'learn-more',
-				__( 'Learn more', 'woocommerce-gateway-stripe' ),
+				__( 'Learn more', 'woocommerce-gateway-monilypay' ),
 				'https://woocommerce.com/document/stripe/#apple-pay'
 			);
 			$note->save();

@@ -106,9 +106,9 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 	 */
 	public function __construct() {
 		$this->id           = self::ID;
-		$this->method_title = __( 'Stripe', 'woocommerce-gateway-stripe' );
+		$this->method_title = __( 'Stripe', 'woocommerce-gateway-monilypay' );
 		/* translators: link */
-		$this->method_description = __( 'Accept debit and credit cards in 135+ currencies, methods such as SEPA, and one-touch checkout with Apple Pay.', 'woocommerce-gateway-stripe' );
+		$this->method_description = __( 'Accept debit and credit cards in 135+ currencies, methods such as SEPA, and one-touch checkout with Apple Pay.', 'woocommerce-gateway-monilypay' );
 		$this->has_fields         = true;
 		$this->supports           = [
 			'products',
@@ -157,7 +157,7 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 			$enabled_payment_methods_count = count( $this->get_upe_enabled_payment_method_ids() );
 			$this->title                   = $enabled_payment_methods_count ?
 				/* translators: $1. Count of enabled payment methods. */
-				sprintf( _n( '%d payment method', '%d payment methods', $enabled_payment_methods_count, 'woocommerce-gateway-stripe' ), $enabled_payment_methods_count )
+				sprintf( _n( '%d payment method', '%d payment methods', $enabled_payment_methods_count, 'woocommerce-gateway-monilypay' ), $enabled_payment_methods_count )
 				: $this->method_title;
 		}
 
@@ -260,7 +260,7 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 		);
 		wp_set_script_translations(
 			'wc-stripe-upe-classic',
-			'woocommerce-gateway-stripe'
+			'woocommerce-gateway-monilypay'
 		);
 
 		wp_localize_script(
@@ -317,7 +317,7 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 		$stripe_params['wcBlocksUPEAppearance']    = get_transient( self::WC_BLOCKS_UPE_APPEARANCE_TRANSIENT );
 		$stripe_params['saveUPEAppearanceNonce']   = wp_create_nonce( 'wc_stripe_save_upe_appearance_nonce' );
 		$stripe_params['paymentMethodsConfig']     = $this->get_enabled_payment_method_config();
-		$stripe_params['genericErrorMessage']      = __( 'There was a problem processing the payment. Please check your email inbox and refresh the page to try again.', 'woocommerce-gateway-stripe' );
+		$stripe_params['genericErrorMessage']      = __( 'There was a problem processing the payment. Please check your email inbox and refresh the page to try again.', 'woocommerce-gateway-monilypay' );
 		$stripe_params['accountDescriptor']        = $this->statement_descriptor;
 		$stripe_params['addPaymentReturnURL']      = wc_get_account_endpoint_url( 'payment-methods' );
 		$stripe_params['enabledBillingFields']     = $enabled_billing_fields;
@@ -452,7 +452,7 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 					<?php
 					printf(
 					/* translators: 1) HTML strong open tag 2) HTML strong closing tag 3) HTML anchor open tag 2) HTML anchor closing tag */
-						esc_html__( '%1$sTest mode:%2$s use the test VISA card 4242424242424242 with any expiry date and CVC. Other payment methods may redirect to a Stripe test page to authorize payment. More test card numbers are listed %3$shere%4$s.', 'woocommerce-gateway-stripe' ),
+						esc_html__( '%1$sTest mode:%2$s use the test VISA card 4242424242424242 with any expiry date and CVC. Other payment methods may redirect to a Stripe test page to authorize payment. More test card numbers are listed %3$shere%4$s.', 'woocommerce-gateway-monilypay' ),
 						'<strong>',
 						'</strong>',
 						'<a href="https://stripe.com/docs/testing" target="_blank">',
@@ -489,7 +489,7 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 			?>
 			<div>
 				<?php
-				echo esc_html__( 'An error was encountered when preparing the payment form. Please try again later.', 'woocommerce-gateway-stripe' );
+				echo esc_html__( 'An error was encountered when preparing the payment form. Please try again later.', 'woocommerce-gateway-monilypay' );
 				?>
 			</div>
 			<?php
@@ -544,7 +544,7 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 					'currency'             => $currency,
 					'statement_descriptor' => $descriptor,
 					/* translators: 1) blog name 2) order number */
-					'description'          => sprintf( __( '%1$s - Order %2$s', 'woocommerce-gateway-stripe' ), wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ), $order->get_order_number() ),
+					'description'          => sprintf( __( '%1$s - Order %2$s', 'woocommerce-gateway-monilypay' ), wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ), $order->get_order_number() ),
 				];
 
 				// Get user/customer for order.
@@ -574,7 +574,7 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 					}
 					$this->set_payment_method_title_for_order( $order, $selected_upe_payment_type );
 					if ( ! $this->payment_methods[ $selected_upe_payment_type ]->is_allowed_on_country( $order->get_billing_country() ) ) {
-						throw new \Exception( __( 'This payment method is not available on the selected country', 'woocommerce-gateway-stripe' ) );
+						throw new \Exception( __( 'This payment method is not available on the selected country', 'woocommerce-gateway-monilypay' ) );
 					}
 				}
 
@@ -585,11 +585,11 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 				$request['metadata'] = $this->get_metadata_from_order( $order );
 
 				WC_Stripe_Helper::add_payment_intent_to_order( $payment_intent_id, $order );
-				$order->update_status( 'pending', __( 'Awaiting payment.', 'woocommerce-gateway-stripe' ) );
+				$order->update_status( 'pending', __( 'Awaiting payment.', 'woocommerce-gateway-monilypay' ) );
 				$order->update_meta_data( '_stripe_upe_payment_type', $selected_upe_payment_type );
 
 				// TODO: This is a stop-gap to fix a critical issue, see
-				// https://github.com/woocommerce/woocommerce-gateway-stripe/issues/2536. It would
+				// https://github.com/woocommerce/woocommerce-gateway-monilypay/issues/2536. It would
 				// be better if we removed the need for additional meta data in favor of refactoring
 				// this part of the payment processing.
 				$order->update_meta_data( '_stripe_upe_waiting_for_redirect', true );
@@ -792,7 +792,7 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 					$user_id  = wp_get_current_user()->ID;
 					$customer = new WC_Stripe_Customer( $user_id );
 					$customer->clear_cache();
-					wc_add_notice( __( 'Payment method successfully added.', 'woocommerce-gateway-stripe' ) );
+					wc_add_notice( __( 'Payment method successfully added.', 'woocommerce-gateway-monilypay' ) );
 
 					// The newly created payment method does not inherit the customers' billing info, so we manually
 					// trigger an update; in case of failure we log the error and continue because the payment method's
@@ -819,7 +819,7 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 						WC_Stripe_Logger::log( 'Error: ' . $e->getMessage() );
 					}
 				} else {
-					wc_add_notice( __( 'Failed to add payment method.', 'woocommerce-gateway-stripe' ), 'error', [ 'icon' => 'error' ] );
+					wc_add_notice( __( 'Failed to add payment method.', 'woocommerce-gateway-monilypay' ), 'error', [ 'icon' => 'error' ] );
 				}
 			}
 			return;
@@ -890,7 +890,7 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 			WC_Stripe_Logger::log( 'Error: ' . $e->getMessage() );
 
 			/* translators: localized exception message */
-			$order->update_status( 'failed', sprintf( __( 'UPE payment failed: %s', 'woocommerce-gateway-stripe' ), $e->getMessage() ) );
+			$order->update_status( 'failed', sprintf( __( 'UPE payment failed: %s', 'woocommerce-gateway-monilypay' ), $e->getMessage() ) );
 
 			wc_add_notice( $e->getMessage(), 'error' );
 			wp_safe_redirect( wc_get_checkout_url() );
@@ -919,7 +919,7 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 
 		if ( ! empty( $error ) ) {
 			WC_Stripe_Logger::log( 'Error when processing payment: ' . $error->message );
-			throw new WC_Stripe_Exception( __( "We're not able to process this payment. Please try again later.", 'woocommerce-gateway-stripe' ) );
+			throw new WC_Stripe_Exception( __( "We're not able to process this payment. Please try again later.", 'woocommerce-gateway-monilypay' ) );
 		}
 
 		list( $payment_method_type, $payment_method_details ) = $this->get_payment_method_data_from_intent( $intent );
@@ -964,7 +964,7 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 		$order->update_meta_data( '_stripe_upe_redirect_processed', true );
 
 		// TODO: This is a stop-gap to fix a critical issue, see
-		// https://github.com/woocommerce/woocommerce-gateway-stripe/issues/2536. It would
+		// https://github.com/woocommerce/woocommerce-gateway-monilypay/issues/2536. It would
 		// be better if we removed the need for additional meta data in favor of refactoring
 		// this part of the payment processing.
 		$order->delete_meta_data( '_stripe_upe_waiting_for_redirect' );
@@ -1024,7 +1024,7 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 	 */
 	public function retry_after_error( $intent, $order, $retry, $force_save_source = false, $previous_error = false, $use_order_source = false ) {
 		if ( ! $retry ) {
-			$localized_message = __( 'Sorry, we are unable to process your payment at this time. Please retry later.', 'woocommerce-gateway-stripe' );
+			$localized_message = __( 'Sorry, we are unable to process your payment at this time. Please retry later.', 'woocommerce-gateway-monilypay' );
 			$order->add_order_note( $localized_message );
 			throw new WC_Stripe_Exception( print_r( $intent, true ), $localized_message ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.
 		}
@@ -1192,13 +1192,13 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 	public function generate_upe_checkout_experience_accepted_payments_html( $key, $data ) {
 		$stripe_account      = $this->stripe_request( 'account' );
 		$stripe_capabilities = isset( $stripe_account->capabilities ) ? (array) $stripe_account->capabilities : [];
-		$data['description'] = '<p>' . __( "Select payments available to customers at checkout. We'll only show your customers the most relevant payment methods based on their currency and location.", 'woocommerce-gateway-stripe' ) . '</p>
+		$data['description'] = '<p>' . __( "Select payments available to customers at checkout. We'll only show your customers the most relevant payment methods based on their currency and location.", 'woocommerce-gateway-monilypay' ) . '</p>
 		<table class="wc_gateways widefat form-table wc-stripe-upe-method-selection" cellspacing="0" aria-describedby="wc_stripe_upe_method_selection">
 			<thead>
 				<tr>
-					<th class="name wc-stripe-upe-method-selection__name">' . esc_html__( 'Method', 'woocommerce-gateway-stripe' ) . '</th>
-					<th class="status wc-stripe-upe-method-selection__status">' . esc_html__( 'Enabled', 'woocommerce-gateway-stripe' ) . '</th>
-					<th class="description wc-stripe-upe-method-selection__description">' . esc_html__( 'Description', 'woocommerce-gateway-stripe' ) . '</th>
+					<th class="name wc-stripe-upe-method-selection__name">' . esc_html__( 'Method', 'woocommerce-gateway-monilypay' ) . '</th>
+					<th class="status wc-stripe-upe-method-selection__status">' . esc_html__( 'Enabled', 'woocommerce-gateway-monilypay' ) . '</th>
+					<th class="description wc-stripe-upe-method-selection__description">' . esc_html__( 'Description', 'woocommerce-gateway-monilypay' ) . '</th>
 				</tr>
 			</thead>
 			<tbody>';
@@ -1207,19 +1207,19 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 
 		foreach ( $this->payment_methods as $method_id => $method ) {
 			$method_enabled       = in_array( $method_id, $this->get_upe_enabled_payment_method_ids(), true ) && ( $is_automatic_capture_enabled || ! $method->requires_automatic_capture() ) ? 'enabled' : 'disabled';
-			$method_enabled_label = 'enabled' === $method_enabled ? __( 'enabled', 'woocommerce-gateway-stripe' ) : __( 'disabled', 'woocommerce-gateway-stripe' );
+			$method_enabled_label = 'enabled' === $method_enabled ? __( 'enabled', 'woocommerce-gateway-monilypay' ) : __( 'disabled', 'woocommerce-gateway-monilypay' );
 			$capability_id        = "{$method_id}_payments"; // "_payments" is a suffix that comes from Stripe API, except when it is "transfers", which does not apply here
 			$method_status        = isset( $stripe_capabilities[ $capability_id ] ) ? $stripe_capabilities[ $capability_id ] : 'inactive';
 			$subtext_messages     = $method->get_subtext_messages( $method_status );
 			$aria_label           = sprintf(
 				/* translators: $1%s payment method ID, $2%s "enabled" or "disabled" */
-				esc_attr__( 'The &quot;%1$s&quot; payment method is currently %2$s', 'woocommerce-gateway-stripe' ),
+				esc_attr__( 'The &quot;%1$s&quot; payment method is currently %2$s', 'woocommerce-gateway-monilypay' ),
 				$method_id,
 				$method_enabled_label
 			);
 			$manual_capture_tip = sprintf(
 				/* translators: $1%s payment method label */
-				__( '%1$s is not available to your customers when manual capture is enabled.', 'woocommerce-gateway-stripe' ),
+				__( '%1$s is not available to your customers when manual capture is enabled.', 'woocommerce-gateway-monilypay' ),
 				$method->get_label()
 			);
 			$data['description'] .= '<tr data-upe_method_id="' . $method_id . '">
@@ -1230,7 +1230,7 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 					<td class="status wc-stripe-upe-method-selection__status" width="1%">
 						<a class="wc-payment-upe-method-toggle-' . $method_enabled . '" href="#">
 							<span class="woocommerce-input-toggle woocommerce-input-toggle--' . $method_enabled . '" aria-label="' . $aria_label . '">
-							' . ( 'enabled' === $method_enabled ? __( 'Yes', 'woocommerce-gateway-stripe' ) : __( 'No', 'woocommerce-gateway-stripe' ) ) . '
+							' . ( 'enabled' === $method_enabled ? __( 'Yes', 'woocommerce-gateway-monilypay' ) : __( 'No', 'woocommerce-gateway-monilypay' ) ) . '
 							</span>
 						</a>'
 						. ( ! $is_automatic_capture_enabled && $method->requires_automatic_capture() ? '<span class="tips dashicons dashicons-warning" style="margin-top: 1px; margin-right: -25px; margin-left: 5px; color: red" data-tip="' . $manual_capture_tip . '" />' : '' ) .
@@ -1241,8 +1241,8 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 
 		$data['description'] .= '</tbody>
 			</table>
-			<p><a class="button" target="_blank" href="https://dashboard.stripe.com/account/payments/settings">' . __( 'Get more payment methods', 'woocommerce-gateway-stripe' ) . '</a></p>
-			<span id="wc_stripe_upe_change_notice" class="hidden">' . __( 'You must save your changes.', 'woocommerce-gateway-stripe' ) . '</span>';
+			<p><a class="button" target="_blank" href="https://dashboard.stripe.com/account/payments/settings">' . __( 'Get more payment methods', 'woocommerce-gateway-monilypay' ) . '</a></p>
+			<span id="wc_stripe_upe_change_notice" class="hidden">' . __( 'You must save your changes.', 'woocommerce-gateway-monilypay' ) . '</span>';
 
 		return $this->generate_title_html( $key, $data );
 	}
@@ -1336,7 +1336,7 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 		try {
 			$setup_intent = $this->stripe_request( 'setup_intents/' . $setup_intent_id );
 			if ( ! empty( $setup_intent->last_payment_error ) ) {
-				throw new WC_Stripe_Exception( __( "We're not able to add this payment method. Please try again later.", 'woocommerce-gateway-stripe' ) );
+				throw new WC_Stripe_Exception( __( "We're not able to add this payment method. Please try again later.", 'woocommerce-gateway-monilypay' ) );
 			}
 
 			$payment_method_id     = $setup_intent->payment_method;

@@ -16,8 +16,8 @@ class WC_Stripe_Email_Failed_Renewal_Authentication extends WC_Stripe_Email_Fail
 	 */
 	public function __construct( $email_classes = [] ) {
 		$this->id             = 'failed_renewal_authentication';
-		$this->title          = __( 'Failed Subscription Renewal SCA Authentication', 'woocommerce-gateway-stripe' );
-		$this->description    = __( 'Sent to a customer when a renewal fails because the transaction requires an SCA verification. The email contains renewal order information and payment links.', 'woocommerce-gateway-stripe' );
+		$this->title          = __( 'Failed Subscription Renewal SCA Authentication', 'woocommerce-gateway-monilypay' );
+		$this->description    = __( 'Sent to a customer when a renewal fails because the transaction requires an SCA verification. The email contains renewal order information and payment links.', 'woocommerce-gateway-monilypay' );
 		$this->customer_email = true;
 
 		$this->template_html  = 'emails/failed-renewal-authentication.php';
@@ -64,7 +64,7 @@ class WC_Stripe_Email_Failed_Renewal_Authentication extends WC_Stripe_Email_Fail
 	 * @return string
 	 */
 	public function get_default_subject() {
-		return __( 'Payment authorization needed for renewal of {site_title} order {order_number}', 'woocommerce-gateway-stripe' );
+		return __( 'Payment authorization needed for renewal of {site_title} order {order_number}', 'woocommerce-gateway-monilypay' );
 	}
 
 	/**
@@ -73,7 +73,7 @@ class WC_Stripe_Email_Failed_Renewal_Authentication extends WC_Stripe_Email_Fail
 	 * @return string
 	 */
 	public function get_default_heading() {
-		return __( 'Payment authorization needed for renewal of order {order_number}', 'woocommerce-gateway-stripe' );
+		return __( 'Payment authorization needed for renewal of order {order_number}', 'woocommerce-gateway-monilypay' );
 	}
 
 	/**

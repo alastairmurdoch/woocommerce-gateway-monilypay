@@ -58,10 +58,10 @@ class WC_Gateway_Stripe_Multibanco extends WC_Stripe_Payment_Gateway {
 	 */
 	public function __construct() {
 		$this->id                 = 'stripe_multibanco';
-		$this->method_title       = __( 'Stripe Multibanco', 'woocommerce-gateway-stripe' );
+		$this->method_title       = __( 'Stripe Multibanco', 'woocommerce-gateway-monilypay' );
 		$this->method_description = sprintf(
 		/* translators: 1) HTML anchor open tag 2) HTML anchor closing tag */
-			__( 'All other general Stripe settings can be adjusted %1$shere%2$s.', 'woocommerce-gateway-stripe' ),
+			__( 'All other general Stripe settings can be adjusted %1$shere%2$s.', 'woocommerce-gateway-monilypay' ),
 			'<a href="' . esc_url( admin_url( 'admin.php?page=wc-settings&tab=checkout&section=stripe' ) ) . '">',
 			'</a>'
 		);
@@ -182,7 +182,7 @@ class WC_Gateway_Stripe_Multibanco extends WC_Stripe_Payment_Gateway {
 		}
 
 		if ( is_add_payment_method_page() ) {
-			$pay_button_text = __( 'Add Payment', 'woocommerce-gateway-stripe' );
+			$pay_button_text = __( 'Add Payment', 'woocommerce-gateway-monilypay' );
 			$total           = '';
 		} else {
 			$pay_button_text = '';
@@ -245,30 +245,30 @@ class WC_Gateway_Stripe_Multibanco extends WC_Stripe_Payment_Gateway {
 		$data = $order->get_meta( '_stripe_multibanco' );
 
 		if ( $plain_text ) {
-			esc_html_e( 'MULTIBANCO INFORMAÇÕES DE ENCOMENDA:', 'woocommerce-gateway-stripe' ) . "\n\n";
+			esc_html_e( 'MULTIBANCO INFORMAÇÕES DE ENCOMENDA:', 'woocommerce-gateway-monilypay' ) . "\n\n";
 			echo "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\n";
-			esc_html_e( 'Montante:', 'woocommerce-gateway-stripe' ) . "\n\n";
+			esc_html_e( 'Montante:', 'woocommerce-gateway-monilypay' ) . "\n\n";
 			echo $data['amount'] . "\n\n";
 			echo "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\n";
-			esc_html_e( 'Entidade:', 'woocommerce-gateway-stripe' ) . "\n\n";
+			esc_html_e( 'Entidade:', 'woocommerce-gateway-monilypay' ) . "\n\n";
 			echo $data['entity'] . "\n\n";
 			echo "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\n";
-			esc_html_e( 'Referencia:', 'woocommerce-gateway-stripe' ) . "\n\n";
+			esc_html_e( 'Referencia:', 'woocommerce-gateway-monilypay' ) . "\n\n";
 			echo $data['reference'] . "\n\n";
 		} else {
 			?>
-			<h3><?php esc_html_e( 'MULTIBANCO INFORMAÇÕES DE ENCOMENDA:', 'woocommerce-gateway-stripe' ); ?></h3>
+			<h3><?php esc_html_e( 'MULTIBANCO INFORMAÇÕES DE ENCOMENDA:', 'woocommerce-gateway-monilypay' ); ?></h3>
 			<ul class="woocommerce-order-overview woocommerce-thankyou-order-details order_details">
 			<li class="woocommerce-order-overview__order order">
-				<?php esc_html_e( 'Montante:', 'woocommerce-gateway-stripe' ); ?>
+				<?php esc_html_e( 'Montante:', 'woocommerce-gateway-monilypay' ); ?>
 				<strong><?php echo $data['amount']; ?></strong>
 			</li>
 			<li class="woocommerce-order-overview__order order">
-				<?php esc_html_e( 'Entidade:', 'woocommerce-gateway-stripe' ); ?>
+				<?php esc_html_e( 'Entidade:', 'woocommerce-gateway-monilypay' ); ?>
 				<strong><?php echo $data['entity']; ?></strong>
 			</li>
 			<li class="woocommerce-order-overview__order order">
-				<?php esc_html_e( 'Referencia:', 'woocommerce-gateway-stripe' ); ?>
+				<?php esc_html_e( 'Referencia:', 'woocommerce-gateway-monilypay' ); ?>
 				<strong><?php echo $data['reference']; ?></strong>
 			</li>
 			</ul>
@@ -364,7 +364,7 @@ class WC_Gateway_Stripe_Multibanco extends WC_Stripe_Payment_Gateway {
 			$this->save_instructions( $order, $response );
 
 			// Mark as on-hold (we're awaiting the payment)
-			$order->update_status( 'on-hold', __( 'Awaiting Multibanco payment', 'woocommerce-gateway-stripe' ) );
+			$order->update_status( 'on-hold', __( 'Awaiting Multibanco payment', 'woocommerce-gateway-monilypay' ) );
 
 			// Reduce stock levels
 			wc_reduce_stock_levels( $order_id );

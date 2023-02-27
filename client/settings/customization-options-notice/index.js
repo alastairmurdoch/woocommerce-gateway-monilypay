@@ -53,7 +53,7 @@ const CustomizationOptionsNotice = () => {
 			{ interpolateComponents( {
 				mixedString: __(
 					'{{strong}}Where are the customization options?{{/strong}} In the new checkout experience, payment method details are automatically displayed in your customers’ languages so you don’t have to worry about writing them manually.',
-					'woocommerce-gateway-stripe'
+					'woocommerce-gateway-monilypay'
 				),
 				components: {
 					strong: <b />,

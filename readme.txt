@@ -79,7 +79,7 @@ WooCommerce Stripe includes [Web Payments API](https://www.w3.org/TR/payment-req
 
 == Installation ==
 
-You can download an [older version of this gateway for older versions of WooCommerce from here](https://wordpress.org/plugins/woocommerce-gateway-stripe/developers/).
+You can download an [older version of this gateway for older versions of WooCommerce from here](https://wordpress.org/plugins/woocommerce-gateway-monilypay/developers/).
 
 Please note, v4 of this gateway requires WooCommerce 3.0 and above.
 
@@ -134,4 +134,4 @@ If you get stuck, you can ask for help in the Plugin Forum.
 * Update – Declare this plugin compatible with High-Performance Order Storage (HPOS).
 
 
-[See changelog for all versions](https://raw.githubusercontent.com/woocommerce/woocommerce-gateway-stripe/trunk/changelog.txt).
+[See changelog for all versions](https://raw.githubusercontent.com/woocommerce/woocommerce-gateway-monilypay/trunk/changelog.txt).

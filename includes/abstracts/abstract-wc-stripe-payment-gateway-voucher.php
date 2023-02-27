@@ -123,7 +123,7 @@ abstract class WC_Stripe_Payment_Gateway_Voucher extends WC_Stripe_Payment_Gatew
 	public function __construct() {
 		$this->method_description = sprintf(
 		/* translators: 1) HTML anchor open tag 2) HTML anchor closing tag */
-			__( 'All other general Stripe settings can be adjusted %1$shere%2$s ', 'woocommerce-gateway-stripe' ),
+			__( 'All other general Stripe settings can be adjusted %1$shere%2$s ', 'woocommerce-gateway-monilypay' ),
 			'<a href="' . esc_url( admin_url( 'admin.php?page=wc-settings&tab=checkout&section=stripe' ) ) . '">',
 			'</a>'
 		);
@@ -261,13 +261,13 @@ abstract class WC_Stripe_Payment_Gateway_Voucher extends WC_Stripe_Payment_Gatew
 			$order = wc_get_order( $order_id );
 
 			if ( ! in_array( $order->get_billing_country(), $this->supported_countries ) ) {
-				throw new \Exception( __( 'This payment method is not available in the selected country', 'woocommerce-gateway-stripe' ) );
+				throw new \Exception( __( 'This payment method is not available in the selected country', 'woocommerce-gateway-monilypay' ) );
 			}
 
 			$intent = $this->create_or_update_payment_intent( $order );
 
 			$order->update_meta_data( '_stripe_upe_payment_type', $this->stripe_id );
-			$order->update_status( 'pending', __( 'Awaiting payment.', 'woocommerce-gateway-stripe' ) );
+			$order->update_status( 'pending', __( 'Awaiting payment.', 'woocommerce-gateway-monilypay' ) );
 			$order->save();
 
 			WC_Stripe_Helper::add_payment_intent_to_order( $intent->id, $order );
@@ -331,7 +331,7 @@ abstract class WC_Stripe_Payment_Gateway_Voucher extends WC_Stripe_Payment_Gatew
 			'amount'               => WC_Stripe_Helper::get_stripe_amount( $amount, strtolower( $currency ) ),
 			'currency'             => strtolower( $currency ),
 			'payment_method_types' => [ $this->stripe_id ],
-			'description'          => __( 'stripe - Order', 'woocommerce-gateway-stripe' ) . ' ' . $order->get_id(),
+			'description'          => __( 'stripe - Order', 'woocommerce-gateway-monilypay' ) . ' ' . $order->get_id(),
 		];
 
 		if ( method_exists( $this, 'update_request_body_on_create_or_update_payment_intent' ) ) {
@@ -368,20 +368,20 @@ abstract class WC_Stripe_Payment_Gateway_Voucher extends WC_Stripe_Payment_Gatew
 		try {
 			$is_nonce_valid = check_ajax_referer( 'wc_stripe_update_payment_intent_nonce', false, false );
 			if ( ! $is_nonce_valid ) {
-				throw new Exception( __( "We're not able to process this payment. Please refresh the page and try again.", 'woocommerce-gateway-stripe' ) );
+				throw new Exception( __( "We're not able to process this payment. Please refresh the page and try again.", 'woocommerce-gateway-monilypay' ) );
 			}
 
 			$order_id = isset( $_POST['order_id'] ) ? absint( $_POST['order_id'] ) : null;
 
 			if ( ! $order_id ) {
-				throw new \Exception( __( 'Order Id not found, send an order id', 'woocommerce-gateway-stripe' ) );
+				throw new \Exception( __( 'Order Id not found, send an order id', 'woocommerce-gateway-monilypay' ) );
 			}
 
 			$order = wc_get_order( $order_id );
 			$order->set_payment_method( $this );
 			$intent = $this->create_or_update_payment_intent( $order );
 
-			$order->update_status( 'pending', __( 'Awaiting payment.', 'woocommerce-gateway-stripe' ) );
+			$order->update_status( 'pending', __( 'Awaiting payment.', 'woocommerce-gateway-monilypay' ) );
 			$order->update_meta_data( '_stripe_upe_payment_type', $this->stripe_id );
 			$order->save();
 
@@ -400,7 +400,7 @@ abstract class WC_Stripe_Payment_Gateway_Voucher extends WC_Stripe_Payment_Gatew
 			wp_send_json(
 				[
 					'result'   => 'fail',
-					'messages' => __( "We're not able to process this payment. Please refresh the page and try again.", 'woocommerce-gateway-stripe' ),
+					'messages' => __( "We're not able to process this payment. Please refresh the page and try again.", 'woocommerce-gateway-monilypay' ),
 				]
 			);
 		}

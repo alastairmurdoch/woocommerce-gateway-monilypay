@@ -81,9 +81,9 @@ abstract class WC_Stripe_Email_Failed_Authentication extends WC_Email {
 
 		$this->form_fields = [
 			'enabled'    => [
-				'title'   => _x( 'Enable/Disable', 'an email notification', 'woocommerce-gateway-stripe' ),
+				'title'   => _x( 'Enable/Disable', 'an email notification', 'woocommerce-gateway-monilypay' ),
 				'type'    => 'checkbox',
-				'label'   => __( 'Enable this email notification', 'woocommerce-gateway-stripe' ),
+				'label'   => __( 'Enable this email notification', 'woocommerce-gateway-monilypay' ),
 				'default' => 'yes',
 			],
 

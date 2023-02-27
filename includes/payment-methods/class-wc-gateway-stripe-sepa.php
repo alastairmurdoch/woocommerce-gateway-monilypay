@@ -61,10 +61,10 @@ class WC_Gateway_Stripe_Sepa extends WC_Stripe_Payment_Gateway {
 	 */
 	public function __construct() {
 		$this->id                 = self::ID;
-		$this->method_title       = __( 'Stripe SEPA Direct Debit', 'woocommerce-gateway-stripe' );
+		$this->method_title       = __( 'Stripe SEPA Direct Debit', 'woocommerce-gateway-monilypay' );
 		$this->method_description = sprintf(
 		/* translators: 1) HTML anchor open tag 2) HTML anchor closing tag */
-			__( 'All other general Stripe settings can be adjusted %1$shere%2$s.', 'woocommerce-gateway-stripe' ),
+			__( 'All other general Stripe settings can be adjusted %1$shere%2$s.', 'woocommerce-gateway-monilypay' ),
 			'<a href="' . esc_url( admin_url( 'admin.php?page=wc-settings&tab=checkout&section=stripe' ) ) . '">',
 			'</a>'
 		);
@@ -187,7 +187,7 @@ class WC_Gateway_Stripe_Sepa extends WC_Stripe_Payment_Gateway {
 	 */
 	public function mandate_display() {
 		/* translators: statement descriptor */
-		printf( __( 'By providing your IBAN and confirming this payment, you are authorizing %s and Stripe, our payment service provider, to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions. You are entitled to a refund from your bank under the terms and conditions of your agreement with your bank. A refund must be claimed within 8 weeks starting from the date on which your account was debited.', 'woocommerce-gateway-stripe' ), WC_Stripe_Helper::clean_statement_descriptor( $this->statement_descriptor ) );
+		printf( __( 'By providing your IBAN and confirming this payment, you are authorizing %s and Stripe, our payment service provider, to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions. You are entitled to a refund from your bank under the terms and conditions of your agreement with your bank. A refund must be claimed within 8 weeks starting from the date on which your account was debited.', 'woocommerce-gateway-monilypay' ), WC_Stripe_Helper::clean_statement_descriptor( $this->statement_descriptor ) );
 	}
 
 	/**
@@ -203,7 +203,7 @@ class WC_Gateway_Stripe_Sepa extends WC_Stripe_Payment_Gateway {
 			<p class="wc-stripe-sepa-mandate" style="margin-bottom:40px;"><?php $this->mandate_display(); ?></p>
 			<p class="form-row form-row-wide">
 				<label for="stripe-iban-element">
-					<?php esc_html_e( 'IBAN.', 'woocommerce-gateway-stripe' ); ?> <span class="required">*</span>
+					<?php esc_html_e( 'IBAN.', 'woocommerce-gateway-monilypay' ); ?> <span class="required">*</span>
 				</label>
 				<div id="stripe-iban-element" class="wc-stripe-iban-element-field">
 					<!-- A Stripe Element will be inserted here. -->
@@ -245,7 +245,7 @@ class WC_Gateway_Stripe_Sepa extends WC_Stripe_Payment_Gateway {
 			data-currency="' . esc_attr( strtolower( get_woocommerce_currency() ) ) . '">';
 
 		if ( $this->testmode ) {
-			$description .= ' ' . __( 'TEST MODE ENABLED. In test mode, you can use IBAN number DE89370400440532013000.', 'woocommerce-gateway-stripe' );
+			$description .= ' ' . __( 'TEST MODE ENABLED. In test mode, you can use IBAN number DE89370400440532013000.', 'woocommerce-gateway-monilypay' );
 		}
 
 		$description = trim( $description );
@@ -332,7 +332,7 @@ class WC_Gateway_Stripe_Sepa extends WC_Stripe_Payment_Gateway {
 						// Source param wrong? The CARD may have been deleted on stripe's end. Remove token and show message.
 						$wc_token = WC_Payment_Tokens::get( $prepared_source->token_id );
 						$wc_token->delete();
-						$localized_message = __( 'This card is no longer available and has been removed.', 'woocommerce-gateway-stripe' );
+						$localized_message = __( 'This card is no longer available and has been removed.', 'woocommerce-gateway-monilypay' );
 						$order->add_order_note( $localized_message );
 						throw new WC_Stripe_Exception( print_r( $response, true ), $localized_message );
 					}
@@ -352,7 +352,7 @@ class WC_Gateway_Stripe_Sepa extends WC_Stripe_Payment_Gateway {
 
 							return $this->process_payment( $order_id, true, $force_save_source );
 						} else {
-							$localized_message = __( 'Sorry, we are unable to process your payment at this time. Please retry later.', 'woocommerce-gateway-stripe' );
+							$localized_message = __( 'Sorry, we are unable to process your payment at this time. Please retry later.', 'woocommerce-gateway-monilypay' );
 							$order->add_order_note( $localized_message );
 							throw new WC_Stripe_Exception( print_r( $response, true ), $localized_message );
 						}

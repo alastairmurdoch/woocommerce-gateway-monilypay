@@ -34,15 +34,15 @@ class WC_Stripe_UPE_StripeLink_Note {
 		$note_class = self::get_note_class();
 		$note       = new $note_class();
 
-		$note->set_title( __( 'Increase conversion at checkout', 'woocommerce-gateway-stripe' ) );
-		$note->set_content( __( 'Reduce cart abandonment and create a frictionless checkout experience with Link by Stripe. Link autofills your customer’s payment and shipping details so they can check out in just six seconds with the Link optimized experience.', 'woocommerce-gateway-stripe' ) );
+		$note->set_title( __( 'Increase conversion at checkout', 'woocommerce-gateway-monilypay' ) );
+		$note->set_content( __( 'Reduce cart abandonment and create a frictionless checkout experience with Link by Stripe. Link autofills your customer’s payment and shipping details so they can check out in just six seconds with the Link optimized experience.', 'woocommerce-gateway-monilypay' ) );
 
 		$note->set_type( $note_class::E_WC_ADMIN_NOTE_INFORMATIONAL );
 		$note->set_name( self::NOTE_NAME );
-		$note->set_source( 'woocommerce-gateway-stripe' );
+		$note->set_source( 'woocommerce-gateway-monilypay' );
 		$note->add_action(
 			self::NOTE_NAME,
-			__( 'Set up now', 'woocommerce-gateway-stripe' ),
+			__( 'Set up now', 'woocommerce-gateway-monilypay' ),
 			self::NOTE_DOCUMENTATION_URL,
 			$note_class::E_WC_ADMIN_NOTE_UNACTIONED,
 			true

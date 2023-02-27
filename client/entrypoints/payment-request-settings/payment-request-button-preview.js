@@ -34,7 +34,7 @@ const BrowserHelpText = () => {
 				/* translators: %1: Payment method name %2: Browser name. */
 				__(
 					'To preview the %1$s button, view this page in the %2$s browser.',
-					'woocommerce-gateway-stripe'
+					'woocommerce-gateway-monilypay'
 				),
 				paymentMethodName,
 				browser
@@ -70,7 +70,7 @@ const PaymentRequestsButtonPreview = () => {
 			country: 'US',
 			currency: 'usd',
 			total: {
-				label: __( 'Total', 'woocommerce-gateway-stripe' ),
+				label: __( 'Total', 'woocommerce-gateway-monilypay' ),
 				amount: 99,
 			},
 			requestPayerName: true,
@@ -102,7 +102,7 @@ const PaymentRequestsButtonPreview = () => {
 					'To preview the buttons, ' +
 						'ensure your device is configured to accept Apple Pay or Google Pay, ' +
 						'and view this page using the Safari or Chrome browsers.',
-					'woocommerce-gateway-stripe'
+					'woocommerce-gateway-monilypay'
 				) }
 			</InlineNotice>
 		);

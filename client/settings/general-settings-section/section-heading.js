@@ -47,10 +47,10 @@ const SectionHeading = () => {
 		<StyledHeader>
 			<Title>
 				<span>
-					{ __( 'Payment methods', 'woocommerce-gateway-stripe' ) }
+					{ __( 'Payment methods', 'woocommerce-gateway-monilypay' ) }
 				</span>{ ' ' }
 				<Pill>
-					{ __( 'Early access', 'woocommerce-gateway-stripe' ) }
+					{ __( 'Early access', 'woocommerce-gateway-monilypay' ) }
 				</Pill>
 			</Title>
 			{ isConfirmationModalOpen && (
@@ -62,18 +62,18 @@ const SectionHeading = () => {
 				icon={ moreVertical }
 				label={ __(
 					'Payment methods menu',
-					'woocommerce-gateway-stripe'
+					'woocommerce-gateway-monilypay'
 				) }
 				controls={ [
 					{
 						title: __(
 							'Refresh payment methods',
-							'woocommerce-gateway-stripe'
+							'woocommerce-gateway-monilypay'
 						),
 						onClick: refreshAccount,
 					},
 					{
-						title: __( 'Disable', 'woocommerce-gateway-stripe' ),
+						title: __( 'Disable', 'woocommerce-gateway-monilypay' ),
 						onClick: toggleConfirmationModal,
 					},
 				] }

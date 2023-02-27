@@ -26,11 +26,11 @@ class WC_Stripe_Email_Failed_Authentication_Retry extends WC_Email_Failed_Order 
 	 */
 	public function __construct() {
 		$this->id          = 'failed_authentication_requested';
-		$this->title       = __( 'Payment Authentication Requested Email', 'woocommerce-gateway-stripe' );
-		$this->description = __( 'Payment authentication requested emails are sent to chosen recipient(s) when an attempt to automatically process a subscription renewal payment fails because the transaction requires an SCA verification, the customer is requested to authenticate the payment, and a retry rule has been applied to notify the customer again within a certain time period.', 'woocommerce-gateway-stripe' );
+		$this->title       = __( 'Payment Authentication Requested Email', 'woocommerce-gateway-monilypay' );
+		$this->description = __( 'Payment authentication requested emails are sent to chosen recipient(s) when an attempt to automatically process a subscription renewal payment fails because the transaction requires an SCA verification, the customer is requested to authenticate the payment, and a retry rule has been applied to notify the customer again within a certain time period.', 'woocommerce-gateway-monilypay' );
 
-		$this->heading = __( 'Automatic renewal payment failed due to authentication required', 'woocommerce-gateway-stripe' );
-		$this->subject = __( '[{site_title}] Automatic payment failed for {order_number}. Customer asked to authenticate payment and will be notified again {retry_time}', 'woocommerce-gateway-stripe' );
+		$this->heading = __( 'Automatic renewal payment failed due to authentication required', 'woocommerce-gateway-monilypay' );
+		$this->subject = __( '[{site_title}] Automatic payment failed for {order_number}. Customer asked to authenticate payment and will be notified again {retry_time}', 'woocommerce-gateway-monilypay' );
 
 		$this->template_html  = 'emails/failed-renewal-authentication-requested.php';
 		$this->template_plain = 'emails/plain/failed-renewal-authentication-requested.php';

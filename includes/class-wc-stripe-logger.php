@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class WC_Stripe_Logger {
 
 	public static $logger;
-	const WC_LOG_FILENAME = 'woocommerce-gateway-stripe';
+	const WC_LOG_FILENAME = 'woocommerce-gateway-monilypay';
 
 	/**
 	 * Utilize WC logger class

@@ -38,63 +38,63 @@ const getErrorMessageForCode = ( code ) => {
 	const messages = {
 		[ errorCodes.INVALID_NUMBER ]: __(
 			'The card number is not a valid credit card number.',
-			'woocommerce-gateway-stripe'
+			'woocommerce-gateway-monilypay'
 		),
 		[ errorCodes.INVALID_EXPIRY_MONTH ]: __(
 			'The card expiration month is invalid.',
-			'woocommerce-gateway-stripe'
+			'woocommerce-gateway-monilypay'
 		),
 		[ errorCodes.INVALID_EXPIRY_YEAR ]: __(
 			'The card expiration year is invalid.',
-			'woocommerce-gateway-stripe'
+			'woocommerce-gateway-monilypay'
 		),
 		[ errorCodes.INVALID_CVC ]: __(
 			'The card security code is invalid.',
-			'woocommerce-gateway-stripe'
+			'woocommerce-gateway-monilypay'
 		),
 		[ errorCodes.INCORRECT_NUMBER ]: __(
 			'The card number is incorrect.',
-			'woocommerce-gateway-stripe'
+			'woocommerce-gateway-monilypay'
 		),
 		[ errorCodes.INCOMPLETE_NUMBER ]: __(
 			'The card number is incomplete.',
-			'woocommerce-gateway-stripe'
+			'woocommerce-gateway-monilypay'
 		),
 		[ errorCodes.INCOMPLETE_CVC ]: __(
 			'The card security code is incomplete.',
-			'woocommerce-gateway-stripe'
+			'woocommerce-gateway-monilypay'
 		),
 		[ errorCodes.INCOMPLETE_EXPIRY ]: __(
 			'The card expiration date is incomplete.',
-			'woocommerce-gateway-stripe'
+			'woocommerce-gateway-monilypay'
 		),
 		[ errorCodes.EXPIRED_CARD ]: __(
 			'The card has expired.',
-			'woocommerce-gateway-stripe'
+			'woocommerce-gateway-monilypay'
 		),
 		[ errorCodes.INCORRECT_CVC ]: __(
 			'The card security code is incorrect.',
-			'woocommerce-gateway-stripe'
+			'woocommerce-gateway-monilypay'
 		),
 		[ errorCodes.INCORRECT_ZIP ]: __(
 			'The card zip code failed validation.',
-			'woocommerce-gateway-stripe'
+			'woocommerce-gateway-monilypay'
 		),
 		[ errorCodes.INVALID_EXPIRY_YEAR_PAST ]: __(
 			'The card expiration year is in the past',
-			'woocommerce-gateway-stripe'
+			'woocommerce-gateway-monilypay'
 		),
 		[ errorCodes.CARD_DECLINED ]: __(
 			'The card was declined.',
-			'woocommerce-gateway-stripe'
+			'woocommerce-gateway-monilypay'
 		),
 		[ errorCodes.MISSING ]: __(
 			'There is no card on a customer that is being charged.',
-			'woocommerce-gateway-stripe'
+			'woocommerce-gateway-monilypay'
 		),
 		[ errorCodes.PROCESSING_ERROR ]: __(
 			'An error occurred while processing the card.',
-			'woocommerce-gateway-stripe'
+			'woocommerce-gateway-monilypay'
 		),
 	};
 	return messages[ code ] || null;
@@ -105,12 +105,12 @@ const getErrorMessageForTypeAndCode = ( type, code = '' ) => {
 		case errorTypes.INVALID_EMAIL:
 			return __(
 				'Invalid email address, please correct and try again.',
-				'woocommerce-gateway-stripe'
+				'woocommerce-gateway-monilypay'
 			);
 		case isNonFriendlyError( type ):
 			return __(
 				'Unable to process this payment, please try again or use alternative method.',
-				'woocommerce-gateway-stripe'
+				'woocommerce-gateway-monilypay'
 			);
 		case errorTypes.CARD_ERROR:
 			return getErrorMessageForCode( code );

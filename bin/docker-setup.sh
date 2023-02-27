@@ -32,7 +32,7 @@ while [[ $? -ne 0 ]]; do
 done
 
 # If the plugin is already active then return early
-cli wp plugin is-active woocommerce-gateway-stripe > /dev/null
+cli wp plugin is-active woocommerce-gateway-monilypay > /dev/null
 if [[ $? -eq 0 ]]; then
 	set -e
 	echo
@@ -111,7 +111,7 @@ echo "Importing some sample data..."
 cli wp import wp-content/plugins/woocommerce/sample-data/sample_products.xml --authors=skip
 
 echo "Activating the WooCommerce Stripe Payment Gateway plugin..."
-cli wp plugin activate woocommerce-gateway-stripe
+cli wp plugin activate woocommerce-gateway-monilypay
 
 echo
 echo "SUCCESS! You should now be able to access http://${SITE_URL}/wp-admin/"

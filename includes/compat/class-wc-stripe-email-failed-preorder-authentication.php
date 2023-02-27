@@ -23,8 +23,8 @@ class WC_Stripe_Email_Failed_Preorder_Authentication extends WC_Stripe_Email_Fai
 	 */
 	public function __construct( $email_classes = [] ) {
 		$this->id             = 'failed_preorder_sca_authentication';
-		$this->title          = __( 'Pre-order Payment Action Needed', 'woocommerce-gateway-stripe' );
-		$this->description    = __( 'This is an order notification sent to the customer once a pre-order is complete, but additional payment steps are required.', 'woocommerce-gateway-stripe' );
+		$this->title          = __( 'Pre-order Payment Action Needed', 'woocommerce-gateway-monilypay' );
+		$this->description    = __( 'This is an order notification sent to the customer once a pre-order is complete, but additional payment steps are required.', 'woocommerce-gateway-monilypay' );
 		$this->customer_email = true;
 
 		$this->template_html  = 'emails/failed-preorder-authentication.php';
@@ -81,7 +81,7 @@ class WC_Stripe_Email_Failed_Preorder_Authentication extends WC_Stripe_Email_Fai
 	 * @return string
 	 */
 	public function get_default_subject() {
-		return __( 'Payment authorization needed for pre-order {order_number}', 'woocommerce-gateway-stripe' );
+		return __( 'Payment authorization needed for pre-order {order_number}', 'woocommerce-gateway-monilypay' );
 	}
 
 	/**
@@ -90,7 +90,7 @@ class WC_Stripe_Email_Failed_Preorder_Authentication extends WC_Stripe_Email_Fai
 	 * @return string
 	 */
 	public function get_default_heading() {
-		return __( 'Payment authorization needed for pre-order {order_number}', 'woocommerce-gateway-stripe' );
+		return __( 'Payment authorization needed for pre-order {order_number}', 'woocommerce-gateway-monilypay' );
 	}
 
 	/**

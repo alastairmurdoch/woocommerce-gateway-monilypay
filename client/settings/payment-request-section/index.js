@@ -67,7 +67,7 @@ const PaymentRequestSection = () => {
 							<div className="express-checkout__label">
 								{ __(
 									'Apple Pay / Google Pay',
-									'woocommerce-gateway-stripe'
+									'woocommerce-gateway-monilypay'
 								) }
 							</div>
 							<div className="express-checkout__description">
@@ -78,7 +78,7 @@ const PaymentRequestSection = () => {
 											'Boost sales by offering a fast, simple, and secure checkout experience.' +
 												'By enabling this feature, you agree to {{stripeLink}}Stripe{{/stripeLink}}, ' +
 												"{{appleLink}}Apple{{/appleLink}}, and {{googleLink}}Google{{/googleLink}}'s terms of use.",
-											'woocommerce-gateway-stripe'
+											'woocommerce-gateway-monilypay'
 										),
 										components: {
 											stripeLink: (
@@ -112,7 +112,7 @@ const PaymentRequestSection = () => {
 							<a href={ customizeAppearanceURL }>
 								{ __(
 									'Customize',
-									'woocommerce-gateway-stripe'
+									'woocommerce-gateway-monilypay'
 								) }
 							</a>
 						</div>
@@ -123,7 +123,7 @@ const PaymentRequestSection = () => {
 								<CheckboxControl
 									label={ __(
 										'Link by Stripe Input',
-										'woocommerce-gateway-stripe'
+										'woocommerce-gateway-monilypay'
 									) }
 									checked={ isStripeLinkEnabled }
 									onChange={ updateStripeLinkCheckout }
@@ -136,7 +136,7 @@ const PaymentRequestSection = () => {
 								<div className="express-checkout__label">
 									{ __(
 										'Link by Stripe',
-										'woocommerce-gateway-stripe'
+										'woocommerce-gateway-monilypay'
 									) }
 								</div>
 								<div className="express-checkout__description">
@@ -150,7 +150,7 @@ const PaymentRequestSection = () => {
 													'By enabling this feature, you agree to the ' +
 													'{{stripeLinkTerms}}Link by Stripe terms{{/stripeLinkTerms}}, ' +
 													'and {{privacyPolicy}}Privacy Policy{{/privacyPolicy}}.',
-												'woocommerce-gateway-stripe'
+												'woocommerce-gateway-monilypay'
 											),
 											components: {
 												stripeLinkTerms: (
@@ -179,7 +179,7 @@ const PaymentRequestSection = () => {
 									interpolateComponents( {
 										mixedString: __(
 											'{{linkDocs}}Read more{{/linkDocs}}',
-											'woocommerce-gateway-stripe'
+											'woocommerce-gateway-monilypay'
 										),
 										components: {
 											linkDocs: (

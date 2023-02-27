@@ -28,14 +28,14 @@ const PaymentMethodMissingCurrencyPill = ( { id, label } ) => {
 						"%1$s won't be visible to your customers until you add %2$s to your store.",
 						"%1$s won't be visible to your customers until you add one of these currencies to your store: %2$s.",
 						paymentMethodCurrencies.length,
-						'woocommerce-gateway-stripe'
+						'woocommerce-gateway-monilypay'
 					),
 					label,
 					paymentMethodCurrencies.join( ', ' )
 				) }
 			>
 				<StyledPill>
-					{ __( 'Requires currency', 'woocommerce-gateway-stripe' ) }
+					{ __( 'Requires currency', 'woocommerce-gateway-monilypay' ) }
 				</StyledPill>
 			</Tooltip>
 		);

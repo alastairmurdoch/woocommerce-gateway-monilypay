@@ -39,7 +39,7 @@ const PaymentMethodsUnavailableList = () => {
 				>
 					{ sprintf(
 						/* translators: %d: Number of unavailable payment methods not displayed. */
-						__( '+ %d more', 'woocommerce-gateway-stripe' ),
+						__( '+ %d more', 'woocommerce-gateway-monilypay' ),
 						unavailablePaymentMethodIds.length - countIconsToDisplay
 					) }
 				</li>

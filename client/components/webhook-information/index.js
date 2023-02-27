@@ -16,7 +16,7 @@ export const WebhookInformation = () => {
 			{ interpolateComponents( {
 				mixedString: __(
 					"Add the following webhook endpoint {{webhookUrl/}} to your {{settingsLink}}Stripe account settings{{/settingsLink}} (if there isn't one already). This will enable you to receive notifications on the charge statuses.",
-					'woocommerce-gateway-stripe'
+					'woocommerce-gateway-monilypay'
 				),
 				components: {
 					webhookUrl: (

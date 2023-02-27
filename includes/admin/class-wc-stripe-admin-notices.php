@@ -138,7 +138,7 @@ class WC_Stripe_Admin_Notices {
 
 				$message = sprintf(
 				/* translators: 1) HTML anchor open tag 2) HTML anchor closing tag */
-					__( 'WooCommerce Stripe - We see that you had the "Require 3D secure when applicable" setting turned on. This setting is not available here anymore, because it is now replaced by Stripe Radar. You can learn more about it %1$shere%2$s ', 'woocommerce-gateway-stripe' ),
+					__( 'WooCommerce Stripe - We see that you had the "Require 3D secure when applicable" setting turned on. This setting is not available here anymore, because it is now replaced by Stripe Radar. You can learn more about it %1$shere%2$s ', 'woocommerce-gateway-monilypay' ),
 					'<a href="' . $url . '" target="_blank">',
 					'</a>'
 				);
@@ -149,7 +149,7 @@ class WC_Stripe_Admin_Notices {
 			if ( empty( $show_style_notice ) ) {
 				$message = sprintf(
 				/* translators: 1) HTML anchor open tag 2) HTML anchor closing tag */
-					__( 'WooCommerce Stripe - We recently made changes to Stripe that may impact the appearance of your checkout. If your checkout has changed unexpectedly, please follow these %1$sinstructions%2$s to fix.', 'woocommerce-gateway-stripe' ),
+					__( 'WooCommerce Stripe - We recently made changes to Stripe that may impact the appearance of your checkout. If your checkout has changed unexpectedly, please follow these %1$sinstructions%2$s to fix.', 'woocommerce-gateway-monilypay' ),
 					'<a href="https://woocommerce.com/document/stripe/#new-checkout-experience" target="_blank">',
 					'</a>'
 				);
@@ -163,7 +163,7 @@ class WC_Stripe_Admin_Notices {
 			if ( empty( $show_phpver_notice ) ) {
 				if ( version_compare( phpversion(), WC_STRIPE_MIN_PHP_VER, '<' ) ) {
 					/* translators: 1) int version 2) int version */
-					$message = __( 'WooCommerce Stripe - The minimum PHP version required for this plugin is %1$s. You are running %2$s.', 'woocommerce-gateway-stripe' );
+					$message = __( 'WooCommerce Stripe - The minimum PHP version required for this plugin is %1$s. You are running %2$s.', 'woocommerce-gateway-monilypay' );
 
 					$this->add_admin_notice( 'phpver', 'error', sprintf( $message, WC_STRIPE_MIN_PHP_VER, phpversion() ), true );
 
@@ -174,14 +174,14 @@ class WC_Stripe_Admin_Notices {
 			if ( empty( $show_wcver_notice ) ) {
 				if ( WC_Stripe_Helper::is_wc_lt( WC_STRIPE_FUTURE_MIN_WC_VER ) ) {
 					/* translators: 1) int version 2) int version */
-					$message = __( 'WooCommerce Stripe - This is the last version of the plugin compatible with WooCommerce %1$s. All future versions of the plugin will require WooCommerce %2$s or greater.', 'woocommerce-gateway-stripe' );
+					$message = __( 'WooCommerce Stripe - This is the last version of the plugin compatible with WooCommerce %1$s. All future versions of the plugin will require WooCommerce %2$s or greater.', 'woocommerce-gateway-monilypay' );
 					$this->add_admin_notice( 'wcver', 'notice notice-warning', sprintf( $message, WC_VERSION, WC_STRIPE_FUTURE_MIN_WC_VER ), true );
 				}
 			}
 
 			if ( empty( $show_curl_notice ) ) {
 				if ( ! function_exists( 'curl_init' ) ) {
-					$this->add_admin_notice( 'curl', 'notice notice-warning', __( 'WooCommerce Stripe - cURL is not installed.', 'woocommerce-gateway-stripe' ), true );
+					$this->add_admin_notice( 'curl', 'notice notice-warning', __( 'WooCommerce Stripe - cURL is not installed.', 'woocommerce-gateway-monilypay' ), true );
 				}
 			}
 
@@ -196,7 +196,7 @@ class WC_Stripe_Admin_Notices {
 
 					$notice_message = sprintf(
 					/* translators: 1) HTML anchor open tag 2) HTML anchor closing tag */
-						__( 'Stripe is almost ready. To get started, %1$sset your Stripe account keys%2$s.', 'woocommerce-gateway-stripe' ),
+						__( 'Stripe is almost ready. To get started, %1$sset your Stripe account keys%2$s.', 'woocommerce-gateway-monilypay' ),
 						'<a href="' . $setting_link . '">',
 						'</a>'
 					);
@@ -212,7 +212,7 @@ class WC_Stripe_Admin_Notices {
 
 						$notice_message = sprintf(
 						/* translators: 1) HTML anchor open tag 2) HTML anchor closing tag */
-							__( 'Stripe is in test mode however your test keys may not be valid. Test keys start with pk_test and sk_test or rk_test. Please go to your settings and, %1$sset your Stripe account keys%2$s.', 'woocommerce-gateway-stripe' ),
+							__( 'Stripe is in test mode however your test keys may not be valid. Test keys start with pk_test and sk_test or rk_test. Please go to your settings and, %1$sset your Stripe account keys%2$s.', 'woocommerce-gateway-monilypay' ),
 							'<a href="' . $setting_link . '">',
 							'</a>'
 						);
@@ -227,7 +227,7 @@ class WC_Stripe_Admin_Notices {
 
 						$message = sprintf(
 						/* translators: 1) HTML anchor open tag 2) HTML anchor closing tag */
-							__( 'Stripe is in live mode however your live keys may not be valid. Live keys start with pk_live and sk_live or rk_live. Please go to your settings and, %1$sset your Stripe account keys%2$s.', 'woocommerce-gateway-stripe' ),
+							__( 'Stripe is in live mode however your live keys may not be valid. Live keys start with pk_live and sk_live or rk_live. Please go to your settings and, %1$sset your Stripe account keys%2$s.', 'woocommerce-gateway-monilypay' ),
 							'<a href="' . $setting_link . '">',
 							'</a>'
 						);
@@ -243,7 +243,7 @@ class WC_Stripe_Admin_Notices {
 
 					$message = sprintf(
 					/* translators: 1) HTML anchor open tag 2) HTML anchor closing tag */
-						__( 'Your customers cannot use Stripe on checkout, because we couldn\'t connect to your account. Please go to your settings and, %1$sset your Stripe account keys%2$s.', 'woocommerce-gateway-stripe' ),
+						__( 'Your customers cannot use Stripe on checkout, because we couldn\'t connect to your account. Please go to your settings and, %1$sset your Stripe account keys%2$s.', 'woocommerce-gateway-monilypay' ),
 						'<a href="' . $setting_link . '">',
 						'</a>'
 					);
@@ -257,7 +257,7 @@ class WC_Stripe_Admin_Notices {
 				if ( ! wc_checkout_is_https() ) {
 					$message = sprintf(
 					/* translators: 1) HTML anchor open tag 2) HTML anchor closing tag */
-						__( 'Stripe is enabled, but a SSL certificate is not detected. Your checkout may not be secure! Please ensure your server has a valid %1$sSSL certificate%2$s.', 'woocommerce-gateway-stripe' ),
+						__( 'Stripe is enabled, but a SSL certificate is not detected. Your checkout may not be secure! Please ensure your server has a valid %1$sSSL certificate%2$s.', 'woocommerce-gateway-monilypay' ),
 						'<a href="https://en.wikipedia.org/wiki/Transport_Layer_Security" target="_blank">',
 						'</a>'
 					);
@@ -269,7 +269,7 @@ class WC_Stripe_Admin_Notices {
 			if ( empty( $show_sca_notice ) ) {
 				$message = sprintf(
 				/* translators: 1) HTML anchor open tag 2) HTML anchor closing tag */
-					__( 'Stripe is now ready for Strong Customer Authentication (SCA) and 3D Secure 2! %1$sRead about SCA%2$s.', 'woocommerce-gateway-stripe' ),
+					__( 'Stripe is now ready for Strong Customer Authentication (SCA) and 3D Secure 2! %1$sRead about SCA%2$s.', 'woocommerce-gateway-monilypay' ),
 					'<a href="https://woocommerce.com/posts/introducing-strong-customer-authentication-sca/" target="_blank">',
 					'</a>'
 				);
@@ -280,7 +280,7 @@ class WC_Stripe_Admin_Notices {
 			if ( 'yes' === $changed_keys_notice ) {
 				$message = sprintf(
 				/* translators: 1) HTML anchor open tag 2) HTML anchor closing tag */
-					__( 'The public and/or secret keys for the Stripe gateway have been changed. This might cause errors for existing customers and saved payment methods. %1$sClick here to learn more%2$s.', 'woocommerce-gateway-stripe' ),
+					__( 'The public and/or secret keys for the Stripe gateway have been changed. This might cause errors for existing customers and saved payment methods. %1$sClick here to learn more%2$s.', 'woocommerce-gateway-monilypay' ),
 					'<a href="https://woocommerce.com/document/stripe-fixing-customer-errors" target="_blank">',
 					'</a>'
 				);
@@ -308,7 +308,7 @@ class WC_Stripe_Admin_Notices {
 
 			if ( ! in_array( get_woocommerce_currency(), $gateway->get_supported_currency(), true ) ) {
 				/* translators: 1) Payment method, 2) List of supported currencies */
-				$this->add_admin_notice( $method, 'notice notice-error', sprintf( __( '%1$s is enabled - it requires store currency to be set to %2$s', 'woocommerce-gateway-stripe' ), $gateway->get_method_title(), implode( ', ', $gateway->get_supported_currency() ) ), true );
+				$this->add_admin_notice( $method, 'notice notice-error', sprintf( __( '%1$s is enabled - it requires store currency to be set to %2$s', 'woocommerce-gateway-monilypay' ), $gateway->get_method_title(), implode( ', ', $gateway->get_supported_currency() ) ), true );
 			}
 		}
 
@@ -328,7 +328,7 @@ class WC_Stripe_Admin_Notices {
 			}
 			if ( ! in_array( get_woocommerce_currency(), $upe_method->get_supported_currencies(), true ) ) {
 				/* translators: %1$s Payment method, %2$s List of supported currencies */
-				$this->add_admin_notice( $method . '_upe', 'notice notice-error', sprintf( __( '%1$s is enabled - it requires store currency to be set to %2$s', 'woocommerce-gateway-stripe' ), $upe_method->get_label(), implode( ', ', $upe_method->get_supported_currencies() ) ), true );
+				$this->add_admin_notice( $method . '_upe', 'notice notice-error', sprintf( __( '%1$s is enabled - it requires store currency to be set to %2$s', 'woocommerce-gateway-monilypay' ), $upe_method->get_label(), implode( ', ', $upe_method->get_supported_currencies() ) ), true );
 			}
 		}
 	}
@@ -342,11 +342,11 @@ class WC_Stripe_Admin_Notices {
 	public function hide_notices() {
 		if ( isset( $_GET['wc-stripe-hide-notice'] ) && isset( $_GET['_wc_stripe_notice_nonce'] ) ) {
 			if ( ! wp_verify_nonce( wc_clean( wp_unslash( $_GET['_wc_stripe_notice_nonce'] ) ), 'wc_stripe_hide_notices_nonce' ) ) {
-				wp_die( __( 'Action failed. Please refresh the page and retry.', 'woocommerce-gateway-stripe' ) );
+				wp_die( __( 'Action failed. Please refresh the page and retry.', 'woocommerce-gateway-monilypay' ) );
 			}
 
 			if ( ! current_user_can( 'manage_woocommerce' ) ) {
-				wp_die( __( 'Cheatin&#8217; huh?', 'woocommerce-gateway-stripe' ) );
+				wp_die( __( 'Cheatin&#8217; huh?', 'woocommerce-gateway-monilypay' ) );
 			}
 
 			$notice = wc_clean( wp_unslash( $_GET['wc-stripe-hide-notice'] ) );

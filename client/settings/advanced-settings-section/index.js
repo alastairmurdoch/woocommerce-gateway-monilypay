@@ -24,7 +24,7 @@ const AdvancedSettings = () => {
 		<>
 			<SettingsSection>
 				<Button onClick={ toggleIsSectionExpanded } isTertiary>
-					{ __( 'Advanced settings', 'woocommerce-gateway-stripe' ) }
+					{ __( 'Advanced settings', 'woocommerce-gateway-monilypay' ) }
 					<Icon
 						icon={ isSectionExpanded ? chevronUp : chevronDown }
 					/>

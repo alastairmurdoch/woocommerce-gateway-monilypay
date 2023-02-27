@@ -111,7 +111,7 @@ final class WC_Stripe_Blocks_Support extends AbstractPaymentMethodType {
 		);
 		wp_set_script_translations(
 			'wc-stripe-blocks-integration',
-			'woocommerce-gateway-stripe'
+			'woocommerce-gateway-monilypay'
 		);
 	}
 
@@ -140,7 +140,7 @@ final class WC_Stripe_Blocks_Support extends AbstractPaymentMethodType {
 		);
 		wp_set_script_translations(
 			'wc-stripe-blocks-integration',
-			'woocommerce-gateway-stripe'
+			'woocommerce-gateway-monilypay'
 		);
 	}
 
@@ -261,8 +261,8 @@ final class WC_Stripe_Blocks_Support extends AbstractPaymentMethodType {
 	private function get_show_save_option() {
 		$saved_cards = $this->get_show_saved_cards();
 		// This assumes that Stripe supports `tokenization` - currently this is true, based on
-		// https://github.com/woocommerce/woocommerce-gateway-stripe/blob/master/includes/class-wc-gateway-stripe.php#L95 .
-		// See https://github.com/woocommerce/woocommerce-gateway-stripe/blob/ad19168b63df86176cbe35c3e95203a245687640/includes/class-wc-gateway-stripe.php#L271 and
+		// https://github.com/woocommerce/woocommerce-gateway-monilypay/blob/master/includes/class-wc-gateway-stripe.php#L95 .
+		// See https://github.com/woocommerce/woocommerce-gateway-monilypay/blob/ad19168b63df86176cbe35c3e95203a245687640/includes/class-wc-gateway-stripe.php#L271 and
 		// https://github.com/woocommerce/woocommerce/wiki/Payment-Token-API .
 		return apply_filters( 'wc_stripe_display_save_payment_method_checkbox', filter_var( $saved_cards, FILTER_VALIDATE_BOOLEAN ) );
 	}
@@ -273,7 +273,7 @@ final class WC_Stripe_Blocks_Support extends AbstractPaymentMethodType {
 	 * @return string Title / label string
 	 */
 	private function get_title() {
-		return isset( $this->settings['title'] ) ? $this->settings['title'] : __( 'Credit / Debit Card', 'woocommerce-gateway-stripe' );
+		return isset( $this->settings['title'] ) ? $this->settings['title'] : __( 'Credit / Debit Card', 'woocommerce-gateway-monilypay' );
 	}
 
 	/**
@@ -285,30 +285,30 @@ final class WC_Stripe_Blocks_Support extends AbstractPaymentMethodType {
 		$icons_src = [
 			'visa'       => [
 				'src' => WC_STRIPE_PLUGIN_URL . '/assets/images/visa.svg',
-				'alt' => __( 'Visa', 'woocommerce-gateway-stripe' ),
+				'alt' => __( 'Visa', 'woocommerce-gateway-monilypay' ),
 			],
 			'amex'       => [
 				'src' => WC_STRIPE_PLUGIN_URL . '/assets/images/amex.svg',
-				'alt' => __( 'American Express', 'woocommerce-gateway-stripe' ),
+				'alt' => __( 'American Express', 'woocommerce-gateway-monilypay' ),
 			],
 			'mastercard' => [
 				'src' => WC_STRIPE_PLUGIN_URL . '/assets/images/mastercard.svg',
-				'alt' => __( 'Mastercard', 'woocommerce-gateway-stripe' ),
+				'alt' => __( 'Mastercard', 'woocommerce-gateway-monilypay' ),
 			],
 		];
 
 		if ( 'USD' === get_woocommerce_currency() ) {
 			$icons_src['discover'] = [
 				'src' => WC_STRIPE_PLUGIN_URL . '/assets/images/discover.svg',
-				'alt' => _x( 'Discover', 'Name of credit card', 'woocommerce-gateway-stripe' ),
+				'alt' => _x( 'Discover', 'Name of credit card', 'woocommerce-gateway-monilypay' ),
 			];
 			$icons_src['jcb']      = [
 				'src' => WC_STRIPE_PLUGIN_URL . '/assets/images/jcb.svg',
-				'alt' => __( 'JCB', 'woocommerce-gateway-stripe' ),
+				'alt' => __( 'JCB', 'woocommerce-gateway-monilypay' ),
 			];
 			$icons_src['diners']   = [
 				'src' => WC_STRIPE_PLUGIN_URL . '/assets/images/diners.svg',
-				'alt' => __( 'Diners', 'woocommerce-gateway-stripe' ),
+				'alt' => __( 'Diners', 'woocommerce-gateway-monilypay' ),
 			];
 		}
 		return $icons_src;

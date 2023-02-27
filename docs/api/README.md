@@ -217,7 +217,7 @@ Status: 200 OK
 
 In WooCommerce Stripe 4.0.0, there will be multiple payment methods to support
 [Stripe Sources](https://stripe.com/docs/sources). For example, there will be
-[`stripe_bancontact`](https://github.com/woocommerce/woocommerce-gateway-stripe/blob/3041f46f4b1b5d25b24be25767e0387f0cdf3f96/includes/payment-methods/class-wc-gateway-stripe-bancontact.php#L59) payment method
+[`stripe_bancontact`](https://github.com/woocommerce/woocommerce-gateway-monilypay/blob/3041f46f4b1b5d25b24be25767e0387f0cdf3f96/includes/payment-methods/class-wc-gateway-stripe-bancontact.php#L59) payment method
 in addition to `stripe` payment method. You can request `stripe_bancontact` with:
 
 ```

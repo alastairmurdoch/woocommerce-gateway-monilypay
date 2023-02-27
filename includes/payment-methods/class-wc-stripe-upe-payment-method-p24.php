@@ -18,13 +18,13 @@ class WC_Stripe_UPE_Payment_Method_P24 extends WC_Stripe_UPE_Payment_Method {
 	public function __construct() {
 		parent::__construct();
 		$this->stripe_id            = self::STRIPE_ID;
-		$this->title                = __( 'Pay with Przelewy24', 'woocommerce-gateway-stripe' );
+		$this->title                = __( 'Pay with Przelewy24', 'woocommerce-gateway-monilypay' );
 		$this->is_reusable          = false;
 		$this->supported_currencies = [ 'EUR', 'PLN' ];
-		$this->label                = __( 'Przelewy24', 'woocommerce-gateway-stripe' );
+		$this->label                = __( 'Przelewy24', 'woocommerce-gateway-monilypay' );
 		$this->description          = __(
 			'Przelewy24 is a Poland-based payment method aggregator that allows customers to complete transactions online using bank transfers and other methods.',
-			'woocommerce-gateway-stripe'
+			'woocommerce-gateway-monilypay'
 		);
 	}
 }

@@ -38,7 +38,7 @@ class WC_Stripe_REST_UPE_Flag_Toggle_Controller extends WC_Stripe_REST_Base_Cont
 				'permission_callback' => [ $this, 'check_permission' ],
 				'args'                => [
 					'is_upe_enabled' => [
-						'description'       => __( 'Determines if the UPE feature flag is enabled.', 'woocommerce-gateway-stripe' ),
+						'description'       => __( 'Determines if the UPE feature flag is enabled.', 'woocommerce-gateway-monilypay' ),
 						'type'              => 'boolean',
 						'validate_callback' => 'rest_validate_request_arg',
 					],

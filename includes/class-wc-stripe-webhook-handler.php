@@ -234,7 +234,7 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 					// Source param wrong? The CARD may have been deleted on stripe's end. Remove token and show message.
 					$wc_token = WC_Payment_Tokens::get( $prepared_source->token_id );
 					$wc_token->delete();
-					$localized_message = __( 'This card is no longer available and has been removed.', 'woocommerce-gateway-stripe' );
+					$localized_message = __( 'This card is no longer available and has been removed.', 'woocommerce-gateway-monilypay' );
 					$order->add_order_note( $localized_message );
 					throw new WC_Stripe_Exception( print_r( $response, true ), $localized_message );
 				}
@@ -253,7 +253,7 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 						$this->retry_interval++;
 						return $this->process_webhook_payment( $notification, true );
 					} else {
-						$localized_message = __( 'Sorry, we are unable to process your payment at this time. Please retry later.', 'woocommerce-gateway-stripe' );
+						$localized_message = __( 'Sorry, we are unable to process your payment at this time. Please retry later.', 'woocommerce-gateway-monilypay' );
 						$order->add_order_note( $localized_message );
 						throw new WC_Stripe_Exception( print_r( $response, true ), $localized_message );
 					}
@@ -314,7 +314,7 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 
 		$message = sprintf(
 		/* translators: 1) HTML anchor open tag 2) HTML anchor closing tag */
-			__( 'A dispute was created for this order. Response is needed. Please go to your %1$sStripe Dashboard%2$s to review this dispute.', 'woocommerce-gateway-stripe' ),
+			__( 'A dispute was created for this order. Response is needed. Please go to your %1$sStripe Dashboard%2$s to review this dispute.', 'woocommerce-gateway-monilypay' ),
 			'<a href="' . esc_url( $this->get_transaction_url( $order ) ) . '" title="Stripe Dashboard" target="_blank">',
 			'</a>'
 		);
@@ -347,11 +347,11 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 		}
 
 		if ( 'lost' === $status ) {
-			$message = __( 'The dispute was lost or accepted.', 'woocommerce-gateway-stripe' );
+			$message = __( 'The dispute was lost or accepted.', 'woocommerce-gateway-monilypay' );
 		} elseif ( 'won' === $status ) {
-			$message = __( 'The dispute was resolved in your favor.', 'woocommerce-gateway-stripe' );
+			$message = __( 'The dispute was resolved in your favor.', 'woocommerce-gateway-monilypay' );
 		} elseif ( 'warning_closed' === $status ) {
-			$message = __( 'The inquiry or retrieval was closed.', 'woocommerce-gateway-stripe' );
+			$message = __( 'The inquiry or retrieval was closed.', 'woocommerce-gateway-monilypay' );
 		} else {
 			return;
 		}
@@ -405,12 +405,12 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 					$refund_object = $this->get_refund_object( $notification );
 					$this->update_fees( $order, $refund_object->balance_transaction );
 					/* translators: partial captured amount */
-					$order->add_order_note( sprintf( __( 'This charge was partially captured via Stripe Dashboard in the amount of: %s', 'woocommerce-gateway-stripe' ), $partial_amount ) );
+					$order->add_order_note( sprintf( __( 'This charge was partially captured via Stripe Dashboard in the amount of: %s', 'woocommerce-gateway-monilypay' ), $partial_amount ) );
 				} else {
 					$order->payment_complete( $notification->data->object->id );
 
 					/* translators: transaction id */
-					$order->add_order_note( sprintf( __( 'Stripe charge complete (Charge ID: %s)', 'woocommerce-gateway-stripe' ), $notification->data->object->id ) );
+					$order->add_order_note( sprintf( __( 'Stripe charge complete (Charge ID: %s)', 'woocommerce-gateway-monilypay' ), $notification->data->object->id ) );
 				}
 
 				if ( is_callable( [ $order, 'save' ] ) ) {
@@ -463,7 +463,7 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 		$order->payment_complete( $notification->data->object->id );
 
 		/* translators: transaction id */
-		$order->add_order_note( sprintf( __( 'Stripe charge complete (Charge ID: %s)', 'woocommerce-gateway-stripe' ), $notification->data->object->id ) );
+		$order->add_order_note( sprintf( __( 'Stripe charge complete (Charge ID: %s)', 'woocommerce-gateway-monilypay' ), $notification->data->object->id ) );
 
 		if ( is_callable( [ $order, 'save' ] ) ) {
 			$order->save();
@@ -490,7 +490,7 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 			return;
 		}
 
-		$message = __( 'This payment failed to clear.', 'woocommerce-gateway-stripe' );
+		$message = __( 'This payment failed to clear.', 'woocommerce-gateway-monilypay' );
 		if ( ! $order->get_meta( '_stripe_status_final', false ) ) {
 			$order->update_status( 'failed', $message );
 		} else {
@@ -527,7 +527,7 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 			return;
 		}
 
-		$message = __( 'This payment was cancelled.', 'woocommerce-gateway-stripe' );
+		$message = __( 'This payment was cancelled.', 'woocommerce-gateway-monilypay' );
 		if ( ! $order->has_status( 'cancelled' ) && ! $order->get_meta( '_stripe_status_final', false ) ) {
 			$order->update_status( 'cancelled', $message );
 		} else {
@@ -574,7 +574,7 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 				// the order was already cancelled, so we don't need a new note.
 				if ( 'cancelled' !== $order->get_status() ) {
 					/* translators: amount (including currency symbol) */
-					$order->add_order_note( sprintf( __( 'Pre-Authorization for %s voided from the Stripe Dashboard.', 'woocommerce-gateway-stripe' ), $amount ) );
+					$order->add_order_note( sprintf( __( 'Pre-Authorization for %s voided from the Stripe Dashboard.', 'woocommerce-gateway-monilypay' ), $amount ) );
 					$order->update_status( 'cancelled' );
 				}
 
@@ -587,7 +587,7 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 			}
 
 			if ( $charge ) {
-				$reason = __( 'Refunded via Stripe Dashboard', 'woocommerce-gateway-stripe' );
+				$reason = __( 'Refunded via Stripe Dashboard', 'woocommerce-gateway-monilypay' );
 
 				// Create the refund.
 				$refund = wc_create_refund(
@@ -609,7 +609,7 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 				}
 
 				/* translators: 1) amount (including currency symbol) 2) transaction id 3) refund message */
-				$order->add_order_note( sprintf( __( 'Refunded %1$s - Refund ID: %2$s - %3$s', 'woocommerce-gateway-stripe' ), $amount, $refund_object->id, $reason ) );
+				$order->add_order_note( sprintf( __( 'Refunded %1$s - Refund ID: %2$s - %3$s', 'woocommerce-gateway-monilypay' ), $amount, $refund_object->id, $reason ) );
 			}
 		}
 	}
@@ -670,10 +670,10 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 					do_action( 'woocommerce_refund_deleted', $refund_id, $order_id );
 					if ( 'failed' === $refund_object->status ) {
 						/* translators: 1) amount (including currency symbol) 2) transaction id 3) refund failure code */
-						$note = sprintf( __( 'Refund failed for %1$s - Refund ID: %2$s - Reason: %3$s', 'woocommerce-gateway-stripe' ), $amount, $refund_object->id, $refund_object->failure_reason );
+						$note = sprintf( __( 'Refund failed for %1$s - Refund ID: %2$s - Reason: %3$s', 'woocommerce-gateway-monilypay' ), $amount, $refund_object->id, $refund_object->failure_reason );
 					} else {
 						/* translators: 1) amount (including currency symbol) 2) transaction id 3) refund failure code */
-						$note = sprintf( __( 'Refund canceled for %1$s - Refund ID: %2$s - Reason: %3$s', 'woocommerce-gateway-stripe' ), $amount, $refund_object->id, $refund_object->failure_reason );
+						$note = sprintf( __( 'Refund canceled for %1$s - Refund ID: %2$s - Reason: %3$s', 'woocommerce-gateway-monilypay' ), $amount, $refund_object->id, $refund_object->failure_reason );
 					}
 
 					$order->add_order_note( $note );
@@ -709,7 +709,7 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 
 		$message = sprintf(
 		/* translators: 1) HTML anchor open tag 2) HTML anchor closing tag 3) The reason type. */
-			__( 'A review has been opened for this order. Action is needed. Please go to your %1$sStripe Dashboard%2$s to review the issue. Reason: (%3$s).', 'woocommerce-gateway-stripe' ),
+			__( 'A review has been opened for this order. Action is needed. Please go to your %1$sStripe Dashboard%2$s to review the issue. Reason: (%3$s).', 'woocommerce-gateway-monilypay' ),
 			'<a href="' . esc_url( $this->get_transaction_url( $order ) ) . '" title="Stripe Dashboard" target="_blank">',
 			'</a>',
 			esc_html( $notification->data->object->reason )
@@ -746,7 +746,7 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 		}
 
 		/* translators: 1) The reason type. */
-		$message = sprintf( __( 'The opened review for this order is now closed. Reason: (%s)', 'woocommerce-gateway-stripe' ), $notification->data->object->reason );
+		$message = sprintf( __( 'The opened review for this order is now closed. Reason: (%s)', 'woocommerce-gateway-monilypay' ), $notification->data->object->reason );
 
 		if (
 			$order->has_status( 'on-hold' ) &&
@@ -861,7 +861,7 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 		switch ( $notification->type ) {
 			case 'payment_intent.requires_action':
 				if ( $is_voucher_payment ) {
-					$order->update_status( 'on-hold', __( 'Awaiting payment.', 'woocommerce-gateway-stripe' ) );
+					$order->update_status( 'on-hold', __( 'Awaiting payment.', 'woocommerce-gateway-monilypay' ) );
 					wc_reduce_stock_levels( $order_id );
 				}
 				break;
@@ -872,7 +872,7 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 				WC_Stripe_Logger::log( "Stripe PaymentIntent $intent->id succeeded for order $order_id" );
 
 				// TODO: This is a stop-gap to fix a critical issue, see
-				// https://github.com/woocommerce/woocommerce-gateway-stripe/issues/2536. It would
+				// https://github.com/woocommerce/woocommerce-gateway-monilypay/issues/2536. It would
 				// be better if we removed the need for additional meta data in favor of refactoring
 				// this part of the payment processing.
 				if ( $order->get_meta( '_stripe_upe_waiting_for_redirect' ) ?? false ) {
@@ -886,7 +886,7 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 				break;
 			default:
 				if ( $is_voucher_payment && 'payment_intent.payment_failed' === $notification->type ) {
-					$order->update_status( 'failed', __( 'Payment not completed in time', 'woocommerce-gateway-stripe' ) );
+					$order->update_status( 'failed', __( 'Payment not completed in time', 'woocommerce-gateway-monilypay' ) );
 					wc_increase_stock_levels( $order_id );
 					break;
 				}
@@ -894,7 +894,7 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 				$error_message = $intent->last_payment_error ? $intent->last_payment_error->message : '';
 
 				/* translators: 1) The error message that was received from Stripe. */
-				$message = sprintf( __( 'Stripe SCA authentication failed. Reason: %s', 'woocommerce-gateway-stripe' ), $error_message );
+				$message = sprintf( __( 'Stripe SCA authentication failed. Reason: %s', 'woocommerce-gateway-monilypay' ), $error_message );
 
 				if ( ! $order->get_meta( '_stripe_status_final', false ) ) {
 					$order->update_status( 'failed', $message );
@@ -945,7 +945,7 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 			$error_message = $intent->last_setup_error ? $intent->last_setup_error->message : '';
 
 			/* translators: 1) The error message that was received from Stripe. */
-			$message = sprintf( __( 'Stripe SCA authentication failed. Reason: %s', 'woocommerce-gateway-stripe' ), $error_message );
+			$message = sprintf( __( 'Stripe SCA authentication failed. Reason: %s', 'woocommerce-gateway-monilypay' ), $error_message );
 
 			if ( ! $order->get_meta( '_stripe_status_final', false ) ) {
 				$order->update_status( 'failed', $message );

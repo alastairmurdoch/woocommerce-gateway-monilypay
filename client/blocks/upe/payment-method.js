@@ -46,7 +46,7 @@ const StripeLabel = ( props ) => {
 
 	const labelText =
 		getBlocksConfiguration()?.title ??
-		__( 'Credit / Debit Card', 'woocommerce-gateway-stripe' );
+		__( 'Credit / Debit Card', 'woocommerce-gateway-monilypay' );
 
 	return <PaymentMethodLabel text={ labelText } />;
 };
@@ -64,7 +64,7 @@ const upePaymentMethod = {
 	canMakePayment: () => !! api.getStripe(),
 	ariaLabel: __(
 		'Stripe Credit Card payment method',
-		'woocommerce-gateway-stripe'
+		'woocommerce-gateway-monilypay'
 	),
 	supports: {
 		// Use `false` as fallback values in case server provided configuration is missing.

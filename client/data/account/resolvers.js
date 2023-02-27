@@ -15,7 +15,7 @@ export function* getAccountData() {
 		yield updateAccount( result );
 	} catch ( e ) {
 		yield dispatch( 'core/notices' ).createErrorNotice(
-			__( 'Error retrieving account data.', 'woocommerce-gateway-stripe' )
+			__( 'Error retrieving account data.', 'woocommerce-gateway-monilypay' )
 		);
 	}
 }

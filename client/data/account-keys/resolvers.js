@@ -15,7 +15,7 @@ export function* getAccountKeys() {
 		yield updateAccountKeys( result );
 	} catch ( e ) {
 		yield dispatch( 'core/notices' ).createErrorNotice(
-			__( 'Error retrieving account keys.', 'woocommerce-gateway-stripe' )
+			__( 'Error retrieving account keys.', 'woocommerce-gateway-monilypay' )
 		);
 	}
 }

@@ -70,11 +70,11 @@ const ManualCaptureControl = () => {
 				checked={ isManualCaptureEnabled }
 				label={ __(
 					'Issue an authorization on checkout, and capture later',
-					'woocommerce-gateway-stripe'
+					'woocommerce-gateway-monilypay'
 				) }
 				help={ __(
 					'Charge must be captured on the order details screen within 7 days of authorization, otherwise the authorization and order will be canceled.',
-					'woocommerce-gateway-stripe'
+					'woocommerce-gateway-monilypay'
 				) }
 			/>
 			{ isConfirmationModalOpen && (
@@ -82,18 +82,18 @@ const ManualCaptureControl = () => {
 					onRequestClose={ handleModalCancel }
 					title={ __(
 						'Enable manual capture',
-						'woocommerce-gateway-stripe'
+						'woocommerce-gateway-monilypay'
 					) }
 					actions={
 						<>
 							<Button onClick={ handleModalCancel } isSecondary>
-								{ __( 'Cancel', 'woocommerce-gateway-stripe' ) }
+								{ __( 'Cancel', 'woocommerce-gateway-monilypay' ) }
 							</Button>
 							<Button
 								onClick={ handleModalConfirmation }
 								isPrimary
 							>
-								{ __( 'Enable', 'woocommerce-gateway-stripe' ) }
+								{ __( 'Enable', 'woocommerce-gateway-monilypay' ) }
 							</Button>
 						</>
 					}
@@ -101,20 +101,20 @@ const ManualCaptureControl = () => {
 					<strong>
 						{ __(
 							'Are you sure you want to enable manual capture of payments?',
-							'woocommerce-gateway-stripe'
+							'woocommerce-gateway-monilypay'
 						) }
 					</strong>
 					<WarningList>
 						<WarningListElement>
 							{ __(
 								'Only cards support manual capture. When enabled, all other payment methods will be hidden from checkout.',
-								'woocommerce-gateway-stripe'
+								'woocommerce-gateway-monilypay'
 							) }
 						</WarningListElement>
 						<WarningListElement>
 							{ __(
 								'You must capture the payment on the order details screen within 7 days of authorization, otherwise the money will return to the shopper.',
-								'woocommerce-gateway-stripe'
+								'woocommerce-gateway-monilypay'
 							) }
 						</WarningListElement>
 					</WarningList>

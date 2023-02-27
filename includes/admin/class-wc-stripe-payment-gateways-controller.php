@@ -45,7 +45,7 @@ class WC_Stripe_Payment_Gateways_Controller {
 		);
 		wp_set_script_translations(
 			'woocommerce_stripe_payment_gateways_page',
-			'woocommerce-gateway-stripe'
+			'woocommerce-gateway-monilypay'
 		);
 		wp_register_style(
 			'woocommerce_stripe_payment_gateways_page',

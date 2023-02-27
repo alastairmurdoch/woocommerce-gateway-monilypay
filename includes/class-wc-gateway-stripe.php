@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 
-	const ID = 'stripe';
+	const ID = 'monilypay';
 
 	/**
 	 * Should we capture Credit cards
@@ -87,9 +87,9 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 	 */
 	public function __construct() {
 		$this->id           = self::ID;
-		$this->method_title = __( 'Stripe', 'woocommerce-gateway-stripe' );
+		$this->method_title = __( 'MonilyPay', 'woocommerce-gateway-monilypay' );
 		/* translators: 1) link to Stripe register page 2) link to Stripe api keys page */
-		$this->method_description = __( 'Stripe works by adding payment fields on the checkout and then sending the details to Stripe for verification.', 'woocommerce-gateway-stripe' );
+		$this->method_description = __( 'MonilyPay works by adding payment fields on the checkout and then sending the details to Stripe for verification.', 'woocommerce-gateway-monilypay' );
 		$this->has_fields         = true;
 		$this->supports           = [
 			'products',
@@ -173,7 +173,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 		}
 
 		/* translators: 1) Opening anchor tag 2) closing anchor tag */
-		wc_add_notice( sprintf( __( 'If your billing address has been changed for saved payment methods, be sure to remove any %1$ssaved payment methods%2$s on file and re-add them.', 'woocommerce-gateway-stripe' ), '<a href="' . esc_url( wc_get_endpoint_url( 'payment-methods' ) ) . '" class="wc-stripe-update-card-notice" style="text-decoration:underline;">', '</a>' ), 'notice' );
+		wc_add_notice( sprintf( __( 'If your billing address has been changed for saved payment methods, be sure to remove any %1$ssaved payment methods%2$s on file and re-add them.', 'woocommerce-gateway-monilypay' ), '<a href="' . esc_url( wc_get_endpoint_url( 'payment-methods' ) ) . '" class="wc-stripe-update-card-notice" style="text-decoration:underline;">', '</a>' ), 'notice' );
 	}
 
 	/**
@@ -237,7 +237,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 
 		if ( $this->testmode ) {
 			/* translators: link to Stripe testing page */
-			$description .= ' ' . sprintf( __( 'TEST MODE ENABLED. In test mode, you can use the card number 4242424242424242 with any CVC and a valid expiration date or check the <a href="%s" target="_blank">Testing Stripe documentation</a> for more card numbers.', 'woocommerce-gateway-stripe' ), 'https://stripe.com/docs/testing' );
+			$description .= ' ' . sprintf( __( 'TEST MODE ENABLED. In test mode, you can use the card number 4242424242424242 with any CVC and a valid expiration date or check the <a href="%s" target="_blank">Testing Stripe documentation</a> for more card numbers.', 'woocommerce-gateway-monilypay' ), 'https://stripe.com/docs/testing' );
 		}
 
 		$description = trim( $description );
@@ -276,7 +276,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 
 			<?php if ( $this->inline_cc_form ) { ?>
 				<label for="card-element">
-					<?php esc_html_e( 'Credit or debit card', 'woocommerce-gateway-stripe' ); ?>
+					<?php esc_html_e( 'Credit or debit card', 'woocommerce-gateway-monilypay' ); ?>
 				</label>
 
 				<div id="stripe-card-element" class="wc-stripe-elements-field">
@@ -284,7 +284,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 				</div>
 			<?php } else { ?>
 				<div class="form-row form-row-wide">
-					<label for="stripe-card-element"><?php esc_html_e( 'Card Number', 'woocommerce-gateway-stripe' ); ?> <span class="required">*</span></label>
+					<label for="stripe-card-element"><?php esc_html_e( 'Card Number', 'woocommerce-gateway-monilypay' ); ?> <span class="required">*</span></label>
 					<div class="stripe-card-group">
 						<div id="stripe-card-element" class="wc-stripe-elements-field">
 						<!-- a Stripe Element will be inserted here. -->
@@ -295,7 +295,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 				</div>
 
 				<div class="form-row form-row-first">
-					<label for="stripe-exp-element"><?php esc_html_e( 'Expiry Date', 'woocommerce-gateway-stripe' ); ?> <span class="required">*</span></label>
+					<label for="stripe-exp-element"><?php esc_html_e( 'Expiry Date', 'woocommerce-gateway-monilypay' ); ?> <span class="required">*</span></label>
 
 					<div id="stripe-exp-element" class="wc-stripe-elements-field">
 					<!-- a Stripe Element will be inserted here. -->
@@ -303,7 +303,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 				</div>
 
 				<div class="form-row form-row-last">
-					<label for="stripe-cvc-element"><?php esc_html_e( 'Card Code (CVC)', 'woocommerce-gateway-stripe' ); ?> <span class="required">*</span></label>
+					<label for="stripe-cvc-element"><?php esc_html_e( 'Card Code (CVC)', 'woocommerce-gateway-monilypay' ); ?> <span class="required">*</span></label>
 				<div id="stripe-cvc-element" class="wc-stripe-elements-field">
 				<!-- a Stripe Element will be inserted here. -->
 				</div>
@@ -574,8 +574,8 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 
 		<tr>
 			<td class="label stripe-fee">
-				<?php echo wc_help_tip( __( 'This represents the fee Stripe collects for the transaction.', 'woocommerce-gateway-stripe' ) ); // wpcs: xss ok. ?>
-				<?php esc_html_e( 'Stripe Fee:', 'woocommerce-gateway-stripe' ); ?>
+				<?php echo wc_help_tip( __( 'This represents the fee Stripe collects for the transaction.', 'woocommerce-gateway-monilypay' ) ); // wpcs: xss ok. ?>
+				<?php esc_html_e( 'Stripe Fee:', 'woocommerce-gateway-monilypay' ); ?>
 			</td>
 			<td width="1%"></td>
 			<td class="total">
@@ -611,8 +611,8 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 
 		<tr>
 			<td class="label stripe-payout">
-				<?php echo wc_help_tip( __( 'This represents the net total that will be credited to your Stripe bank account. This may be in the currency that is set in your Stripe account.', 'woocommerce-gateway-stripe' ) ); // wpcs: xss ok. ?>
-				<?php esc_html_e( 'Stripe Payout:', 'woocommerce-gateway-stripe' ); ?>
+				<?php echo wc_help_tip( __( 'This represents the net total that will be credited to your Stripe bank account. This may be in the currency that is set in your Stripe account.', 'woocommerce-gateway-monilypay' ) ); // wpcs: xss ok. ?>
+				<?php esc_html_e( 'Stripe Payout:', 'woocommerce-gateway-monilypay' ); ?>
 			</td>
 			<td width="1%"></td>
 			<td class="total">
@@ -638,7 +638,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 	 */
 	public function retry_after_error( $response, $order, $retry, $force_save_source, $previous_error, $use_order_source ) {
 		if ( ! $retry ) {
-			$localized_message = __( 'Sorry, we are unable to process your payment at this time. Please retry later.', 'woocommerce-gateway-stripe' );
+			$localized_message = __( 'Sorry, we are unable to process your payment at this time. Please retry later.', 'woocommerce-gateway-monilypay' );
 			$order->add_order_note( $localized_message );
 			throw new WC_Stripe_Exception( print_r( $response, true ), $localized_message ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.
 		}
@@ -691,7 +691,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 	 * @return string the new message.
 	 */
 	public function change_no_available_methods_message() {
-		return wpautop( __( "Almost there!\n\nYour order has already been created, the only thing that still needs to be done is for you to authorize the payment with your bank.", 'woocommerce-gateway-stripe' ) );
+		return wpautop( __( "Almost there!\n\nYour order has already been created, the only thing that still needs to be done is for you to authorize the payment with your bank.", 'woocommerce-gateway-monilypay' ) );
 	}
 
 	/**
@@ -713,7 +713,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 				'Payment Intent not found',
 				sprintf(
 					/* translators: %s is the order Id */
-					__( 'Payment Intent not found for order #%s', 'woocommerce-gateway-stripe' ),
+					__( 'Payment Intent not found for order #%s', 'woocommerce-gateway-monilypay' ),
 					$order->get_id()
 				)
 			);
@@ -952,8 +952,8 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 		// Load the right message and update the status.
 		$status_message = isset( $intent->last_payment_error )
 			/* translators: 1) The error message that was received from Stripe. */
-			? sprintf( __( 'Stripe SCA authentication failed. Reason: %s', 'woocommerce-gateway-stripe' ), $intent->last_payment_error->message )
-			: __( 'Stripe SCA authentication failed.', 'woocommerce-gateway-stripe' );
+			? sprintf( __( 'Stripe SCA authentication failed. Reason: %s', 'woocommerce-gateway-monilypay' ), $intent->last_payment_error->message )
+			: __( 'Stripe SCA authentication failed.', 'woocommerce-gateway-monilypay' );
 		$order->update_status( 'failed', $status_message );
 	}
 
@@ -1151,10 +1151,10 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 	public function validate_account_statement_descriptor_field( $param, $value, $max_length ) {
 		// Since the value is escaped, and we are saving in a place that does not require escaping, apply stripslashes.
 		$value = trim( stripslashes( $value ) );
-		$field = __( 'customer bank statement', 'woocommerce-gateway-stripe' );
+		$field = __( 'customer bank statement', 'woocommerce-gateway-monilypay' );
 
 		if ( 'short_statement_descriptor' === $param ) {
-			$field = __( 'shortened customer bank statement', 'woocommerce-gateway-stripe' );
+			$field = __( 'shortened customer bank statement', 'woocommerce-gateway-monilypay' );
 		}
 
 		// Validation can be done with a single regex but splitting into multiple for better readability.
@@ -1170,7 +1170,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 			throw new InvalidArgumentException(
 				sprintf(
 					/* translators: %1 field name, %2 Number of the maximum characters allowed */
-					__( 'The %1$s is invalid. The bank statement must contain only Latin characters, be between 5 and %2$u characters, contain at least one letter, and not contain any of the special characters: \' " * &lt; &gt;', 'woocommerce-gateway-stripe' ),
+					__( 'The %1$s is invalid. The bank statement must contain only Latin characters, be between 5 and %2$u characters, contain at least one letter, and not contain any of the special characters: \' " * &lt; &gt;', 'woocommerce-gateway-monilypay' ),
 					$field,
 					$max_length
 				)
@@ -1211,7 +1211,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 	public function get_setup_help_text() {
 		return sprintf(
 			/* translators: %1$s Link to Stripe API details, %2$s Link to register a Stripe account */
-			__( 'Your API details can be obtained from your <a href="%1$s">Stripe account</a>. Don’t have a Stripe account? <a href="%2$s">Create one.</a>', 'woocommerce-gateway-stripe' ),
+			__( 'Your API details can be obtained from your <a href="%1$s">Stripe account</a>. Don’t have a Stripe account? <a href="%2$s">Create one.</a>', 'woocommerce-gateway-monilypay' ),
 			'https://dashboard.stripe.com/apikeys',
 			'https://dashboard.stripe.com/register'
 		);

@@ -68,13 +68,13 @@ const ConnectStripeAccount = ( { oauthUrl } ) => {
 					<h2>
 						{ __(
 							'Get started with Stripe',
-							'woocommerce-gateway-stripe'
+							'woocommerce-gateway-monilypay'
 						) }
 					</h2>
 					<InformationText>
 						{ __(
 							'Connect or create a Stripe account to accept payments directly onsite, including Payment Request buttons (such as Apple Pay and Google Pay), iDEAL, SEPA, Sofort, and more international payment methods.',
-							'woocommerce-gateway-stripe'
+							'woocommerce-gateway-monilypay'
 						) }
 					</InformationText>
 
@@ -83,7 +83,7 @@ const ConnectStripeAccount = ( { oauthUrl } ) => {
 							{ interpolateComponents( {
 								mixedString: __(
 									'By clicking "Create or connect an account", you agree to the {{tosLink}}Terms of service.{{/tosLink}}',
-									'woocommerce-gateway-stripe'
+									'woocommerce-gateway-monilypay'
 								),
 								components: {
 									tosLink: (
@@ -103,7 +103,7 @@ const ConnectStripeAccount = ( { oauthUrl } ) => {
 							<Button isPrimary href={ oauthUrl }>
 								{ __(
 									'Create or connect an account',
-									'woocommerce-gateway-stripe'
+									'woocommerce-gateway-monilypay'
 								) }
 							</Button>
 						) }
@@ -116,11 +116,11 @@ const ConnectStripeAccount = ( { oauthUrl } ) => {
 							{ oauthUrl
 								? __(
 										'Enter account keys (advanced)',
-										'woocommerce-gateway-stripe'
+										'woocommerce-gateway-monilypay'
 								  )
 								: __(
 										'Enter account keys',
-										'woocommerce-gateway-stripe'
+										'woocommerce-gateway-monilypay'
 								  ) }
 						</Button>
 					</ButtonWrapper>

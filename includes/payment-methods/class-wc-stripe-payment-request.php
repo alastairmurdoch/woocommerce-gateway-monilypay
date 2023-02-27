@@ -416,7 +416,7 @@ class WC_Stripe_Payment_Request {
 
 		if ( wc_tax_enabled() ) {
 			$items[] = [
-				'label'   => __( 'Tax', 'woocommerce-gateway-stripe' ),
+				'label'   => __( 'Tax', 'woocommerce-gateway-monilypay' ),
 				'amount'  => 0,
 				'pending' => true,
 			];
@@ -424,14 +424,14 @@ class WC_Stripe_Payment_Request {
 
 		if ( wc_shipping_enabled() && $product->needs_shipping() ) {
 			$items[] = [
-				'label'   => __( 'Shipping', 'woocommerce-gateway-stripe' ),
+				'label'   => __( 'Shipping', 'woocommerce-gateway-monilypay' ),
 				'amount'  => 0,
 				'pending' => true,
 			];
 
 			$data['shippingOptions'] = [
 				'id'     => 'pending',
-				'label'  => __( 'Pending', 'woocommerce-gateway-stripe' ),
+				'label'  => __( 'Pending', 'woocommerce-gateway-monilypay' ),
 				'detail' => '',
 				'amount' => 0,
 			];
@@ -720,9 +720,9 @@ class WC_Stripe_Payment_Request {
 				'clear_cart'                => wp_create_nonce( 'wc-stripe-clear-cart' ),
 			],
 			'i18n'               => [
-				'no_prepaid_card'  => __( 'Sorry, we\'re not accepting prepaid cards at this time.', 'woocommerce-gateway-stripe' ),
+				'no_prepaid_card'  => __( 'Sorry, we\'re not accepting prepaid cards at this time.', 'woocommerce-gateway-monilypay' ),
 				/* translators: Do not translate the [option] placeholder */
-				'unknown_shipping' => __( 'Unknown shipping option "[option]".', 'woocommerce-gateway-stripe' ),
+				'unknown_shipping' => __( 'Unknown shipping option "[option]".', 'woocommerce-gateway-monilypay' ),
 			],
 			'checkout'           => [
 				'url'               => wc_get_checkout_url(),
@@ -847,7 +847,7 @@ class WC_Stripe_Payment_Request {
 			return;
 		}
 		?>
-		<p id="wc-stripe-payment-request-button-separator" style="margin-top:1.5em;text-align:center;display:none;">&mdash; <?php esc_html_e( 'OR', 'woocommerce-gateway-stripe' ); ?> &mdash;</p>
+		<p id="wc-stripe-payment-request-button-separator" style="margin-top:1.5em;text-align:center;display:none;">&mdash; <?php esc_html_e( 'OR', 'woocommerce-gateway-monilypay' ); ?> &mdash;</p>
 		<?php
 	}
 
@@ -1121,14 +1121,14 @@ class WC_Stripe_Payment_Request {
 			if ( ! empty( $packages ) && WC()->customer->has_calculated_shipping() ) {
 				foreach ( $packages as $package_key => $package ) {
 					if ( empty( $package['rates'] ) ) {
-						throw new Exception( __( 'Unable to find shipping method for address.', 'woocommerce-gateway-stripe' ) );
+						throw new Exception( __( 'Unable to find shipping method for address.', 'woocommerce-gateway-monilypay' ) );
 					}
 
 					foreach ( $package['rates'] as $key => $rate ) {
 						if ( in_array( $rate->id, $shipping_rate_ids, true ) ) {
 							// The Payment Requests will try to load indefinitely if there are duplicate shipping
 							// option IDs.
-							throw new Exception( __( 'Unable to provide shipping options for Payment Requests.', 'woocommerce-gateway-stripe' ) );
+							throw new Exception( __( 'Unable to provide shipping options for Payment Requests.', 'woocommerce-gateway-monilypay' ) );
 						}
 						$shipping_rate_ids[]        = $rate->id;
 						$data['shipping_options'][] = [
@@ -1140,7 +1140,7 @@ class WC_Stripe_Payment_Request {
 					}
 				}
 			} else {
-				throw new Exception( __( 'Unable to find shipping method for address.', 'woocommerce-gateway-stripe' ) );
+				throw new Exception( __( 'Unable to find shipping method for address.', 'woocommerce-gateway-monilypay' ) );
 			}
 
 			// The first shipping option is automatically applied on the client.
@@ -1240,7 +1240,7 @@ class WC_Stripe_Payment_Request {
 
 			if ( ! is_a( $product, 'WC_Product' ) ) {
 				/* translators: 1) The product Id */
-				throw new Exception( sprintf( __( 'Product with the ID (%1$s) cannot be found.', 'woocommerce-gateway-stripe' ), $product_id ) );
+				throw new Exception( sprintf( __( 'Product with the ID (%1$s) cannot be found.', 'woocommerce-gateway-monilypay' ), $product_id ) );
 			}
 
 			if ( 'variable' === $product->get_type() && isset( $_POST['attributes'] ) ) {
@@ -1261,7 +1261,7 @@ class WC_Stripe_Payment_Request {
 
 			if ( ! $product->has_enough_stock( $qty ) ) {
 				/* translators: 1) product name 2) quantity in stock */
-				throw new Exception( sprintf( __( 'You cannot add that amount of "%1$s"; to the cart because there is not enough stock (%2$s remaining).', 'woocommerce-gateway-stripe' ), $product->get_name(), wc_format_stock_quantity_for_display( $product->get_stock_quantity(), $product ) ) );
+				throw new Exception( sprintf( __( 'You cannot add that amount of "%1$s"; to the cart because there is not enough stock (%2$s remaining).', 'woocommerce-gateway-monilypay' ), $product->get_name(), wc_format_stock_quantity_for_display( $product->get_stock_quantity(), $product ) ) );
 			}
 
 			$total = $qty * $this->get_product_price( $product ) + $addon_value;
@@ -1278,7 +1278,7 @@ class WC_Stripe_Payment_Request {
 
 			if ( wc_tax_enabled() ) {
 				$items[] = [
-					'label'   => __( 'Tax', 'woocommerce-gateway-stripe' ),
+					'label'   => __( 'Tax', 'woocommerce-gateway-monilypay' ),
 					'amount'  => 0,
 					'pending' => true,
 				];
@@ -1286,14 +1286,14 @@ class WC_Stripe_Payment_Request {
 
 			if ( wc_shipping_enabled() && $product->needs_shipping() ) {
 				$items[] = [
-					'label'   => __( 'Shipping', 'woocommerce-gateway-stripe' ),
+					'label'   => __( 'Shipping', 'woocommerce-gateway-monilypay' ),
 					'amount'  => 0,
 					'pending' => true,
 				];
 
 				$data['shippingOptions'] = [
 					'id'     => 'pending',
-					'label'  => __( 'Pending', 'woocommerce-gateway-stripe' ),
+					'label'  => __( 'Pending', 'woocommerce-gateway-monilypay' ),
 					'detail' => '',
 					'amount' => 0,
 				];
@@ -1572,7 +1572,7 @@ class WC_Stripe_Payment_Request {
 			wc_add_notice(
 				sprintf(
 					/* translators: 1) country. */
-					__( 'The Payment Request button is not supported in %1$s because some required fields couldn\'t be verified. Please proceed to the checkout page and try again.', 'woocommerce-gateway-stripe' ),
+					__( 'The Payment Request button is not supported in %1$s because some required fields couldn\'t be verified. Please proceed to the checkout page and try again.', 'woocommerce-gateway-monilypay' ),
 					isset( $countries[ $posted_data['billing_country'] ] ) ? $countries[ $posted_data['billing_country'] ] : $posted_data['billing_country']
 				),
 				'error'
@@ -1588,7 +1588,7 @@ class WC_Stripe_Payment_Request {
 	 */
 	public function ajax_create_order() {
 		if ( WC()->cart->is_empty() ) {
-			wp_send_json_error( __( 'Empty cart', 'woocommerce-gateway-stripe' ) );
+			wp_send_json_error( __( 'Empty cart', 'woocommerce-gateway-monilypay' ) );
 		}
 
 		if ( ! defined( 'WOOCOMMERCE_CHECKOUT' ) ) {
@@ -1792,21 +1792,21 @@ class WC_Stripe_Payment_Request {
 
 		if ( wc_tax_enabled() ) {
 			$items[] = [
-				'label'  => esc_html( __( 'Tax', 'woocommerce-gateway-stripe' ) ),
+				'label'  => esc_html( __( 'Tax', 'woocommerce-gateway-monilypay' ) ),
 				'amount' => WC_Stripe_Helper::get_stripe_amount( $tax ),
 			];
 		}
 
 		if ( WC()->cart->needs_shipping() ) {
 			$items[] = [
-				'label'  => esc_html( __( 'Shipping', 'woocommerce-gateway-stripe' ) ),
+				'label'  => esc_html( __( 'Shipping', 'woocommerce-gateway-monilypay' ) ),
 				'amount' => WC_Stripe_Helper::get_stripe_amount( $shipping ),
 			];
 		}
 
 		if ( WC()->cart->has_discount() ) {
 			$items[] = [
-				'label'  => esc_html( __( 'Discount', 'woocommerce-gateway-stripe' ) ),
+				'label'  => esc_html( __( 'Discount', 'woocommerce-gateway-monilypay' ) ),
 				'amount' => WC_Stripe_Helper::get_stripe_amount( $discounts ),
 			];
 		}
@@ -1849,7 +1849,7 @@ class WC_Stripe_Payment_Request {
 		}
 
 		/* translators: The text encapsulated in `**` can be replaced with "Apple Pay" or "Google Pay". Please translate this text, but don't remove the `**`. */
-		$message      = __( 'To complete your transaction with **the selected payment method**, you must log in or create an account with our site.', 'woocommerce-gateway-stripe' );
+		$message      = __( 'To complete your transaction with **the selected payment method**, you must log in or create an account with our site.', 'woocommerce-gateway-monilypay' );
 		$redirect_url = add_query_arg(
 			[
 				'_wpnonce'                               => wp_create_nonce( 'wc-stripe-set-redirect-url' ),

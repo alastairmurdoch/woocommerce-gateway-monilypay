@@ -210,7 +210,7 @@ class WC_Stripe_API {
 				)
 			);
 
-			throw new WC_Stripe_Exception( print_r( $response, true ), __( 'There was a problem connecting to the Stripe API endpoint.', 'woocommerce-gateway-stripe' ) );
+			throw new WC_Stripe_Exception( print_r( $response, true ), __( 'There was a problem connecting to the Stripe API endpoint.', 'woocommerce-gateway-monilypay' ) );
 		}
 
 		if ( $with_headers ) {
@@ -244,7 +244,7 @@ class WC_Stripe_API {
 
 		if ( is_wp_error( $response ) || empty( $response['body'] ) ) {
 			WC_Stripe_Logger::log( 'Error Response: ' . print_r( $response, true ) );
-			return new WP_Error( 'stripe_error', __( 'There was a problem connecting to the Stripe API endpoint.', 'woocommerce-gateway-stripe' ) );
+			return new WP_Error( 'stripe_error', __( 'There was a problem connecting to the Stripe API endpoint.', 'woocommerce-gateway-monilypay' ) );
 		}
 
 		return json_decode( $response['body'] );

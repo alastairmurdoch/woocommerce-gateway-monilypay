@@ -44,7 +44,7 @@ if ( ! class_exists( 'WC_Stripe_Connect' ) ) {
 			}
 
 			if ( substr( $return_url, 0, 8 ) !== 'https://' ) {
-				return new WP_Error( 'invalid_url_protocol', __( 'Your site must be served over HTTPS in order to connect your Stripe account automatically.', 'woocommerce-gateway-stripe' ) );
+				return new WP_Error( 'invalid_url_protocol', __( 'Your site must be served over HTTPS in order to connect your Stripe account automatically.', 'woocommerce-gateway-monilypay' ) );
 			}
 
 			$result = $this->api->get_stripe_oauth_init( $return_url );

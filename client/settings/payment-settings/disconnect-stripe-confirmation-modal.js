@@ -36,7 +36,7 @@ const DisconnectStripeConfirmationModal = ( {
 					<AlertTitle
 						title={ __(
 							'Disconnect Stripe account',
-							'woocommerce-gateway-stripe'
+							'woocommerce-gateway-monilypay'
 						) }
 					/>
 				}
@@ -55,7 +55,7 @@ const DisconnectStripeConfirmationModal = ( {
 							disabled={ status === 'pending' }
 							onClick={ onClose }
 						>
-							{ __( 'Cancel', 'woocommerce-gateway-stripe' ) }
+							{ __( 'Cancel', 'woocommerce-gateway-monilypay' ) }
 						</Button>
 						<Button
 							isPrimary
@@ -64,7 +64,7 @@ const DisconnectStripeConfirmationModal = ( {
 							disabled={ status === 'pending' }
 							onClick={ handleDisconnect }
 						>
-							{ __( 'Disconnect', 'woocommerce-gateway-stripe' ) }
+							{ __( 'Disconnect', 'woocommerce-gateway-monilypay' ) }
 						</Button>
 					</>
 				}
@@ -72,13 +72,13 @@ const DisconnectStripeConfirmationModal = ( {
 				<strong>
 					{ __(
 						'Are you sure you want to disconnect your Stripe account from your WooCommerce store?',
-						'woocommerce-gateway-stripe'
+						'woocommerce-gateway-monilypay'
 					) }
 				</strong>
 				<p>
 					{ __(
 						'All settings will be cleared and your customers will no longer be able to pay using cards and other payment methods offered by Stripe.',
-						'woocommerce-gateway-stripe'
+						'woocommerce-gateway-monilypay'
 					) }
 				</p>
 			</ConfirmationModal>

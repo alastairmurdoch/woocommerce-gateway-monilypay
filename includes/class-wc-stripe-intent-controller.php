@@ -67,7 +67,7 @@ class WC_Stripe_Intent_Controller {
 		$gateway = $this->get_gateway();
 		if ( ! $gateway instanceof WC_Stripe_UPE_Payment_Gateway ) {
 			WC_Stripe_Logger::log( 'Error instantiating the UPE Payment Gateway, UPE is not enabled.' );
-			throw new WC_Stripe_Exception( __( "We're not able to process this payment.", 'woocommerce-gateway-stripe' ) );
+			throw new WC_Stripe_Exception( __( "We're not able to process this payment.", 'woocommerce-gateway-monilypay' ) );
 		}
 		return $gateway;
 	}
@@ -81,7 +81,7 @@ class WC_Stripe_Intent_Controller {
 	 */
 	protected function get_order_from_request() {
 		if ( ! isset( $_GET['nonce'] ) || ! wp_verify_nonce( sanitize_key( $_GET['nonce'] ), 'wc_stripe_confirm_pi' ) ) {
-			throw new WC_Stripe_Exception( 'missing-nonce', __( 'CSRF verification failed.', 'woocommerce-gateway-stripe' ) );
+			throw new WC_Stripe_Exception( 'missing-nonce', __( 'CSRF verification failed.', 'woocommerce-gateway-monilypay' ) );
 		}
 
 		// Load the order ID.
@@ -94,7 +94,7 @@ class WC_Stripe_Intent_Controller {
 		$order = wc_get_order( $order_id );
 
 		if ( ! $order ) {
-			throw new WC_Stripe_Exception( 'missing-order', __( 'Missing order ID for payment confirmation', 'woocommerce-gateway-stripe' ) );
+			throw new WC_Stripe_Exception( 'missing-order', __( 'Missing order ID for payment confirmation', 'woocommerce-gateway-monilypay' ) );
 		}
 
 		return $order;
@@ -114,7 +114,7 @@ class WC_Stripe_Intent_Controller {
 			$order = $this->get_order_from_request();
 		} catch ( WC_Stripe_Exception $e ) {
 			/* translators: Error message text */
-			$message = sprintf( __( 'Payment verification error: %s', 'woocommerce-gateway-stripe' ), $e->getLocalizedMessage() );
+			$message = sprintf( __( 'Payment verification error: %s', 'woocommerce-gateway-monilypay' ), $e->getLocalizedMessage() );
 			wc_add_notice( esc_html( $message ), 'error' );
 
 			$redirect_url = $woocommerce->cart->is_empty()
@@ -199,7 +199,7 @@ class WC_Stripe_Intent_Controller {
 				! wp_verify_nonce( sanitize_key( $_POST['nonce'] ), 'wc_stripe_create_si' )
 				|| ! preg_match( '/^src_.*$/', $source_id )
 			) {
-				throw new Exception( __( 'Unable to verify your request. Please reload the page and try again.', 'woocommerce-gateway-stripe' ) );
+				throw new Exception( __( 'Unable to verify your request. Please reload the page and try again.', 'woocommerce-gateway-monilypay' ) );
 			}
 
 			// 2. Load the customer ID (and create a customer eventually).
@@ -239,7 +239,7 @@ class WC_Stripe_Intent_Controller {
 				$error_response_message = print_r( $setup_intent, true );
 				WC_Stripe_Logger::log( 'Failed create Setup Intent while saving a card.' );
 				WC_Stripe_Logger::log( "Response: $error_response_message" );
-				throw new Exception( __( 'Your card could not be set up for future usage.', 'woocommerce-gateway-stripe' ) );
+				throw new Exception( __( 'Your card could not be set up for future usage.', 'woocommerce-gateway-monilypay' ) );
 			}
 
 			// 5. Respond.
@@ -256,7 +256,7 @@ class WC_Stripe_Intent_Controller {
 					'status' => 'error',
 					'error'  => [
 						'type'    => 'setup_intent_error',
-						'message' => __( 'Failed to save payment method.', 'woocommerce-gateway-stripe' ),
+						'message' => __( 'Failed to save payment method.', 'woocommerce-gateway-monilypay' ),
 					],
 				];
 			} else {
@@ -287,7 +287,7 @@ class WC_Stripe_Intent_Controller {
 		try {
 			$is_nonce_valid = check_ajax_referer( 'wc_stripe_create_payment_intent_nonce', false, false );
 			if ( ! $is_nonce_valid ) {
-				throw new Exception( __( "We're not able to process this payment. Please refresh the page and try again.", 'woocommerce-gateway-stripe' ) );
+				throw new Exception( __( "We're not able to process this payment. Please refresh the page and try again.", 'woocommerce-gateway-monilypay' ) );
 			}
 
 			// If paying from order, we need to get the total from the order instead of the cart.
@@ -355,7 +355,7 @@ class WC_Stripe_Intent_Controller {
 		try {
 			$is_nonce_valid = check_ajax_referer( 'wc_stripe_update_payment_intent_nonce', false, false );
 			if ( ! $is_nonce_valid ) {
-				throw new Exception( __( "We're not able to process this payment. Please refresh the page and try again.", 'woocommerce-gateway-stripe' ) );
+				throw new Exception( __( "We're not able to process this payment. Please refresh the page and try again.", 'woocommerce-gateway-monilypay' ) );
 			}
 
 			$order_id                  = isset( $_POST['stripe_order_id'] ) ? absint( $_POST['stripe_order_id'] ) : null;
@@ -408,7 +408,7 @@ class WC_Stripe_Intent_Controller {
 				'currency'    => strtolower( $currency ),
 				'metadata'    => $gateway->get_metadata_from_order( $order ),
 				/* translators: 1) blog name 2) order number */
-				'description' => sprintf( __( '%1$s - Order %2$s', 'woocommerce-gateway-stripe' ), wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ), $order->get_order_number() ),
+				'description' => sprintf( __( '%1$s - Order %2$s', 'woocommerce-gateway-monilypay' ), wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ), $order->get_order_number() ),
 			];
 
 			if ( '' !== $selected_upe_payment_type ) {
@@ -445,7 +445,7 @@ class WC_Stripe_Intent_Controller {
 				$order
 			);
 
-			$order->update_status( 'pending', __( 'Awaiting payment.', 'woocommerce-gateway-stripe' ) );
+			$order->update_status( 'pending', __( 'Awaiting payment.', 'woocommerce-gateway-monilypay' ) );
 			$order->save();
 			WC_Stripe_Helper::add_payment_intent_to_order( $payment_intent_id, $order );
 		}
@@ -465,7 +465,7 @@ class WC_Stripe_Intent_Controller {
 		try {
 			$is_nonce_valid = check_ajax_referer( 'wc_stripe_create_setup_intent_nonce', false, false );
 			if ( ! $is_nonce_valid ) {
-				throw new Exception( __( "We're not able to add this payment method. Please refresh the page and try again.", 'woocommerce-gateway-stripe' ) );
+				throw new Exception( __( "We're not able to add this payment method. Please refresh the page and try again.", 'woocommerce-gateway-monilypay' ) );
 			}
 
 			wp_send_json_success( $this->init_setup_intent(), 200 );
@@ -531,7 +531,7 @@ class WC_Stripe_Intent_Controller {
 			$is_nonce_valid = check_ajax_referer( 'wc_stripe_save_upe_appearance_nonce', false, false );
 			if ( ! $is_nonce_valid ) {
 				throw new Exception(
-					__( 'Unable to update UPE appearance values at this time.', 'woocommerce-gateway-stripe' )
+					__( 'Unable to update UPE appearance values at this time.', 'woocommerce-gateway-monilypay' )
 				);
 			}
 
@@ -580,13 +580,13 @@ class WC_Stripe_Intent_Controller {
 		try {
 			$is_nonce_valid = check_ajax_referer( 'wc_stripe_update_order_status_nonce', false, false );
 			if ( ! $is_nonce_valid ) {
-				throw new WC_Stripe_Exception( 'missing-nonce', __( 'CSRF verification failed.', 'woocommerce-gateway-stripe' ) );
+				throw new WC_Stripe_Exception( 'missing-nonce', __( 'CSRF verification failed.', 'woocommerce-gateway-monilypay' ) );
 			}
 
 			$order_id = isset( $_POST['order_id'] ) ? absint( $_POST['order_id'] ) : false;
 			$order    = wc_get_order( $order_id );
 			if ( ! $order ) {
-				throw new WC_Stripe_Exception( 'order_not_found', __( "We're not able to process this payment. Please try again later.", 'woocommerce-gateway-stripe' ) );
+				throw new WC_Stripe_Exception( 'order_not_found', __( "We're not able to process this payment. Please try again later.", 'woocommerce-gateway-monilypay' ) );
 			}
 
 			$intent_id          = $order->get_meta( '_stripe_intent_id' );
@@ -594,11 +594,11 @@ class WC_Stripe_Intent_Controller {
 			if ( empty( $intent_id_received ) || $intent_id_received !== $intent_id ) {
 				$note = sprintf(
 					/* translators: %1: transaction ID of the payment or a translated string indicating an unknown ID. */
-					__( 'A payment with ID %s was used in an attempt to pay for this order. This payment intent ID does not match any payments for this order, so it was ignored and the order was not updated.', 'woocommerce-gateway-stripe' ),
+					__( 'A payment with ID %s was used in an attempt to pay for this order. This payment intent ID does not match any payments for this order, so it was ignored and the order was not updated.', 'woocommerce-gateway-monilypay' ),
 					$intent_id_received
 				);
 				$order->add_order_note( $note );
-				throw new WC_Stripe_Exception( 'invalid_intent_id', __( "We're not able to process this payment. Please try again later.", 'woocommerce-gateway-stripe' ) );
+				throw new WC_Stripe_Exception( 'invalid_intent_id', __( "We're not able to process this payment. Please try again later.", 'woocommerce-gateway-monilypay' ) );
 			}
 			$save_payment_method = isset( $_POST['payment_method_id'] ) && ! empty( wc_clean( wp_unslash( $_POST['payment_method_id'] ) ) );
 
@@ -640,7 +640,7 @@ class WC_Stripe_Intent_Controller {
 		try {
 			$is_nonce_valid = check_ajax_referer( 'wc_stripe_update_failed_order_nonce', false, false );
 			if ( ! $is_nonce_valid ) {
-				throw new WC_Stripe_Exception( 'missing-nonce', __( 'CSRF verification failed.', 'woocommerce-gateway-stripe' ) );
+				throw new WC_Stripe_Exception( 'missing-nonce', __( 'CSRF verification failed.', 'woocommerce-gateway-monilypay' ) );
 			}
 
 			$order_id  = isset( $_POST['order_id'] ) ? absint( $_POST['order_id'] ) : null;
@@ -658,7 +658,7 @@ class WC_Stripe_Intent_Controller {
 
 				if ( ! empty( $error ) ) {
 					WC_Stripe_Logger::log( 'Error when processing payment: ' . $error->message );
-					throw new WC_Stripe_Exception( __( "We're not able to process this payment. Please try again later.", 'woocommerce-gateway-stripe' ) );
+					throw new WC_Stripe_Exception( __( "We're not able to process this payment. Please try again later.", 'woocommerce-gateway-monilypay' ) );
 				}
 
 				// Use the last charge within the intent to proceed.

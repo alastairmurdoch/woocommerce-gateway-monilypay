@@ -27,7 +27,7 @@ const SaveSettingsSection = ( { onSettingsSave } ) => {
 				disabled={ isSaving || isLoading }
 				onClick={ onClickHandler }
 			>
-				{ __( 'Save changes', 'woocommerce-gateway-stripe' ) }
+				{ __( 'Save changes', 'woocommerce-gateway-monilypay' ) }
 			</Button>
 		</SaveSettingsSectionWrapper>
 	);

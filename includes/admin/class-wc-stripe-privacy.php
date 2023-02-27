@@ -8,18 +8,18 @@ class WC_Stripe_Privacy extends WC_Abstract_Privacy {
 	 * Constructor
 	 */
 	public function __construct() {
-		parent::__construct( __( 'Stripe', 'woocommerce-gateway-stripe' ) );
+		parent::__construct( __( 'Stripe', 'woocommerce-gateway-monilypay' ) );
 
-		$this->add_exporter( 'woocommerce-gateway-stripe-order-data', __( 'WooCommerce Stripe Order Data', 'woocommerce-gateway-stripe' ), [ $this, 'order_data_exporter' ] );
+		$this->add_exporter( 'woocommerce-gateway-monilypay-order-data', __( 'WooCommerce Stripe Order Data', 'woocommerce-gateway-monilypay' ), [ $this, 'order_data_exporter' ] );
 
 		if ( function_exists( 'wcs_get_subscriptions' ) ) {
-			$this->add_exporter( 'woocommerce-gateway-stripe-subscriptions-data', __( 'WooCommerce Stripe Subscriptions Data', 'woocommerce-gateway-stripe' ), [ $this, 'subscriptions_data_exporter' ] );
+			$this->add_exporter( 'woocommerce-gateway-monilypay-subscriptions-data', __( 'WooCommerce Stripe Subscriptions Data', 'woocommerce-gateway-monilypay' ), [ $this, 'subscriptions_data_exporter' ] );
 		}
 
-		$this->add_exporter( 'woocommerce-gateway-stripe-customer-data', __( 'WooCommerce Stripe Customer Data', 'woocommerce-gateway-stripe' ), [ $this, 'customer_data_exporter' ] );
+		$this->add_exporter( 'woocommerce-gateway-monilypay-customer-data', __( 'WooCommerce Stripe Customer Data', 'woocommerce-gateway-monilypay' ), [ $this, 'customer_data_exporter' ] );
 
-		$this->add_eraser( 'woocommerce-gateway-stripe-customer-data', __( 'WooCommerce Stripe Customer Data', 'woocommerce-gateway-stripe' ), [ $this, 'customer_data_eraser' ] );
-		$this->add_eraser( 'woocommerce-gateway-stripe-order-data', __( 'WooCommerce Stripe Data', 'woocommerce-gateway-stripe' ), [ $this, 'order_data_eraser' ] );
+		$this->add_eraser( 'woocommerce-gateway-monilypay-customer-data', __( 'WooCommerce Stripe Customer Data', 'woocommerce-gateway-monilypay' ), [ $this, 'customer_data_eraser' ] );
+		$this->add_eraser( 'woocommerce-gateway-monilypay-order-data', __( 'WooCommerce Stripe Data', 'woocommerce-gateway-monilypay' ), [ $this, 'order_data_eraser' ] );
 
 		add_filter( 'woocommerce_get_settings_account', [ $this, 'account_settings' ] );
 	}
@@ -33,11 +33,11 @@ class WC_Stripe_Privacy extends WC_Abstract_Privacy {
 	public function account_settings( $settings ) {
 		$insert_setting = [
 			[
-				'title'       => __( 'Retain Stripe Data', 'woocommerce-gateway-stripe' ),
-				'desc_tip'    => __( 'Retains any Stripe data such as Stripe customer ID, source ID.', 'woocommerce-gateway-stripe' ),
+				'title'       => __( 'Retain Stripe Data', 'woocommerce-gateway-monilypay' ),
+				'desc_tip'    => __( 'Retains any Stripe data such as Stripe customer ID, source ID.', 'woocommerce-gateway-monilypay' ),
 				'id'          => 'woocommerce_gateway_stripe_retention',
 				'type'        => 'relative_date_selector',
-				'placeholder' => __( 'N/A', 'woocommerce-gateway-stripe' ),
+				'placeholder' => __( 'N/A', 'woocommerce-gateway-monilypay' ),
 				'default'     => '',
 				'autoload'    => false,
 			],
@@ -92,7 +92,7 @@ class WC_Stripe_Privacy extends WC_Abstract_Privacy {
 
 		$message = sprintf(
 		/* translators: 1) HTML anchor open tag 2) HTML anchor closing tag */
-			esc_html__( 'By using this extension, you may be storing personal data or sharing data with an external service. %1$sLearn more about how this works, including what you may want to include in your privacy policy%2$s.', 'woocommerce-gateway-stripe' ),
+			esc_html__( 'By using this extension, you may be storing personal data or sharing data with an external service. %1$sLearn more about how this works, including what you may want to include in your privacy policy%2$s.', 'woocommerce-gateway-monilypay' ),
 			'<a href="https://woocommerce.com/document/privacy-payments/#section-3" target="_blank">',
 			'</a>'
 		);
@@ -120,15 +120,15 @@ class WC_Stripe_Privacy extends WC_Abstract_Privacy {
 			foreach ( $orders as $order ) {
 				$data_to_export[] = [
 					'group_id'    => 'woocommerce_orders',
-					'group_label' => __( 'Orders', 'woocommerce-gateway-stripe' ),
+					'group_label' => __( 'Orders', 'woocommerce-gateway-monilypay' ),
 					'item_id'     => 'order-' . $order->get_id(),
 					'data'        => [
 						[
-							'name'  => __( 'Stripe payment id', 'woocommerce-gateway-stripe' ),
+							'name'  => __( 'Stripe payment id', 'woocommerce-gateway-monilypay' ),
 							'value' => get_post_meta( $order->get_id(), '_stripe_source_id', true ),
 						],
 						[
-							'name'  => __( 'Stripe customer id', 'woocommerce-gateway-stripe' ),
+							'name'  => __( 'Stripe customer id', 'woocommerce-gateway-monilypay' ),
 							'value' => get_post_meta( $order->get_id(), '_stripe_customer_id', true ),
 						],
 					],
@@ -185,15 +185,15 @@ class WC_Stripe_Privacy extends WC_Abstract_Privacy {
 			foreach ( $subscriptions as $subscription ) {
 				$data_to_export[] = [
 					'group_id'    => 'woocommerce_subscriptions',
-					'group_label' => __( 'Subscriptions', 'woocommerce-gateway-stripe' ),
+					'group_label' => __( 'Subscriptions', 'woocommerce-gateway-monilypay' ),
 					'item_id'     => 'subscription-' . $subscription->get_id(),
 					'data'        => [
 						[
-							'name'  => __( 'Stripe payment id', 'woocommerce-gateway-stripe' ),
+							'name'  => __( 'Stripe payment id', 'woocommerce-gateway-monilypay' ),
 							'value' => get_post_meta( $subscription->get_id(), '_stripe_source_id', true ),
 						],
 						[
-							'name'  => __( 'Stripe customer id', 'woocommerce-gateway-stripe' ),
+							'name'  => __( 'Stripe customer id', 'woocommerce-gateway-monilypay' ),
 							'value' => get_post_meta( $subscription->get_id(), '_stripe_customer_id', true ),
 						],
 					],
@@ -225,15 +225,15 @@ class WC_Stripe_Privacy extends WC_Abstract_Privacy {
 
 			$data_to_export[] = [
 				'group_id'    => 'woocommerce_customer',
-				'group_label' => __( 'Customer Data', 'woocommerce-gateway-stripe' ),
+				'group_label' => __( 'Customer Data', 'woocommerce-gateway-monilypay' ),
 				'item_id'     => 'user',
 				'data'        => [
 					[
-						'name'  => __( 'Stripe payment id', 'woocommerce-gateway-stripe' ),
+						'name'  => __( 'Stripe payment id', 'woocommerce-gateway-monilypay' ),
 						'value' => get_user_option( '_stripe_source_id', $user->ID ),
 					],
 					[
-						'name'  => __( 'Stripe customer id', 'woocommerce-gateway-stripe' ),
+						'name'  => __( 'Stripe customer id', 'woocommerce-gateway-monilypay' ),
 						'value' => $stripe_user->get_id(),
 					],
 				],
@@ -271,7 +271,7 @@ class WC_Stripe_Privacy extends WC_Abstract_Privacy {
 			$items_removed = true;
 			delete_user_option( $user->ID, '_stripe_customer_id' );
 			delete_user_option( $user->ID, '_stripe_source_id' );
-			$messages[] = __( 'Stripe User Data Erased.', 'woocommerce-gateway-stripe' );
+			$messages[] = __( 'Stripe User Data Erased.', 'woocommerce-gateway-monilypay' );
 		}
 
 		return [
@@ -347,12 +347,12 @@ class WC_Stripe_Privacy extends WC_Abstract_Privacy {
 
 		if ( ! $this->is_retention_expired( $order->get_date_created()->getTimestamp() ) ) {
 			/* translators: %d Order ID */
-			return [ false, true, [ sprintf( __( 'Order ID %d is less than set retention days. Personal data retained. (Stripe)', 'woocommerce-gateway-stripe' ), $order->get_id() ) ] ];
+			return [ false, true, [ sprintf( __( 'Order ID %d is less than set retention days. Personal data retained. (Stripe)', 'woocommerce-gateway-monilypay' ), $order->get_id() ) ] ];
 		}
 
 		if ( $subscription->has_status( apply_filters( 'wc_stripe_privacy_eraser_subs_statuses', [ 'on-hold', 'active' ] ) ) ) {
 			/* translators: %d Order ID */
-			return [ false, true, [ sprintf( __( 'Order ID %d contains an active Subscription. Personal data retained. (Stripe)', 'woocommerce-gateway-stripe' ), $order->get_id() ) ] ];
+			return [ false, true, [ sprintf( __( 'Order ID %d contains an active Subscription. Personal data retained. (Stripe)', 'woocommerce-gateway-monilypay' ), $order->get_id() ) ] ];
 		}
 
 		$renewal_orders = WC_Subscriptions_Renewal_Order::get_renewal_orders( $order->get_id() );
@@ -367,7 +367,7 @@ class WC_Stripe_Privacy extends WC_Abstract_Privacy {
 		delete_post_meta( $subscription_id, '_stripe_refund_id' );
 		delete_post_meta( $subscription_id, '_stripe_customer_id' );
 
-		return [ true, false, [ __( 'Stripe Subscription Data Erased.', 'woocommerce-gateway-stripe' ) ] ];
+		return [ true, false, [ __( 'Stripe Subscription Data Erased.', 'woocommerce-gateway-monilypay' ) ] ];
 	}
 
 	/**
@@ -384,7 +384,7 @@ class WC_Stripe_Privacy extends WC_Abstract_Privacy {
 
 		if ( ! $this->is_retention_expired( $order->get_date_created()->getTimestamp() ) ) {
 			/* translators: %d Order ID */
-			return [ false, true, [ sprintf( __( 'Order ID %d is less than set retention days. Personal data retained. (Stripe)', 'woocommerce-gateway-stripe' ), $order->get_id() ) ] ];
+			return [ false, true, [ sprintf( __( 'Order ID %d is less than set retention days. Personal data retained. (Stripe)', 'woocommerce-gateway-monilypay' ), $order->get_id() ) ] ];
 		}
 
 		if ( empty( $stripe_source_id ) && empty( $stripe_refund_id ) && empty( $stripe_customer_id ) ) {
@@ -395,7 +395,7 @@ class WC_Stripe_Privacy extends WC_Abstract_Privacy {
 		delete_post_meta( $order_id, '_stripe_refund_id' );
 		delete_post_meta( $order_id, '_stripe_customer_id' );
 
-		return [ true, false, [ __( 'Stripe personal data erased.', 'woocommerce-gateway-stripe' ) ] ];
+		return [ true, false, [ __( 'Stripe personal data erased.', 'woocommerce-gateway-monilypay' ) ] ];
 	}
 
 	/**

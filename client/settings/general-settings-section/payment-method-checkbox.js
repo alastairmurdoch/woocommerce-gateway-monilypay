@@ -62,7 +62,7 @@ const PaymentMethodCheckbox = ( { id, label, isAllowingManualCapture } ) => {
 						/* translators: %s: a payment method name. */
 						__(
 							'%s is not available to your customers when the "manual capture" setting is enabled.',
-							'woocommerce-gateway-stripe'
+							'woocommerce-gateway-monilypay'
 						),
 						label
 					) }

@@ -35,7 +35,7 @@ class WC_Stripe_Payment_Requests_Controller {
 		);
 		wp_set_script_translations(
 			'wc-stripe-payment-request-settings',
-			'woocommerce-gateway-stripe'
+			'woocommerce-gateway-monilypay'
 		);
 		wp_enqueue_script( 'wc-stripe-payment-request-settings' );
 
@@ -55,8 +55,8 @@ class WC_Stripe_Payment_Requests_Controller {
 	public function admin_options() {
 		global $hide_save_button;
 		$hide_save_button = true;
-		echo '<h2>' . __( 'Customize express checkouts', 'woocommerce-gateway-stripe' );
-		wc_back_link( __( 'Return to Stripe', 'woocommerce-gateway-stripe' ), admin_url( 'admin.php?page=wc-settings&tab=checkout&section=stripe' ) );
+		echo '<h2>' . __( 'Customize express checkouts', 'woocommerce-gateway-monilypay' );
+		wc_back_link( __( 'Return to Stripe', 'woocommerce-gateway-monilypay' ), admin_url( 'admin.php?page=wc-settings&tab=checkout&section=stripe' ) );
 		echo '</h2>';
 		echo '<div class="wrap"><div id="wc-stripe-payment-request-settings-container"></div></div>';
 	}

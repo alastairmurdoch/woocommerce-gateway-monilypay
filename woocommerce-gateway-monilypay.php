@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: WooCommerce MonilyPay Gateway
- * Plugin URI: https://wordpress.org/plugins/woocommerce-gateway-stripe/
+ * Plugin URI: https://wordpress.org/plugins/woocommerce-gateway-monilypay/
  * Description: Take credit card payments on your store using MonilyPay. A fork of the official Woocommerce Stripe Plugin
  * Author: MonilyPay
  * Author URI: https://moni.ly/
@@ -39,7 +39,7 @@ define( 'WC_STRIPE_PLUGIN_PATH', untrailingslashit( plugin_dir_path( __FILE__ ) 
  */
 function woocommerce_stripe_missing_wc_notice() {
 	/* translators: 1. URL link. */
-	echo '<div class="error"><p><strong>' . sprintf( esc_html__( 'Stripe requires WooCommerce to be installed and active. You can download %s here.', 'woocommerce-gateway-stripe' ), '<a href="https://woocommerce.com/" target="_blank">WooCommerce</a>' ) . '</strong></p></div>';
+	echo '<div class="error"><p><strong>' . sprintf( esc_html__( 'Stripe requires WooCommerce to be installed and active. You can download %s here.', 'woocommerce-gateway-monilypay' ), '<a href="https://woocommerce.com/" target="_blank">WooCommerce</a>' ) . '</strong></p></div>';
 }
 
 /**
@@ -49,7 +49,7 @@ function woocommerce_stripe_missing_wc_notice() {
  */
 function woocommerce_stripe_wc_not_supported() {
 	/* translators: $1. Minimum WooCommerce version. $2. Current WooCommerce version. */
-	echo '<div class="error"><p><strong>' . sprintf( esc_html__( 'Stripe requires WooCommerce %1$s or greater to be installed and active. WooCommerce %2$s is no longer supported.', 'woocommerce-gateway-stripe' ), WC_STRIPE_MIN_WC_VER, WC_VERSION ) . '</strong></p></div>';
+	echo '<div class="error"><p><strong>' . sprintf( esc_html__( 'Stripe requires WooCommerce %1$s or greater to be installed and active. WooCommerce %2$s is no longer supported.', 'woocommerce-gateway-monilypay' ), WC_STRIPE_MIN_WC_VER, WC_VERSION ) . '</strong></p></div>';
 }
 
 function woocommerce_gateway_stripe() {
@@ -346,7 +346,7 @@ function woocommerce_gateway_stripe() {
 			 */
 			public function plugin_action_links( $links ) {
 				$plugin_links = [
-					'<a href="admin.php?page=wc-settings&tab=checkout&section=stripe">' . esc_html__( 'Settings', 'woocommerce-gateway-stripe' ) . '</a>',
+					'<a href="admin.php?page=wc-settings&tab=checkout&section=stripe">' . esc_html__( 'Settings', 'woocommerce-gateway-monilypay' ) . '</a>',
 				];
 				return array_merge( $plugin_links, $links );
 			}
@@ -362,8 +362,8 @@ function woocommerce_gateway_stripe() {
 			public function plugin_row_meta( $links, $file ) {
 				if ( plugin_basename( __FILE__ ) === $file ) {
 					$row_meta = [
-						'docs'    => '<a href="' . esc_url( apply_filters( 'woocommerce_gateway_stripe_docs_url', 'https://woocommerce.com/document/stripe/' ) ) . '" title="' . esc_attr( __( 'View Documentation', 'woocommerce-gateway-stripe' ) ) . '">' . __( 'Docs', 'woocommerce-gateway-stripe' ) . '</a>',
-						'support' => '<a href="' . esc_url( apply_filters( 'woocommerce_gateway_stripe_support_url', 'https://woocommerce.com/my-account/create-a-ticket?select=18627' ) ) . '" title="' . esc_attr( __( 'Open a support request at WooCommerce.com', 'woocommerce-gateway-stripe' ) ) . '">' . __( 'Support', 'woocommerce-gateway-stripe' ) . '</a>',
+						'docs'    => '<a href="' . esc_url( apply_filters( 'woocommerce_gateway_stripe_docs_url', 'https://woocommerce.com/document/stripe/' ) ) . '" title="' . esc_attr( __( 'View Documentation', 'woocommerce-gateway-monilypay' ) ) . '">' . __( 'Docs', 'woocommerce-gateway-monilypay' ) . '</a>',
+						'support' => '<a href="' . esc_url( apply_filters( 'woocommerce_gateway_stripe_support_url', 'https://woocommerce.com/my-account/create-a-ticket?select=18627' ) ) . '" title="' . esc_attr( __( 'Open a support request at WooCommerce.com', 'woocommerce-gateway-monilypay' ) ) . '">' . __( 'Support', 'woocommerce-gateway-monilypay' ) . '</a>',
 					];
 					return array_merge( $links, $row_meta );
 				}
@@ -424,15 +424,15 @@ function woocommerce_gateway_stripe() {
 				if ( WC_Stripe_Feature_Flags::is_upe_preview_enabled() ) {
 					$sections['stripe_upe'] = 'Stripe checkout experience';
 				}
-				$sections['stripe_bancontact'] = __( 'Stripe Bancontact', 'woocommerce-gateway-stripe' );
-				$sections['stripe_sofort']     = __( 'Stripe Sofort', 'woocommerce-gateway-stripe' );
-				$sections['stripe_giropay']    = __( 'Stripe giropay', 'woocommerce-gateway-stripe' );
-				$sections['stripe_eps']        = __( 'Stripe EPS', 'woocommerce-gateway-stripe' );
-				$sections['stripe_ideal']      = __( 'Stripe iDEAL', 'woocommerce-gateway-stripe' );
-				$sections['stripe_p24']        = __( 'Stripe P24', 'woocommerce-gateway-stripe' );
-				$sections['stripe_alipay']     = __( 'Stripe Alipay', 'woocommerce-gateway-stripe' );
-				$sections['stripe_sepa']       = __( 'Stripe SEPA Direct Debit', 'woocommerce-gateway-stripe' );
-				$sections['stripe_multibanco'] = __( 'Stripe Multibanco', 'woocommerce-gateway-stripe' );
+				$sections['stripe_bancontact'] = __( 'Stripe Bancontact', 'woocommerce-gateway-monilypay' );
+				$sections['stripe_sofort']     = __( 'Stripe Sofort', 'woocommerce-gateway-monilypay' );
+				$sections['stripe_giropay']    = __( 'Stripe giropay', 'woocommerce-gateway-monilypay' );
+				$sections['stripe_eps']        = __( 'Stripe EPS', 'woocommerce-gateway-monilypay' );
+				$sections['stripe_ideal']      = __( 'Stripe iDEAL', 'woocommerce-gateway-monilypay' );
+				$sections['stripe_p24']        = __( 'Stripe P24', 'woocommerce-gateway-monilypay' );
+				$sections['stripe_alipay']     = __( 'Stripe Alipay', 'woocommerce-gateway-monilypay' );
+				$sections['stripe_sepa']       = __( 'Stripe SEPA Direct Debit', 'woocommerce-gateway-monilypay' );
+				$sections['stripe_multibanco'] = __( 'Stripe Multibanco', 'woocommerce-gateway-monilypay' );
 
 				return $sections;
 			}
@@ -688,7 +688,7 @@ function woocommerce_gateway_stripe() {
 add_action( 'plugins_loaded', 'woocommerce_gateway_stripe_init' );
 
 function woocommerce_gateway_stripe_init() {
-	load_plugin_textdomain( 'woocommerce-gateway-stripe', false, plugin_basename( dirname( __FILE__ ) ) . '/languages' );
+	load_plugin_textdomain( 'woocommerce-gateway-monilypay', false, plugin_basename( dirname( __FILE__ ) ) . '/languages' );
 
 	if ( ! class_exists( 'WooCommerce' ) ) {
 		add_action( 'admin_notices', 'woocommerce_stripe_missing_wc_notice' );
