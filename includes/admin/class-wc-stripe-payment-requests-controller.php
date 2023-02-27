@@ -56,7 +56,7 @@ class WC_Stripe_Payment_Requests_Controller {
 		global $hide_save_button;
 		$hide_save_button = true;
 		echo '<h2>' . __( 'Customize express checkouts', 'woocommerce-gateway-monilypay' );
-		wc_back_link( __( 'Return to Stripe', 'woocommerce-gateway-monilypay' ), admin_url( 'admin.php?page=wc-settings&tab=checkout&section=stripe' ) );
+		wc_back_link( __( 'Return to Stripe', 'woocommerce-gateway-monilypay' ), admin_url( 'admin.php?page=wc-settings&tab=checkout&section=monilypay' ) );
 		echo '</h2>';
 		echo '<div class="wrap"><div id="wc-stripe-payment-request-settings-container"></div></div>';
 	}

@@ -28,25 +28,25 @@ const GeneralSettingsDescription = () => (
 		<h2>{ __( 'General', 'woocommerce-gateway-monilypay' ) }</h2>
 		<p>
 			{ __(
-				'Enable or disable Stripe on your store, enter ' +
+				'Enable or disable MonilyPay on your store, enter ' +
 					'activation keys, and turn on test mode ' +
 					'to simulate transactions.',
 				'woocommerce-gateway-monilypay'
 			) }
 		</p>
-		<p>
+		{/* <p>
 			<ExternalLink href="https://woocommerce.com/document/stripe/">
 				{ __(
 					'View Stripe plugin docs',
 					'woocommerce-gateway-monilypay'
 				) }
 			</ExternalLink>
-		</p>
-		<p>
+		</p> */}
+		{/* <p>
 			<ExternalLink href="https://woocommerce.com/contact-us/">
 				{ __( 'Get support', 'woocommerce-gateway-monilypay' ) }
 			</ExternalLink>
-		</p>
+		</p> */}
 	</>
 );
 

@@ -30,17 +30,17 @@ class WC_REST_Stripe_Payment_Gateway_Controller extends WC_Stripe_REST_Base_Cont
 	 * @var array
 	 */
 	private $gateways = [
-		'stripe_sepa'       => WC_Gateway_Stripe_Sepa::class,
-		'stripe_giropay'    => WC_Gateway_Stripe_Giropay::class,
-		'stripe_ideal'      => WC_Gateway_Stripe_Ideal::class,
-		'stripe_bancontact' => WC_Gateway_Stripe_Bancontact::class,
-		'stripe_eps'        => WC_Gateway_Stripe_Eps::class,
-		'stripe_sofort'     => WC_Gateway_Stripe_Sofort::class,
-		'stripe_p24'        => WC_Gateway_Stripe_P24::class,
-		'stripe_alipay'     => WC_Gateway_Stripe_Alipay::class,
-		'stripe_multibanco' => WC_Gateway_Stripe_Multibanco::class,
-		'stripe_oxxo'       => WC_Gateway_Stripe_Oxxo::class,
-		'stripe_boleto'     => WC_Gateway_Stripe_Boleto::class,
+		//'stripe_sepa'       => WC_Gateway_Stripe_Sepa::class,
+		//'stripe_giropay'    => WC_Gateway_Stripe_Giropay::class,
+		//'stripe_ideal'      => WC_Gateway_Stripe_Ideal::class,
+		//'stripe_bancontact' => WC_Gateway_Stripe_Bancontact::class,
+		//'stripe_eps'        => WC_Gateway_Stripe_Eps::class,
+		//'stripe_sofort'     => WC_Gateway_Stripe_Sofort::class,
+		//'stripe_p24'        => WC_Gateway_Stripe_P24::class,
+		//'stripe_alipay'     => WC_Gateway_Stripe_Alipay::class,
+		//'stripe_multibanco' => WC_Gateway_Stripe_Multibanco::class,
+		//'stripe_oxxo'       => WC_Gateway_Stripe_Oxxo::class,
+		//'stripe_boleto'     => WC_Gateway_Stripe_Boleto::class,
 	];
 
 	/**

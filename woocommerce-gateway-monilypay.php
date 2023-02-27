@@ -39,7 +39,7 @@ define( 'WC_STRIPE_PLUGIN_PATH', untrailingslashit( plugin_dir_path( __FILE__ ) 
  */
 function woocommerce_stripe_missing_wc_notice() {
 	/* translators: 1. URL link. */
-	echo '<div class="error"><p><strong>' . sprintf( esc_html__( 'Stripe requires WooCommerce to be installed and active. You can download %s here.', 'woocommerce-gateway-monilypay' ), '<a href="https://woocommerce.com/" target="_blank">WooCommerce</a>' ) . '</strong></p></div>';
+	echo '<div class="error"><p><strong>' . sprintf( esc_html__( 'MonilyPay requires WooCommerce to be installed and active. You can download %s here.', 'woocommerce-gateway-monilypay' ), '<a href="https://woocommerce.com/" target="_blank">WooCommerce</a>' ) . '</strong></p></div>';
 }
 
 /**
@@ -49,7 +49,7 @@ function woocommerce_stripe_missing_wc_notice() {
  */
 function woocommerce_stripe_wc_not_supported() {
 	/* translators: $1. Minimum WooCommerce version. $2. Current WooCommerce version. */
-	echo '<div class="error"><p><strong>' . sprintf( esc_html__( 'Stripe requires WooCommerce %1$s or greater to be installed and active. WooCommerce %2$s is no longer supported.', 'woocommerce-gateway-monilypay' ), WC_STRIPE_MIN_WC_VER, WC_VERSION ) . '</strong></p></div>';
+	echo '<div class="error"><p><strong>' . sprintf( esc_html__( 'MonilyPay requires WooCommerce %1$s or greater to be installed and active. WooCommerce %2$s is no longer supported.', 'woocommerce-gateway-monilypay' ), WC_STRIPE_MIN_WC_VER, WC_VERSION ) . '</strong></p></div>';
 }
 
 function woocommerce_gateway_stripe() {

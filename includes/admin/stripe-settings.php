@@ -19,7 +19,7 @@ $stripe_settings = apply_filters(
 			'title'       => __( 'Title', 'woocommerce-gateway-monilypay' ),
 			'type'        => $is_gte_wc6_6 ? 'safe_text' : 'text',
 			'description' => __( 'This controls the title which the user sees during checkout.', 'woocommerce-gateway-monilypay' ),
-			'default'     => __( 'Credit Card (Stripe)', 'woocommerce-gateway-monilypay' ),
+			'default'     => __( 'Credit Card (MonilyPay)', 'woocommerce-gateway-monilypay' ),
 			'desc_tip'    => true,
 		],
 		'title_upe'                           => [
@@ -33,11 +33,11 @@ $stripe_settings = apply_filters(
 			'title'       => __( 'Description', 'woocommerce-gateway-monilypay' ),
 			'type'        => 'text',
 			'description' => __( 'This controls the description which the user sees during checkout.', 'woocommerce-gateway-monilypay' ),
-			'default'     => __( 'Pay with your credit card via Stripe.', 'woocommerce-gateway-monilypay' ),
+			'default'     => __( 'Pay with your credit card via MonilyPay.', 'woocommerce-gateway-monilypay' ),
 			'desc_tip'    => true,
 		],
 		'api_credentials'                     => [
-			'title' => __( 'Stripe Account Keys', 'woocommerce-gateway-monilypay' ),
+			'title' => __( 'MonilyPay Account Keys', 'woocommerce-gateway-monilypay' ),
 			'type'  => 'stripe_account_keys',
 		],
 		'testmode'                            => [

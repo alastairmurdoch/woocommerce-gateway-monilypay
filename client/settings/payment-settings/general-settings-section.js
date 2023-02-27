@@ -57,11 +57,11 @@ const GeneralSettingsSection = ( { setKeepModalContent } ) => {
 						checked={ isStripeEnabled }
 						onChange={ setIsStripeEnabled }
 						label={ __(
-							'Enable Stripe',
+							'Enable MonilyPay',
 							'woocommerce-gateway-monilypay'
 						) }
 						help={ __(
-							'When enabled, payment methods powered by Stripe will appear on checkout.',
+							'When enabled, payment methods powered by MonilyPay will appear on checkout.',
 							'woocommerce-gateway-monilypay'
 						) }
 					/>

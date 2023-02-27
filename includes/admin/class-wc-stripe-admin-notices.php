@@ -89,17 +89,17 @@ class WC_Stripe_Admin_Notices {
 	 */
 	public function get_payment_methods() {
 		return [
-			'alipay'     => 'WC_Gateway_Stripe_Alipay',
-			'bancontact' => 'WC_Gateway_Stripe_Bancontact',
-			'eps'        => 'WC_Gateway_Stripe_EPS',
-			'giropay'    => 'WC_Gateway_Stripe_Giropay',
-			'ideal'      => 'WC_Gateway_Stripe_Ideal',
-			'multibanco' => 'WC_Gateway_Stripe_Multibanco',
-			'p24'        => 'WC_Gateway_Stripe_p24',
-			'sepa'       => 'WC_Gateway_Stripe_Sepa',
-			'sofort'     => 'WC_Gateway_Stripe_Sofort',
-			'boleto'     => 'WC_Gateway_Stripe_Boleto',
-			'oxxo'       => 'WC_Gateway_Stripe_Oxxo',
+			//'alipay'     => 'WC_Gateway_Stripe_Alipay',
+			//'bancontact' => 'WC_Gateway_Stripe_Bancontact',
+			//'eps'        => 'WC_Gateway_Stripe_EPS',
+			//'giropay'    => 'WC_Gateway_Stripe_Giropay',
+			//'ideal'      => 'WC_Gateway_Stripe_Ideal',
+			//'multibanco' => 'WC_Gateway_Stripe_Multibanco',
+			//'p24'        => 'WC_Gateway_Stripe_p24',
+			//'sepa'       => 'WC_Gateway_Stripe_Sepa',
+			//'sofort'     => 'WC_Gateway_Stripe_Sofort',
+			//'boleto'     => 'WC_Gateway_Stripe_Boleto',
+			//'oxxo'       => 'WC_Gateway_Stripe_Oxxo',
 		];
 	}
 
@@ -423,7 +423,7 @@ class WC_Stripe_Admin_Notices {
 	 * @return string Setting link
 	 */
 	public function get_setting_link() {
-		return esc_url( admin_url( 'admin.php?page=wc-settings&tab=checkout&section=stripe&panel=settings' ) );
+		return esc_url( admin_url( 'admin.php?page=wc-settings&tab=checkout&section=monilypay&panel=settings' ) );
 	}
 
 	/**

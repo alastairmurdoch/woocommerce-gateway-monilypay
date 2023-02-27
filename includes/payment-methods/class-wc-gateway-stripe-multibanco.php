@@ -62,7 +62,7 @@ class WC_Gateway_Stripe_Multibanco extends WC_Stripe_Payment_Gateway {
 		$this->method_description = sprintf(
 		/* translators: 1) HTML anchor open tag 2) HTML anchor closing tag */
 			__( 'All other general Stripe settings can be adjusted %1$shere%2$s.', 'woocommerce-gateway-monilypay' ),
-			'<a href="' . esc_url( admin_url( 'admin.php?page=wc-settings&tab=checkout&section=stripe' ) ) . '">',
+			'<a href="' . esc_url( admin_url( 'admin.php?page=wc-settings&tab=checkout&section=monilypay' ) ) . '">',
 			'</a>'
 		);
 		$this->supports = [
