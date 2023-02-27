@@ -173,27 +173,27 @@ function woocommerce_gateway_stripe() {
 				require_once dirname( __FILE__ ) . '/includes/payment-methods/class-wc-stripe-upe-payment-gateway.php';
 				require_once dirname( __FILE__ ) . '/includes/payment-methods/class-wc-stripe-upe-payment-method.php';
 				require_once dirname( __FILE__ ) . '/includes/payment-methods/class-wc-stripe-upe-payment-method-cc.php';
-				require_once dirname( __FILE__ ) . '/includes/payment-methods/class-wc-stripe-upe-payment-method-giropay.php';
-				require_once dirname( __FILE__ ) . '/includes/payment-methods/class-wc-stripe-upe-payment-method-ideal.php';
-				require_once dirname( __FILE__ ) . '/includes/payment-methods/class-wc-stripe-upe-payment-method-bancontact.php';
-				require_once dirname( __FILE__ ) . '/includes/payment-methods/class-wc-stripe-upe-payment-method-boleto.php';
-				require_once dirname( __FILE__ ) . '/includes/payment-methods/class-wc-stripe-upe-payment-method-oxxo.php';
-				require_once dirname( __FILE__ ) . '/includes/payment-methods/class-wc-stripe-upe-payment-method-eps.php';
-				require_once dirname( __FILE__ ) . '/includes/payment-methods/class-wc-stripe-upe-payment-method-sepa.php';
-				require_once dirname( __FILE__ ) . '/includes/payment-methods/class-wc-stripe-upe-payment-method-p24.php';
-				require_once dirname( __FILE__ ) . '/includes/payment-methods/class-wc-stripe-upe-payment-method-sofort.php';
-				require_once dirname( __FILE__ ) . '/includes/payment-methods/class-wc-stripe-upe-payment-method-link.php';
-				require_once dirname( __FILE__ ) . '/includes/payment-methods/class-wc-gateway-stripe-bancontact.php';
-				require_once dirname( __FILE__ ) . '/includes/payment-methods/class-wc-gateway-stripe-sofort.php';
-				require_once dirname( __FILE__ ) . '/includes/payment-methods/class-wc-gateway-stripe-giropay.php';
-				require_once dirname( __FILE__ ) . '/includes/payment-methods/class-wc-gateway-stripe-eps.php';
-				require_once dirname( __FILE__ ) . '/includes/payment-methods/class-wc-gateway-stripe-ideal.php';
-				require_once dirname( __FILE__ ) . '/includes/payment-methods/class-wc-gateway-stripe-p24.php';
-				require_once dirname( __FILE__ ) . '/includes/payment-methods/class-wc-gateway-stripe-alipay.php';
-				require_once dirname( __FILE__ ) . '/includes/payment-methods/class-wc-gateway-stripe-sepa.php';
-				require_once dirname( __FILE__ ) . '/includes/payment-methods/class-wc-gateway-stripe-multibanco.php';
-				require_once dirname( __FILE__ ) . '/includes/payment-methods/class-wc-gateway-stripe-boleto.php';
-				require_once dirname( __FILE__ ) . '/includes/payment-methods/class-wc-gateway-stripe-oxxo.php';
+				// require_once dirname( __FILE__ ) . '/includes/payment-methods/class-wc-stripe-upe-payment-method-giropay.php';
+				// require_once dirname( __FILE__ ) . '/includes/payment-methods/class-wc-stripe-upe-payment-method-ideal.php';
+				// require_once dirname( __FILE__ ) . '/includes/payment-methods/class-wc-stripe-upe-payment-method-bancontact.php';
+				// require_once dirname( __FILE__ ) . '/includes/payment-methods/class-wc-stripe-upe-payment-method-boleto.php';
+				// require_once dirname( __FILE__ ) . '/includes/payment-methods/class-wc-stripe-upe-payment-method-oxxo.php';
+				// require_once dirname( __FILE__ ) . '/includes/payment-methods/class-wc-stripe-upe-payment-method-eps.php';
+				// require_once dirname( __FILE__ ) . '/includes/payment-methods/class-wc-stripe-upe-payment-method-sepa.php';
+				// require_once dirname( __FILE__ ) . '/includes/payment-methods/class-wc-stripe-upe-payment-method-p24.php';
+				// require_once dirname( __FILE__ ) . '/includes/payment-methods/class-wc-stripe-upe-payment-method-sofort.php';
+				// require_once dirname( __FILE__ ) . '/includes/payment-methods/class-wc-stripe-upe-payment-method-link.php';
+				// require_once dirname( __FILE__ ) . '/includes/payment-methods/class-wc-gateway-stripe-bancontact.php';
+				// require_once dirname( __FILE__ ) . '/includes/payment-methods/class-wc-gateway-stripe-sofort.php';
+				// require_once dirname( __FILE__ ) . '/includes/payment-methods/class-wc-gateway-stripe-giropay.php';
+				// require_once dirname( __FILE__ ) . '/includes/payment-methods/class-wc-gateway-stripe-eps.php';
+				// require_once dirname( __FILE__ ) . '/includes/payment-methods/class-wc-gateway-stripe-ideal.php';
+				// require_once dirname( __FILE__ ) . '/includes/payment-methods/class-wc-gateway-stripe-p24.php';
+				// require_once dirname( __FILE__ ) . '/includes/payment-methods/class-wc-gateway-stripe-alipay.php';
+				// require_once dirname( __FILE__ ) . '/includes/payment-methods/class-wc-gateway-stripe-sepa.php';
+				// require_once dirname( __FILE__ ) . '/includes/payment-methods/class-wc-gateway-stripe-multibanco.php';
+				// require_once dirname( __FILE__ ) . '/includes/payment-methods/class-wc-gateway-stripe-boleto.php';
+				// require_once dirname( __FILE__ ) . '/includes/payment-methods/class-wc-gateway-stripe-oxxo.php';
 				require_once dirname( __FILE__ ) . '/includes/payment-methods/class-wc-stripe-payment-request.php';
 				require_once dirname( __FILE__ ) . '/includes/compat/class-wc-stripe-woo-compat-utils.php';
 				require_once dirname( __FILE__ ) . '/includes/connect/class-wc-stripe-connect.php';
@@ -346,7 +346,7 @@ function woocommerce_gateway_stripe() {
 			 */
 			public function plugin_action_links( $links ) {
 				$plugin_links = [
-					'<a href="admin.php?page=wc-settings&tab=checkout&section=stripe">' . esc_html__( 'Settings', 'woocommerce-gateway-monilypay' ) . '</a>',
+					'<a href="admin.php?page=wc-settings&tab=checkout&section=monilypay">' . esc_html__( 'Settings', 'woocommerce-gateway-monilypay' ) . '</a>',
 				];
 				return array_merge( $plugin_links, $links );
 			}
@@ -381,20 +381,20 @@ function woocommerce_gateway_stripe() {
 
 				if ( ! WC_Stripe_Feature_Flags::is_upe_preview_enabled() || ! WC_Stripe_Feature_Flags::is_upe_checkout_enabled() ) {
 					// These payment gateways will be hidden when UPE is enabled:
-					$methods[] = WC_Gateway_Stripe_Sepa::class;
-					$methods[] = WC_Gateway_Stripe_Giropay::class;
-					$methods[] = WC_Gateway_Stripe_Ideal::class;
-					$methods[] = WC_Gateway_Stripe_Bancontact::class;
-					$methods[] = WC_Gateway_Stripe_Eps::class;
-					$methods[] = WC_Gateway_Stripe_Sofort::class;
-					$methods[] = WC_Gateway_Stripe_P24::class;
-					$methods[] = WC_Gateway_Stripe_Boleto::class;
-					$methods[] = WC_Gateway_Stripe_Oxxo::class;
+				//	$methods[] = WC_Gateway_Stripe_Sepa::class;
+				//	$methods[] = WC_Gateway_Stripe_Giropay::class;
+				//	$methods[] = WC_Gateway_Stripe_Ideal::class;
+				//	$methods[] = WC_Gateway_Stripe_Bancontact::class;
+			//		$methods[] = WC_Gateway_Stripe_Eps::class;
+			//		$methods[] = WC_Gateway_Stripe_Sofort::class;
+			//		$methods[] = WC_Gateway_Stripe_P24::class;
+			//		$methods[] = WC_Gateway_Stripe_Boleto::class;
+			//		$methods[] = WC_Gateway_Stripe_Oxxo::class;
 				}
 
 				// These payment gateways will always be visible, regardless if UPE is enabled or disabled:
-				$methods[] = WC_Gateway_Stripe_Alipay::class;
-				$methods[] = WC_Gateway_Stripe_Multibanco::class;
+				//$methods[] = WC_Gateway_Stripe_Alipay::class;
+				//$methods[] = WC_Gateway_Stripe_Multibanco::class;
 
 				return $methods;
 			}
@@ -410,29 +410,29 @@ function woocommerce_gateway_stripe() {
 				if ( WC_Stripe_Feature_Flags::is_upe_preview_enabled() ) {
 					unset( $sections['stripe_upe'] );
 				}
-				unset( $sections['stripe_bancontact'] );
-				unset( $sections['stripe_sofort'] );
-				unset( $sections['stripe_giropay'] );
-				unset( $sections['stripe_eps'] );
-				unset( $sections['stripe_ideal'] );
-				unset( $sections['stripe_p24'] );
-				unset( $sections['stripe_alipay'] );
-				unset( $sections['stripe_sepa'] );
-				unset( $sections['stripe_multibanco'] );
+				// unset( $sections['stripe_bancontact'] );
+				// unset( $sections['stripe_sofort'] );
+				// unset( $sections['stripe_giropay'] );
+				// unset( $sections['stripe_eps'] );
+				// unset( $sections['stripe_ideal'] );
+				// unset( $sections['stripe_p24'] );
+				// unset( $sections['stripe_alipay'] );
+				// unset( $sections['stripe_sepa'] );
+				// unset( $sections['stripe_multibanco'] );
 
 				$sections['stripe'] = 'Stripe';
 				if ( WC_Stripe_Feature_Flags::is_upe_preview_enabled() ) {
 					$sections['stripe_upe'] = 'Stripe checkout experience';
 				}
-				$sections['stripe_bancontact'] = __( 'Stripe Bancontact', 'woocommerce-gateway-monilypay' );
-				$sections['stripe_sofort']     = __( 'Stripe Sofort', 'woocommerce-gateway-monilypay' );
-				$sections['stripe_giropay']    = __( 'Stripe giropay', 'woocommerce-gateway-monilypay' );
-				$sections['stripe_eps']        = __( 'Stripe EPS', 'woocommerce-gateway-monilypay' );
-				$sections['stripe_ideal']      = __( 'Stripe iDEAL', 'woocommerce-gateway-monilypay' );
-				$sections['stripe_p24']        = __( 'Stripe P24', 'woocommerce-gateway-monilypay' );
-				$sections['stripe_alipay']     = __( 'Stripe Alipay', 'woocommerce-gateway-monilypay' );
-				$sections['stripe_sepa']       = __( 'Stripe SEPA Direct Debit', 'woocommerce-gateway-monilypay' );
-				$sections['stripe_multibanco'] = __( 'Stripe Multibanco', 'woocommerce-gateway-monilypay' );
+				// $sections['stripe_bancontact'] = __( 'Stripe Bancontact', 'woocommerce-gateway-monilypay' );
+				// $sections['stripe_sofort']     = __( 'Stripe Sofort', 'woocommerce-gateway-monilypay' );
+				// $sections['stripe_giropay']    = __( 'Stripe giropay', 'woocommerce-gateway-monilypay' );
+				// $sections['stripe_eps']        = __( 'Stripe EPS', 'woocommerce-gateway-monilypay' );
+				// $sections['stripe_ideal']      = __( 'Stripe iDEAL', 'woocommerce-gateway-monilypay' );
+				// $sections['stripe_p24']        = __( 'Stripe P24', 'woocommerce-gateway-monilypay' );
+				// $sections['stripe_alipay']     = __( 'Stripe Alipay', 'woocommerce-gateway-monilypay' );
+				// $sections['stripe_sepa']       = __( 'Stripe SEPA Direct Debit', 'woocommerce-gateway-monilypay' );
+				// $sections['stripe_multibanco'] = __( 'Stripe Multibanco', 'woocommerce-gateway-monilypay' );
 
 				return $sections;
 			}
