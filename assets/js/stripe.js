@@ -211,7 +211,7 @@ jQuery( function( $ ) {
 
 			$( 'form.woocommerce-checkout' )
 				.on(
-					'checkout_place_order_stripe checkout_place_order_stripe_bancontact checkout_place_order_stripe_sofort checkout_place_order_stripe_giropay checkout_place_order_stripe_ideal checkout_place_order_stripe_alipay checkout_place_order_stripe_sepa checkout_place_order_stripe_boleto checkout_place_order_stripe_oxxo',
+					'checkout_place_order_monilypay checkout_place_order_stripe_bancontact checkout_place_order_stripe_sofort checkout_place_order_stripe_giropay checkout_place_order_stripe_ideal checkout_place_order_stripe_alipay checkout_place_order_stripe_sepa checkout_place_order_stripe_boleto checkout_place_order_stripe_oxxo',
 					this.onSubmit
 				);
 
@@ -290,7 +290,7 @@ jQuery( function( $ ) {
 		 * @return {boolean}
 		 */
 		isStripeChosen: function() {
-			return $( '#payment_method_stripe, #payment_method_stripe_bancontact, #payment_method_stripe_sofort, #payment_method_stripe_giropay, #payment_method_stripe_ideal, #payment_method_stripe_alipay, #payment_method_stripe_sepa, #payment_method_stripe_eps, #payment_method_stripe_multibanco, #payment_method_stripe_boleto, #payment_method_stripe_oxxo' ).is( ':checked' ) || ( $( '#payment_method_stripe' ).is( ':checked' ) && 'new' === $( 'input[name="wc-stripe-payment-token"]:checked' ).val() ) || ( $( '#payment_method_stripe_sepa' ).is( ':checked' ) && 'new' === $( 'input[name="wc-stripe-payment-token"]:checked' ).val() );
+			return $( '#payment_method_monilypay, #payment_method_stripe_bancontact, #payment_method_stripe_sofort, #payment_method_stripe_giropay, #payment_method_stripe_ideal, #payment_method_stripe_alipay, #payment_method_stripe_sepa, #payment_method_stripe_eps, #payment_method_stripe_multibanco, #payment_method_stripe_boleto, #payment_method_stripe_oxxo' ).is( ':checked' ) || ( $( '#payment_method_stripe' ).is( ':checked' ) && 'new' === $( 'input[name="wc-monilypay-payment-token"]:checked' ).val() ) || ( $( '#payment_method_stripe_sepa' ).is( ':checked' ) && 'new' === $( 'input[name="wc-monilypay-payment-token"]:checked' ).val() );
 		},
 
 		/**
@@ -300,9 +300,9 @@ jQuery( function( $ ) {
 		 */
 		isStripeSaveCardChosen: function() {
 			return (
-				$( '#payment_method_stripe' ).is( ':checked' ) &&
-				$( 'input[name="wc-stripe-payment-token"]' ).is( ':checked' ) &&
-				'new' !== $( 'input[name="wc-stripe-payment-token"]:checked' ).val()
+				$( '#payment_method_monilypay' ).is( ':checked' ) &&
+				$( 'input[name="wc-monilypay-payment-token"]' ).is( ':checked' ) &&
+				'new' !== $( 'input[name="wc-monilypay-payment-token"]:checked' ).val()
 			) || (
 				$( '#payment_method_stripe_sepa' ).is( ':checked' ) &&
 				$( 'input[name="wc-stripe_sepa-payment-token"]' ).is( ':checked' ) &&
@@ -316,7 +316,7 @@ jQuery( function( $ ) {
 		 * @return {boolean}
 		 */
 		isStripeCardChosen: function() {
-			return $( '#payment_method_stripe' ).is( ':checked' );
+			return $( '#payment_method_monilypay' ).is( ':checked' );
 		},
 
 		/**
@@ -544,6 +544,13 @@ jQuery( function( $ ) {
 			}
 
 			// Handle card payments.
+			try {
+				stripe.createSource( stripe_card, extra_details );
+			} catch( error ) { 
+				console.log( error );
+				return;
+			}
+			
 			return stripe.createSource( stripe_card, extra_details )
 				.then( wc_stripe_form.sourceResponse );
 		},
