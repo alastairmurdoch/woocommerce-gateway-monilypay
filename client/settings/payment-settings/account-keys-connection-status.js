@@ -119,8 +119,7 @@ export const AccountKeysConnectionStatus = ( { formRef } ) => {
 			//TODO: need to pull account ID from somewhere
 			const stripe = await loadStripe( publishableKey );
 			const createTokenResult = await stripe.createToken( 'pii', {
-				personal_id_number: 'connection_test',
-				blah:'blah'
+				personal_id_number: 'connection_test'
 			} );
 
 			const tokenId = createTokenResult?.token?.id;
