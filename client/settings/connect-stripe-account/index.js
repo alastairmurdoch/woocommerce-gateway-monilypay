@@ -59,7 +59,7 @@ const ConnectStripeAccount = ( { oauthUrl } ) => {
 				<AccountKeysModal
 					type={ modalType }
 					onClose={ handleModalDismiss }
-					redirectOnSave={ `${ window.location.pathname }?page=wc-settings&tab=checkout&section=stripe&panel=settings` }
+					redirectOnSave={ `${ window.location.pathname }?page=wc-settings&tab=checkout&section=monilypay&panel=settings` }
 				/>
 			) }
 			<CardWrapper>
@@ -67,13 +67,13 @@ const ConnectStripeAccount = ( { oauthUrl } ) => {
 				<CardBody>
 					<h2>
 						{ __(
-							'Get started with Stripe',
+							'Get started with MonilyPay',
 							'woocommerce-gateway-monilypay'
 						) }
 					</h2>
 					<InformationText>
 						{ __(
-							'Connect or create a Stripe account to accept payments directly onsite, including Payment Request buttons (such as Apple Pay and Google Pay), iDEAL, SEPA, Sofort, and more international payment methods.',
+							'Connect a MonilyPay account to accept payments directly onsite.',
 							'woocommerce-gateway-monilypay'
 						) }
 					</InformationText>

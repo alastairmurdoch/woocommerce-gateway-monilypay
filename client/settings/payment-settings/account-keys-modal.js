@@ -191,7 +191,7 @@ const WebhookSecret = () => {
 		<TextControl
 			label={ __( 'Webhook secret', 'woocommerce-gateway-monilypay' ) }
 			help={ __(
-				'Get your webhook signing secret from the webhooks section in your Stripe account.',
+				'Get your webhook signing secret from the webhooks section in your MonilyPay account.',
 				'woocommerce-gateway-monilypay'
 			) }
 			value={ value }
@@ -211,7 +211,7 @@ const TestWebhookSecret = () => {
 		<TextControl
 			label={ __( 'Test Webhook secret', 'woocommerce-gateway-monilypay' ) }
 			help={ __(
-				'Get your webhook signing secret from the webhooks section in your Stripe account.',
+				'Get your webhook signing secret from the webhooks section in your MonilyPay account.',
 				'woocommerce-gateway-monilypay'
 			) }
 			value={ value }
@@ -253,7 +253,7 @@ const StyledConfirmationModal = styled( ConfirmationModal )`
 		margin: 0 -24px 24px;
 	}
 	.wcstripe-inline-notice {
-		margin-top: -24px;
+		margin-top: 0px;
 		margin-bottom: 0;
 	}
 	.wcstripe-confirmation-modal__separator {

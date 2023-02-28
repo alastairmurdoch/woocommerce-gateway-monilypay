@@ -74,7 +74,7 @@ abstract class WC_Stripe_Payment_Gateway extends WC_Payment_Gateway_CC {
 	 */
 	public function display_admin_settings_webhook_description() {
 		/* translators: 1) webhook url */
-		$description = sprintf( __( 'You must add the following webhook endpoint <strong style="background-color:#ddd;">&nbsp;%s&nbsp;</strong> to your <a href="https://dashboard.stripe.com/account/webhooks" target="_blank">Stripe account settings</a> (if there isn\'t one already enabled). This will enable you to receive notifications on the charge statuses.', 'woocommerce-gateway-monilypay' ), WC_Stripe_Helper::get_webhook_url() );
+		$description = sprintf( __( 'You must add the following webhook endpoint <strong style="background-color:#ddd;">&nbsp;%s&nbsp;</strong> to your <a href="https://dashboard.stripe.com/account/webhooks" target="_blank">MonilyPay account settings</a> (if there isn\'t one already enabled). This will enable you to receive notifications on the charge statuses.', 'woocommerce-gateway-monilypay' ), WC_Stripe_Helper::get_webhook_url() );
 
 		$webhook_status = WC_Stripe_Webhook_State::get_webhook_status_message();
 
@@ -1851,7 +1851,7 @@ abstract class WC_Stripe_Payment_Gateway extends WC_Payment_Gateway_CC {
 			'updatePaymentIntentNonce' => wp_create_nonce( 'wc_stripe_update_payment_intent_nonce' ),
 			'orderId'                  => $order_id,
 			'checkout_url'             => WC_AJAX::get_endpoint( 'checkout' ),
-			'stripeAccount'			   => $this->monilypay_account_id
+			//'stripeAccount'			   => $this->monilypay_account_id
 		];
 
 		// If we're on the pay page we need to pass stripe.js the address of the order.

@@ -317,7 +317,7 @@ export const setupStripe = ( page, baseUrl ) =>
 					try {
 						console.log( '- Trying to setup the Stripe keys...' );
 						await page.goto(
-							`/wp-admin/admin.php?page=wc-settings&tab=checkout&section=stripe`
+							`/wp-admin/admin.php?page=wc-settings&tab=checkout&section=monilypay`
 						);
 
 						await page

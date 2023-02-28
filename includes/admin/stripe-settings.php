@@ -112,14 +112,14 @@ $stripe_settings = apply_filters(
 		'test_webhook_secret'                 => [
 			'title'       => __( 'Test Webhook Secret', 'woocommerce-gateway-monilypay' ),
 			'type'        => 'password',
-			'description' => __( 'Get your webhook signing secret from the webhooks section in your stripe account.', 'woocommerce-gateway-monilypay' ),
+			'description' => __( 'Get your webhook signing secret from the webhooks section in your MonilyPay account.', 'woocommerce-gateway-monilypay' ),
 			'default'     => '',
 			'desc_tip'    => true,
 		],
 		'webhook_secret'                      => [
 			'title'       => __( 'Webhook Secret', 'woocommerce-gateway-monilypay' ),
 			'type'        => 'password',
-			'description' => __( 'Get your webhook signing secret from the webhooks section in your stripe account.', 'woocommerce-gateway-monilypay' ),
+			'description' => __( 'Get your webhook signing secret from the webhooks section in your MonilyPay account.', 'woocommerce-gateway-monilypay' ),
 			'default'     => '',
 			'desc_tip'    => true,
 		],

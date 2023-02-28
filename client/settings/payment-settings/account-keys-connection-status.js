@@ -117,9 +117,10 @@ export const AccountKeysConnectionStatus = ( { formRef } ) => {
 
 		try {
 			//TODO: need to pull account ID from somewhere
-			const stripe = await loadStripe( publishableKey, {stripeAccount: monilypayAccountId} );
+			const stripe = await loadStripe( publishableKey );
 			const createTokenResult = await stripe.createToken( 'pii', {
 				personal_id_number: 'connection_test',
+				blah:'blah'
 			} );
 
 			const tokenId = createTokenResult?.token?.id;

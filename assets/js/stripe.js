@@ -7,7 +7,7 @@ jQuery( function( $ ) {
 		var stripe = Stripe( wc_stripe_params.key, {
 			locale: wc_stripe_params.stripe_locale || 'auto',
 		} );
-	} catch( error ) {
+	} catch( error ) { 
 		console.log( error );
 		return;
 	}
