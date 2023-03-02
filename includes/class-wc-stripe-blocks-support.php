@@ -16,7 +16,7 @@ final class WC_Stripe_Blocks_Support extends AbstractPaymentMethodType {
 	 *
 	 * @var string
 	 */
-	protected $name = 'stripe';
+	protected $name = 'monilypay';
 
 	/**
 	 * The Payment Request configuration class used for Shortcode PRBs. We use it here to retrieve

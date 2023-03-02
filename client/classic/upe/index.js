@@ -609,8 +609,8 @@ jQuery( function ( $ ) {
 	 */
 	function isUsingSavedPaymentMethod() {
 		return (
-			$( '#wc-stripe-payment-token-new' ).length &&
-			! $( '#wc-stripe-payment-token-new' ).is( ':checked' )
+			$( '#wc-monilypay-payment-token-new' ).length &&
+			! $( '#wc-monilypay-payment-token-new' ).is( ':checked' )
 		);
 	}
 
