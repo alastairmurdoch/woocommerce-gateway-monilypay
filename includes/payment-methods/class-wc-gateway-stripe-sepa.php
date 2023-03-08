@@ -6,11 +6,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Class that handles SEPA payment method.
  *
- * @extends WC_Gateway_Stripe
+ * @extends WC_Gateway_Monilypay
  *
  * @since 4.0.0
  */
-class WC_Gateway_Stripe_Sepa extends WC_Stripe_Payment_Gateway {
+class WC_Gateway_Monilypay_Sepa extends WC_Monilypay_Payment_Gateway {
 
 	const ID = 'stripe_sepa';
 
@@ -187,7 +187,7 @@ class WC_Gateway_Stripe_Sepa extends WC_Stripe_Payment_Gateway {
 	 */
 	public function mandate_display() {
 		/* translators: statement descriptor */
-		printf( __( 'By providing your IBAN and confirming this payment, you are authorizing %s and Stripe, our payment service provider, to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions. You are entitled to a refund from your bank under the terms and conditions of your agreement with your bank. A refund must be claimed within 8 weeks starting from the date on which your account was debited.', 'woocommerce-gateway-monilypay' ), WC_Stripe_Helper::clean_statement_descriptor( $this->statement_descriptor ) );
+		printf( __( 'By providing your IBAN and confirming this payment, you are authorizing %s and Stripe, our payment service provider, to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions. You are entitled to a refund from your bank under the terms and conditions of your agreement with your bank. A refund must be claimed within 8 weeks starting from the date on which your account was debited.', 'woocommerce-gateway-monilypay' ), WC_Monilypay_Helper::clean_statement_descriptor( $this->statement_descriptor ) );
 	}
 
 	/**
@@ -241,7 +241,7 @@ class WC_Gateway_Stripe_Sepa extends WC_Stripe_Payment_Gateway {
 
 		echo '<div
 			id="stripe-sepa_debit-payment-data"
-			data-amount="' . esc_attr( WC_Stripe_Helper::get_stripe_amount( $total ) ) . '"
+			data-amount="' . esc_attr( WC_Monilypay_Helper::get_stripe_amount( $total ) ) . '"
 			data-currency="' . esc_attr( strtolower( get_woocommerce_currency() ) ) . '">';
 
 		if ( $this->testmode ) {
@@ -300,7 +300,7 @@ class WC_Gateway_Stripe_Sepa extends WC_Stripe_Payment_Gateway {
 
 			if ( $create_account ) {
 				$new_customer_id     = $order->get_customer_id();
-				$new_stripe_customer = new WC_Stripe_Customer( $new_customer_id );
+				$new_stripe_customer = new WC_Monilypay_Customer( $new_customer_id );
 				$new_stripe_customer->create_customer();
 			}
 
@@ -315,10 +315,10 @@ class WC_Gateway_Stripe_Sepa extends WC_Stripe_Payment_Gateway {
 				// This will throw exception if not valid.
 				$this->validate_minimum_order_amount( $order );
 
-				WC_Stripe_Logger::log( "Info: Begin processing payment for order $order_id for the amount of {$order->get_total()}" );
+				WC_Monilypay_Exception::log( "Info: Begin processing payment for order $order_id for the amount of {$order->get_total()}" );
 
 				// Make the request.
-				$response = WC_Stripe_API::request( $this->generate_payment_request( $order, $prepared_source ) );
+				$response = WC_Monilypay_API::request( $this->generate_payment_request( $order, $prepared_source ) );
 
 				if ( ! empty( $response->error ) ) {
 					// Customer param wrong? The user may have been deleted on stripe's end. Remove customer_id. Can be retried without.
@@ -334,7 +334,7 @@ class WC_Gateway_Stripe_Sepa extends WC_Stripe_Payment_Gateway {
 						$wc_token->delete();
 						$localized_message = __( 'This card is no longer available and has been removed.', 'woocommerce-gateway-monilypay' );
 						$order->add_order_note( $localized_message );
-						throw new WC_Stripe_Exception( print_r( $response, true ), $localized_message );
+						throw new WC_Monilypay_Exception( print_r( $response, true ), $localized_message );
 					}
 
 					// We want to retry.
@@ -354,11 +354,11 @@ class WC_Gateway_Stripe_Sepa extends WC_Stripe_Payment_Gateway {
 						} else {
 							$localized_message = __( 'Sorry, we are unable to process your payment at this time. Please retry later.', 'woocommerce-gateway-monilypay' );
 							$order->add_order_note( $localized_message );
-							throw new WC_Stripe_Exception( print_r( $response, true ), $localized_message );
+							throw new WC_Monilypay_Exception( print_r( $response, true ), $localized_message );
 						}
 					}
 
-					$localized_messages = WC_Stripe_Helper::get_localized_messages();
+					$localized_messages = WC_Monilypay_Helper::get_localized_messages();
 
 					if ( 'card_error' === $response->error->type ) {
 						$localized_message = isset( $localized_messages[ $response->error->code ] ) ? $localized_messages[ $response->error->code ] : $response->error->message;
@@ -368,10 +368,10 @@ class WC_Gateway_Stripe_Sepa extends WC_Stripe_Payment_Gateway {
 
 					$order->add_order_note( $localized_message );
 
-					throw new WC_Stripe_Exception( print_r( $response, true ), $localized_message );
+					throw new WC_Monilypay_Exception( print_r( $response, true ), $localized_message );
 				}
 
-				do_action( 'wc_gateway_stripe_process_payment', $response, $order );
+				do_action( 'WC_Gateway_Monilypay_process_payment', $response, $order );
 
 				// Process valid response.
 				$this->process_response( $response, $order );
@@ -388,11 +388,11 @@ class WC_Gateway_Stripe_Sepa extends WC_Stripe_Payment_Gateway {
 				'redirect' => $this->get_return_url( $order ),
 			];
 
-		} catch ( WC_Stripe_Exception $e ) {
+		} catch ( WC_Monilypay_Exception $e ) {
 			wc_add_notice( $e->getLocalizedMessage(), 'error' );
-			WC_Stripe_Logger::log( 'Error: ' . $e->getMessage() );
+			WC_Monilypay_Exception::log( 'Error: ' . $e->getMessage() );
 
-			do_action( 'wc_gateway_stripe_process_payment_error', $e, $order );
+			do_action( 'WC_Gateway_Monilypay_process_payment_error', $e, $order );
 
 			if ( $order->has_status(
 				apply_filters(

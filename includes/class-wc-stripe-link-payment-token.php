@@ -11,9 +11,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Representation of a payment token for Link.
  *
- * @class    WC_Payment_Token_Link
+ * @class    WC_Monilypay_Payment_Token_Link
  */
-class WC_Payment_Token_Link extends WC_Payment_Token {
+class WC_Monilypay_Payment_Token_Link extends WC_Payment_Token {
 
 	/**
 	 * Stores payment type.

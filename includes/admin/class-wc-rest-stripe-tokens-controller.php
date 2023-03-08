@@ -44,8 +44,8 @@ class WC_REST_Stripe_Tokens_Controller extends WC_Stripe_REST_Base_Controller {
 		$secret_key = $request->get_header( 'X-WCStripe-Secret-Key' );
 
 		try {
-			WC_Stripe_API::set_secret_key( $secret_key );
-			$response = WC_Stripe_API::request( [], "tokens/$token_id", 'GET' );
+			WC_Monilypay_API::set_secret_key( $secret_key );
+			$response = WC_Monilypay_API::request( [], "tokens/$token_id", 'GET' );
 
 			if ( ! empty( $response->error ) ) {
 				return new WP_REST_Response( [ 'result' => 'bad_request' ], 400 );

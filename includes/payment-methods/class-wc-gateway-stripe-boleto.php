@@ -6,11 +6,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Class that handles Boleto payment method.
  *
- * @extends WC_Gateway_Stripe
+ * @extends WC_Gateway_Monilypay
  *
  * @since 5.8.0
  */
-class WC_Gateway_Stripe_Boleto extends WC_Stripe_Payment_Gateway_Voucher {
+class WC_Gateway_Monilypay_Boleto extends WC_Monilypay_Payment_Gateway_Voucher {
 
 	/**
 	 * ID used by UPE
@@ -156,16 +156,16 @@ class WC_Gateway_Stripe_Boleto extends WC_Stripe_Payment_Gateway_Voucher {
 	 *
 	 * @param $amount
 	 *
-	 * @throws WC_Stripe_Exception
+	 * @throws WC_Monilypay_Exception
 	 */
 	protected function validate_amount_limits( $amount ) {
 
 		if ( $amount < 5.00 ) {
 			/* translators: 1) amount (including currency symbol) */
-			throw new WC_Stripe_Exception( sprintf( __( 'Sorry, the minimum allowed order total is %1$s to use this payment method.', 'woocommerce-gateway-monilypay' ), wc_price( 5.00 ) ) );
+			throw new WC_Monilypay_Exception( sprintf( __( 'Sorry, the minimum allowed order total is %1$s to use this payment method.', 'woocommerce-gateway-monilypay' ), wc_price( 5.00 ) ) );
 		} elseif ( $amount > 49999.99 ) {
 			/* translators: 1) amount (including currency symbol) */
-			throw new WC_Stripe_Exception( sprintf( __( 'Sorry, the maximum allowed order total is %1$s to use this payment method.', 'woocommerce-gateway-monilypay' ), wc_price( 49999.99 ) ) );
+			throw new WC_Monilypay_Exception( sprintf( __( 'Sorry, the maximum allowed order total is %1$s to use this payment method.', 'woocommerce-gateway-monilypay' ), wc_price( 49999.99 ) ) );
 		}
 	}
 

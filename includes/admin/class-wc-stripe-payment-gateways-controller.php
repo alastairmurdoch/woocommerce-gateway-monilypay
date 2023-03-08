@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 5.6.0
  */
-class WC_Stripe_Payment_Gateways_Controller {
+class WC_Monilypay_Payment_Gateways_Controller {
 	/**
 	 * Constructor
 	 *

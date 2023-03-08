@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 4.1.0
  */
-class WC_Stripe_Admin_Notices {
+class WC_Monilypay_Admin_Notices {
 	/**
 	 * Notices (array)
 	 *
@@ -89,17 +89,17 @@ class WC_Stripe_Admin_Notices {
 	 */
 	public function get_payment_methods() {
 		return [
-			//'alipay'     => 'WC_Gateway_Stripe_Alipay',
-			//'bancontact' => 'WC_Gateway_Stripe_Bancontact',
-			//'eps'        => 'WC_Gateway_Stripe_EPS',
-			//'giropay'    => 'WC_Gateway_Stripe_Giropay',
-			//'ideal'      => 'WC_Gateway_Stripe_Ideal',
-			//'multibanco' => 'WC_Gateway_Stripe_Multibanco',
-			//'p24'        => 'WC_Gateway_Stripe_p24',
-			//'sepa'       => 'WC_Gateway_Stripe_Sepa',
-			//'sofort'     => 'WC_Gateway_Stripe_Sofort',
-			//'boleto'     => 'WC_Gateway_Stripe_Boleto',
-			//'oxxo'       => 'WC_Gateway_Stripe_Oxxo',
+			//'alipay'     => 'WC_Gateway_Monilypay_Alipay',
+			//'bancontact' => 'WC_Gateway_Monilypay_Bancontact',
+			//'eps'        => 'WC_Gateway_Monilypay_EPS',
+			//'giropay'    => 'WC_Gateway_Monilypay_Giropay',
+			//'ideal'      => 'WC_Gateway_Monilypay_Ideal',
+			//'multibanco' => 'WC_Gateway_Monilypay_Multibanco',
+			//'p24'        => 'WC_Gateway_Monilypay_p24',
+			//'sepa'       => 'WC_Gateway_Monilypay_Sepa',
+			//'sofort'     => 'WC_Gateway_Monilypay_Sofort',
+			//'boleto'     => 'WC_Gateway_Monilypay_Boleto',
+			//'oxxo'       => 'WC_Gateway_Monilypay_Oxxo',
 		];
 	}
 
@@ -161,21 +161,21 @@ class WC_Stripe_Admin_Notices {
 
 			// @codeCoverageIgnoreStart
 			if ( empty( $show_phpver_notice ) ) {
-				if ( version_compare( phpversion(), WC_STRIPE_MIN_PHP_VER, '<' ) ) {
+				if ( version_compare( phpversion(), WC_MONILYPAY_MIN_PHP_VER, '<' ) ) {
 					/* translators: 1) int version 2) int version */
 					$message = __( 'WooCommerce Stripe - The minimum PHP version required for this plugin is %1$s. You are running %2$s.', 'woocommerce-gateway-monilypay' );
 
-					$this->add_admin_notice( 'phpver', 'error', sprintf( $message, WC_STRIPE_MIN_PHP_VER, phpversion() ), true );
+					$this->add_admin_notice( 'phpver', 'error', sprintf( $message, WC_MONILYPAY_MIN_PHP_VER, phpversion() ), true );
 
 					return;
 				}
 			}
 
 			if ( empty( $show_wcver_notice ) ) {
-				if ( WC_Stripe_Helper::is_wc_lt( WC_STRIPE_FUTURE_MIN_WC_VER ) ) {
+				if ( WC_Monilypay_Helper::is_wc_lt( WC_MONILYPAY_FUTURE_MIN_WC_VER ) ) {
 					/* translators: 1) int version 2) int version */
 					$message = __( 'WooCommerce Stripe - This is the last version of the plugin compatible with WooCommerce %1$s. All future versions of the plugin will require WooCommerce %2$s or greater.', 'woocommerce-gateway-monilypay' );
-					$this->add_admin_notice( 'wcver', 'notice notice-warning', sprintf( $message, WC_VERSION, WC_STRIPE_FUTURE_MIN_WC_VER ), true );
+					$this->add_admin_notice( 'wcver', 'notice notice-warning', sprintf( $message, WC_VERSION, WC_MONILYPAY_FUTURE_MIN_WC_VER ), true );
 				}
 			}
 
@@ -187,7 +187,7 @@ class WC_Stripe_Admin_Notices {
 
 			// @codeCoverageIgnoreEnd
 			if ( empty( $show_keys_notice ) ) {
-				$secret = WC_Stripe_API::get_secret_key();
+				$secret = WC_Monilypay_API::get_secret_key();
 				// phpcs:ignore
 				$should_show_notice_on_page = ! ( isset( $_GET['page'], $_GET['section'] ) && 'wc-settings' === $_GET['page'] && 0 === strpos( $_GET['section'], 'stripe' ) );
 
@@ -243,7 +243,7 @@ class WC_Stripe_Admin_Notices {
 
 					$message = sprintf(
 					/* translators: 1) HTML anchor open tag 2) HTML anchor closing tag */
-						__( 'Your customers cannot use Stripe on checkout, because we couldn\'t connect to your account. Please go to your settings and, %1$sset your Stripe account keys%2$s.', 'woocommerce-gateway-monilypay' ),
+						__( 'Your customers cannot use Monilypay on checkout, because we couldn\'t connect to your account. Please go to your settings and, %1$sset your Monilypay account keys%2$s.', 'woocommerce-gateway-monilypay' ),
 						'<a href="' . $setting_link . '">',
 						'</a>'
 					);
@@ -257,7 +257,7 @@ class WC_Stripe_Admin_Notices {
 				if ( ! wc_checkout_is_https() ) {
 					$message = sprintf(
 					/* translators: 1) HTML anchor open tag 2) HTML anchor closing tag */
-						__( 'Stripe is enabled, but a SSL certificate is not detected. Your checkout may not be secure! Please ensure your server has a valid %1$sSSL certificate%2$s.', 'woocommerce-gateway-monilypay' ),
+						__( 'Monilypayt is enabled, but a SSL certificate is not detected. Your checkout may not be secure! Please ensure your server has a valid %1$sSSL certificate%2$s.', 'woocommerce-gateway-monilypay' ),
 						'<a href="https://en.wikipedia.org/wiki/Transport_Layer_Security" target="_blank">',
 						'</a>'
 					);
@@ -312,12 +312,12 @@ class WC_Stripe_Admin_Notices {
 			}
 		}
 
-		if ( ! WC_Stripe_Feature_Flags::is_upe_preview_enabled() || ! WC_Stripe_Feature_Flags::is_upe_checkout_enabled() ) {
+		if ( ! WC_Monilypay_Feature_Flags::is_upe_preview_enabled() || ! WC_Monilypay_Feature_Flags::is_upe_checkout_enabled() ) {
 			return;
 		}
 
-		foreach ( WC_Stripe_UPE_Payment_Gateway::UPE_AVAILABLE_METHODS as $method_class ) {
-			if ( WC_Stripe_UPE_Payment_Method_CC::class === $method_class ) {
+		foreach ( WC_Monilypay_UPE_Payment_Gateway::UPE_AVAILABLE_METHODS as $method_class ) {
+			if ( WC_Monilypay_UPE_Payment_Method_CC::class === $method_class ) {
 				continue;
 			}
 			$method      = $method_class::STRIPE_ID;
@@ -446,4 +446,4 @@ class WC_Stripe_Admin_Notices {
 	}
 }
 
-new WC_Stripe_Admin_Notices();
+new WC_Monilypay_Admin_Notices();

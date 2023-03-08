@@ -11,11 +11,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Representation of a payment token for SEPA.
  *
- * @class    WC_Payment_Token_SEPA
+ * @class    WC_Monilypay_Payment_Token_SEPA
  * @version  4.0.0
  * @since    4.0.0
  */
-class WC_Payment_Token_SEPA extends WC_Payment_Token {
+class WC_Monilypay_Payment_Token_SEPA extends WC_Payment_Token {
 
 	/**
 	 * Stores payment type.

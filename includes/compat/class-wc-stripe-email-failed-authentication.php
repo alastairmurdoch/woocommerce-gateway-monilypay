@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @extends WC_Email
  */
-abstract class WC_Stripe_Email_Failed_Authentication extends WC_Email {
+abstract class WC_Monilypay_Email_Failed_Authentication extends WC_Email {
 	/**
 	 * An instance of the email, which would normally be sent after a failed payment.
 	 *

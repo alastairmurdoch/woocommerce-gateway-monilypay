@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 4.0.0
  * @version 4.0.0
  */
-class WC_Stripe_Logger {
+class WC_Monilypay_Logger {
 
 	public static $logger;
 	const WC_LOG_FILENAME = 'woocommerce-gateway-monilypay';

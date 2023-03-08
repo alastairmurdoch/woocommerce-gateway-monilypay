@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Link Payment Method class extending UPE base class
  */
-class WC_Stripe_UPE_Payment_Method_Link extends WC_Stripe_UPE_Payment_Method {
+class WC_Monilypay_UPE_Payment_Method_Link extends WC_Monilypay_UPE_Payment_Method {
 
 	const STRIPE_ID = 'link';
 
@@ -60,12 +60,12 @@ class WC_Stripe_UPE_Payment_Method_Link extends WC_Stripe_UPE_Payment_Method {
 	 * @param int $user_id        WP_User ID
 	 * @param object $payment_method Stripe payment method object
 	 *
-	 * @return WC_Payment_Token_Link
+	 * @return WC_Monilypay_Payment_Token_Link
 	 */
 	public function create_payment_token_for_user( $user_id, $payment_method ) {
-		$token = new WC_Payment_Token_Link();
+		$token = new WC_Monilypay_Payment_Token_Link();
 		$token->set_email( $payment_method->link->email );
-		$token->set_gateway_id( WC_Stripe_UPE_Payment_Gateway::ID );
+		$token->set_gateway_id( WC_Monilypay_UPE_Payment_Gateway::ID );
 		$token->set_token( $payment_method->id );
 		$token->set_payment_method_type( $this->get_id() );
 		$token->set_user_id( $user_id );

@@ -4,11 +4,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * WC_Stripe_Account class.
+ * WC_Monilypay_Account class.
  *
  * Communicates with Stripe API.
  */
-class WC_Stripe_Account {
+class WC_Monilypay_Account {
 
 	const LIVE_ACCOUNT_OPTION = 'wcstripe_account_data_live';
 	const TEST_ACCOUNT_OPTION = 'wcstripe_account_data_test';
@@ -28,7 +28,7 @@ class WC_Stripe_Account {
 	/**
 	 * The Stripe API class to access the static method.
 	 *
-	 * @var WC_Stripe_API
+	 * @var WC_Monilypay_API
 	 */
 	private $stripe_api;
 

@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class WC_Stripe_Apple_Pay_Registration {
+class WC_Monilypay_Apple_Pay_Registration {
 
 	const DOMAIN_ASSOCIATION_FILE_NAME = 'apple-developer-merchantid-domain-association';
 	const DOMAIN_ASSOCIATION_FILE_DIR  = '.well-known';
@@ -170,13 +170,13 @@ class WC_Stripe_Apple_Pay_Registration {
 
 		if ( isset( $error_message ) ) {
 			$url = get_site_url() . '/' . self::DOMAIN_ASSOCIATION_FILE_DIR . '/' . self::DOMAIN_ASSOCIATION_FILE_NAME;
-			WC_Stripe_Logger::log(
+			WC_Monilypay_Exception::log(
 				'Error: ' . $error_message . ' ' .
 				/* translators: expected domain association file URL */
 				sprintf( __( 'To enable Apple Pay, domain association file must be hosted at %s.', 'woocommerce-gateway-monilypay' ), $url )
 			);
 		} else {
-			WC_Stripe_Logger::log( __( 'Domain association file updated.', 'woocommerce-gateway-monilypay' ) );
+			WC_Monilypay_Exception::log( __( 'Domain association file updated.', 'woocommerce-gateway-monilypay' ) );
 		}
 	}
 
@@ -288,7 +288,7 @@ class WC_Stripe_Apple_Pay_Registration {
 
 			update_option( 'woocommerce_monilypay_settings', $this->stripe_settings );
 
-			WC_Stripe_Logger::log( 'Your domain has been verified with Apple Pay!' );
+			WC_Monilypay_Exception::log( 'Your domain has been verified with Apple Pay!' );
 
 			return true;
 
@@ -299,7 +299,7 @@ class WC_Stripe_Apple_Pay_Registration {
 
 			update_option( 'woocommerce_monilypay_settings', $this->stripe_settings );
 
-			WC_Stripe_Logger::log( 'Error: ' . $e->getMessage() );
+			WC_Monilypay_Exception::log( 'Error: ' . $e->getMessage() );
 
 			return false;
 		}
@@ -329,7 +329,7 @@ class WC_Stripe_Apple_Pay_Registration {
 		$verification_complete = $this->register_domain_with_apple( $secret_key );
 
 		// Show/hide notes if necessary.
-		WC_Stripe_Inbox_Notes::notify_on_apple_pay_domain_verification( $verification_complete );
+		WC_Monilypay_Inbox_Notes::notify_on_apple_pay_domain_verification( $verification_complete );
 	}
 
 	/**
@@ -414,4 +414,4 @@ class WC_Stripe_Apple_Pay_Registration {
 	}
 }
 
-new WC_Stripe_Apple_Pay_Registration();
+new WC_Monilypay_Apple_Pay_Registration();

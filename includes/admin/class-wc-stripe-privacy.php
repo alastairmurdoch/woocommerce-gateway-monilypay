@@ -3,7 +3,7 @@ if ( ! class_exists( 'WC_Abstract_Privacy' ) ) {
 	return;
 }
 
-class WC_Stripe_Privacy extends WC_Abstract_Privacy {
+class WC_Monilypay_Privacy extends WC_Abstract_Privacy {
 	/**
 	 * Constructor
 	 */
@@ -221,7 +221,7 @@ class WC_Stripe_Privacy extends WC_Abstract_Privacy {
 		$data_to_export = [];
 
 		if ( $user instanceof WP_User ) {
-			$stripe_user = new WC_Stripe_Customer( $user->ID );
+			$stripe_user = new WC_Monilypay_Customer( $user->ID );
 
 			$data_to_export[] = [
 				'group_id'    => 'woocommerce_customer',
@@ -438,4 +438,4 @@ class WC_Stripe_Privacy extends WC_Abstract_Privacy {
 	}
 }
 
-new WC_Stripe_Privacy();
+new WC_Monilypay_Privacy();

@@ -6,9 +6,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Failed Renewal/Pre-Order Authentication Notification
  *
- * @extends WC_Stripe_Email_Failed_Authentication
+ * @extends WC_Monilypay_Email_Failed_Authentication
  */
-class WC_Stripe_Email_Failed_Preorder_Authentication extends WC_Stripe_Email_Failed_Authentication {
+class WC_Monilypay_Email_Failed_Preorder_Authentication extends WC_Monilypay_Email_Failed_Authentication {
 	/**
 	 * Holds the message, which is entered by admins when sending the email.
 	 *
@@ -32,7 +32,7 @@ class WC_Stripe_Email_Failed_Preorder_Authentication extends WC_Stripe_Email_Fai
 		$this->template_base  = plugin_dir_path( WC_STRIPE_MAIN_FILE ) . 'templates/';
 
 		// Use the "authentication required" hook to add the correct, later hook.
-		add_action( 'wc_gateway_stripe_process_payment_authentication_required', [ $this, 'trigger' ] );
+		add_action( 'WC_Gateway_Monilypay_process_payment_authentication_required', [ $this, 'trigger' ] );
 
 		if ( isset( $email_classes['WC_Pre_Orders_Email_Pre_Order_Available'] ) ) {
 			$this->original_email = $email_classes['WC_Pre_Orders_Email_Pre_Order_Available'];

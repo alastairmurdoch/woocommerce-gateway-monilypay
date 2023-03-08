@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @extends WC_Email_Customer_Invoice
  */
-class WC_Stripe_Email_Failed_Renewal_Authentication extends WC_Stripe_Email_Failed_Authentication {
+class WC_Monilypay_Email_Failed_Renewal_Authentication extends WC_Monilypay_Email_Failed_Authentication {
 	/**
 	 * Constructor.
 	 *
@@ -25,7 +25,7 @@ class WC_Stripe_Email_Failed_Renewal_Authentication extends WC_Stripe_Email_Fail
 		$this->template_base  = plugin_dir_path( WC_STRIPE_MAIN_FILE ) . 'templates/';
 
 		// Triggers the email at the correct hook.
-		add_action( 'wc_gateway_stripe_process_payment_authentication_required', [ $this, 'trigger' ] );
+		add_action( 'WC_Gateway_Monilypay_process_payment_authentication_required', [ $this, 'trigger' ] );
 
 		if ( isset( $email_classes['WCS_Email_Customer_Renewal_Invoice'] ) ) {
 			$this->original_email = $email_classes['WCS_Email_Customer_Renewal_Invoice'];
@@ -105,7 +105,7 @@ class WC_Stripe_Email_Failed_Renewal_Authentication extends WC_Stripe_Email_Fail
 			wcs_get_objects_property( $this->object, 'id' ) === $order_id &&
 			'' !== $rule_array['email_template_admin'] // Only send our email if a retry admin email was already going to be sent.
 		) {
-			$rule_array['email_template_admin'] = 'WC_Stripe_Email_Failed_Authentication_Retry';
+			$rule_array['email_template_admin'] = 'WC_Monilypay_Email_Failed_Authentication_Retry';
 		}
 
 		return $rule_array;

@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 5.5.0
  */
-class WC_Stripe_Old_Settings_UPE_Toggle_Controller {
+class WC_Monilypay_Old_Settings_UPE_Toggle_Controller {
 	protected $was_upe_checkout_enabled = null;
 
 	public function __construct() {

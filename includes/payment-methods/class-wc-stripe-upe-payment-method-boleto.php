@@ -6,11 +6,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Boleto Payment Method class extending UPE base class
  */
-class WC_Stripe_UPE_Payment_Method_Boleto extends WC_Stripe_UPE_Payment_Method {
+class WC_Monilypay_UPE_Payment_Method_Boleto extends WC_Monilypay_UPE_Payment_Method {
 
 	const STRIPE_ID = 'boleto';
 
-	const LPM_GATEWAY_CLASS = WC_Gateway_Stripe_Boleto::class;
+	const LPM_GATEWAY_CLASS = WC_Gateway_Monilypay_Boleto::class;
 
 	/**
 	 * Constructor for Boleto payment method

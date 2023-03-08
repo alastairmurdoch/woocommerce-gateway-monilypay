@@ -7,31 +7,31 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
 * Class that handles UPE payment method.
 *
-* @extends WC_Gateway_Stripe
+* @extends WC_Gateway_Monilypay
 *
 * @since 5.5.0
 */
-class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
+class WC_Monilypay_UPE_Payment_Gateway extends WC_Gateway_Monilypay {
 
 	const ID = 'monilypay';
 
 	/**
 	 * Upe Available Methods
 	 *
-	 * @type WC_Stripe_UPE_Payment_Method[]
+	 * @type WC_Monilypay_UPE_Payment_Method[]
 	 */
 	const UPE_AVAILABLE_METHODS = [
-		WC_Stripe_UPE_Payment_Method_CC::class,
-		//WC_Stripe_UPE_Payment_Method_Giropay::class,
-		//WC_Stripe_UPE_Payment_Method_Eps::class,
-		//WC_Stripe_UPE_Payment_Method_Bancontact::class,
-		//WC_Stripe_UPE_Payment_Method_Boleto::class,
-		//WC_Stripe_UPE_Payment_Method_Ideal::class,
-		//WC_Stripe_UPE_Payment_Method_Oxxo::class,
-		//WC_Stripe_UPE_Payment_Method_Sepa::class,
-		//WC_Stripe_UPE_Payment_Method_P24::class,
-		//WC_Stripe_UPE_Payment_Method_Sofort::class,
-		WC_Stripe_UPE_Payment_Method_Link::class,
+		WC_Monilypay_UPE_Payment_Method_CC::class,
+		//WC_Monilypay_UPE_Payment_Method_Giropay::class,
+		//WC_Monilypay_UPE_Payment_Method_Eps::class,
+		//WC_Monilypay_UPE_Payment_Method_Bancontact::class,
+		//WC_Monilypay_UPE_Payment_Method_Boleto::class,
+		//WC_Monilypay_UPE_Payment_Method_Ideal::class,
+		//WC_Monilypay_UPE_Payment_Method_Oxxo::class,
+		//WC_Monilypay_UPE_Payment_Method_Sepa::class,
+		//WC_Monilypay_UPE_Payment_Method_P24::class,
+		//WC_Monilypay_UPE_Payment_Method_Sofort::class,
+		WC_Monilypay_UPE_Payment_Method_Link::class,
 	];
 
 	const UPE_APPEARANCE_TRANSIENT = 'wc_stripe_upe_appearance';
@@ -97,7 +97,7 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 	/**
 	 * Array mapping payment method string IDs to classes
 	 *
-	 * @var WC_Stripe_UPE_Payment_Method[]
+	 * @var WC_Monilypay_UPE_Payment_Method[]
 	 */
 	public $payment_methods = [];
 
@@ -153,7 +153,7 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 		}
 
 		// When feature flags are enabled, title shows the count of enabled payment methods in settings page only.
-		if ( WC_Stripe_Feature_Flags::is_upe_checkout_enabled() && WC_Stripe_Feature_Flags::is_upe_preview_enabled() && isset( $_GET['page'] ) && 'wc-settings' === $_GET['page'] ) {
+		if ( WC_Monilypay_Feature_Flags::is_upe_checkout_enabled() && WC_Monilypay_Feature_Flags::is_upe_preview_enabled() && isset( $_GET['page'] ) && 'wc-settings' === $_GET['page'] ) {
 			$enabled_payment_methods_count = count( $this->get_upe_enabled_payment_method_ids() );
 			$this->title                   = $enabled_payment_methods_count ?
 				/* translators: $1. Count of enabled payment methods. */
@@ -172,7 +172,7 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 		add_action( 'wp_enqueue_scripts', [ $this, 'payment_scripts' ] );
 
 		// Needed for 3DS compatibility when checking out with PRBs..
-		// Copied from WC_Gateway_Stripe::__construct().
+		// Copied from WC_Gateway_Monilypay::__construct().
 		add_filter( 'woocommerce_payment_successful_result', [ $this, 'modify_successful_payment_result' ], 99999, 2 );
 	}
 
@@ -204,7 +204,7 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 	 * Initialize Gateway Settings Form Fields.
 	 */
 	public function init_form_fields() {
-		$this->form_fields = require WC_STRIPE_PLUGIN_PATH . '/includes/admin/stripe-settings.php';
+		$this->form_fields = require WC_MONILYPAY_PLUGIN_PATH . '/includes/admin/stripe-settings.php';
 		unset( $this->form_fields['inline_cc_form'] );
 		unset( $this->form_fields['title'] );
 		unset( $this->form_fields['description'] );
@@ -216,21 +216,21 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 	public function payment_scripts() {
 		if (
 			! is_product()
-			&& ! WC_Stripe_Helper::has_cart_or_checkout_on_current_page()
+			&& ! WC_Monilypay_Helper::has_cart_or_checkout_on_current_page()
 			&& ! isset( $_GET['pay_for_order'] ) // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			&& ! is_add_payment_method_page() ) {
 			return;
 		}
 
-		if ( is_product() && ! WC_Stripe_Helper::should_load_scripts_on_product_page() ) {
+		if ( is_product() && ! WC_Monilypay_Helper::should_load_scripts_on_product_page() ) {
 			return;
 		}
 
-		if ( is_cart() && ! WC_Stripe_Helper::should_load_scripts_on_cart_page() ) {
+		if ( is_cart() && ! WC_Monilypay_Helper::should_load_scripts_on_cart_page() ) {
 			return;
 		}
 
-		$asset_path   = WC_STRIPE_PLUGIN_PATH . '/build/checkout_upe.asset.php';
+		$asset_path   = WC_MONILYPAY_PLUGIN_PATH . '/build/checkout_upe.asset.php';
 		$version      = wc_monilypay_stripe_version;
 		$dependencies = [];
 		if ( file_exists( $asset_path ) ) {
@@ -253,7 +253,7 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 
 		wp_register_script(
 			'wc-stripe-upe-classic',
-			WC_STRIPE_PLUGIN_URL . '/build/upe_classic.js',
+			WC_MONILYPAY_PLUGIN_URL . '/build/upe_classic.js',
 			array_merge( [ 'stripe', 'wc-checkout' ], $dependencies ),
 			$version,
 			true
@@ -271,7 +271,7 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 
 		wp_register_style(
 			'wc-stripe-upe-classic',
-			WC_STRIPE_PLUGIN_URL . '/build/upe_classic.css',
+			WC_MONILYPAY_PLUGIN_URL . '/build/upe_classic.css',
 			[],
 			$version
 		);
@@ -295,8 +295,8 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 			'title'        => $this->title,
 			'isUPEEnabled' => true,
 			'key'          => $this->publishable_key,
-			'locale'       => WC_Stripe_Helper::convert_wc_locale_to_stripe_locale( get_locale() ),
-			'stripeAccount' => $this->monilypay_account_id . "test123"
+			'locale'       => WC_Monilypay_Helper::convert_wc_locale_to_stripe_locale( get_locale() ),
+			'stripeAccount' => $this->monilypay_account_id
 		];
 
 		$enabled_billing_fields = [];
@@ -357,7 +357,7 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 		// Pre-orders and free trial subscriptions don't require payments.
 		$stripe_params['isPaymentNeeded'] = $this->is_payment_needed( isset( $order_id ) ? $order_id : null );
 
-		return array_merge( $stripe_params, WC_Stripe_Helper::get_localized_messages() );
+		return array_merge( $stripe_params, WC_Monilypay_Helper::get_localized_messages() );
 	}
 
 	/**
@@ -485,7 +485,7 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 			}
 		} catch ( Exception $e ) {
 			// Output the error message.
-			WC_Stripe_Logger::log( 'Error: ' . $e->getMessage() );
+			WC_Monilypay_Exception::log( 'Error: ' . $e->getMessage() );
 			?>
 			<div>
 				<?php
@@ -528,16 +528,16 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 		$descriptor                            = null;
 		if ( 'card' === $selected_upe_payment_type && $is_short_statement_descriptor_enabled && ! ( empty( $short_statement_descriptor ) && empty( $statement_descriptor ) ) ) {
 			// Use the shortened statement descriptor for card transactions only
-			$descriptor = WC_Stripe_Helper::get_dynamic_statement_descriptor( $short_statement_descriptor, $order, $statement_descriptor );
+			$descriptor = WC_Monilypay_Helper::get_dynamic_statement_descriptor( $short_statement_descriptor, $order, $statement_descriptor );
 		} elseif ( ! empty( $statement_descriptor ) ) {
-			$descriptor = WC_Stripe_Helper::clean_statement_descriptor( $statement_descriptor );
+			$descriptor = WC_Monilypay_Helper::clean_statement_descriptor( $statement_descriptor );
 		}
 
 		if ( $payment_intent_id ) {
 			if ( $payment_needed ) {
 				$amount           = $order->get_total();
 				$currency         = $order->get_currency();
-				$converted_amount = WC_Stripe_Helper::get_stripe_amount( $amount, $currency );
+				$converted_amount = WC_Monilypay_Helper::get_stripe_amount( $amount, $currency );
 
 				$request = [
 					'amount'               => $converted_amount,
@@ -553,22 +553,22 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 					$request['customer'] = $customer_id;
 				} else {
 					$user                = $this->get_user_from_order( $order );
-					$customer            = new WC_Stripe_Customer( $user->ID );
+					$customer            = new WC_Monilypay_Customer( $user->ID );
 					$request['customer'] = $customer->update_or_create_customer();// Update customer or create customer if customer does not exist.
 				}
 
 				if ( '' !== $selected_upe_payment_type ) {
 					// Only update the payment_method_types if we have a reference to the payment type the customer selected.
 					$request['payment_method_types'] = [ $selected_upe_payment_type ];
-					if ( WC_Stripe_UPE_Payment_Method_CC::STRIPE_ID === $selected_upe_payment_type ) {
+					if ( WC_Monilypay_UPE_Payment_Method_CC::STRIPE_ID === $selected_upe_payment_type ) {
 						if ( in_array(
-							WC_Stripe_UPE_Payment_Method_Link::STRIPE_ID,
+							WC_Monilypay_UPE_Payment_Method_Link::STRIPE_ID,
 							$this->get_upe_enabled_payment_method_ids(),
 							true
 						) ) {
 							$request['payment_method_types'] = [
-								WC_Stripe_UPE_Payment_Method_CC::STRIPE_ID,
-								WC_Stripe_UPE_Payment_Method_Link::STRIPE_ID,
+								WC_Monilypay_UPE_Payment_Method_CC::STRIPE_ID,
+								WC_Monilypay_UPE_Payment_Method_Link::STRIPE_ID,
 							];
 						}
 					}
@@ -584,7 +584,7 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 
 				$request['metadata'] = $this->get_metadata_from_order( $order );
 
-				WC_Stripe_Helper::add_payment_intent_to_order( $payment_intent_id, $order );
+				WC_Monilypay_Helper::add_payment_intent_to_order( $payment_intent_id, $order );
 				$order->update_status( 'pending', __( 'Awaiting payment.', 'woocommerce-gateway-monilypay' ) );
 				$order->update_meta_data( '_stripe_upe_payment_type', $selected_upe_payment_type );
 
@@ -628,7 +628,7 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 
 	/**
 	 * Process payment using saved payment method.
-	 * This follows WC_Gateway_Stripe::process_payment,
+	 * This follows WC_Gateway_Monilypay::process_payment,
 	 * but uses Payment Methods instead of Sources.
 	 *
 	 * @param int $order_id   The order ID being processed.
@@ -642,14 +642,14 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 				return $this->process_pre_order( $order_id );
 			}
 
-			$token                   = WC_Stripe_Payment_Tokens::get_token_from_request( $_POST );
+			$token                   = WC_Monilypay_Payment_Tokens::get_token_from_request( $_POST );
 			$payment_method          = $this->stripe_request( 'payment_methods/' . $token->get_token(), [], null, 'GET' );
 			$prepared_payment_method = $this->prepare_payment_method( $payment_method );
 
 			$this->maybe_disallow_prepaid_card( $payment_method );
 			$this->save_payment_method_to_order( $order, $prepared_payment_method );
 
-			WC_Stripe_Logger::log( "Info: Begin processing payment with saved payment method for order $order_id for the amount of {$order->get_total()}" );
+			WC_Monilypay_Exception::log( "Info: Begin processing payment with saved payment method for order $order_id for the amount of {$order->get_total()}" );
 
 			// If we are retrying request, maybe intent has been saved to order.
 			$intent = $this->get_intent_from_order( $order );
@@ -666,7 +666,7 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 				$request         = [
 					'payment_method'       => $payment_method->id,
 					'payment_method_types' => array_values( $enabled_payment_methods ),
-					'amount'               => WC_Stripe_Helper::get_stripe_amount( $order->get_total() ),
+					'amount'               => WC_Monilypay_Helper::get_stripe_amount( $order->get_total() ),
 					'currency'             => strtolower( $order->get_currency() ),
 					'description'          => $request_details['description'],
 					'metadata'             => $request_details['metadata'],
@@ -763,11 +763,11 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 				'redirect' => $this->get_return_url( $order ),
 			];
 
-		} catch ( WC_Stripe_Exception $e ) {
+		} catch ( WC_Monilypay_Exception $e ) {
 			wc_add_notice( $e->getLocalizedMessage(), 'error' );
-			WC_Stripe_Logger::log( 'Error: ' . $e->getMessage() );
+			WC_Monilypay_Exception::log( 'Error: ' . $e->getMessage() );
 
-			do_action( 'wc_gateway_stripe_process_payment_error', $e, $order );
+			do_action( 'WC_Gateway_Monilypay_process_payment_error', $e, $order );
 
 			/* translators: error message */
 			$order->update_status( 'failed' );
@@ -790,7 +790,7 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 			if ( $this->is_setup_intent_success_creation_redirection() ) {
 				if ( isset( $_GET['redirect_status'] ) && 'succeeded' === $_GET['redirect_status'] ) {
 					$user_id  = wp_get_current_user()->ID;
-					$customer = new WC_Stripe_Customer( $user_id );
+					$customer = new WC_Monilypay_Customer( $user_id );
 					$customer->clear_cache();
 					wc_add_notice( __( 'Payment method successfully added.', 'woocommerce-gateway-monilypay' ) );
 
@@ -801,7 +801,7 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 						$setup_intent_id = isset( $_GET['setup_intent'] ) ? wc_clean( wp_unslash( $_GET['setup_intent'] ) ) : '';
 						$setup_intent    = $this->stripe_request( 'setup_intents/' . $setup_intent_id, [], null, 'GET' );
 
-						$customer_data         = WC_Stripe_Customer::map_customer_data( null, new WC_Customer( $user_id ) );
+						$customer_data         = WC_Monilypay_Customer::map_customer_data( null, new WC_Customer( $user_id ) );
 						$payment_method_object = $this->stripe_request(
 							'payment_methods/' . $setup_intent->payment_method,
 							[
@@ -816,7 +816,7 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 
 						do_action( 'woocommerce_stripe_add_payment_method', $user_id, $payment_method_object );
 					} catch ( Exception $e ) {
-						WC_Stripe_Logger::log( 'Error: ' . $e->getMessage() );
+						WC_Monilypay_Exception::log( 'Error: ' . $e->getMessage() );
 					}
 				} else {
 					wc_add_notice( __( 'Failed to add payment method.', 'woocommerce-gateway-monilypay' ), 'error', [ 'icon' => 'error' ] );
@@ -882,12 +882,12 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 			return;
 		}
 
-		WC_Stripe_Logger::log( "Begin processing UPE redirect payment for order $order_id for the amount of {$order->get_total()}" );
+		WC_Monilypay_Exception::log( "Begin processing UPE redirect payment for order $order_id for the amount of {$order->get_total()}" );
 
 		try {
 			$this->process_order_for_confirmed_intent( $order, $intent_id, $save_payment_method );
 		} catch ( Exception $e ) {
-			WC_Stripe_Logger::log( 'Error: ' . $e->getMessage() );
+			WC_Monilypay_Exception::log( 'Error: ' . $e->getMessage() );
 
 			/* translators: localized exception message */
 			$order->update_status( 'failed', sprintf( __( 'UPE payment failed: %s', 'woocommerce-gateway-monilypay' ), $e->getMessage() ) );
@@ -918,8 +918,8 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 		}
 
 		if ( ! empty( $error ) ) {
-			WC_Stripe_Logger::log( 'Error when processing payment: ' . $error->message );
-			throw new WC_Stripe_Exception( __( "We're not able to process this payment. Please try again later.", 'woocommerce-gateway-monilypay' ) );
+			WC_Monilypay_Exception::log( 'Error when processing payment: ' . $error->message );
+			throw new WC_Monilypay_Exception( __( "We're not able to process this payment. Please try again later.", 'woocommerce-gateway-monilypay' ) );
 		}
 
 		list( $payment_method_type, $payment_method_details ) = $this->get_payment_method_data_from_intent( $intent );
@@ -945,7 +945,7 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 				$payment_method_object = $intent->payment_method;
 			}
 			$user                    = $this->get_user_from_order( $order );
-			$customer                = new WC_Stripe_Customer( $user->ID );
+			$customer                = new WC_Monilypay_Customer( $user->ID );
 			$prepared_payment_method = $this->prepare_payment_method( $payment_method_object );
 
 			$customer->clear_cache();
@@ -1019,14 +1019,14 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 	 * @param bool     $force_save_source Force save the payment source.
 	 * @param mixed    $previous_error    Any error message from previous request.
 	 * @param bool     $use_order_source  Whether to use the source, which should already be attached to the order.
-	 * @throws WC_Stripe_Exception If the payment is not accepted.
+	 * @throws WC_Monilypay_Exception If the payment is not accepted.
 	 * @return array|void
 	 */
 	public function retry_after_error( $intent, $order, $retry, $force_save_source = false, $previous_error = false, $use_order_source = false ) {
 		if ( ! $retry ) {
 			$localized_message = __( 'Sorry, we are unable to process your payment at this time. Please retry later.', 'woocommerce-gateway-monilypay' );
 			$order->add_order_note( $localized_message );
-			throw new WC_Stripe_Exception( print_r( $intent, true ), $localized_message ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.
+			throw new WC_Monilypay_Exception( print_r( $intent, true ), $localized_message ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.
 		}
 
 		// Don't do anymore retries after this.
@@ -1067,7 +1067,7 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 			$amount = $order->get_total();
 		}
 
-		$converted_amount = WC_Stripe_Helper::get_stripe_amount( $amount, strtolower( get_woocommerce_currency() ) );
+		$converted_amount = WC_Monilypay_Helper::get_stripe_amount( $amount, strtolower( get_woocommerce_currency() ) );
 
 		return 0 < $converted_amount;
 	}
@@ -1336,7 +1336,7 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 		try {
 			$setup_intent = $this->stripe_request( 'setup_intents/' . $setup_intent_id );
 			if ( ! empty( $setup_intent->last_payment_error ) ) {
-				throw new WC_Stripe_Exception( __( "We're not able to add this payment method. Please try again later.", 'woocommerce-gateway-monilypay' ) );
+				throw new WC_Monilypay_Exception( __( "We're not able to add this payment method. Please try again later.", 'woocommerce-gateway-monilypay' ) );
 			}
 
 			$payment_method_id     = $setup_intent->payment_method;
@@ -1344,13 +1344,13 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 
 			$payment_method = $this->payment_methods[ $payment_method_object->type ];
 
-			$customer = new WC_Stripe_Customer( wp_get_current_user()->ID );
+			$customer = new WC_Monilypay_Customer( wp_get_current_user()->ID );
 			$customer->clear_cache();
 
 			return $payment_method->create_payment_token_for_user( $user->ID, $payment_method_object );
 		} catch ( Exception $e ) {
 			wc_add_notice( $e->getMessage(), 'error', [ 'icon' => 'error' ] );
-			WC_Stripe_Logger::log( 'Error when adding payment method: ' . $e->getMessage() );
+			WC_Monilypay_Exception::log( 'Error when adding payment method: ' . $e->getMessage() );
 			return [
 				'result' => 'error',
 			];
@@ -1358,7 +1358,7 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 	}
 
 	/**
-	 * Wrapper function to manage requests to WC_Stripe_API.
+	 * Wrapper function to manage requests to WC_Monilypay_API.
 	 *
 	 * @param string   $path   Stripe API endpoint path to query.
 	 * @param string   $params Parameters for request body.
@@ -1369,13 +1369,13 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 	 */
 	protected function stripe_request( $path, $params = null, $order = null, $method = 'POST' ) {
 		if ( is_null( $params ) ) {
-			return WC_Stripe_API::retrieve( $path );
+			return WC_Monilypay_API::retrieve( $path );
 		}
 		if ( ! is_null( $order ) ) {
 			$level3_data = $this->get_level3_data_from_order( $order );
-			return WC_Stripe_API::request_with_level3_data( $params, $path, $level3_data, $order );
+			return WC_Monilypay_API::request_with_level3_data( $params, $path, $level3_data, $order );
 		}
-		return WC_Stripe_API::request( $params, $path, $method );
+		return WC_Monilypay_API::request( $params, $path, $method );
 	}
 
 }

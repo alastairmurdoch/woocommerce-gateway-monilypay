@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 4.5.4
  */
-class WC_Stripe_Inbox_Notes {
+class WC_Monilypay_Inbox_Notes {
 	const SUCCESS_NOTE_NAME = 'stripe-apple-pay-marketing-guide-holiday-2020';
 	const FAILURE_NOTE_NAME = 'stripe-apple-pay-domain-verification-needed';
 
@@ -74,7 +74,7 @@ class WC_Stripe_Inbox_Notes {
 	 * Manage notes to show after Apple Pay domain verification.
 	 */
 	public static function notify_on_apple_pay_domain_verification( $verification_complete ) {
-		$admin_notes_class = WC_Stripe_Woo_Compat_Utils::get_notes_class();
+		$admin_notes_class = WC_Monilypay_Woo_Compat_Utils::get_notes_class();
 		if ( ! class_exists( $admin_notes_class ) || ! class_exists( 'WC_Data_Store' ) ) {
 			return;
 		}
@@ -143,7 +143,7 @@ class WC_Stripe_Inbox_Notes {
 		}
 
 		try {
-			$admin_note_class = WC_Stripe_Woo_Compat_Utils::get_note_class();
+			$admin_note_class = WC_Monilypay_Woo_Compat_Utils::get_note_class();
 			$note             = new $admin_note_class();
 			$note->set_title( self::get_success_title() );
 			$note->set_content( __( 'Now that you accept Apple Pay® with Stripe, you can increase conversion rates by letting your customers know that Apple Pay is available. Here’s a marketing guide to help you get started.', 'woocommerce-gateway-monilypay' ) );
@@ -164,7 +164,7 @@ class WC_Stripe_Inbox_Notes {
 	 */
 	public static function create_failure_note() {
 		try {
-			$admin_note_class = WC_Stripe_Woo_Compat_Utils::get_note_class();
+			$admin_note_class = WC_Monilypay_Woo_Compat_Utils::get_note_class();
 			$note             = new $admin_note_class();
 			$note->set_title( __( 'Apple Pay domain verification needed', 'woocommerce-gateway-monilypay' ) );
 			$note->set_content( __( 'The WooCommerce Stripe Gateway extension attempted to perform domain verification on behalf of your store, but was unable to do so. This must be resolved before Apple Pay can be offered to your customers.', 'woocommerce-gateway-monilypay' ) );
@@ -190,7 +190,7 @@ class WC_Stripe_Inbox_Notes {
 			return;
 		}
 
-		$admin_notes_class = WC_Stripe_Woo_Compat_Utils::get_notes_class();
+		$admin_notes_class = WC_Monilypay_Woo_Compat_Utils::get_notes_class();
 		if ( ! class_exists( $admin_notes_class ) || ! class_exists( 'WC_Data_Store' ) ) {
 			return;
 		}
@@ -209,7 +209,7 @@ class WC_Stripe_Inbox_Notes {
 
 		$deleted_an_unactioned_note = false;
 
-		$admin_note_class = WC_Stripe_Woo_Compat_Utils::get_note_class();
+		$admin_note_class = WC_Monilypay_Woo_Compat_Utils::get_note_class();
 		foreach ( (array) $note_ids as $note_id ) {
 			try {
 				$note = new $admin_note_class( $note_id );
@@ -227,4 +227,4 @@ class WC_Stripe_Inbox_Notes {
 	}
 }
 
-new WC_Stripe_Inbox_Notes();
+new WC_Monilypay_Inbox_Notes();

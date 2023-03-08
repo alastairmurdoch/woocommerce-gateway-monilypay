@@ -6,7 +6,7 @@
  * with the `authentication_needed` error, and a retry rule has been applied to retry the payment in the future.
  *
  * @version     4.3.0
- * @package     WooCommerce_Stripe/Classes/WC_Stripe_Email_Failed_Authentication_Retry
+ * @package     WooCommerce_Stripe/Classes/WC_Monilypay_Email_Failed_Authentication_Retry
  * @extends     WC_Email_Failed_Order
  */
 
@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 4.3.0
  */
-class WC_Stripe_Email_Failed_Authentication_Retry extends WC_Email_Failed_Order {
+class WC_Monilypay_Email_Failed_Authentication_Retry extends WC_Email_Failed_Order {
 
 	/**
 	 * Constructor
@@ -74,7 +74,7 @@ class WC_Stripe_Email_Failed_Authentication_Retry extends WC_Email_Failed_Order 
 			$this->retry                 = WCS_Retry_Manager::store()->get_last_retry_for_order( wcs_get_objects_property( $order, 'id' ) );
 			$this->replace['retry-time'] = wcs_get_human_time_diff( $this->retry->get_time() );
 		} else {
-			WC_Stripe_Logger::log( 'WCS_Retry_Manager class or does not exist. Not able to send admnin email about customer notification for authentication required for renewal payment.' );
+			WC_Monilypay_Exception::log( 'WCS_Retry_Manager class or does not exist. Not able to send admnin email about customer notification for authentication required for renewal payment.' );
 			return;
 		}
 

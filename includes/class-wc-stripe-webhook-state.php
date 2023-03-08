@@ -4,13 +4,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class WC_Stripe_Webhook_State.
+ * Class WC_Monilypay_Webhook_State.
  *
  * Tracks the most recent successful and unsuccessful webhooks in test and live modes.
  *
  * @since 5.0.0
  */
-class WC_Stripe_Webhook_State {
+class WC_Monilypay_Webhook_State {
 	const OPTION_LIVE_MONITORING_BEGAN_AT = 'wc_stripe_wh_monitor_began_at';
 	const OPTION_LIVE_LAST_SUCCESS_AT     = 'wc_stripe_wh_last_success_at';
 	const OPTION_LIVE_LAST_FAILURE_AT     = 'wc_stripe_wh_last_failure_at';

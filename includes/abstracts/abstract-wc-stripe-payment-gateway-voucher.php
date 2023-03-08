@@ -8,11 +8,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Abstract class that will be inherited by voucher payment methods.
  * Used by Boleto and OXXO
  *
- * @extends WC_Gateway_Stripe
+ * @extends WC_Gateway_Monilypay
  *
  * @since 5.8.0
  */
-abstract class WC_Stripe_Payment_Gateway_Voucher extends WC_Stripe_Payment_Gateway {
+abstract class WC_Monilypay_Payment_Gateway_Voucher extends WC_Monilypay_Payment_Gateway {
 
 	/**
 	 * ID used by UPE
@@ -270,7 +270,7 @@ abstract class WC_Stripe_Payment_Gateway_Voucher extends WC_Stripe_Payment_Gatew
 			$order->update_status( 'pending', __( 'Awaiting payment.', 'woocommerce-gateway-monilypay' ) );
 			$order->save();
 
-			WC_Stripe_Helper::add_payment_intent_to_order( $intent->id, $order );
+			WC_Monilypay_Helper::add_payment_intent_to_order( $intent->id, $order );
 
 			return [
 				'result'               => 'success',
@@ -280,11 +280,11 @@ abstract class WC_Stripe_Payment_Gateway_Voucher extends WC_Stripe_Payment_Gatew
 				'order_id'             => $order_id,
 				'confirm_payment_data' => $this->get_confirm_payment_data( $order ),
 			];
-		} catch ( WC_Stripe_Exception $e ) {
+		} catch ( WC_Monilypay_Exception $e ) {
 			wc_add_notice( $e->getLocalizedMessage(), 'error' );
-			WC_Stripe_Logger::log( 'Error: ' . $e->getMessage() );
+			WC_Monilypay_Exception::log( 'Error: ' . $e->getMessage() );
 
-			do_action( 'wc_gateway_stripe_process_payment_error', $e, $order );
+			do_action( 'WC_Gateway_Monilypay_process_payment_error', $e, $order );
 
 			$statuses = apply_filters(
 				'wc_stripe_allowed_payment_processing_statuses',
@@ -328,7 +328,7 @@ abstract class WC_Stripe_Payment_Gateway_Voucher extends WC_Stripe_Payment_Gatew
 		}
 
 		$body = [
-			'amount'               => WC_Stripe_Helper::get_stripe_amount( $amount, strtolower( $currency ) ),
+			'amount'               => WC_Monilypay_Helper::get_stripe_amount( $amount, strtolower( $currency ) ),
 			'currency'             => strtolower( $currency ),
 			'payment_method_types' => [ $this->stripe_id ],
 			'description'          => __( 'stripe - Order', 'woocommerce-gateway-monilypay' ) . ' ' . $order->get_id(),
@@ -338,7 +338,7 @@ abstract class WC_Stripe_Payment_Gateway_Voucher extends WC_Stripe_Payment_Gatew
 			$body = $this->update_request_body_on_create_or_update_payment_intent( $body );
 		}
 
-		$payment_intent = WC_Stripe_API::request(
+		$payment_intent = WC_Monilypay_API::request(
 			$body,
 			'payment_intents' . $intent_to_be_updated
 		);
@@ -356,7 +356,7 @@ abstract class WC_Stripe_Payment_Gateway_Voucher extends WC_Stripe_Payment_Gatew
 	 *
 	 * @param $amount
 	 *
-	 * @throws WC_Stripe_Exception when amount is out of range
+	 * @throws WC_Monilypay_Exception when amount is out of range
 	 * @since 5.8.0
 	 */
 	abstract protected function validate_amount_limits( $amount );

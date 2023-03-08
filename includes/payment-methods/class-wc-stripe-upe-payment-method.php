@@ -13,10 +13,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Extendable abstract class for payment methods.
  */
-abstract class WC_Stripe_UPE_Payment_Method {
+abstract class WC_Monilypay_UPE_Payment_Method {
 
-	use WC_Stripe_Subscriptions_Utilities_Trait;
-	use WC_Stripe_Pre_Orders_Trait;
+	use WC_Monilypay_Subscriptions_Utilities_Trait;
+	use WC_Monilypay_Pre_Orders_Trait;
 
 	/**
 	 * Stripe key name
@@ -90,7 +90,7 @@ abstract class WC_Stripe_UPE_Payment_Method {
 		if ( isset( $main_settings['upe_checkout_experience_accepted_payments'] ) ) {
 			$enabled_upe_methods = $main_settings['upe_checkout_experience_accepted_payments'];
 		} else {
-			$enabled_upe_methods = [ WC_Stripe_UPE_Payment_Method_CC::STRIPE_ID ];
+			$enabled_upe_methods = [ WC_Monilypay_UPE_Payment_Method_CC::STRIPE_ID ];
 		}
 
 		$this->enabled = in_array( static::STRIPE_ID, $enabled_upe_methods, true );
@@ -252,7 +252,7 @@ abstract class WC_Stripe_UPE_Payment_Method {
 	 * to query to retrieve saved payment methods from Stripe.
 	 */
 	public function get_retrievable_type() {
-		return $this->is_reusable() ? WC_Stripe_UPE_Payment_Method_Sepa::STRIPE_ID : null;
+		return $this->is_reusable() ? WC_Monilypay_UPE_Payment_Method_Sepa::STRIPE_ID : null;
 	}
 
 	/**
@@ -261,12 +261,12 @@ abstract class WC_Stripe_UPE_Payment_Method {
 	 * @param int $user_id        WP_User ID
 	 * @param object $payment_method Stripe payment method object
 	 *
-	 * @return WC_Payment_Token_SEPA
+	 * @return WC_Monilypay_Payment_Token_SEPA
 	 */
 	public function create_payment_token_for_user( $user_id, $payment_method ) {
-		$token = new WC_Payment_Token_SEPA();
+		$token = new WC_Monilypay_Payment_Token_SEPA();
 		$token->set_last4( $payment_method->sepa_debit->last4 );
-		$token->set_gateway_id( WC_Stripe_UPE_Payment_Gateway::ID );
+		$token->set_gateway_id( WC_Monilypay_UPE_Payment_Gateway::ID );
 		$token->set_token( $payment_method->id );
 		$token->set_payment_method_type( $this->get_id() );
 		$token->set_user_id( $user_id );

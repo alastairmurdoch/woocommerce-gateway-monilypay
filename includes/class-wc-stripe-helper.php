@@ -10,7 +10,7 @@ use Automattic\WooCommerce\Utilities\OrderUtil;
  *
  * @since 4.0.0
  */
-class WC_Stripe_Helper {
+class WC_Monilypay_Helper {
 	const LEGACY_META_NAME_FEE      = 'Stripe Fee';
 	const LEGACY_META_NAME_NET      = 'Net Revenue From Stripe';
 	const META_NAME_FEE             = '_stripe_fee';

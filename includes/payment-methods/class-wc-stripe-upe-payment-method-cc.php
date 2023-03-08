@@ -4,17 +4,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class WC_Stripe_UPE_Payment_Method_CC
+ * Class WC_Monilypay_UPE_Payment_Method_CC
  */
 
 /**
  * Credit card Payment Method class extending UPE base class
  */
-class WC_Stripe_UPE_Payment_Method_CC extends WC_Stripe_UPE_Payment_Method {
+class WC_Monilypay_UPE_Payment_Method_CC extends WC_Monilypay_UPE_Payment_Method {
 
 	const STRIPE_ID = 'card';
 
-	const LPM_GATEWAY_CLASS = WC_Gateway_Stripe::class;
+	const LPM_GATEWAY_CLASS = WC_Gateway_Monilypay::class;
 
 	/**
 	 * Constructor for card payment method
@@ -70,8 +70,8 @@ class WC_Stripe_UPE_Payment_Method_CC extends WC_Stripe_UPE_Payment_Method {
 	/**
 	 * Create and return WC payment token for user.
 	 *
-	 * This will be used from the WC_Stripe_Payment_Tokens service
-	 * as opposed to WC_Stripe_UPE_Payment_Gateway.
+	 * This will be used from the WC_Monilypay_Payment_Tokens service
+	 * as opposed to WC_Monilypay_UPE_Payment_Gateway.
 	 *
 	 * @param string $user_id        WP_User ID
 	 * @param object $payment_method Stripe payment method object
@@ -84,7 +84,7 @@ class WC_Stripe_UPE_Payment_Method_CC extends WC_Stripe_UPE_Payment_Method {
 		$token->set_expiry_year( $payment_method->card->exp_year );
 		$token->set_card_type( strtolower( $payment_method->card->brand ) );
 		$token->set_last4( $payment_method->card->last4 );
-		$token->set_gateway_id( WC_Stripe_UPE_Payment_Gateway::ID );
+		$token->set_gateway_id( WC_Monilypay_UPE_Payment_Gateway::ID );
 		$token->set_token( $payment_method->id );
 		$token->set_user_id( $user_id );
 		$token->save();

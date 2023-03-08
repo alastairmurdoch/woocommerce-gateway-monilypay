@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class WC_Stripe_Exception extends Exception {
+class WC_Monilypay_Exception extends Exception {
 
 	/**
 	 * String sanitized/localized error message.

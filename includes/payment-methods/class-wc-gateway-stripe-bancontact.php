@@ -6,11 +6,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Class that handles Bancontact payment method.
  *
- * @extends WC_Gateway_Stripe
+ * @extends WC_Gateway_Monilypay
  *
  * @since 4.0.0
  */
-class WC_Gateway_Stripe_Bancontact extends WC_Stripe_Payment_Gateway {
+class WC_Gateway_Monilypay_Bancontact extends WC_Monilypay_Payment_Gateway {
 
 	const ID = 'stripe_bancontact';
 
@@ -189,7 +189,7 @@ class WC_Gateway_Stripe_Bancontact extends WC_Stripe_Payment_Gateway {
 
 		echo '<div
 			id="stripe-bancontact-payment-data"
-			data-amount="' . esc_attr( WC_Stripe_Helper::get_stripe_amount( $total ) ) . '"
+			data-amount="' . esc_attr( WC_Monilypay_Helper::get_stripe_amount( $total ) ) . '"
 			data-currency="' . esc_attr( strtolower( get_woocommerce_currency() ) ) . '">';
 
 		if ( $description ) {
@@ -211,7 +211,7 @@ class WC_Gateway_Stripe_Bancontact extends WC_Stripe_Payment_Gateway {
 		$currency                = $order->get_currency();
 		$return_url              = $this->get_stripe_return_url( $order );
 		$post_data               = [];
-		$post_data['amount']     = WC_Stripe_Helper::get_stripe_amount( $order->get_total(), $currency );
+		$post_data['amount']     = WC_Monilypay_Helper::get_stripe_amount( $order->get_total(), $currency );
 		$post_data['currency']   = strtolower( $currency );
 		$post_data['type']       = 'bancontact';
 		$post_data['owner']      = $this->get_owner_details( $order );
@@ -219,12 +219,12 @@ class WC_Gateway_Stripe_Bancontact extends WC_Stripe_Payment_Gateway {
 		$post_data['bancontact'] = [ 'preferred_language' => $this->get_locale() ];
 
 		if ( ! empty( $this->statement_descriptor ) ) {
-			$post_data['statement_descriptor'] = WC_Stripe_Helper::clean_statement_descriptor( $this->statement_descriptor );
+			$post_data['statement_descriptor'] = WC_Monilypay_Helper::clean_statement_descriptor( $this->statement_descriptor );
 		}
 
-		WC_Stripe_Logger::log( 'Info: Begin creating Bancontact source' );
+		WC_Monilypay_Exception::log( 'Info: Begin creating Bancontact source' );
 
-		return WC_Stripe_API::request( apply_filters( 'wc_stripe_bancontact_source', $post_data, $order ), 'sources' );
+		return WC_Monilypay_API::request( apply_filters( 'wc_stripe_bancontact_source', $post_data, $order ), 'sources' );
 	}
 
 	/**
@@ -250,7 +250,7 @@ class WC_Gateway_Stripe_Bancontact extends WC_Stripe_Payment_Gateway {
 
 			if ( $create_account ) {
 				$new_customer_id     = $order->get_customer_id();
-				$new_stripe_customer = new WC_Stripe_Customer( $new_customer_id );
+				$new_stripe_customer = new WC_Monilypay_Customer( $new_customer_id );
 				$new_stripe_customer->create_customer();
 			}
 
@@ -259,23 +259,23 @@ class WC_Gateway_Stripe_Bancontact extends WC_Stripe_Payment_Gateway {
 			if ( ! empty( $response->error ) ) {
 				$order->add_order_note( $response->error->message );
 
-				throw new WC_Stripe_Exception( print_r( $response, true ), $response->error->message );
+				throw new WC_Monilypay_Exception( print_r( $response, true ), $response->error->message );
 			}
 
 			$order->update_meta_data( '_stripe_source_id', $response->id );
 			$order->save();
 
-			WC_Stripe_Logger::log( 'Info: Redirecting to Bancontact...' );
+			WC_Monilypay_Exception::log( 'Info: Redirecting to Bancontact...' );
 
 			return [
 				'result'   => 'success',
 				'redirect' => esc_url_raw( $response->redirect->url ),
 			];
-		} catch ( WC_Stripe_Exception $e ) {
+		} catch ( WC_Monilypay_Exception $e ) {
 			wc_add_notice( $e->getLocalizedMessage(), 'error' );
-			WC_Stripe_Logger::log( 'Error: ' . $e->getMessage() );
+			WC_Monilypay_Exception::log( 'Error: ' . $e->getMessage() );
 
-			do_action( 'wc_gateway_stripe_process_payment_error', $e, $order );
+			do_action( 'WC_Gateway_Monilypay_process_payment_error', $e, $order );
 
 			if ( $order->has_status(
 				apply_filters(

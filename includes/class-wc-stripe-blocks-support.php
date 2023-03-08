@@ -6,11 +6,11 @@ use Automattic\WooCommerce\Blocks\Payments\PaymentContext;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * WC_Stripe_Blocks_Support class.
+ * WC_Monilypay_Blocks_Support class.
  *
  * @extends AbstractPaymentMethodType
  */
-final class WC_Stripe_Blocks_Support extends AbstractPaymentMethodType {
+final class WC_Monilypay_Blocks_Support extends AbstractPaymentMethodType {
 	/**
 	 * Payment method name defined by payment methods extending this class.
 	 *
@@ -22,20 +22,20 @@ final class WC_Stripe_Blocks_Support extends AbstractPaymentMethodType {
 	 * The Payment Request configuration class used for Shortcode PRBs. We use it here to retrieve
 	 * the same configurations.
 	 *
-	 * @var WC_Stripe_Payment_Request
+	 * @var WC_Monilypay_Payment_Request
 	 */
 	private $payment_request_configuration;
 
 	/**
 	 * Constructor
 	 *
-	 * @param WC_Stripe_Payment_Request  The Stripe Payment Request configuration used for Payment
+	 * @param WC_Monilypay_Payment_Request  The Stripe Payment Request configuration used for Payment
 	 *                                   Request buttons.
 	 */
 	public function __construct( $payment_request_configuration = null ) {
 		add_action( 'woocommerce_rest_checkout_process_payment_with_context', [ $this, 'add_payment_request_order_meta' ], 8, 2 );
 		add_action( 'woocommerce_rest_checkout_process_payment_with_context', [ $this, 'add_stripe_intents' ], 9999, 2 );
-		$this->payment_request_configuration = null !== $payment_request_configuration ? $payment_request_configuration : new WC_Stripe_Payment_Request();
+		$this->payment_request_configuration = null !== $payment_request_configuration ? $payment_request_configuration : new WC_Monilypay_Payment_Request();
 	}
 
 	/**
@@ -239,7 +239,7 @@ final class WC_Stripe_Blocks_Support extends AbstractPaymentMethodType {
 	 */
 	private function get_payment_request_javascript_params() {
 		return apply_filters(
-			'wc_stripe_payment_request_params',
+			'WC_Monilypay_Payment_Request_params',
 			$this->payment_request_configuration->javascript_params()
 		);
 	}
@@ -332,7 +332,7 @@ final class WC_Stripe_Blocks_Support extends AbstractPaymentMethodType {
 		// this context).
 		if ( 'stripe' === $context->payment_method ) {
 			add_action(
-				'wc_gateway_stripe_process_payment_error',
+				'WC_Gateway_Monilypay_process_payment_error',
 				function( $error ) use ( &$result ) {
 					$payment_details                 = $result->payment_details;
 					$payment_details['errorMessage'] = wp_strip_all_tags( $error->getLocalizedMessage() );

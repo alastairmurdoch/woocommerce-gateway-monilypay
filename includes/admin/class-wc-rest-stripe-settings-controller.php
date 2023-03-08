@@ -20,16 +20,16 @@ class WC_REST_Stripe_Settings_Controller extends WC_Stripe_REST_Base_Controller 
 	/**
 	 * Stripe payment gateway.
 	 *
-	 * @var WC_Gateway_Stripe
+	 * @var WC_Gateway_Monilypay
 	 */
 	private $gateway;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param WC_Gateway_Stripe $gateway Stripe payment gateway.
+	 * @param WC_Gateway_Monilypay $gateway Stripe payment gateway.
 	 */
-	public function __construct( WC_Gateway_Stripe $gateway ) {
+	public function __construct( WC_Gateway_Monilypay $gateway ) {
 		$this->gateway = $gateway;
 	}
 
@@ -528,7 +528,7 @@ class WC_REST_Stripe_Settings_Controller extends WC_Stripe_REST_Base_Controller 
 		update_option( 'woocommerce_monilypay_settings', $settings );
 
 		// including the class again because otherwise it's not present.
-		if ( WC_Stripe_Inbox_Notes::are_inbox_notes_supported() ) {
+		if ( WC_Monilypay_Inbox_Notes::are_inbox_notes_supported() ) {
 			require_once WC_STRIPE_PLUGIN_PATH . '/includes/notes/class-wc-stripe-upe-availability-note.php';
 			WC_Stripe_UPE_Availability_Note::possibly_delete_note();
 

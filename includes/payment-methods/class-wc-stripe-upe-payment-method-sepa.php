@@ -6,11 +6,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * SEPA Payment Method class extending UPE base class
  */
-class WC_Stripe_UPE_Payment_Method_Sepa extends WC_Stripe_UPE_Payment_Method {
+class WC_Monilypay_UPE_Payment_Method_Sepa extends WC_Monilypay_UPE_Payment_Method {
 
 	const STRIPE_ID = 'sepa_debit';
 
-	const LPM_GATEWAY_CLASS = WC_Gateway_Stripe_Sepa::class;
+	const LPM_GATEWAY_CLASS = WC_Gateway_Monilypay_Sepa::class;
 
 	/**
 	 * Constructor for SEPA payment method

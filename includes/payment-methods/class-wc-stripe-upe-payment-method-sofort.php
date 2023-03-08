@@ -6,11 +6,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Sofort Payment Method class extending UPE base class
  */
-class WC_Stripe_UPE_Payment_Method_Sofort extends WC_Stripe_UPE_Payment_Method {
+class WC_Monilypay_UPE_Payment_Method_Sofort extends WC_Monilypay_UPE_Payment_Method {
 
 	const STRIPE_ID = 'sofort';
 
-	const LPM_GATEWAY_CLASS = WC_Gateway_Stripe_Sofort::class;
+	const LPM_GATEWAY_CLASS = WC_Gateway_Monilypay_Sofort::class;
 
 	/**
 	 * Constructor for Sofort payment method

@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 4.0.0
  */
-class WC_Stripe_Payment_Tokens {
+class WC_Monilypay_Payment_Tokens {
 	private static $_this;
 
 	/**
@@ -148,7 +148,7 @@ class WC_Stripe_Payment_Tokens {
 			}
 
 			if ( 'stripe' === $gateway_id ) {
-				$stripe_customer = new WC_Stripe_Customer( $customer_id );
+				$stripe_customer = new WC_Monilypay_Customer( $customer_id );
 				$stripe_sources  = $stripe_customer->get_sources();
 
 				foreach ( $stripe_sources as $source ) {
@@ -191,13 +191,13 @@ class WC_Stripe_Payment_Tokens {
 			}
 
 			if ( 'stripe_sepa' === $gateway_id ) {
-				$stripe_customer = new WC_Stripe_Customer( $customer_id );
+				$stripe_customer = new WC_Monilypay_Customer( $customer_id );
 				$stripe_sources  = $stripe_customer->get_sources();
 
 				foreach ( $stripe_sources as $source ) {
 					if ( isset( $source->type ) && 'sepa_debit' === $source->type ) {
 						if ( ! isset( $stored_tokens[ $source->id ] ) ) {
-							$token = new WC_Payment_Token_SEPA();
+							$token = new WC_Monilypay_Payment_Token_SEPA();
 							$token->set_token( $source->id );
 							$token->set_gateway_id( 'stripe_sepa' );
 							$token->set_last4( $source->sepa_debit->last4 );
@@ -225,7 +225,7 @@ class WC_Stripe_Payment_Tokens {
 	 * @return array
 	 */
 	public function woocommerce_get_customer_upe_payment_tokens( $tokens, $user_id, $gateway_id ) {
-		if ( ( ! empty( $gateway_id ) && WC_Stripe_UPE_Payment_Gateway::ID !== $gateway_id ) || ! is_user_logged_in() ) {
+		if ( ( ! empty( $gateway_id ) && WC_Monilypay_UPE_Payment_Gateway::ID !== $gateway_id ) || ! is_user_logged_in() ) {
 			return $tokens;
 		}
 
@@ -235,13 +235,13 @@ class WC_Stripe_Payment_Tokens {
 			return $tokens;
 		}
 
-		$gateway                  = new WC_Stripe_UPE_Payment_Gateway();
+		$gateway                  = new WC_Monilypay_UPE_Payment_Gateway();
 		$reusable_payment_methods = array_filter( $gateway->get_upe_enabled_payment_method_ids(), [ $gateway, 'is_enabled_for_saved_payments' ] );
-		$customer                 = new WC_Stripe_Customer( $user_id );
+		$customer                 = new WC_Monilypay_Customer( $user_id );
 		$remaining_tokens         = [];
 
 		foreach ( $tokens as $token ) {
-			if ( WC_Stripe_UPE_Payment_Gateway::ID === $token->get_gateway_id() ) {
+			if ( WC_Monilypay_UPE_Payment_Gateway::ID === $token->get_gateway_id() ) {
 				$payment_method_type = $this->get_payment_method_type_from_token( $token );
 				if ( ! in_array( $payment_method_type, $reusable_payment_methods, true ) ) {
 					// Remove saved token from list, if payment method is not enabled.
@@ -307,7 +307,7 @@ class WC_Stripe_Payment_Tokens {
 	 * @return string Payment method type/ID
 	 */
 	private function get_original_payment_method_type( $payment_method ) {
-		if ( WC_Stripe_UPE_Payment_Method_Sepa::STRIPE_ID === $payment_method->type ) {
+		if ( WC_Monilypay_UPE_Payment_Method_Sepa::STRIPE_ID === $payment_method->type ) {
 			if ( ! is_null( $payment_method->sepa_debit->generated_from->charge ) ) {
 				return $payment_method->sepa_debit->generated_from->charge->payment_method_details->type;
 			}
@@ -361,9 +361,9 @@ class WC_Stripe_Payment_Tokens {
 	 * @version 4.0.0
 	 */
 	public function woocommerce_payment_token_deleted( $token_id, $token ) {
-		$stripe_customer = new WC_Stripe_Customer( get_current_user_id() );
+		$stripe_customer = new WC_Monilypay_Customer( get_current_user_id() );
 		if ( WC_Stripe_Feature_Flags::is_upe_checkout_enabled() ) {
-			if ( WC_Stripe_UPE_Payment_Gateway::ID === $token->get_gateway_id() ) {
+			if ( WC_Monilypay_UPE_Payment_Gateway::ID === $token->get_gateway_id() ) {
 				$stripe_customer->detach_payment_method( $token->get_token() );
 			}
 		} else {
@@ -381,10 +381,10 @@ class WC_Stripe_Payment_Tokens {
 	 */
 	public function woocommerce_payment_token_set_default( $token_id ) {
 		$token           = WC_Payment_Tokens::get( $token_id );
-		$stripe_customer = new WC_Stripe_Customer( get_current_user_id() );
+		$stripe_customer = new WC_Monilypay_Customer( get_current_user_id() );
 
 		if ( WC_Stripe_Feature_Flags::is_upe_checkout_enabled() ) {
-			if ( WC_Stripe_UPE_Payment_Gateway::ID === $token->get_gateway_id() ) {
+			if ( WC_Monilypay_UPE_Payment_Gateway::ID === $token->get_gateway_id() ) {
 				$stripe_customer->set_default_payment_method( $token->get_token() );
 			}
 		} else {
@@ -395,4 +395,4 @@ class WC_Stripe_Payment_Tokens {
 	}
 }
 
-new WC_Stripe_Payment_Tokens();
+new WC_Monilypay_Payment_Tokens();

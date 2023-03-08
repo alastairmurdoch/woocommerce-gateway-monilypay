@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Trait for Pre-Orders compatibility.
  */
-trait WC_Stripe_Pre_Orders_Trait {
+trait WC_Monilypay_Pre_Orders_Trait {
 
 	/**
 	 * Initialize pre-orders hook.
@@ -173,7 +173,7 @@ trait WC_Stripe_Pre_Orders_Trait {
 
 			// We need a source on file to continue.
 			if ( empty( $prepared_source->customer ) || empty( $prepared_source->source ) ) {
-				throw new WC_Stripe_Exception( __( 'Unable to store payment details. Please try again.', 'woocommerce-gateway-monilypay' ) );
+				throw new WC_Monilypay_Exception( __( 'Unable to store payment details. Please try again.', 'woocommerce-gateway-monilypay' ) );
 			}
 
 			// Setup the response early to allow later modifications.
@@ -199,9 +199,9 @@ trait WC_Stripe_Pre_Orders_Trait {
 
 			// Return thank you page redirect
 			return $response;
-		} catch ( WC_Stripe_Exception $e ) {
+		} catch ( WC_Monilypay_Exception $e ) {
 			wc_add_notice( $e->getLocalizedMessage(), 'error' );
-			WC_Stripe_Logger::log( 'Pre Orders Error: ' . $e->getMessage() );
+			WC_Monilypay_Exception::log( 'Pre Orders Error: ' . $e->getMessage() );
 
 			return [
 				'result'   => 'success',
@@ -244,9 +244,9 @@ trait WC_Stripe_Pre_Orders_Trait {
 
 				WC_Emails::instance();
 
-				do_action( 'wc_gateway_stripe_process_payment_authentication_required', $order );
+				do_action( 'WC_Gateway_Monilypay_process_payment_authentication_required', $order );
 
-				throw new WC_Stripe_Exception( print_r( $response, true ), $response->error->message );
+				throw new WC_Monilypay_Exception( print_r( $response, true ), $response->error->message );
 			} else {
 				// Successful
 				$this->process_response( end( $response->charges->data ), $order );

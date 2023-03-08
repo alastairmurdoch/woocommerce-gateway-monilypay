@@ -20,16 +20,16 @@ class WC_REST_Stripe_Orders_Controller extends WC_Stripe_REST_Base_Controller {
 	/**
 	 * Stripe payment gateway.
 	 *
-	 * @var WC_Gateway_Stripe
+	 * @var WC_Gateway_Monilypay
 	 */
 	private $gateway;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param WC_Gateway_Stripe $gateway Stripe payment gateway.
+	 * @param WC_Gateway_Monilypay $gateway Stripe payment gateway.
 	 */
-	public function __construct( WC_Gateway_Stripe $gateway ) {
+	public function __construct( WC_Gateway_Monilypay $gateway ) {
 		$this->gateway = $gateway;
 	}
 
@@ -88,7 +88,7 @@ class WC_REST_Stripe_Orders_Controller extends WC_Stripe_REST_Base_Controller {
 		if ( false === $order_user ) {
 			$order_user = new WP_User();
 		}
-		$customer = new WC_Stripe_Customer( $order_user->ID );
+		$customer = new WC_Monilypay_Customer( $order_user->ID );
 
 		// Set the customer ID if known but not already set.
 		$customer_id = $order->get_meta( '_stripe_customer_id', true );
@@ -98,13 +98,13 @@ class WC_REST_Stripe_Orders_Controller extends WC_Stripe_REST_Base_Controller {
 
 		try {
 			// Update or create Stripe customer.
-			$customer_data = WC_Stripe_Customer::map_customer_data( $order );
+			$customer_data = WC_Monilypay_Customer::map_customer_data( $order );
 			if ( $customer->get_id() ) {
 				$customer_id = $customer->update_customer( $customer_data );
 			} else {
 				$customer_id = $customer->create_customer( $customer_data );
 			}
-		} catch ( WC_Stripe_Exception $e ) {
+		} catch ( WC_Monilypay_Exception $e ) {
 			return new WP_Error( 'stripe_error', $e->getMessage() );
 		}
 
@@ -131,7 +131,7 @@ class WC_REST_Stripe_Orders_Controller extends WC_Stripe_REST_Base_Controller {
 			}
 
 			// Retrieve intent from Stripe.
-			$intent = WC_Stripe_API::retrieve( "payment_intents/$intent_id" );
+			$intent = WC_Monilypay_API::retrieve( "payment_intents/$intent_id" );
 
 			// Check that intent exists.
 			if ( ! empty( $intent->error ) ) {
@@ -144,14 +144,14 @@ class WC_REST_Stripe_Orders_Controller extends WC_Stripe_REST_Base_Controller {
 			}
 
 			// Update order with payment method and intent details.
-			$order->set_payment_method( WC_Gateway_Stripe::ID );
+			$order->set_payment_method( WC_Gateway_Monilypay::ID );
 			$order->set_payment_method_title( __( 'WooCommerce Stripe In-Person Payments', 'woocommerce-gateway-monilypay' ) );
 			$this->gateway->save_intent_to_order( $order, $intent );
 
 			// Capture payment intent.
 			$charge = end( $intent->charges->data );
 			$this->gateway->process_response( $charge, $order );
-			$result = WC_Stripe_Order_Handler::get_instance()->capture_payment( $order );
+			$result = WC_Monilypay_Order_Handler::get_instance()->capture_payment( $order );
 
 			// Check for failure to capture payment.
 			if ( empty( $result ) || empty( $result->status ) || 'succeeded' !== $result->status ) {
@@ -174,7 +174,7 @@ class WC_REST_Stripe_Orders_Controller extends WC_Stripe_REST_Base_Controller {
 					'id'     => $result->id,
 				]
 			);
-		} catch ( WC_Stripe_Exception $e ) {
+		} catch ( WC_Monilypay_Exception $e ) {
 			return rest_ensure_response( new WP_Error( 'stripe_error', $e->getMessage() ) );
 		}
 

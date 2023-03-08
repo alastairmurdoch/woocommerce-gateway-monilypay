@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 5.5.0
  */
-class WC_Stripe_UPE_Compatibility_Controller {
+class WC_Monilypay_UPE_Compatibility_Controller {
 	public function __construct() {
 		add_action( 'admin_notices', [ $this, 'add_compatibility_notice' ] );
 	}

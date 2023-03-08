@@ -6,11 +6,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Przelewy24 Payment Method class extending UPE base class
  */
-class WC_Stripe_UPE_Payment_Method_P24 extends WC_Stripe_UPE_Payment_Method {
+class WC_Monilypay_UPE_Payment_Method_P24 extends WC_Monilypay_UPE_Payment_Method {
 
 	const STRIPE_ID = 'p24';
 
-	const LPM_GATEWAY_CLASS = WC_Gateway_Stripe_P24::class;
+	const LPM_GATEWAY_CLASS = WC_Gateway_Monilypay_P24::class;
 
 	/**
 	 * Constructor for Przelewy24 payment method

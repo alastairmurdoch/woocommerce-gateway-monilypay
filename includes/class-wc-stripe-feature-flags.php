@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class WC_Stripe_Feature_Flags {
+class WC_Monilypay_Feature_Flags {
 	const UPE_CHECKOUT_FEATURE_ATTRIBUTE_NAME = 'upe_checkout_experience_enabled';
 
 	/**
@@ -13,7 +13,7 @@ class WC_Stripe_Feature_Flags {
 	 * @return bool
 	 */
 	public static function is_upe_preview_enabled() {
-		return 'yes' === get_option( '_wcstripe_feature_upe', 'yes' );
+		return 'yes' === get_option( '_wcmonilypay_feature_upe', 'yes' );
 	}
 
 	/**

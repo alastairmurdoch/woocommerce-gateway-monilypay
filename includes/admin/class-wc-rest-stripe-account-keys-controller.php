@@ -25,16 +25,16 @@ class WC_REST_Stripe_Account_Keys_Controller extends WC_Stripe_REST_Base_Control
 	/**
 	 * The instance of the Stripe account.
 	 *
-	 * @var WC_Stripe_Account
+	 * @var WC_Monilypay_Account
 	 */
 	private $account;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param WC_Stripe_Account $account The instance of the Stripe account.
+	 * @param WC_Monilypay_Account $account The instance of the Stripe account.
 	 */
-	public function __construct( WC_Stripe_Account $account ) {
+	public function __construct( WC_Monilypay_Account $account ) {
 		$this->account = $account;
 	}
 

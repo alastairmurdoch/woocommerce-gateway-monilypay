@@ -6,11 +6,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * EPS Payment Method class extending UPE base class
  */
-class WC_Stripe_UPE_Payment_Method_Eps extends WC_Stripe_UPE_Payment_Method {
+class WC_Monilypay_UPE_Payment_Method_Eps extends WC_Monilypay_UPE_Payment_Method {
 
 	const STRIPE_ID = 'eps';
 
-	const LPM_GATEWAY_CLASS = WC_Gateway_Stripe_Eps::class;
+	const LPM_GATEWAY_CLASS = WC_Gateway_Monilypay_Eps::class;
 
 	/**
 	 * Constructor for EPS payment method

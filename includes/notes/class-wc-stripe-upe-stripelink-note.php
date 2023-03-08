@@ -67,12 +67,12 @@ class WC_Stripe_UPE_StripeLink_Note {
 	/**
 	 * Init Link payment method notification
 	 *
-	 * @param WC_Stripe_Payment_Gateway $gateway
+	 * @param WC_Monilypay_Payment_Gateway $gateway
 	 *
 	 * @return void
 	 * @throws \Automattic\WooCommerce\Admin\Notes\NotesUnavailableException
 	 */
-	public static function init( WC_Stripe_Payment_Gateway $gateway ) {
+	public static function init( WC_Monilypay_Payment_Gateway $gateway ) {
 		if ( ! WC_Stripe_Feature_Flags::is_upe_checkout_enabled() ) {
 			return;
 		}
@@ -80,11 +80,11 @@ class WC_Stripe_UPE_StripeLink_Note {
 		// Check if Link payment is available.
 		$available_upe_payment_methods = $gateway->get_upe_available_payment_methods();
 
-		if ( ! in_array( WC_Stripe_UPE_Payment_Method_Link::STRIPE_ID, $available_upe_payment_methods, true ) ) {
+		if ( ! in_array( WC_Monilypay_UPE_Payment_Method_Link::STRIPE_ID, $available_upe_payment_methods, true ) ) {
 			return;
 		}
 
-		if ( ! is_a( $gateway, 'WC_Stripe_UPE_Payment_Gateway' ) ) {
+		if ( ! is_a( $gateway, 'WC_Monilypay_UPE_Payment_Gateway' ) ) {
 			return;
 		}
 
@@ -97,8 +97,8 @@ class WC_Stripe_UPE_StripeLink_Note {
 		$enabled_payment_methods = $gateway->get_upe_enabled_at_checkout_payment_method_ids();
 		// If card payment method is not enabled, skip. If Link payment method is enabled, skip.
 		if (
-			! in_array( WC_Stripe_UPE_Payment_Method_CC::STRIPE_ID, $enabled_payment_methods, true ) ||
-			in_array( WC_Stripe_UPE_Payment_Method_Link::STRIPE_ID, $enabled_payment_methods, true )
+			! in_array( WC_Monilypay_UPE_Payment_Method_CC::STRIPE_ID, $enabled_payment_methods, true ) ||
+			in_array( WC_Monilypay_UPE_Payment_Method_Link::STRIPE_ID, $enabled_payment_methods, true )
 		) {
 			return;
 		}
