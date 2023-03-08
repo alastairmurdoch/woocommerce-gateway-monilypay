@@ -5,7 +5,7 @@
  * Description: Take credit card payments on your store using MonilyPay. A fork of the official Woocommerce Stripe Plugin
  * Author: MonilyPay
  * Author URI: https://moni.ly/
- * Version: 7.1.0
+ * Version: 7.0.2
  * Requires at least: 5.9
  * Tested up to: 6.1
  * WC requires at least: 6.9
@@ -725,10 +725,10 @@ function wcmonilypay_deactivated() {
 		// requirements for the note
 		require_once WC_MONILYPAY_PLUGIN_PATH . '/includes/class-wc-stripe-feature-flags.php';
 		require_once WC_MONILYPAY_PLUGIN_PATH . '/includes/notes/class-wc-stripe-upe-availability-note.php';
-		WC_Stripe_UPE_Availability_Note::possibly_delete_note();
+		WC_M_UPE_Availability_Note::possibly_delete_note();
 
 		require_once WC_MONILYPAY_PLUGIN_PATH . '/includes/notes/class-wc-stripe-upe-stripelink-note.php';
-		WC_Stripe_UPE_StripeLink_Note::possibly_delete_note();
+		WC_M_UPE_StripeLink_Note::possibly_delete_note();
 	}
 }
 register_deactivation_hook( __FILE__, 'wcmonilypay_deactivated' );

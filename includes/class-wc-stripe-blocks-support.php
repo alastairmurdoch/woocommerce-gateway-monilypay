@@ -69,7 +69,7 @@ final class WC_Monilypay_Blocks_Support extends AbstractPaymentMethodType {
 			true
 		);
 
-		if ( WC_Stripe_Feature_Flags::is_upe_checkout_enabled() ) {
+		if ( WC_Monilypay_Feature_Flags::is_upe_checkout_enabled() ) {
 			$this->register_upe_payment_method_script_handles();
 		} else {
 			$this->register_legacy_payment_method_script_handles();
@@ -82,7 +82,7 @@ final class WC_Monilypay_Blocks_Support extends AbstractPaymentMethodType {
 	 * Registers the UPE JS scripts.
 	 */
 	private function register_upe_payment_method_script_handles() {
-		$asset_path   = WC_STRIPE_PLUGIN_PATH . '/build/upe_blocks.asset.php';
+		$asset_path   = WC_MONILYPAY_PLUGIN_PATH . '/build/upe_blocks.asset.php';
 		$version      = wc_monilypay_stripe_version;
 		$dependencies = [];
 		if ( file_exists( $asset_path ) ) {
@@ -97,14 +97,14 @@ final class WC_Monilypay_Blocks_Support extends AbstractPaymentMethodType {
 
 		wp_enqueue_style(
 			'wc-stripe-blocks-checkout-style',
-			WC_STRIPE_PLUGIN_URL . '/build/upe_blocks.css',
+			WC_MONILYPAY_PLUGIN_URL . '/build/upe_blocks.css',
 			[],
 			$version
 		);
 
 		wp_register_script(
 			'wc-stripe-blocks-integration',
-			WC_STRIPE_PLUGIN_URL . '/build/upe_blocks.js',
+			WC_MONILYPAY_PLUGIN_URL . '/build/upe_blocks.js',
 			array_merge( [ 'stripe' ], $dependencies ),
 			$version,
 			true
@@ -119,7 +119,7 @@ final class WC_Monilypay_Blocks_Support extends AbstractPaymentMethodType {
 	 * Registers the classic JS scripts.
 	 */
 	private function register_legacy_payment_method_script_handles() {
-		$asset_path   = WC_STRIPE_PLUGIN_PATH . '/build/index.asset.php';
+		$asset_path   = WC_MONILYPAY_PLUGIN_PATH . '/build/index.asset.php';
 		$version      = wc_monilypay_stripe_version;
 		$dependencies = [];
 		if ( file_exists( $asset_path ) ) {
@@ -133,7 +133,7 @@ final class WC_Monilypay_Blocks_Support extends AbstractPaymentMethodType {
 		}
 		wp_register_script(
 			'wc-stripe-blocks-integration',
-			WC_STRIPE_PLUGIN_URL . '/build/index.js',
+			WC_MONILYPAY_PLUGIN_URL . '/build/index.js',
 			array_merge( [ 'stripe' ], $dependencies ),
 			$version,
 			true
@@ -284,30 +284,30 @@ final class WC_Monilypay_Blocks_Support extends AbstractPaymentMethodType {
 	private function get_icons() {
 		$icons_src = [
 			'visa'       => [
-				'src' => WC_STRIPE_PLUGIN_URL . '/assets/images/visa.svg',
+				'src' => WC_MONILYPAY_PLUGIN_URL . '/assets/images/visa.svg',
 				'alt' => __( 'Visa', 'woocommerce-gateway-monilypay' ),
 			],
 			'amex'       => [
-				'src' => WC_STRIPE_PLUGIN_URL . '/assets/images/amex.svg',
+				'src' => WC_MONILYPAY_PLUGIN_URL . '/assets/images/amex.svg',
 				'alt' => __( 'American Express', 'woocommerce-gateway-monilypay' ),
 			],
 			'mastercard' => [
-				'src' => WC_STRIPE_PLUGIN_URL . '/assets/images/mastercard.svg',
+				'src' => WC_MONILYPAY_PLUGIN_URL . '/assets/images/mastercard.svg',
 				'alt' => __( 'Mastercard', 'woocommerce-gateway-monilypay' ),
 			],
 		];
 
 		if ( 'USD' === get_woocommerce_currency() ) {
 			$icons_src['discover'] = [
-				'src' => WC_STRIPE_PLUGIN_URL . '/assets/images/discover.svg',
+				'src' => WC_MONILYPAY_PLUGIN_URL . '/assets/images/discover.svg',
 				'alt' => _x( 'Discover', 'Name of credit card', 'woocommerce-gateway-monilypay' ),
 			];
 			$icons_src['jcb']      = [
-				'src' => WC_STRIPE_PLUGIN_URL . '/assets/images/jcb.svg',
+				'src' => WC_MONILYPAY_PLUGIN_URL . '/assets/images/jcb.svg',
 				'alt' => __( 'JCB', 'woocommerce-gateway-monilypay' ),
 			];
 			$icons_src['diners']   = [
-				'src' => WC_STRIPE_PLUGIN_URL . '/assets/images/diners.svg',
+				'src' => WC_MONILYPAY_PLUGIN_URL . '/assets/images/diners.svg',
 				'alt' => __( 'Diners', 'woocommerce-gateway-monilypay' ),
 			];
 		}

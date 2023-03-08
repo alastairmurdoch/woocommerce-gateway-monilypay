@@ -162,7 +162,7 @@ class WC_Gateway_Monilypay_Bancontact extends WC_Monilypay_Payment_Gateway {
 	 * Initialize Gateway Settings Form Fields.
 	 */
 	public function init_form_fields() {
-		$this->form_fields = require WC_STRIPE_PLUGIN_PATH . '/includes/admin/stripe-bancontact-settings.php';
+		$this->form_fields = require WC_MONILYPAY_PLUGIN_PATH . '/includes/admin/stripe-bancontact-settings.php';
 	}
 
 	/**

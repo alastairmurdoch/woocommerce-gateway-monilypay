@@ -123,7 +123,7 @@ class WC_Monilypay_Apple_Pay_Registration {
 	 */
 	private function verify_hosted_domain_association_file_is_up_to_date() {
 		// Contents of domain association file from plugin dir.
-		$new_contents = @file_get_contents( WC_STRIPE_PLUGIN_PATH . '/' . self::DOMAIN_ASSOCIATION_FILE_NAME ); // @codingStandardsIgnoreLine
+		$new_contents = @file_get_contents( WC_MONILYPAY_PLUGIN_PATH . '/' . self::DOMAIN_ASSOCIATION_FILE_NAME ); // @codingStandardsIgnoreLine
 		// Get file contents from local path and remote URL and check if either of which matches.
 		$fullpath        = untrailingslashit( ABSPATH ) . '/' . self::DOMAIN_ASSOCIATION_FILE_DIR . '/' . self::DOMAIN_ASSOCIATION_FILE_NAME;
 		$local_contents  = @file_get_contents( $fullpath ); // @codingStandardsIgnoreLine
@@ -150,7 +150,7 @@ class WC_Monilypay_Apple_Pay_Registration {
 			}
 		}
 
-		if ( ! @copy( WC_STRIPE_PLUGIN_PATH . '/' . self::DOMAIN_ASSOCIATION_FILE_NAME, $fullpath ) ) { // @codingStandardsIgnoreLine
+		if ( ! @copy( WC_MONILYPAY_PLUGIN_PATH . '/' . self::DOMAIN_ASSOCIATION_FILE_NAME, $fullpath ) ) { // @codingStandardsIgnoreLine
 			return __( 'Unable to copy domain association file to domain root.', 'woocommerce-gateway-monilypay' );
 		}
 	}
@@ -214,7 +214,7 @@ class WC_Monilypay_Apple_Pay_Registration {
 			return;
 		}
 
-		$path = WC_STRIPE_PLUGIN_PATH . '/' . self::DOMAIN_ASSOCIATION_FILE_NAME;
+		$path = WC_MONILYPAY_PLUGIN_PATH . '/' . self::DOMAIN_ASSOCIATION_FILE_NAME;
 		header( 'Content-Type: text/plain;charset=utf-8' );
 		echo esc_html( file_get_contents( $path ) );
 		exit;

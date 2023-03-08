@@ -14,13 +14,13 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Class WC_Stripe_UPE_Availability_Note
  */
-class WC_Stripe_UPE_Availability_Note {
+class WC_Monilypay_UPE_Availability_Note {
 	use NoteTraits;
 
 	/**
 	 * Name of the note for use in the database.
 	 */
-	const NOTE_NAME = 'wc-stripe-upe-availability-note';
+	const NOTE_NAME = 'wc-monilypay-upe-availability-note';
 
 	/**
 	 * Link to enable the UPE in store.
@@ -35,7 +35,7 @@ class WC_Stripe_UPE_Availability_Note {
 		$note_class = self::get_note_class();
 		$note       = new $note_class();
 
-		$note->set_title( __( 'Boost your sales with the new payment experience in Stripe', 'woocommerce-gateway-monilypay' ) );
+		$note->set_title( __( 'Boost your sales with the new payment experience in Monilypay', 'woocommerce-gateway-monilypay' ) );
 		$message = sprintf(
 		/* translators: 1) HTML anchor open tag 2) HTML anchor closing tag */
 			__( 'Get early access to an improved checkout experience, now available to select merchants. %1$sLearn more%2$s.', 'woocommerce-gateway-monilypay' ),
@@ -78,15 +78,15 @@ class WC_Stripe_UPE_Availability_Note {
 		 * - UPE has been manually disabled
 		 * - Stripe is not enabled
 		 */
-		if ( ! WC_Stripe_Feature_Flags::is_upe_preview_enabled() ) {
+		if ( ! WC_Monilypay_Feature_Flags::is_upe_preview_enabled() ) {
 			return;
 		}
 
-		if ( WC_Stripe_Feature_Flags::is_upe_checkout_enabled() ) {
+		if ( WC_Monilypay_Feature_Flags::is_upe_checkout_enabled() ) {
 			return;
 		}
 
-		if ( WC_Stripe_Feature_Flags::did_merchant_disable_upe() ) {
+		if ( WC_Monilypay_Feature_Flags::did_merchant_disable_upe() ) {
 			return;
 		}
 

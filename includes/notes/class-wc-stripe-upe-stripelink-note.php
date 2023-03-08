@@ -14,13 +14,13 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Class WC_Stripe_UPE_StripeLink_Note
  */
-class WC_Stripe_UPE_StripeLink_Note {
+class WC_Monilypay_UPE_StripeLink_Note {
 	use NoteTraits;
 
 	/**
 	 * Name of the note for use in the database.
 	 */
-	const NOTE_NAME = 'wc-stripe-upe-stripelink-note';
+	const NOTE_NAME = 'wc-monilypay-upe-stripelink-note';
 
 	/**
 	 * Link to Stripe Link documentation.
@@ -73,7 +73,7 @@ class WC_Stripe_UPE_StripeLink_Note {
 	 * @throws \Automattic\WooCommerce\Admin\Notes\NotesUnavailableException
 	 */
 	public static function init( WC_Monilypay_Payment_Gateway $gateway ) {
-		if ( ! WC_Stripe_Feature_Flags::is_upe_checkout_enabled() ) {
+		if ( ! WC_Monilypay_Feature_Flags::is_upe_checkout_enabled() ) {
 			return;
 		}
 

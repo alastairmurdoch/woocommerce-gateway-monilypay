@@ -265,7 +265,7 @@ class WC_REST_Monilypay_Settings_Controller extends WC_Monilypay_REST_Base_Contr
 
 				/* Settings > Advanced settings */
 				'is_debug_log_enabled'                  => 'yes' === $this->gateway->get_option( 'logging' ),
-				'is_upe_enabled'                        => WC_Stripe_Feature_Flags::is_upe_checkout_enabled(),
+				'is_upe_enabled'                        => WC_Monilypay_Feature_Flags::is_upe_checkout_enabled(),
 			]
 		);
 	}
@@ -524,15 +524,15 @@ class WC_REST_Monilypay_Settings_Controller extends WC_Monilypay_REST_Base_Contr
 		}
 
 		$settings = get_option( 'woocommerce_monilypay_settings', [] );
-		$settings[ WC_Stripe_Feature_Flags::UPE_CHECKOUT_FEATURE_ATTRIBUTE_NAME ] = $is_upe_enabled ? 'yes' : 'disabled';
+		$settings[ WC_Monilypay_Feature_Flags::UPE_CHECKOUT_FEATURE_ATTRIBUTE_NAME ] = $is_upe_enabled ? 'yes' : 'disabled';
 		update_option( 'woocommerce_monilypay_settings', $settings );
 
 		// including the class again because otherwise it's not present.
 		if ( WC_Monilypay_Inbox_Notes::are_inbox_notes_supported() ) {
-			require_once WC_STRIPE_PLUGIN_PATH . '/includes/notes/class-wc-stripe-upe-availability-note.php';
+			require_once WC_MONILYPAY_PLUGIN_PATH . '/includes/notes/class-wc-stripe-upe-availability-note.php';
 			WC_Stripe_UPE_Availability_Note::possibly_delete_note();
 
-			require_once WC_STRIPE_PLUGIN_PATH . '/includes/notes/class-wc-stripe-upe-stripelink-note.php';
+			require_once WC_MONILYPAY_PLUGIN_PATH . '/includes/notes/class-wc-stripe-upe-stripelink-note.php';
 			WC_Stripe_UPE_StripeLink_Note::possibly_delete_note();
 		}
 	}
@@ -567,7 +567,7 @@ class WC_REST_Monilypay_Settings_Controller extends WC_Monilypay_REST_Base_Contr
 	 */
 	private function update_enabled_payment_methods( WP_REST_Request $request ) {
 		// no need to update the payment methods, if the UPE checkout is not enabled
-		if ( ! WC_Stripe_Feature_Flags::is_upe_checkout_enabled() ) {
+		if ( ! WC_Monilypay_Feature_Flags::is_upe_checkout_enabled() ) {
 			return;
 		}
 

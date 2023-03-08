@@ -271,7 +271,7 @@ $stripe_settings = apply_filters(
 	]
 );
 
-if ( WC_Stripe_Feature_Flags::is_upe_preview_enabled() ) {
+if ( WC_Monilypay_Feature_Flags::is_upe_preview_enabled() ) {
 	// in the new settings, "checkout" is going to be enabled by default (if it is a new WCStripe installation).
 	$stripe_settings['payment_request_button_locations']['default'][] = 'checkout';
 
@@ -289,9 +289,9 @@ if ( WC_Stripe_Feature_Flags::is_upe_preview_enabled() ) {
 	unset( $stripe_settings['payment_request_button_size'] );
 }
 
-if ( WC_Stripe_Feature_Flags::is_upe_preview_enabled() ) {
+if ( WC_Monilypay_Feature_Flags::is_upe_preview_enabled() ) {
 	$upe_settings = [
-		WC_Stripe_Feature_Flags::UPE_CHECKOUT_FEATURE_ATTRIBUTE_NAME => [
+		WC_Monilypay_Feature_Flags::UPE_CHECKOUT_FEATURE_ATTRIBUTE_NAME => [
 			'title'       => __( 'New checkout experience', 'woocommerce-gateway-monilypay' ),
 			'label'       => sprintf(
 				/* translators: 1) br tag 2) Stripe anchor tag 3) Apple anchor tag 4) Stripe dashboard opening anchor tag 5) Stripe dashboard closing anchor tag */
@@ -306,7 +306,7 @@ if ( WC_Stripe_Feature_Flags::is_upe_preview_enabled() ) {
 			'desc_tip'    => true,
 		],
 	];
-	if ( WC_Stripe_Feature_Flags::is_upe_checkout_enabled() ) {
+	if ( WC_Monilypay_Feature_Flags::is_upe_checkout_enabled() ) {
 		// This adds the payment method section
 		$upe_settings['upe_checkout_experience_accepted_payments'] = [
 			'title'   => __( 'Payments accepted on checkout (Early access)', 'woocommerce-gateway-monilypay' ),

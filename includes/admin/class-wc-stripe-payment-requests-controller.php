@@ -19,7 +19,7 @@ class WC_Monilypay_Payment_Requests_Controller {
 	 */
 	public function admin_scripts() {
 		// Webpack generates an assets file containing a dependencies array for our built JS file.
-		$script_asset_path = WC_STRIPE_PLUGIN_PATH . '/build/payment_requests_settings.asset.php';
+		$script_asset_path = WC_MONILYPAY_PLUGIN_PATH . '/build/payment_requests_settings.asset.php';
 		$asset_metadata    = file_exists( $script_asset_path )
 			? require $script_asset_path
 			: [

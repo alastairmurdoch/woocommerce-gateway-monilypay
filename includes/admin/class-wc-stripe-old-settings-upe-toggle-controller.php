@@ -25,7 +25,7 @@ class WC_Monilypay_Old_Settings_UPE_Toggle_Controller {
 	 * @return mixed
 	 */
 	public function pre_options_save( $value ) {
-		$this->was_upe_checkout_enabled = WC_Stripe_Feature_Flags::is_upe_checkout_enabled();
+		$this->was_upe_checkout_enabled = WC_Monilypay_Feature_Flags::is_upe_checkout_enabled();
 
 		return $value;
 	}
@@ -34,7 +34,7 @@ class WC_Monilypay_Old_Settings_UPE_Toggle_Controller {
 	 * Determines what to do after the options have been saved.
 	 */
 	public function maybe_enqueue_script() {
-		$is_upe_checkout_enabled = WC_Stripe_Feature_Flags::is_upe_checkout_enabled();
+		$is_upe_checkout_enabled = WC_Monilypay_Feature_Flags::is_upe_checkout_enabled();
 
 		if ( $this->was_upe_checkout_enabled !== $is_upe_checkout_enabled ) {
 			add_action( 'admin_enqueue_scripts', [ $this, 'upe_toggle_script' ] );
@@ -46,7 +46,7 @@ class WC_Monilypay_Old_Settings_UPE_Toggle_Controller {
 	 */
 	public function upe_toggle_script() {
 		// Webpack generates an assets file containing a dependencies array for our built JS file.
-		$script_asset_path = WC_STRIPE_PLUGIN_PATH . '/build/old_settings_upe_toggle.asset.php';
+		$script_asset_path = WC_MONILYPAY_PLUGIN_PATH . '/build/old_settings_upe_toggle.asset.php';
 		$script_asset      = file_exists( $script_asset_path )
 			? require $script_asset_path
 			: [
@@ -66,7 +66,7 @@ class WC_Monilypay_Old_Settings_UPE_Toggle_Controller {
 			'wc_stripe_old_settings_param',
 			[
 				'was_upe_enabled' => $this->was_upe_checkout_enabled,
-				'is_upe_enabled'  => WC_Stripe_Feature_Flags::is_upe_checkout_enabled(),
+				'is_upe_enabled'  => WC_Monilypay_Feature_Flags::is_upe_checkout_enabled(),
 			]
 		);
 		wp_set_script_translations(

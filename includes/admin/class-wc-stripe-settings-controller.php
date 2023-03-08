@@ -76,7 +76,7 @@ class WC_Monilypay_Settings_Controller {
 		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
 		// Webpack generates an assets file containing a dependencies array for our built JS file.
-		$script_asset_path = WC_STRIPE_PLUGIN_PATH . '/build/upe_settings.asset.php';
+		$script_asset_path = WC_MONILYPAY_PLUGIN_PATH . '/build/upe_settings.asset.php';
 		$script_asset      = file_exists( $script_asset_path )
 			? require $script_asset_path
 			: [
@@ -113,7 +113,7 @@ class WC_Monilypay_Settings_Controller {
 		$params = [
 			'time'                    => time(),
 			'i18n_out_of_sync'        => $message,
-			'is_upe_checkout_enabled' => WC_Stripe_Feature_Flags::is_upe_checkout_enabled(),
+			'is_upe_checkout_enabled' => WC_Monilypay_Feature_Flags::is_upe_checkout_enabled(),
 			'stripe_oauth_url'        => $oauth_url,
 		];
 		wp_localize_script(

@@ -28,7 +28,7 @@ class WC_Monilypay_Payment_Gateways_Controller {
 	}
 
 	public function register_payments_scripts() {
-		$payment_gateways_script_asset_path = WC_STRIPE_PLUGIN_PATH . '/build/payment_gateways.asset.php';
+		$payment_gateways_script_asset_path = WC_MONILYPAY_PLUGIN_PATH . '/build/payment_gateways.asset.php';
 		$payment_gateways_script_asset      = file_exists( $payment_gateways_script_asset_path )
 			? require_once $payment_gateways_script_asset_path
 			: [

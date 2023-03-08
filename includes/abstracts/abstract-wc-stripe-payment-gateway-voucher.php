@@ -241,7 +241,7 @@ abstract class WC_Monilypay_Payment_Gateway_Voucher extends WC_Monilypay_Payment
 	 * @since 5.8.0
 	 */
 	public function init_form_fields() {
-		$this->form_fields = require WC_STRIPE_PLUGIN_PATH . '/includes/admin/stripe-' . $this->stripe_id . '-settings.php';
+		$this->form_fields = require WC_MONILYPAY_PLUGIN_PATH . '/includes/admin/stripe-' . $this->stripe_id . '-settings.php';
 	}
 
 	/**

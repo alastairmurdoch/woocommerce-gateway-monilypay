@@ -35,7 +35,7 @@ class WC_Monilypay_UPE_Payment_Method_Link extends WC_Monilypay_UPE_Payment_Meth
 	public static function is_link_enabled() {
 
 		// Assume Link is disabled if UPE is disabled.
-		if ( ! WC_Stripe_Feature_Flags::is_upe_checkout_enabled() ) {
+		if ( ! WC_Monilypay_Feature_Flags::is_upe_checkout_enabled() ) {
 			return false;
 		}
 
