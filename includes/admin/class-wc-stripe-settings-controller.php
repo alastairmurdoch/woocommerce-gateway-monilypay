@@ -25,7 +25,7 @@ class WC_Monilypay_Settings_Controller {
 	public function __construct( WC_Monilypay_Account $account ) {
 		$this->account = $account;
 		add_action( 'admin_enqueue_scripts', [ $this, 'admin_scripts' ] );
-		add_action( 'wc_stripe_gateway_admin_options_wrapper', [ $this, 'admin_options' ] );
+		add_action( 'wc_monilypay_gateway_admin_options_wrapper', [ $this, 'admin_options' ] );
 	}
 
 	/**

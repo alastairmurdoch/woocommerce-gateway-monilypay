@@ -323,7 +323,7 @@ class WC_Gateway_Monilypay extends WC_Monilypay_Payment_Gateway {
 	 * Override the parent admin_options method.
 	 */
 	public function admin_options() {
-		do_action( 'wc_stripe_gateway_admin_options_wrapper', $this );
+		do_action( 'wc_monilypay_gateway_admin_options_wrapper', $this );
 	}
 
 	/**

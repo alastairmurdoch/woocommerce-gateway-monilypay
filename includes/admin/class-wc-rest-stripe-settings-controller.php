@@ -1,6 +1,6 @@
 <?php
 /**
- * Class WC_REST_Stripe_Settings_Controller
+ * Class WC_REST_Monilypay_Settings_Controller
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * REST controller for settings.
  */
-class WC_REST_Stripe_Settings_Controller extends WC_Stripe_REST_Base_Controller {
+class WC_REST_Monilypay_Settings_Controller extends WC_Monilypay_REST_Base_Controller {
 
 	/**
 	 * Endpoint path.

@@ -237,7 +237,7 @@ class WC_Monilypay_Admin_Notices {
 				}
 
 				// Check if Stripe Account data was successfully fetched.
-				$account_data = WC_Stripe::get_instance()->account->get_cached_account_data();
+				$account_data = WC_Monilypay::get_instance()->account->get_cached_account_data();
 				if ( ! empty( $secret ) && empty( $account_data ) ) {
 					$setting_link = $this->get_setting_link();
 
@@ -257,7 +257,7 @@ class WC_Monilypay_Admin_Notices {
 				if ( ! wc_checkout_is_https() ) {
 					$message = sprintf(
 					/* translators: 1) HTML anchor open tag 2) HTML anchor closing tag */
-						__( 'Monilypayt is enabled, but a SSL certificate is not detected. Your checkout may not be secure! Please ensure your server has a valid %1$sSSL certificate%2$s.', 'woocommerce-gateway-monilypay' ),
+						__( 'Monilypay is enabled, but a SSL certificate is not detected. Your checkout may not be secure! Please ensure your server has a valid %1$sSSL certificate%2$s.', 'woocommerce-gateway-monilypay' ),
 						'<a href="https://en.wikipedia.org/wiki/Transport_Layer_Security" target="_blank">',
 						'</a>'
 					);

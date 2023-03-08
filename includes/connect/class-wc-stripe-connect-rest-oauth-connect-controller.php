@@ -8,7 +8,7 @@ if ( ! class_exists( 'WC_Stripe_Connect_REST_Oauth_Connect_Controller' ) ) {
 	/**
 	 * Stripe Connect Oauth Connect controller class.
 	 */
-	class WC_Stripe_Connect_REST_Oauth_Connect_Controller extends WC_Stripe_Connect_REST_Controller {
+	class WC_Stripe_Connect_REST_Oauth_Connect_Controller extends WC_Monilypay_Connect_REST_Controller {
 
 		/**
 		 * REST base.

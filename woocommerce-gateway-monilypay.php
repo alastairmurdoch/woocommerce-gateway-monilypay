@@ -597,13 +597,13 @@ function woocommerce_gateway_monilypay() {
 				require_once WC_MONILYPAY_PLUGIN_PATH . '/includes/connect/class-wc-stripe-connect-rest-oauth-init-controller.php';
 				require_once WC_MONILYPAY_PLUGIN_PATH . '/includes/connect/class-wc-stripe-connect-rest-oauth-connect-controller.php';
 
-				$connection_tokens_controller = new WC_REST_Stripe_Connection_Tokens_Controller( $this->get_main_stripe_gateway() );
-				$locations_controller         = new WC_REST_Stripe_Locations_Controller();
-				$orders_controller            = new WC_REST_Stripe_Orders_Controller( $this->get_main_stripe_gateway() );
-				$stripe_tokens_controller     = new WC_REST_Stripe_Tokens_Controller();
+				$connection_tokens_controller = new WC_REST_Monilypay_Connection_Tokens_Controller( $this->get_main_stripe_gateway() );
+				$locations_controller         = new WC_REST_Monilypay_Locations_Controller();
+				$orders_controller            = new WC_REST_Monilypay_Orders_Controller( $this->get_main_stripe_gateway() );
+				$stripe_tokens_controller     = new WC_REST_Monilypay_Tokens_Controller();
 				$oauth_init                   = new WC_Stripe_Connect_REST_Oauth_Init_Controller( $this->connect, $this->api );
 				$oauth_connect                = new WC_Stripe_Connect_REST_Oauth_Connect_Controller( $this->connect, $this->api );
-				$stripe_account_controller    = new WC_REST_Stripe_Account_Controller( $this->get_main_stripe_gateway(), $this->account );
+				$stripe_account_controller    = new WC_REST_Monilypay_Account_Controller( $this->get_main_stripe_gateway(), $this->account );
 
 				$connection_tokens_controller->register_routes();
 				$locations_controller->register_routes();
@@ -619,16 +619,16 @@ function woocommerce_gateway_monilypay() {
 					require_once WC_MONILYPAY_PLUGIN_PATH . '/includes/admin/class-wc-rest-stripe-account-keys-controller.php';
 					require_once WC_MONILYPAY_PLUGIN_PATH . '/includes/admin/class-wc-rest-stripe-payment-gateway-controller.php';
 
-					$upe_flag_toggle_controller = new WC_Stripe_REST_UPE_Flag_Toggle_Controller();
+					$upe_flag_toggle_controller = new WC_Monilypay_REST_UPE_Flag_Toggle_Controller();
 					$upe_flag_toggle_controller->register_routes();
 
-					$settings_controller = new WC_REST_Stripe_Settings_Controller( $this->get_main_stripe_gateway() );
+					$settings_controller = new WC_REST_Monilypay_Settings_Controller( $this->get_main_stripe_gateway() );
 					$settings_controller->register_routes();
 
-					$stripe_account_keys_controller = new WC_REST_Stripe_Account_Keys_Controller( $this->account );
+					$stripe_account_keys_controller = new WC_REST_Monilypay_Account_Keys_Controller( $this->account );
 					$stripe_account_keys_controller->register_routes();
 
-					$settings_controller = new WC_REST_Stripe_Payment_Gateway_Controller();
+					$settings_controller = new WC_REST_Monilypay_Payment_Gateway_Controller();
 					$settings_controller->register_routes();
 				}
 			}

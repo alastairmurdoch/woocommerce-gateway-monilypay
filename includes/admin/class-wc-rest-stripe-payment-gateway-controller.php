@@ -1,6 +1,6 @@
 <?php
 /**
- * Class WC_REST_Stripe_Payment_Gateway_Controller
+ * Class WC_REST_Monilypay_Payment_Gateway_Controller
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Dynamic REST controller for payment gateway settings.
  */
-class WC_REST_Stripe_Payment_Gateway_Controller extends WC_Stripe_REST_Base_Controller {
+class WC_REST_Monilypay_Payment_Gateway_Controller extends WC_Monilypay_REST_Base_Controller {
 
 	/**
 	 * Endpoint path.

@@ -1,6 +1,6 @@
 <?php
 /**
- * Class WC_REST_Stripe_Account_Keys_Controller
+ * Class WC_REST_Monilypay_Account_Keys_Controller
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @since 5.6.0
  */
-class WC_REST_Stripe_Account_Keys_Controller extends WC_Stripe_REST_Base_Controller {
+class WC_REST_Monilypay_Account_Keys_Controller extends WC_Monilypay_REST_Base_Controller {
 	const STRIPE_GATEWAY_SETTINGS_OPTION_NAME = 'woocommerce_monilypay_settings';
 
 	/**
