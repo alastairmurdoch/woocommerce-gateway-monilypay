@@ -282,7 +282,7 @@ abstract class WC_Monilypay_Payment_Gateway_Voucher extends WC_Monilypay_Payment
 			];
 		} catch ( WC_Monilypay_Exception $e ) {
 			wc_add_notice( $e->getLocalizedMessage(), 'error' );
-			WC_Monilypay_Exception::log( 'Error: ' . $e->getMessage() );
+			WC_Monilypay_Logger::log( 'Error: ' . $e->getMessage() );
 
 			do_action( 'WC_Gateway_Monilypay_process_payment_error', $e, $order );
 

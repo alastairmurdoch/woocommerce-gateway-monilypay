@@ -224,7 +224,7 @@ class WC_Gateway_Monilypay_Multibanco extends WC_Monilypay_Payment_Gateway {
 		$payment_method = $order->get_payment_method();
 
 		if ( ! $sent_to_admin && 'stripe_multibanco' === $payment_method && $order->has_status( 'on-hold' ) ) {
-			WC_Monilypay_Exception::log( 'Sending multibanco email for order #' . $order_id );
+			WC_Monilypay_Logger::log( 'Sending multibanco email for order #' . $order_id );
 
 			$this->get_instructions( $order, $plain_text );
 		}
@@ -318,7 +318,7 @@ class WC_Gateway_Monilypay_Multibanco extends WC_Monilypay_Payment_Gateway {
 			$post_data['statement_descriptor'] = WC_Monilypay_Helper::clean_statement_descriptor( $this->statement_descriptor );
 		}
 
-		WC_Monilypay_Exception::log( 'Info: Begin creating Multibanco source' );
+		WC_Monilypay_Logger::log( 'Info: Begin creating Multibanco source' );
 
 		return WC_Monilypay_API::request( $post_data, 'sources' );
 	}
@@ -372,7 +372,7 @@ class WC_Gateway_Monilypay_Multibanco extends WC_Monilypay_Payment_Gateway {
 			// Remove cart
 			WC()->cart->empty_cart();
 
-			WC_Monilypay_Exception::log( 'Info: Redirecting to Multibanco...' );
+			WC_Monilypay_Logger::log( 'Info: Redirecting to Multibanco...' );
 
 			return [
 				'result'   => 'success',
@@ -380,7 +380,7 @@ class WC_Gateway_Monilypay_Multibanco extends WC_Monilypay_Payment_Gateway {
 			];
 		} catch ( Exception $e ) {
 			wc_add_notice( $e->getMessage(), 'error' );
-			WC_Monilypay_Exception::log( 'Error: ' . $e->getMessage() );
+			WC_Monilypay_Logger::log( 'Error: ' . $e->getMessage() );
 
 			do_action( 'WC_Gateway_Monilypay_process_payment_error', $e, $order );
 

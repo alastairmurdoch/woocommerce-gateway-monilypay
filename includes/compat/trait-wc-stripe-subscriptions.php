@@ -172,7 +172,7 @@ trait WC_Monilypay_Subscriptions_Trait {
 			];
 		} catch ( WC_Monilypay_Exception $e ) {
 			wc_add_notice( $e->getLocalizedMessage(), 'error' );
-			WC_Monilypay_Exception::log( 'Error: ' . $e->getMessage() );
+			WC_Monilypay_Logger::log( 'Error: ' . $e->getMessage() );
 		}
 	}
 
@@ -253,7 +253,7 @@ trait WC_Monilypay_Subscriptions_Trait {
 				);
 			}
 
-			WC_Monilypay_Exception::log( "Info: Begin processing subscription payment for order {$order_id} for the amount of {$amount}" );
+			WC_Monilypay_Logger::log( "Info: Begin processing subscription payment for order {$order_id} for the amount of {$amount}" );
 
 			/*
 			 * If we're doing a retry and source is chargeable, we need to pass
@@ -349,7 +349,7 @@ trait WC_Monilypay_Subscriptions_Trait {
 				$this->unlock_order_payment( $renewal_order );
 			}
 		} catch ( WC_Monilypay_Exception $e ) {
-			WC_Monilypay_Exception::log( 'Error: ' . $e->getMessage() );
+			WC_Monilypay_Logger::log( 'Error: ' . $e->getMessage() );
 
 			do_action( 'WC_Gateway_Monilypay_process_payment_error', $e, $renewal_order );
 

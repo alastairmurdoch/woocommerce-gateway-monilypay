@@ -86,14 +86,14 @@ class WC_Monilypay_Settings_Controller {
 
 		wp_register_script(
 			'woocommerce_stripe_admin',
-			plugins_url( 'build/upe_settings.js', WC_STRIPE_MAIN_FILE ),
+			plugins_url( 'build/upe_settings.js', WC_MONILYPAY_MAIN_FILE ),
 			$script_asset['dependencies'],
 			$script_asset['version'],
 			true
 		);
 		wp_register_style(
 			'woocommerce_stripe_admin',
-			plugins_url( 'build/upe_settings.css', WC_STRIPE_MAIN_FILE ),
+			plugins_url( 'build/upe_settings.css', WC_MONILYPAY_MAIN_FILE ),
 			[ 'wc-components' ],
 			$script_asset['version']
 		);

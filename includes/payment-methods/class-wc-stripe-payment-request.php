@@ -761,7 +761,7 @@ class WC_Monilypay_Payment_Request {
 		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
 		wp_register_script( 'stripe', 'https://js.stripe.com/v3/', '', '3.0', true );
-		wp_register_script( 'WC_Monilypay_Payment_Request', plugins_url( 'assets/js/stripe-payment-request' . $suffix . '.js', WC_STRIPE_MAIN_FILE ), [ 'jquery', 'stripe' ], wc_monilypay_stripe_version, true );
+		wp_register_script( 'WC_Monilypay_Payment_Request', plugins_url( 'assets/js/stripe-payment-request' . $suffix . '.js', WC_MONILYPAY_MAIN_FILE ), [ 'jquery', 'stripe' ], wc_monilypay_stripe_version, true );
 
 		wp_localize_script(
 			'WC_Monilypay_Payment_Request',
@@ -862,13 +862,13 @@ class WC_Monilypay_Payment_Request {
 	public function should_show_payment_request_button() {
 		// If keys are not set bail.
 		if ( ! $this->are_keys_set() ) {
-			WC_Monilypay_Exception::log( 'Keys are not set correctly.' );
+			WC_Monilypay_Logger::log( 'Keys are not set correctly.' );
 			return false;
 		}
 
 		// If no SSL bail.
 		if ( ! $this->testmode && ! is_ssl() ) {
-			WC_Monilypay_Exception::log( 'Stripe Payment Request live mode requires SSL.' );
+			WC_Monilypay_Logger::log( 'Stripe Payment Request live mode requires SSL.' );
 			return false;
 		}
 
@@ -1023,7 +1023,7 @@ class WC_Monilypay_Payment_Request {
 
 		$errors = isset( $_POST['errors'] ) ? wc_clean( wp_unslash( $_POST['errors'] ) ) : '';
 
-		WC_Monilypay_Exception::log( $errors );
+		WC_Monilypay_Logger::log( $errors );
 
 		exit;
 	}

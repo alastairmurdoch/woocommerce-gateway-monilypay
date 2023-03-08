@@ -75,7 +75,7 @@ class WC_Monilypay_Webhook_Handler extends WC_Monilypay_Payment_Gateway {
 			status_header( 200 );
 			exit;
 		} else {
-			WC_Monilypay_Exception::log( 'Incoming webhook failed validation: ' . print_r( $request_body, true ) );
+			WC_Monilypay_Logger::log( 'Incoming webhook failed validation: ' . print_r( $request_body, true ) );
 			WC_Monilypay_Webhook_State::set_last_webhook_failure_at( time() );
 			WC_Monilypay_Webhook_State::set_last_error_reason( $validation_result );
 
@@ -189,7 +189,7 @@ class WC_Monilypay_Webhook_Handler extends WC_Monilypay_Payment_Gateway {
 		$order = WC_Monilypay_Helper::get_order_by_source_id( $notification->data->object->id );
 
 		if ( ! $order ) {
-			WC_Monilypay_Exception::log( 'Could not find order via source ID: ' . $notification->data->object->id );
+			WC_Monilypay_Logger::log( 'Could not find order via source ID: ' . $notification->data->object->id );
 			return;
 		}
 
@@ -212,7 +212,7 @@ class WC_Monilypay_Webhook_Handler extends WC_Monilypay_Payment_Gateway {
 			// This will throw exception if not valid.
 			$this->validate_minimum_order_amount( $order );
 
-			WC_Monilypay_Exception::log( "Info: (Webhook) Begin processing payment for order $order_id for the amount of {$order->get_total()}" );
+			WC_Monilypay_Logger::log( "Info: (Webhook) Begin processing payment for order $order_id for the amount of {$order->get_total()}" );
 
 			// Prep source object.
 			$prepared_source = $this->prepare_order_source( $order );
@@ -282,7 +282,7 @@ class WC_Monilypay_Webhook_Handler extends WC_Monilypay_Payment_Gateway {
 			$this->process_response( $response, $order );
 
 		} catch ( WC_Monilypay_Exception $e ) {
-			WC_Monilypay_Exception::log( 'Error: ' . $e->getMessage() );
+			WC_Monilypay_Logger::log( 'Error: ' . $e->getMessage() );
 
 			do_action( 'WC_Gateway_Monilypay_process_webhook_payment_error', $order, $notification, $e );
 
@@ -306,7 +306,7 @@ class WC_Monilypay_Webhook_Handler extends WC_Monilypay_Payment_Gateway {
 		$order = WC_Monilypay_Helper::get_order_by_charge_id( $notification->data->object->charge );
 
 		if ( ! $order ) {
-			WC_Monilypay_Exception::log( 'Could not find order via charge ID: ' . $notification->data->object->charge );
+			WC_Monilypay_Logger::log( 'Could not find order via charge ID: ' . $notification->data->object->charge );
 			return;
 		}
 
@@ -342,7 +342,7 @@ class WC_Monilypay_Webhook_Handler extends WC_Monilypay_Payment_Gateway {
 		$status = $notification->data->object->status;
 
 		if ( ! $order ) {
-			WC_Monilypay_Exception::log( 'Could not find order via charge ID: ' . $notification->data->object->charge );
+			WC_Monilypay_Logger::log( 'Could not find order via charge ID: ' . $notification->data->object->charge );
 			return;
 		}
 
@@ -380,7 +380,7 @@ class WC_Monilypay_Webhook_Handler extends WC_Monilypay_Payment_Gateway {
 		$order = WC_Monilypay_Helper::get_order_by_charge_id( $notification->data->object->id );
 
 		if ( ! $order ) {
-			WC_Monilypay_Exception::log( 'Could not find order via charge ID: ' . $notification->data->object->id );
+			WC_Monilypay_Logger::log( 'Could not find order via charge ID: ' . $notification->data->object->id );
 			return;
 		}
 
@@ -437,7 +437,7 @@ class WC_Monilypay_Webhook_Handler extends WC_Monilypay_Payment_Gateway {
 		$order = WC_Monilypay_Helper::get_order_by_charge_id( $notification->data->object->id );
 
 		if ( ! $order ) {
-			WC_Monilypay_Exception::log( 'Could not find order via charge ID: ' . $notification->data->object->id );
+			WC_Monilypay_Logger::log( 'Could not find order via charge ID: ' . $notification->data->object->id );
 			return;
 		}
 
@@ -481,7 +481,7 @@ class WC_Monilypay_Webhook_Handler extends WC_Monilypay_Payment_Gateway {
 		$order = WC_Monilypay_Helper::get_order_by_charge_id( $notification->data->object->id );
 
 		if ( ! $order ) {
-			WC_Monilypay_Exception::log( 'Could not find order via charge ID: ' . $notification->data->object->id );
+			WC_Monilypay_Logger::log( 'Could not find order via charge ID: ' . $notification->data->object->id );
 			return;
 		}
 
@@ -516,14 +516,14 @@ class WC_Monilypay_Webhook_Handler extends WC_Monilypay_Payment_Gateway {
 			$order = WC_Monilypay_Helper::get_order_by_source_id( $notification->data->object->id );
 
 			if ( ! $order ) {
-				WC_Monilypay_Exception::log( 'Could not find order via charge/source ID: ' . $notification->data->object->id );
+				WC_Monilypay_Logger::log( 'Could not find order via charge/source ID: ' . $notification->data->object->id );
 				return;
 			}
 		}
 
 		// Don't proceed if payment method isn't Stripe.
 		if ( 'stripe' !== $order->get_payment_method() ) {
-			WC_Monilypay_Exception::log( 'Canceled webhook abort: Order was not processed by Stripe: ' . $order->get_id() );
+			WC_Monilypay_Logger::log( 'Canceled webhook abort: Order was not processed by Stripe: ' . $order->get_id() );
 			return;
 		}
 
@@ -548,7 +548,7 @@ class WC_Monilypay_Webhook_Handler extends WC_Monilypay_Payment_Gateway {
 		$order = WC_Monilypay_Helper::get_order_by_charge_id( $notification->data->object->id );
 
 		if ( ! $order ) {
-			WC_Monilypay_Exception::log( 'Could not find order via charge ID: ' . $notification->data->object->id );
+			WC_Monilypay_Logger::log( 'Could not find order via charge ID: ' . $notification->data->object->id );
 			return;
 		}
 
@@ -599,7 +599,7 @@ class WC_Monilypay_Webhook_Handler extends WC_Monilypay_Payment_Gateway {
 				);
 
 				if ( is_wp_error( $refund ) ) {
-					WC_Monilypay_Exception::log( $refund->get_error_message() );
+					WC_Monilypay_Logger::log( $refund->get_error_message() );
 				}
 
 				$order->update_meta_data( '_stripe_refund_id', $refund_object->id );
@@ -624,7 +624,7 @@ class WC_Monilypay_Webhook_Handler extends WC_Monilypay_Payment_Gateway {
 		$order         = WC_Monilypay_Helper::get_order_by_charge_id( $refund_object->charge );
 
 		if ( ! $order ) {
-			WC_Monilypay_Exception::log( 'Could not find order to update refund via charge ID: ' . $refund_object->charge );
+			WC_Monilypay_Logger::log( 'Could not find order to update refund via charge ID: ' . $refund_object->charge );
 			return;
 		}
 
@@ -693,14 +693,14 @@ class WC_Monilypay_Webhook_Handler extends WC_Monilypay_Payment_Gateway {
 			$order = WC_Monilypay_Helper::get_order_by_intent_id( $notification->data->object->payment_intent );
 
 			if ( ! $order ) {
-				WC_Monilypay_Exception::log( '[Review Opened] Could not find order via intent ID: ' . $notification->data->object->payment_intent );
+				WC_Monilypay_Logger::log( '[Review Opened] Could not find order via intent ID: ' . $notification->data->object->payment_intent );
 				return;
 			}
 		} else {
 			$order = WC_Monilypay_Helper::get_order_by_charge_id( $notification->data->object->charge );
 
 			if ( ! $order ) {
-				WC_Monilypay_Exception::log( '[Review Opened] Could not find order via charge ID: ' . $notification->data->object->charge );
+				WC_Monilypay_Logger::log( '[Review Opened] Could not find order via charge ID: ' . $notification->data->object->charge );
 				return;
 			}
 		}
@@ -733,14 +733,14 @@ class WC_Monilypay_Webhook_Handler extends WC_Monilypay_Payment_Gateway {
 			$order = WC_Monilypay_Helper::get_order_by_intent_id( $notification->data->object->payment_intent );
 
 			if ( ! $order ) {
-				WC_Monilypay_Exception::log( '[Review Closed] Could not find order via intent ID: ' . $notification->data->object->payment_intent );
+				WC_Monilypay_Logger::log( '[Review Closed] Could not find order via intent ID: ' . $notification->data->object->payment_intent );
 				return;
 			}
 		} else {
 			$order = WC_Monilypay_Helper::get_order_by_charge_id( $notification->data->object->charge );
 
 			if ( ! $order ) {
-				WC_Monilypay_Exception::log( '[Review Closed] Could not find order via charge ID: ' . $notification->data->object->charge );
+				WC_Monilypay_Logger::log( '[Review Closed] Could not find order via charge ID: ' . $notification->data->object->charge );
 				return;
 			}
 		}
@@ -837,7 +837,7 @@ class WC_Monilypay_Webhook_Handler extends WC_Monilypay_Payment_Gateway {
 		$order  = WC_Monilypay_Helper::get_order_by_intent_id( $intent->id );
 
 		if ( ! $order ) {
-			WC_Monilypay_Exception::log( 'Could not find order via intent ID: ' . $intent->id );
+			WC_Monilypay_Logger::log( 'Could not find order via intent ID: ' . $intent->id );
 			return;
 		}
 
@@ -869,7 +869,7 @@ class WC_Monilypay_Webhook_Handler extends WC_Monilypay_Payment_Gateway {
 			case 'payment_intent.amount_capturable_updated':
 				$charge = $this->get_latest_charge_from_intent( $intent );
 
-				WC_Monilypay_Exception::log( "Stripe PaymentIntent $intent->id succeeded for order $order_id" );
+				WC_Monilypay_Logger::log( "Stripe PaymentIntent $intent->id succeeded for order $order_id" );
 
 				// TODO: This is a stop-gap to fix a critical issue, see
 				// https://github.com/woocommerce/woocommerce-gateway-monilypay/issues/2536. It would
@@ -916,7 +916,7 @@ class WC_Monilypay_Webhook_Handler extends WC_Monilypay_Payment_Gateway {
 		$order  = WC_Monilypay_Helper::get_order_by_setup_intent_id( $intent->id );
 
 		if ( ! $order ) {
-			WC_Monilypay_Exception::log( 'Could not find order via setup intent ID: ' . $intent->id );
+			WC_Monilypay_Logger::log( 'Could not find order via setup intent ID: ' . $intent->id );
 			return;
 		}
 
@@ -935,7 +935,7 @@ class WC_Monilypay_Webhook_Handler extends WC_Monilypay_Payment_Gateway {
 
 		$order_id = $order->get_id();
 		if ( 'setup_intent.succeeded' === $notification->type ) {
-			WC_Monilypay_Exception::log( "Stripe SetupIntent $intent->id succeeded for order $order_id" );
+			WC_Monilypay_Logger::log( "Stripe SetupIntent $intent->id succeeded for order $order_id" );
 			if ( $this->has_pre_order( $order ) ) {
 				$this->mark_order_as_pre_ordered( $order );
 			} else {

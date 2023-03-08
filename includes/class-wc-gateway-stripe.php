@@ -430,7 +430,7 @@ class WC_Gateway_Monilypay extends WC_Monilypay_Payment_Gateway {
 			// This will throw exception if not valid.
 			$this->validate_minimum_order_amount( $order );
 
-			WC_Monilypay_Exception::log( "Info: Begin processing payment for order $order_id for the amount of {$order->get_total()}" );
+			WC_Monilypay_Logger::log( "Info: Begin processing payment for order $order_id for the amount of {$order->get_total()}" );
 
 			if ( $intent ) {
 				$intent = $this->update_existing_intent( $intent, $order, $prepared_source );
@@ -513,7 +513,7 @@ class WC_Gateway_Monilypay extends WC_Monilypay_Payment_Gateway {
 
 		} catch ( WC_Monilypay_Exception $e ) {
 			wc_add_notice( $e->getLocalizedMessage(), 'error' );
-			WC_Monilypay_Exception::log( 'Error: ' . $e->getMessage() );
+			WC_Monilypay_Logger::log( 'Error: ' . $e->getMessage() );
 
 			do_action( 'WC_Gateway_Monilypay_process_payment_error', $e, $order );
 

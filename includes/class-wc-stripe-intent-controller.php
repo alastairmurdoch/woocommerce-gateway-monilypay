@@ -66,7 +66,7 @@ class WC_Monilypay_Intent_Controller {
 	protected function get_upe_gateway() {
 		$gateway = $this->get_gateway();
 		if ( ! $gateway instanceof WC_Monilypay_UPE_Payment_Gateway ) {
-			WC_Monilypay_Exception::log( 'Error instantiating the UPE Payment Gateway, UPE is not enabled.' );
+			WC_Monilypay_Logger::log( 'Error instantiating the UPE Payment Gateway, UPE is not enabled.' );
 			throw new WC_Monilypay_Exception( __( "We're not able to process this payment.", 'woocommerce-gateway-monilypay' ) );
 		}
 		return $gateway;
@@ -168,7 +168,7 @@ class WC_Monilypay_Intent_Controller {
 	protected function handle_error( $e, $redirect_url ) {
 		// Log the exception before redirecting.
 		$message = sprintf( 'PaymentIntent verification exception: %s', $e->getLocalizedMessage() );
-		WC_Monilypay_Exception::log( $message );
+		WC_Monilypay_Logger::log( $message );
 
 		// `is_ajax` is only used for PI error reporting, a response is not expected.
 		if ( isset( $_GET['is_ajax'] ) ) {
@@ -237,8 +237,8 @@ class WC_Monilypay_Intent_Controller {
 
 			if ( ! empty( $setup_intent->error ) ) {
 				$error_response_message = print_r( $setup_intent, true );
-				WC_Monilypay_Exception::log( 'Failed create Setup Intent while saving a card.' );
-				WC_Monilypay_Exception::log( "Response: $error_response_message" );
+				WC_Monilypay_Logger::log( 'Failed create Setup Intent while saving a card.' );
+				WC_Monilypay_Logger::log( "Response: $error_response_message" );
 				throw new Exception( __( 'Your card could not be set up for future usage.', 'woocommerce-gateway-monilypay' ) );
 			}
 
@@ -295,7 +295,7 @@ class WC_Monilypay_Intent_Controller {
 
 			wp_send_json_success( $this->create_payment_intent( $order_id ), 200 );
 		} catch ( Exception $e ) {
-			WC_Monilypay_Exception::log( 'Create payment intent error: ' . $e->getMessage() );
+			WC_Monilypay_Logger::log( 'Create payment intent error: ' . $e->getMessage() );
 			// Send back error so it can be displayed to the customer.
 			wp_send_json_error(
 				[
@@ -612,7 +612,7 @@ class WC_Monilypay_Intent_Controller {
 			);
 		} catch ( WC_Monilypay_Exception $e ) {
 			wc_add_notice( $e->getLocalizedMessage(), 'error' );
-			WC_Monilypay_Exception::log( 'Error: ' . $e->getMessage() );
+			WC_Monilypay_Logger::log( 'Error: ' . $e->getMessage() );
 
 			/* translators: error message */
 			if ( $order ) {
@@ -657,7 +657,7 @@ class WC_Monilypay_Intent_Controller {
 				$error = $intent->last_payment_error;
 
 				if ( ! empty( $error ) ) {
-					WC_Monilypay_Exception::log( 'Error when processing payment: ' . $error->message );
+					WC_Monilypay_Logger::log( 'Error when processing payment: ' . $error->message );
 					throw new WC_Monilypay_Exception( __( "We're not able to process this payment. Please try again later.", 'woocommerce-gateway-monilypay' ) );
 				}
 
@@ -675,7 +675,7 @@ class WC_Monilypay_Intent_Controller {
 		} catch ( WC_Monilypay_Exception $e ) {
 			// We are expecting an exception to be thrown here.
 			wc_add_notice( $e->getLocalizedMessage(), 'error' );
-			WC_Monilypay_Exception::log( 'Error: ' . $e->getMessage() );
+			WC_Monilypay_Logger::log( 'Error: ' . $e->getMessage() );
 
 			do_action( 'WC_Gateway_Monilypay_process_payment_error', $e, $order );
 

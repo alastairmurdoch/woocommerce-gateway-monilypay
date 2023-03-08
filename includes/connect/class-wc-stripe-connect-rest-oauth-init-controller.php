@@ -51,7 +51,7 @@ if ( ! class_exists( 'WC_Stripe_Connect_REST_Oauth_Init_Controller' ) ) {
 
 			if ( is_wp_error( $response ) ) {
 
-				WC_Monilypay_Exception::log( $response, __CLASS__ );
+				WC_Monilypay_Logger::log( $response, __CLASS__ );
 
 				return new WP_Error(
 					$response->get_error_code(),

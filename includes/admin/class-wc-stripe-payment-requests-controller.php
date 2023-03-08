@@ -28,7 +28,7 @@ class WC_Monilypay_Payment_Requests_Controller {
 			];
 		wp_register_script(
 			'wc-stripe-payment-request-settings',
-			plugins_url( 'build/payment_requests_settings.js', WC_STRIPE_MAIN_FILE ),
+			plugins_url( 'build/payment_requests_settings.js', WC_MONILYPAY_MAIN_FILE ),
 			$asset_metadata['dependencies'],
 			$asset_metadata['version'],
 			true
@@ -41,7 +41,7 @@ class WC_Monilypay_Payment_Requests_Controller {
 
 		wp_register_style(
 			'wc-stripe-payment-request-settings',
-			plugins_url( 'build/payment_requests_settings.css', WC_STRIPE_MAIN_FILE ),
+			plugins_url( 'build/payment_requests_settings.css', WC_MONILYPAY_MAIN_FILE ),
 			[ 'wc-components' ],
 			$asset_metadata['version']
 		);

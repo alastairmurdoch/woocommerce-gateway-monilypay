@@ -175,7 +175,7 @@ class WC_Monilypay_API {
 	 * @throws WC_Monilypay_Exception
 	 */
 	public static function request( $request, $api = 'charges', $method = 'POST', $with_headers = false ) {
-		WC_Monilypay_Exception::log( "{$api} request: " . print_r( $request, true ) );
+		WC_Monilypay_Logger::log( "{$api} request: " . print_r( $request, true ) );
 
 		$headers         = self::get_headers();
 		$idempotency_key = '';
@@ -199,7 +199,7 @@ class WC_Monilypay_API {
 		);
 
 		if ( is_wp_error( $response ) || empty( $response['body'] ) ) {
-			WC_Monilypay_Exception::log(
+			WC_Monilypay_Logger::log(
 				'Error Response: ' . print_r( $response, true ) . PHP_EOL . PHP_EOL . 'Failed request: ' . print_r(
 					[
 						'api'             => $api,
@@ -231,7 +231,7 @@ class WC_Monilypay_API {
 	 * @param string $api
 	 */
 	public static function retrieve( $api ) {
-		WC_Monilypay_Exception::log( "{$api}" );
+		WC_Monilypay_Logger::log( "{$api}" );
 
 		$response = wp_safe_remote_get(
 			self::ENDPOINT . $api,
@@ -243,7 +243,7 @@ class WC_Monilypay_API {
 		);
 
 		if ( is_wp_error( $response ) || empty( $response['body'] ) ) {
-			WC_Monilypay_Exception::log( 'Error Response: ' . print_r( $response, true ) );
+			WC_Monilypay_Logger::log( 'Error Response: ' . print_r( $response, true ) );
 			return new WP_Error( 'stripe_error', __( 'There was a problem connecting to the Stripe API endpoint.', 'woocommerce-gateway-monilypay' ) );
 		}
 
@@ -312,7 +312,7 @@ class WC_Monilypay_API {
 			set_transient( 'wc_stripe_level3_not_allowed', true, 3 * MONTH_IN_SECONDS );
 		} elseif ( $is_level_3data_incorrect ) {
 			// Log the issue so we could debug it.
-			WC_Monilypay_Exception::log(
+			WC_Monilypay_Logger::log(
 				'Level3 data sum incorrect: ' . PHP_EOL
 				. print_r( $result->error->message, true ) . PHP_EOL
 				. print_r( 'Order line items: ', true ) . PHP_EOL

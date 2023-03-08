@@ -279,7 +279,7 @@ class WC_Monilypay_UPE_Payment_Gateway extends WC_Gateway_Monilypay {
 		wp_enqueue_script( 'wc-stripe-upe-classic' );
 		wp_enqueue_style( 'wc-stripe-upe-classic' );
 
-		wp_register_style( 'stripelink_styles', plugins_url( 'assets/css/stripe-link.css', WC_STRIPE_MAIN_FILE ), [], wc_monilypay_stripe_version );
+		wp_register_style( 'stripelink_styles', plugins_url( 'assets/css/stripe-link.css', WC_MONILYPAY_MAIN_FILE ), [], wc_monilypay_stripe_version );
 		wp_enqueue_style( 'stripelink_styles' );
 	}
 
@@ -485,7 +485,7 @@ class WC_Monilypay_UPE_Payment_Gateway extends WC_Gateway_Monilypay {
 			}
 		} catch ( Exception $e ) {
 			// Output the error message.
-			WC_Monilypay_Exception::log( 'Error: ' . $e->getMessage() );
+			WC_Monilypay_Logger::log( 'Error: ' . $e->getMessage() );
 			?>
 			<div>
 				<?php
@@ -649,7 +649,7 @@ class WC_Monilypay_UPE_Payment_Gateway extends WC_Gateway_Monilypay {
 			$this->maybe_disallow_prepaid_card( $payment_method );
 			$this->save_payment_method_to_order( $order, $prepared_payment_method );
 
-			WC_Monilypay_Exception::log( "Info: Begin processing payment with saved payment method for order $order_id for the amount of {$order->get_total()}" );
+			WC_Monilypay_Logger::log( "Info: Begin processing payment with saved payment method for order $order_id for the amount of {$order->get_total()}" );
 
 			// If we are retrying request, maybe intent has been saved to order.
 			$intent = $this->get_intent_from_order( $order );
@@ -765,7 +765,7 @@ class WC_Monilypay_UPE_Payment_Gateway extends WC_Gateway_Monilypay {
 
 		} catch ( WC_Monilypay_Exception $e ) {
 			wc_add_notice( $e->getLocalizedMessage(), 'error' );
-			WC_Monilypay_Exception::log( 'Error: ' . $e->getMessage() );
+			WC_Monilypay_Logger::log( 'Error: ' . $e->getMessage() );
 
 			do_action( 'WC_Gateway_Monilypay_process_payment_error', $e, $order );
 
@@ -816,7 +816,7 @@ class WC_Monilypay_UPE_Payment_Gateway extends WC_Gateway_Monilypay {
 
 						do_action( 'woocommerce_stripe_add_payment_method', $user_id, $payment_method_object );
 					} catch ( Exception $e ) {
-						WC_Monilypay_Exception::log( 'Error: ' . $e->getMessage() );
+						WC_Monilypay_Logger::log( 'Error: ' . $e->getMessage() );
 					}
 				} else {
 					wc_add_notice( __( 'Failed to add payment method.', 'woocommerce-gateway-monilypay' ), 'error', [ 'icon' => 'error' ] );
@@ -882,12 +882,12 @@ class WC_Monilypay_UPE_Payment_Gateway extends WC_Gateway_Monilypay {
 			return;
 		}
 
-		WC_Monilypay_Exception::log( "Begin processing UPE redirect payment for order $order_id for the amount of {$order->get_total()}" );
+		WC_Monilypay_Logger::log( "Begin processing UPE redirect payment for order $order_id for the amount of {$order->get_total()}" );
 
 		try {
 			$this->process_order_for_confirmed_intent( $order, $intent_id, $save_payment_method );
 		} catch ( Exception $e ) {
-			WC_Monilypay_Exception::log( 'Error: ' . $e->getMessage() );
+			WC_Monilypay_Logger::log( 'Error: ' . $e->getMessage() );
 
 			/* translators: localized exception message */
 			$order->update_status( 'failed', sprintf( __( 'UPE payment failed: %s', 'woocommerce-gateway-monilypay' ), $e->getMessage() ) );
@@ -918,7 +918,7 @@ class WC_Monilypay_UPE_Payment_Gateway extends WC_Gateway_Monilypay {
 		}
 
 		if ( ! empty( $error ) ) {
-			WC_Monilypay_Exception::log( 'Error when processing payment: ' . $error->message );
+			WC_Monilypay_Logger::log( 'Error when processing payment: ' . $error->message );
 			throw new WC_Monilypay_Exception( __( "We're not able to process this payment. Please try again later.", 'woocommerce-gateway-monilypay' ) );
 		}
 
@@ -1350,7 +1350,7 @@ class WC_Monilypay_UPE_Payment_Gateway extends WC_Gateway_Monilypay {
 			return $payment_method->create_payment_token_for_user( $user->ID, $payment_method_object );
 		} catch ( Exception $e ) {
 			wc_add_notice( $e->getMessage(), 'error', [ 'icon' => 'error' ] );
-			WC_Monilypay_Exception::log( 'Error when adding payment method: ' . $e->getMessage() );
+			WC_Monilypay_Logger::log( 'Error when adding payment method: ' . $e->getMessage() );
 			return [
 				'result' => 'error',
 			];

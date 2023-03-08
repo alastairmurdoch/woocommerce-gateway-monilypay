@@ -170,13 +170,13 @@ class WC_Monilypay_Apple_Pay_Registration {
 
 		if ( isset( $error_message ) ) {
 			$url = get_site_url() . '/' . self::DOMAIN_ASSOCIATION_FILE_DIR . '/' . self::DOMAIN_ASSOCIATION_FILE_NAME;
-			WC_Monilypay_Exception::log(
+			WC_Monilypay_Logger::log(
 				'Error: ' . $error_message . ' ' .
 				/* translators: expected domain association file URL */
 				sprintf( __( 'To enable Apple Pay, domain association file must be hosted at %s.', 'woocommerce-gateway-monilypay' ), $url )
 			);
 		} else {
-			WC_Monilypay_Exception::log( __( 'Domain association file updated.', 'woocommerce-gateway-monilypay' ) );
+			WC_Monilypay_Logger::log( __( 'Domain association file updated.', 'woocommerce-gateway-monilypay' ) );
 		}
 	}
 
@@ -288,7 +288,7 @@ class WC_Monilypay_Apple_Pay_Registration {
 
 			update_option( 'woocommerce_monilypay_settings', $this->stripe_settings );
 
-			WC_Monilypay_Exception::log( 'Your domain has been verified with Apple Pay!' );
+			WC_Monilypay_Logger::log( 'Your domain has been verified with Apple Pay!' );
 
 			return true;
 
@@ -299,7 +299,7 @@ class WC_Monilypay_Apple_Pay_Registration {
 
 			update_option( 'woocommerce_monilypay_settings', $this->stripe_settings );
 
-			WC_Monilypay_Exception::log( 'Error: ' . $e->getMessage() );
+			WC_Monilypay_Logger::log( 'Error: ' . $e->getMessage() );
 
 			return false;
 		}

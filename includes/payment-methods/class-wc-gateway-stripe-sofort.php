@@ -226,7 +226,7 @@ class WC_Gateway_Monilypay_Sofort extends WC_Monilypay_Payment_Gateway {
 			$post_data['statement_descriptor'] = WC_Monilypay_Helper::clean_statement_descriptor( $this->statement_descriptor );
 		}
 
-		WC_Monilypay_Exception::log( 'Info: Begin creating Sofort source' );
+		WC_Monilypay_Logger::log( 'Info: Begin creating Sofort source' );
 
 		return WC_Monilypay_API::request( apply_filters( 'wc_stripe_sofort_source', $post_data, $order ), 'sources' );
 	}
@@ -277,7 +277,7 @@ class WC_Gateway_Monilypay_Sofort extends WC_Monilypay_Payment_Gateway {
 			$order->update_meta_data( '_stripe_source_id', $response->id );
 			$order->save();
 
-			WC_Monilypay_Exception::log( 'Info: Redirecting to Sofort...' );
+			WC_Monilypay_Logger::log( 'Info: Redirecting to Sofort...' );
 
 			return [
 				'result'   => 'success',
@@ -285,7 +285,7 @@ class WC_Gateway_Monilypay_Sofort extends WC_Monilypay_Payment_Gateway {
 			];
 		} catch ( WC_Monilypay_Exception $e ) {
 			wc_add_notice( $e->getLocalizedMessage(), 'error' );
-			WC_Monilypay_Exception::log( 'Error: ' . $e->getMessage() );
+			WC_Monilypay_Logger::log( 'Error: ' . $e->getMessage() );
 
 			do_action( 'WC_Gateway_Monilypay_process_payment_error', $e, $order );
 

@@ -507,7 +507,7 @@ abstract class WC_Monilypay_Payment_Gateway extends WC_Payment_Gateway_CC {
 	 * Store extra meta data for an order from a Stripe Response.
 	 */
 	public function process_response( $response, $order ) {
-		WC_Monilypay_Exception::log( 'Processing response: ' . print_r( $response, true ) );
+		WC_Monilypay_Logger::log( 'Processing response: ' . print_r( $response, true ) );
 
 		$order_id = $order->get_id();
 		$captured = ( isset( $response->captured ) && $response->captured ) ? 'yes' : 'no';
@@ -1004,7 +1004,7 @@ abstract class WC_Monilypay_Payment_Gateway extends WC_Payment_Gateway_CC {
 				}
 			}
 		} else {
-			WC_Monilypay_Exception::log( 'Unable to update fees/net meta for order: ' . $order->get_id() );
+			WC_Monilypay_Logger::log( 'Unable to update fees/net meta for order: ' . $order->get_id() );
 		}
 	}
 
@@ -1059,7 +1059,7 @@ abstract class WC_Monilypay_Payment_Gateway extends WC_Payment_Gateway_CC {
 		}
 
 		$request['charge'] = $charge_id;
-		WC_Monilypay_Exception::log( "Info: Beginning refund for order {$charge_id} for the amount of {$amount}" );
+		WC_Monilypay_Logger::log( "Info: Beginning refund for order {$charge_id} for the amount of {$amount}" );
 
 		$request = apply_filters( 'wc_stripe_refund_request', $request, $order );
 
@@ -1091,7 +1091,7 @@ abstract class WC_Monilypay_Payment_Gateway extends WC_Payment_Gateway_CC {
 		}
 
 		if ( ! empty( $response->error ) ) {
-			WC_Monilypay_Exception::log( 'Error: ' . $response->error->message );
+			WC_Monilypay_Logger::log( 'Error: ' . $response->error->message );
 
 			return new WP_Error(
 				'stripe_error',
@@ -1133,7 +1133,7 @@ abstract class WC_Monilypay_Payment_Gateway extends WC_Payment_Gateway_CC {
 			$refund_message = sprintf( __( 'Refunded %1$s - Refund ID: %2$s - Reason: %3$s', 'woocommerce-gateway-monilypay' ), $formatted_amount, $response->id, $reason );
 
 			$order->add_order_note( $refund_message );
-			WC_Monilypay_Exception::log( 'Success: ' . html_entity_decode( wp_strip_all_tags( $refund_message ) ) );
+			WC_Monilypay_Logger::log( 'Success: ' . html_entity_decode( wp_strip_all_tags( $refund_message ) ) );
 
 			return true;
 		}
@@ -1179,7 +1179,7 @@ abstract class WC_Monilypay_Payment_Gateway extends WC_Payment_Gateway_CC {
 
 		if ( $error ) {
 			wc_add_notice( $error_msg, 'error' );
-			WC_Monilypay_Exception::log( 'Add payment method Error: ' . $error_msg );
+			WC_Monilypay_Logger::log( 'Add payment method Error: ' . $error_msg );
 			return;
 		}
 
@@ -1386,7 +1386,7 @@ abstract class WC_Monilypay_Payment_Gateway extends WC_Payment_Gateway_CC {
 		}
 
 		$order_id = $order->get_id();
-		WC_Monilypay_Exception::log( "Stripe PaymentIntent $intent->id initiated for order $order_id" );
+		WC_Monilypay_Logger::log( "Stripe PaymentIntent $intent->id initiated for order $order_id" );
 
 		// Save the intent ID to the order.
 		$this->save_intent_to_order( $order, $intent );
@@ -1483,9 +1483,9 @@ abstract class WC_Monilypay_Payment_Gateway extends WC_Payment_Gateway_CC {
 		// Save a note about the status of the intent.
 		$order_id = $order->get_id();
 		if ( 'succeeded' === $confirmed_intent->status ) {
-			WC_Monilypay_Exception::log( "Stripe PaymentIntent $intent->id succeeded for order $order_id" );
+			WC_Monilypay_Logger::log( "Stripe PaymentIntent $intent->id succeeded for order $order_id" );
 		} elseif ( 'requires_action' === $confirmed_intent->status ) {
-			WC_Monilypay_Exception::log( "Stripe PaymentIntent $intent->id requires authentication for order $order_id" );
+			WC_Monilypay_Logger::log( "Stripe PaymentIntent $intent->id requires authentication for order $order_id" );
 		}
 
 		return $confirmed_intent;
@@ -1551,8 +1551,8 @@ abstract class WC_Monilypay_Payment_Gateway extends WC_Payment_Gateway_CC {
 
 		if ( $response && isset( $response->{ 'error' } ) ) {
 			$error_response_message = print_r( $response, true );
-			WC_Monilypay_Exception::log( "Failed to get Stripe intent $intent_type/$intent_id." );
-			WC_Monilypay_Exception::log( "Response: $error_response_message" );
+			WC_Monilypay_Logger::log( "Failed to get Stripe intent $intent_type/$intent_id." );
+			WC_Monilypay_Logger::log( "Response: $error_response_message" );
 			return false;
 		}
 
@@ -1631,7 +1631,7 @@ abstract class WC_Monilypay_Payment_Gateway extends WC_Payment_Gateway_CC {
 		);
 
 		if ( is_wp_error( $setup_intent ) ) {
-			WC_Monilypay_Exception::log( "Unable to create SetupIntent for Order #$order_id: " . print_r( $setup_intent, true ) );
+			WC_Monilypay_Logger::log( "Unable to create SetupIntent for Order #$order_id: " . print_r( $setup_intent, true ) );
 		} elseif ( 'requires_action' === $setup_intent->status ) {
 			$order->update_meta_data( '_stripe_setup_intent', $setup_intent->id );
 			$order->save();
@@ -1719,7 +1719,7 @@ abstract class WC_Monilypay_Payment_Gateway extends WC_Payment_Gateway_CC {
 			: $intent
 		);
 		$order_id       = $order->get_id();
-		WC_Monilypay_Exception::log( "Stripe PaymentIntent $intent_id initiated for order $order_id" );
+		WC_Monilypay_Logger::log( "Stripe PaymentIntent $intent_id initiated for order $order_id" );
 
 		// Save the intent ID to the order.
 		$this->save_intent_to_order( $order, $payment_intent );
@@ -1809,13 +1809,13 @@ abstract class WC_Monilypay_Payment_Gateway extends WC_Payment_Gateway_CC {
 
 		// If keys are not set bail.
 		if ( ! $this->are_keys_set() ) {
-			WC_Monilypay_Exception::log( 'Keys are not set correctly.' );
+			WC_Monilypay_Logger::log( 'Keys are not set correctly.' );
 			return;
 		}
 
 		// If no SSL bail.
 		if ( ! $this->testmode && ! is_ssl() ) {
-			WC_Monilypay_Exception::log( 'Stripe live mode requires SSL.' );
+			WC_Monilypay_Logger::log( 'Stripe live mode requires SSL.' );
 			return;
 		}
 

@@ -77,7 +77,7 @@ class WC_Monilypay_Order_Handler extends WC_Monilypay_Payment_Gateway {
 			// This will throw exception if not valid.
 			$this->validate_minimum_order_amount( $order );
 
-			WC_Monilypay_Exception::log( "Info: (Redirect) Begin processing payment for order $order_id for the amount of {$order->get_total()}" );
+			WC_Monilypay_Logger::log( "Info: (Redirect) Begin processing payment for order $order_id for the amount of {$order->get_total()}" );
 
 			/**
 			 * First check if the source is chargeable at this time. If not,
@@ -177,7 +177,7 @@ class WC_Monilypay_Order_Handler extends WC_Monilypay_Payment_Gateway {
 			$this->process_response( $response, $order );
 
 		} catch ( WC_Monilypay_Exception $e ) {
-			WC_Monilypay_Exception::log( 'Error: ' . $e->getMessage() );
+			WC_Monilypay_Logger::log( 'Error: ' . $e->getMessage() );
 
 			do_action( 'WC_Gateway_Monilypay_process_redirect_payment_error', $e, $order );
 

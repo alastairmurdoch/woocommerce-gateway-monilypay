@@ -29,7 +29,7 @@ class WC_Monilypay_Email_Failed_Preorder_Authentication extends WC_Monilypay_Ema
 
 		$this->template_html  = 'emails/failed-preorder-authentication.php';
 		$this->template_plain = 'emails/plain/failed-preorder-authentication.php';
-		$this->template_base  = plugin_dir_path( WC_STRIPE_MAIN_FILE ) . 'templates/';
+		$this->template_base  = plugin_dir_path( WC_MONILYPAY_MAIN_FILE ) . 'templates/';
 
 		// Use the "authentication required" hook to add the correct, later hook.
 		add_action( 'WC_Gateway_Monilypay_process_payment_authentication_required', [ $this, 'trigger' ] );

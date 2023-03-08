@@ -201,7 +201,7 @@ trait WC_Monilypay_Pre_Orders_Trait {
 			return $response;
 		} catch ( WC_Monilypay_Exception $e ) {
 			wc_add_notice( $e->getLocalizedMessage(), 'error' );
-			WC_Monilypay_Exception::log( 'Pre Orders Error: ' . $e->getMessage() );
+			WC_Monilypay_Logger::log( 'Pre Orders Error: ' . $e->getMessage() );
 
 			return [
 				'result'   => 'success',

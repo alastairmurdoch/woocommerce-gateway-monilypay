@@ -315,7 +315,7 @@ class WC_Gateway_Monilypay_Sepa extends WC_Monilypay_Payment_Gateway {
 				// This will throw exception if not valid.
 				$this->validate_minimum_order_amount( $order );
 
-				WC_Monilypay_Exception::log( "Info: Begin processing payment for order $order_id for the amount of {$order->get_total()}" );
+				WC_Monilypay_Logger::log( "Info: Begin processing payment for order $order_id for the amount of {$order->get_total()}" );
 
 				// Make the request.
 				$response = WC_Monilypay_API::request( $this->generate_payment_request( $order, $prepared_source ) );
@@ -390,7 +390,7 @@ class WC_Gateway_Monilypay_Sepa extends WC_Monilypay_Payment_Gateway {
 
 		} catch ( WC_Monilypay_Exception $e ) {
 			wc_add_notice( $e->getLocalizedMessage(), 'error' );
-			WC_Monilypay_Exception::log( 'Error: ' . $e->getMessage() );
+			WC_Monilypay_Logger::log( 'Error: ' . $e->getMessage() );
 
 			do_action( 'WC_Gateway_Monilypay_process_payment_error', $e, $order );
 

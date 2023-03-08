@@ -38,7 +38,7 @@ class WC_Monilypay_Payment_Gateways_Controller {
 
 		wp_register_script(
 			'woocommerce_stripe_payment_gateways_page',
-			plugins_url( 'build/payment_gateways.js', WC_STRIPE_MAIN_FILE ),
+			plugins_url( 'build/payment_gateways.js', WC_MONILYPAY_MAIN_FILE ),
 			$payment_gateways_script_asset['dependencies'],
 			$payment_gateways_script_asset['version'],
 			true
@@ -49,7 +49,7 @@ class WC_Monilypay_Payment_Gateways_Controller {
 		);
 		wp_register_style(
 			'woocommerce_stripe_payment_gateways_page',
-			plugins_url( 'build/payment_gateways.css', WC_STRIPE_MAIN_FILE ),
+			plugins_url( 'build/payment_gateways.css', WC_MONILYPAY_MAIN_FILE ),
 			[ 'wc-components' ],
 			$payment_gateways_script_asset['version']
 		);

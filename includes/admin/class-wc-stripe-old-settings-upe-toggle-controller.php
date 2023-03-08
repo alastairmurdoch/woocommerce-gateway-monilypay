@@ -56,7 +56,7 @@ class WC_Monilypay_Old_Settings_UPE_Toggle_Controller {
 
 		wp_register_script(
 			'woocommerce_stripe_old_settings_upe_toggle',
-			plugins_url( 'build/old_settings_upe_toggle.js', WC_STRIPE_MAIN_FILE ),
+			plugins_url( 'build/old_settings_upe_toggle.js', WC_MONILYPAY_MAIN_FILE ),
 			$script_asset['dependencies'],
 			$script_asset['version'],
 			true

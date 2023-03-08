@@ -218,7 +218,7 @@ class WC_Gateway_Monilypay_P24 extends WC_Monilypay_Payment_Gateway {
 		$post_data['owner']    = $this->get_owner_details( $order );
 		$post_data['redirect'] = [ 'return_url' => $return_url ];
 
-		WC_Monilypay_Exception::log( 'Info: Begin creating P24 source' );
+		WC_Monilypay_Logger::log( 'Info: Begin creating P24 source' );
 
 		return WC_Monilypay_API::request( apply_filters( 'wc_stripe_p24_source', $post_data, $order ), 'sources' );
 	}
@@ -261,7 +261,7 @@ class WC_Gateway_Monilypay_P24 extends WC_Monilypay_Payment_Gateway {
 			$order->update_meta_data( '_stripe_source_id', $response->id );
 			$order->save();
 
-			WC_Monilypay_Exception::log( 'Info: Redirecting to P24...' );
+			WC_Monilypay_Logger::log( 'Info: Redirecting to P24...' );
 
 			return [
 				'result'   => 'success',
@@ -269,7 +269,7 @@ class WC_Gateway_Monilypay_P24 extends WC_Monilypay_Payment_Gateway {
 			];
 		} catch ( WC_Monilypay_Exception $e ) {
 			wc_add_notice( $e->getLocalizedMessage(), 'error' );
-			WC_Monilypay_Exception::log( 'Error: ' . $e->getMessage() );
+			WC_Monilypay_Logger::log( 'Error: ' . $e->getMessage() );
 
 			do_action( 'WC_Gateway_Monilypay_process_payment_error', $e, $order );
 

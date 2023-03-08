@@ -22,7 +22,7 @@ class WC_Monilypay_Email_Failed_Renewal_Authentication extends WC_Monilypay_Emai
 
 		$this->template_html  = 'emails/failed-renewal-authentication.php';
 		$this->template_plain = 'emails/plain/failed-renewal-authentication.php';
-		$this->template_base  = plugin_dir_path( WC_STRIPE_MAIN_FILE ) . 'templates/';
+		$this->template_base  = plugin_dir_path( WC_MONILYPAY_MAIN_FILE ) . 'templates/';
 
 		// Triggers the email at the correct hook.
 		add_action( 'WC_Gateway_Monilypay_process_payment_authentication_required', [ $this, 'trigger' ] );
