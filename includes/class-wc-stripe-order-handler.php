@@ -370,7 +370,7 @@ class WC_Monilypay_Order_Handler extends WC_Monilypay_Payment_Gateway {
 
 		$properties['admin_email']                        = get_option( 'admin_email' );
 		$properties['is_live']                            = $is_live;
-		$properties['woocommerce_gateway_stripe_version'] = wc_monilypay_stripe_version;
+		$properties['woocommerce_gateway_monilypay_version'] = wc_monilypay_stripe_version;
 		$properties['woocommerce_default_country']        = get_option( 'woocommerce_default_country' );
 
 		return $properties;

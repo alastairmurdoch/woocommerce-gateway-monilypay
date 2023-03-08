@@ -98,7 +98,7 @@ class WC_Monilypay_Settings_Controller {
 			$script_asset['version']
 		);
 
-		$oauth_url = woocommerce_gateway_stripe()->connect->get_oauth_url();
+		$oauth_url = woocommerce_gateway_monilypay()->connect->get_oauth_url();
 		if ( is_wp_error( $oauth_url ) ) {
 			$oauth_url = '';
 		}

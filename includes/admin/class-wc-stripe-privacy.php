@@ -35,7 +35,7 @@ class WC_Monilypay_Privacy extends WC_Abstract_Privacy {
 			[
 				'title'       => __( 'Retain Stripe Data', 'woocommerce-gateway-monilypay' ),
 				'desc_tip'    => __( 'Retains any Stripe data such as Stripe customer ID, source ID.', 'woocommerce-gateway-monilypay' ),
-				'id'          => 'woocommerce_gateway_stripe_retention',
+				'id'          => 'woocommerce_gateway_monilypay_retention',
 				'type'        => 'relative_date_selector',
 				'placeholder' => __( 'N/A', 'woocommerce-gateway-monilypay' ),
 				'default'     => '',
@@ -402,7 +402,7 @@ class WC_Monilypay_Privacy extends WC_Abstract_Privacy {
 	 * Checks if create date is passed retention duration.
 	 */
 	public function is_retention_expired( $created_date ) {
-		$retention  = wc_parse_relative_date_option( get_option( 'woocommerce_gateway_stripe_retention' ) );
+		$retention  = wc_parse_relative_date_option( get_option( 'woocommerce_gateway_monilypay_retention' ) );
 		$is_expired = false;
 		$time_span  = time() - strtotime( $created_date );
 		if ( empty( $retention['number'] ) || empty( $created_date ) ) {

@@ -90,7 +90,7 @@ class WC_Monilypay_UPE_Availability_Note {
 			return;
 		}
 
-		if ( ! woocommerce_gateway_stripe()->connect->is_connected() ) {
+		if ( ! woocommerce_gateway_monilypay()->connect->is_connected() ) {
 			return;
 		}
 

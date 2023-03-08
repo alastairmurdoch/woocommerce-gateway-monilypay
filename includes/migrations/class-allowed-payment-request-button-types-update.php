@@ -1,20 +1,20 @@
 <?php
 /**
- * Class Allowed_Payment_Request_Button_Types_Update_Monilypay
+ * Class Allowed_Payment_Request_Button_Types_Update
  */
 
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Class Allowed_Payment_Request_Button_Types_Update_Monilypay
+ * Class Allowed_Payment_Request_Button_Types_Update
  *
  * Remaps deprecated payment request button types to fallback values.
  *
  * @since 5.6.0
  */
-class Allowed_Payment_Request_Button_Types_Update_Monilypay {
+class Allowed_Payment_Request_Button_Types_Update {
 	/**
-	 * Allowed_Payment_Request_Button_Types_Update_Monilypay constructor.
+	 * Allowed_Payment_Request_Button_Types_Update constructor.
 	 */
 	public function __construct() {
 		add_action( 'woocommerce_stripe_updated', [ $this, 'maybe_migrate' ] );
@@ -73,9 +73,9 @@ class Allowed_Payment_Request_Button_Types_Update_Monilypay {
 	/**
 	 * Returns the main Stripe payment gateways.
 	 *
-	 * @return WC_Monilypay_Payment_Gateway
+	 * @return WC_Stripe_Payment_Gateway
 	 */
 	public function get_gateway() {
-		return woocommerce_gateway_stripe()->get_main_stripe_gateway();
+		return woocommerce_gateway_monilypay()->get_main_stripe_gateway();
 	}
 }

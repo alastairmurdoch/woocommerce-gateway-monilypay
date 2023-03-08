@@ -206,7 +206,7 @@ function woocommerce_gateway_monilypay() {
 				require_once dirname( __FILE__ ) . '/includes/admin/class-wc-stripe-upe-compatibility-controller.php';
 				require_once dirname( __FILE__ ) . '/includes/migrations/class-allowed-payment-request-button-types-update.php';
 				require_once dirname( __FILE__ ) . '/includes/class-wc-stripe-account.php';
-				new Allowed_Payment_Request_Button_Types_Update_Monilypay();
+				//new Allowed_Payment_Request_Button_Types_Update_Monilypay();
 
 				$this->api                           = new WC_Stripe_Connect_API();
 				$this->connect                       = new WC_Stripe_Connect( $this->api );
@@ -362,8 +362,8 @@ function woocommerce_gateway_monilypay() {
 			public function plugin_row_meta( $links, $file ) {
 				if ( plugin_basename( __FILE__ ) === $file ) {
 					$row_meta = [
-						'docs'    => '<a href="' . esc_url( apply_filters( 'woocommerce_gateway_stripe_docs_url', 'https://woocommerce.com/document/stripe/' ) ) . '" title="' . esc_attr( __( 'View Documentation', 'woocommerce-gateway-monilypay' ) ) . '">' . __( 'Docs', 'woocommerce-gateway-monilypay' ) . '</a>',
-						'support' => '<a href="' . esc_url( apply_filters( 'woocommerce_gateway_stripe_support_url', 'https://woocommerce.com/my-account/create-a-ticket?select=18627' ) ) . '" title="' . esc_attr( __( 'Open a support request at WooCommerce.com', 'woocommerce-gateway-monilypay' ) ) . '">' . __( 'Support', 'woocommerce-gateway-monilypay' ) . '</a>',
+						'docs'    => '<a href="' . esc_url( apply_filters( 'woocommerce_gateway_monilypay_docs_url', 'https://woocommerce.com/document/stripe/' ) ) . '" title="' . esc_attr( __( 'View Documentation', 'woocommerce-gateway-monilypay' ) ) . '">' . __( 'Docs', 'woocommerce-gateway-monilypay' ) . '</a>',
+						'support' => '<a href="' . esc_url( apply_filters( 'woocommerce_gateway_monilypay_support_url', 'https://woocommerce.com/my-account/create-a-ticket?select=18627' ) ) . '" title="' . esc_attr( __( 'Open a support request at WooCommerce.com', 'woocommerce-gateway-monilypay' ) ) . '">' . __( 'Support', 'woocommerce-gateway-monilypay' ) . '</a>',
 					];
 					return array_merge( $links, $row_meta );
 				}

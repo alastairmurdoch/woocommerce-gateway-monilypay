@@ -41,7 +41,7 @@ class WC_Monilypay_UPE_Payment_Method_Link extends WC_Monilypay_UPE_Payment_Meth
 
 		return in_array(
 			self::STRIPE_ID,
-			woocommerce_gateway_stripe()->get_main_stripe_gateway()->get_upe_enabled_payment_method_ids(),
+			woocommerce_gateway_monilypay()->get_main_stripe_gateway()->get_upe_enabled_payment_method_ids(),
 			true
 		);
 	}
