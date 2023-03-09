@@ -18,11 +18,11 @@ import { errorTypes, errorCodes } from './constants';
 const getStripeServerData = () => {
 	// Classic checkout.
 	// eslint-disable-next-line camelcase
-	if ( ! wc_stripe_upe_params ) {
+	if ( ! wc_monilypay_upe_params ) {
 		throw new Error( 'Stripe initialization data is not available' );
 	}
 	// eslint-disable-next-line camelcase
-	return wc_stripe_upe_params;
+	return wc_monilypay_upe_params;
 };
 
 const isNonFriendlyError = ( type ) =>

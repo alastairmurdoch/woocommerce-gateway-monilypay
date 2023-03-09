@@ -156,7 +156,7 @@ jQuery( function ( $ ) {
 
 	// Set the selected UPE payment type field
 	const setSelectedUPEPaymentType = ( paymentType ) => {
-		$( '#wc_stripe_selected_upe_payment_type' ).val( paymentType );
+		$( '#wc_monilypay_selected_upe_payment_type' ).val( paymentType );
 	};
 
 	/**
@@ -425,7 +425,7 @@ jQuery( function ( $ ) {
 				paymentIntentId,
 				orderId,
 				savePaymentMethod,
-				$( '#wc_stripe_selected_upe_payment_type' ).val()
+				$( '#wc_monilypay_selected_upe_payment_type' ).val()
 			);
 
 			const { error } = await api.getStripe().confirmPayment( {
@@ -437,7 +437,7 @@ jQuery( function ( $ ) {
 
 			if ( error ) {
 				const upeType = $(
-					'#wc_stripe_selected_upe_payment_type'
+					'#wc_monilypay_selected_upe_payment_type'
 				).val();
 
 				if ( upeType !== 'boleto' && upeType !== 'oxxo' ) {
@@ -529,7 +529,7 @@ jQuery( function ( $ ) {
 			}
 
 			if ( error ) {
-				const upeType = formFields.wc_stripe_selected_upe_payment_type;
+				const upeType = formFields.wc_monilypay_selected_upe_payment_type;
 
 				if ( upeType !== 'boleto' && upeType !== 'oxxo' ) {
 					await api.updateFailedOrder(

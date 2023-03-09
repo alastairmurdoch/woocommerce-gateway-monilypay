@@ -765,14 +765,14 @@ class WC_Monilypay_Payment_Request {
 
 		wp_localize_script(
 			'WC_Monilypay_Payment_Request',
-			'WC_Monilypay_Payment_Request_params',
+			'wc_monilypay_payment_request_params',
 			apply_filters(
-				'WC_Monilypay_Payment_Request_params',
+				'wc_monilypay_payment_request_params',
 				$this->javascript_params()
 			)
 		);
 
-		wp_enqueue_script( 'WC_Monilypay_Payment_Request' );
+		wp_enqueue_script( 'wc_monilypay_payment_request' );
 	}
 
 	/**

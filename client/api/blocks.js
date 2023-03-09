@@ -9,10 +9,10 @@ import { getBlocksConfiguration } from 'wcstripe/blocks/utils';
  * Construct WC AJAX endpoint URL.
  *
  * @param {string} endpoint Request endpoint URL.
- * @param {string} prefix Endpoint URI prefix (default: 'wc_stripe_').
+ * @param {string} prefix Endpoint URI prefix (default: 'wc_monilypay_').
  * @return {string} URL with interpolated endpoint.
  */
-const getAjaxUrl = ( endpoint, prefix = 'wc_stripe_' ) => {
+const getAjaxUrl = ( endpoint, prefix = 'wc_monilypay_' ) => {
 	return getBlocksConfiguration()
 		?.ajax_url?.toString()
 		?.replace( '%%endpoint%%', prefix + endpoint );

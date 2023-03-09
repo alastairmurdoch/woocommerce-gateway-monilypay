@@ -1,19 +1,19 @@
-/* global wc_stripe_params */
+/* global wc_monilypay_params */
 
 jQuery( function( $ ) {
 	'use strict';
 
 	try {
-		var stripe = Stripe( wc_stripe_params.key, {
-			locale: wc_stripe_params.stripe_locale || 'auto',
+		var stripe = Stripe( wc_monilypay_params.key, {
+			locale: wc_monilypay_params.stripe_locale || 'auto',
 		} );
 	} catch( error ) { 
 		console.log( error );
 		return;
 	}
 
-	var stripe_elements_options = Object.keys( wc_stripe_params.elements_options ).length ? wc_stripe_params.elements_options : {},
-		sepa_elements_options   = Object.keys( wc_stripe_params.sepa_elements_options ).length ? wc_stripe_params.sepa_elements_options : {},
+	var stripe_elements_options = Object.keys( wc_monilypay_params.elements_options ).length ? wc_monilypay_params.elements_options : {},
+		sepa_elements_options   = Object.keys( wc_monilypay_params.sepa_elements_options ).length ? wc_monilypay_params.sepa_elements_options : {},
 		elements                = stripe.elements( stripe_elements_options ),
 		iban                    = elements.create( 'iban', sepa_elements_options ),
 		stripe_card,
@@ -23,7 +23,7 @@ jQuery( function( $ ) {
 	/**
 	 * Object to handle Stripe elements payment form.
 	 */
-	var wc_stripe_form = {
+	var wc_monilypay_form = {
 		/**
 		 * Get WC AJAX endpoint URL.
 		 *
@@ -31,16 +31,16 @@ jQuery( function( $ ) {
 		 * @return {String}
 		 */
 		getAjaxURL: function( endpoint ) {
-			return wc_stripe_params.ajaxurl
+			return wc_monilypay_params.ajaxurl
 				.toString()
-				.replace( '%%endpoint%%', 'wc_stripe_' + endpoint );
+				.replace( '%%endpoint%%', 'wc_monilypay_' + endpoint );
 		},
 
 		/**
 		 * Unmounts all Stripe elements when the checkout page is being updated.
 		 */
 		unmountElements: function() {
-			if ( 'yes' === wc_stripe_params.inline_cc_form ) {
+			if ( 'yes' === wc_monilypay_params.inline_cc_form ) {
 				stripe_card.unmount( '#stripe-card-element' );
 			} else {
 				stripe_card.unmount( '#stripe-card-element' );
@@ -57,7 +57,7 @@ jQuery( function( $ ) {
 				return;
 			}
 
-			if ( 'yes' === wc_stripe_params.inline_cc_form ) {
+			if ( 'yes' === wc_monilypay_params.inline_cc_form ) {
 				stripe_card.mount( '#stripe-card-element' );
 				return;
 			}
@@ -88,14 +88,14 @@ jQuery( function( $ ) {
 				invalid: 'invalid',
 			};
 
-			elementStyles  = wc_stripe_params.elements_styling ? wc_stripe_params.elements_styling : elementStyles;
-			elementClasses = wc_stripe_params.elements_classes ? wc_stripe_params.elements_classes : elementClasses;
+			elementStyles  = wc_monilypay_params.elements_styling ? wc_monilypay_params.elements_styling : elementStyles;
+			elementClasses = wc_monilypay_params.elements_classes ? wc_monilypay_params.elements_classes : elementClasses;
 
-			if ( 'yes' === wc_stripe_params.inline_cc_form ) {
+			if ( 'yes' === wc_monilypay_params.inline_cc_form ) {
 				stripe_card = elements.create( 'card', { style: elementStyles, hidePostalCode: true } );
 
 				stripe_card.addEventListener( 'change', function( event ) {
-					wc_stripe_form.onCCFormChange();
+					wc_monilypay_form.onCCFormChange();
 
 					if ( event.error ) {
 						$( document.body ).trigger( 'stripeError', event );
@@ -107,9 +107,9 @@ jQuery( function( $ ) {
 				stripe_cvc  = elements.create( 'cardCvc', { style: elementStyles, classes: elementClasses } );
 
 				stripe_card.addEventListener( 'change', function( event ) {
-					wc_stripe_form.onCCFormChange();
+					wc_monilypay_form.onCCFormChange();
 
-					wc_stripe_form.updateCardBrand( event.brand );
+					wc_monilypay_form.updateCardBrand( event.brand );
 
 					if ( event.error ) {
 						$( document.body ).trigger( 'stripeError', event );
@@ -117,7 +117,7 @@ jQuery( function( $ ) {
 				} );
 
 				stripe_exp.addEventListener( 'change', function( event ) {
-					wc_stripe_form.onCCFormChange();
+					wc_monilypay_form.onCCFormChange();
 
 					if ( event.error ) {
 						$( document.body ).trigger( 'stripeError', event );
@@ -125,7 +125,7 @@ jQuery( function( $ ) {
 				} );
 
 				stripe_cvc.addEventListener( 'change', function( event ) {
-					wc_stripe_form.onCCFormChange();
+					wc_monilypay_form.onCCFormChange();
 
 					if ( event.error ) {
 						$( document.body ).trigger( 'stripeError', event );
@@ -137,7 +137,7 @@ jQuery( function( $ ) {
 			 * Only in checkout page we need to delay the mounting of the
 			 * card as some AJAX process needs to happen before we do.
 			 */
-			if ( 'yes' === wc_stripe_params.is_checkout ) {
+			if ( 'yes' === wc_monilypay_params.is_checkout ) {
 				$( document.body ).on( 'updated_checkout', function() {
 					// Don't re-mount if already mounted in DOM.
 					if ( $( '#stripe-card-element' ).children().length ) {
@@ -146,17 +146,17 @@ jQuery( function( $ ) {
 
 					// Unmount prior to re-mounting.
 					if ( stripe_card ) {
-						wc_stripe_form.unmountElements();
+						wc_monilypay_form.unmountElements();
 					}
 
-					wc_stripe_form.mountElements();
+					wc_monilypay_form.mountElements();
 
 					if ( $( '#stripe-iban-element' ).length ) {
 						iban.mount( '#stripe-iban-element' );
 					}
 				} );
 			} else if ( $( 'form#add_payment_method' ).length || $( 'form#order_review' ).length ) {
-				wc_stripe_form.mountElements();
+				wc_monilypay_form.mountElements();
 
 				if ( $( '#stripe-iban-element' ).length ) {
 					iban.mount( '#stripe-iban-element' );
@@ -200,7 +200,7 @@ jQuery( function( $ ) {
 		 */
 		init: function() {
 			// Initialize tokenization script if on change payment method page and pay for order page.
-			if ( 'yes' === wc_stripe_params.is_change_payment_page || 'yes' === wc_stripe_params.is_pay_for_order_page ) {
+			if ( 'yes' === wc_monilypay_params.is_change_payment_page || 'yes' === wc_monilypay_params.is_pay_for_order_page ) {
 				$( document.body ).trigger( 'wc-credit-card-form-init' );
 			}
 
@@ -259,11 +259,11 @@ jQuery( function( $ ) {
 				$('#early_renewal_modal_submit').on('click', this.onEarlyRenewalSubmit);
 			}
 
-			wc_stripe_form.createElements();
+			wc_monilypay_form.createElements();
 
 			// Listen for hash changes in order to handle payment intents
-			window.addEventListener( 'hashchange', wc_stripe_form.onHashChange );
-			wc_stripe_form.maybeConfirmIntent();
+			window.addEventListener( 'hashchange', wc_monilypay_form.onHashChange );
+			wc_monilypay_form.maybeConfirmIntent();
 
 			//Mask CPF/CNPJ field when using Boleto
 			$( document ).on( 'change', '.wc_payment_methods', function () {
@@ -445,8 +445,8 @@ jQuery( function( $ ) {
 		 * Blocks payment forms with an overlay while being submitted.
 		 */
 		block: function() {
-			if ( ! wc_stripe_form.isMobile() ) {
-				wc_stripe_form.form.block( {
+			if ( ! wc_monilypay_form.isMobile() ) {
+				wc_monilypay_form.form.block( {
 					message: null,
 					overlayCSS: {
 						background: '#fff',
@@ -460,7 +460,7 @@ jQuery( function( $ ) {
 		 * Removes overlays from payment forms.
 		 */
 		unblock: function() {
-			wc_stripe_form.form && wc_stripe_form.form.unblock();
+			wc_monilypay_form.form && wc_monilypay_form.form.unblock();
 		},
 
 		/**
@@ -478,8 +478,8 @@ jQuery( function( $ ) {
 		 * @return {Object}
 		 */
 		getOwnerDetails: function() {
-			var first_name = $( '#billing_first_name' ).length ? $( '#billing_first_name' ).val() : wc_stripe_params.billing_first_name,
-				last_name  = $( '#billing_last_name' ).length ? $( '#billing_last_name' ).val() : wc_stripe_params.billing_last_name,
+			var first_name = $( '#billing_first_name' ).length ? $( '#billing_first_name' ).val() : wc_monilypay_params.billing_first_name,
+				last_name  = $( '#billing_last_name' ).length ? $( '#billing_last_name' ).val() : wc_monilypay_params.billing_last_name,
 				owner      = { name: '', address: {}, email: '', phone: '' };
 
 			owner.name = first_name;
@@ -513,12 +513,12 @@ jQuery( function( $ ) {
 				delete owner.name;
 			}
 
-			owner.address.line1       = $( '#billing_address_1' ).val() || wc_stripe_params.billing_address_1;
-			owner.address.line2       = $( '#billing_address_2' ).val() || wc_stripe_params.billing_address_2;
-			owner.address.state       = $( '#billing_state' ).val()     || wc_stripe_params.billing_state;
-			owner.address.city        = $( '#billing_city' ).val()      || wc_stripe_params.billing_city;
-			owner.address.postal_code = $( '#billing_postcode' ).val()  || wc_stripe_params.billing_postcode;
-			owner.address.country     = $( '#billing_country' ).val()   || wc_stripe_params.billing_country;
+			owner.address.line1       = $( '#billing_address_1' ).val() || wc_monilypay_params.billing_address_1;
+			owner.address.line2       = $( '#billing_address_2' ).val() || wc_monilypay_params.billing_address_2;
+			owner.address.state       = $( '#billing_state' ).val()     || wc_monilypay_params.billing_state;
+			owner.address.city        = $( '#billing_city' ).val()      || wc_monilypay_params.billing_city;
+			owner.address.postal_code = $( '#billing_postcode' ).val()  || wc_monilypay_params.billing_postcode;
+			owner.address.country     = $( '#billing_country' ).val()   || wc_monilypay_params.billing_country;
 
 			return {
 				owner: owner,
@@ -532,15 +532,15 @@ jQuery( function( $ ) {
 		 * all other payment methods work with redirects to create sources.
 		 */
 		createSource: function() {
-			var extra_details = wc_stripe_form.getOwnerDetails();
+			var extra_details = wc_monilypay_form.getOwnerDetails();
 
 			// Handle SEPA Direct Debit payments.
-			if ( wc_stripe_form.isSepaChosen() ) {
+			if ( wc_monilypay_form.isSepaChosen() ) {
 				extra_details.currency = $( '#stripe-sepa_debit-payment-data' ).data( 'currency' );
-				extra_details.mandate  = { notification_method: wc_stripe_params.sepa_mandate_notification };
+				extra_details.mandate  = { notification_method: wc_monilypay_params.sepa_mandate_notification };
 				extra_details.type     = 'sepa_debit';
 
-				return stripe.createSource( iban, extra_details ).then( wc_stripe_form.sourceResponse );
+				return stripe.createSource( iban, extra_details ).then( wc_monilypay_form.sourceResponse );
 			}
 
 			// Handle card payments.
@@ -552,7 +552,7 @@ jQuery( function( $ ) {
 			}
 			
 			return stripe.createSource( stripe_card, extra_details )
-				.then( wc_stripe_form.sourceResponse );
+				.then( wc_monilypay_form.sourceResponse );
 		},
 
 		/**
@@ -566,9 +566,9 @@ jQuery( function( $ ) {
 				return;
 			}
 
-			wc_stripe_form.reset();
+			wc_monilypay_form.reset();
 
-			wc_stripe_form.form.append(
+			wc_monilypay_form.form.append(
 				$( '<input type="hidden" />' )
 					.addClass( 'stripe-source' )
 					.attr( 'name', 'stripe_source' )
@@ -576,11 +576,11 @@ jQuery( function( $ ) {
 			);
 
 			if ( $( 'form#add_payment_method' ).length || $( '#wc-stripe-change-payment-method' ).length ) {
-				wc_stripe_form.sourceSetup( response );
+				wc_monilypay_form.sourceSetup( response );
 				return;
 			}
 
-			wc_stripe_form.form.trigger( 'submit' );
+			wc_monilypay_form.form.trigger( 'submit' );
 		},
 
 		/**
@@ -596,11 +596,11 @@ jQuery( function( $ ) {
 			};
 
 			$.post( {
-				url: wc_stripe_form.getAjaxURL( 'create_setup_intent'),
+				url: wc_monilypay_form.getAjaxURL( 'create_setup_intent'),
 				dataType: 'json',
 				data: {
 					stripe_source_id: response.source.id,
-					nonce: wc_stripe_params.add_card_nonce,
+					nonce: wc_monilypay_params.add_card_nonce,
 				},
 				error: function() {
 					$( document.body ).trigger( 'stripeError', apiError );
@@ -608,9 +608,9 @@ jQuery( function( $ ) {
 			} ).done( function( serverResponse ) {
 				if ( 'success' === serverResponse.status ) {
 					if ( $( 'form#add_payment_method' ).length ) {
-						$( wc_stripe_form.form ).off( 'submit', wc_stripe_form.form.onSubmit );
+						$( wc_monilypay_form.form ).off( 'submit', wc_monilypay_form.form.onSubmit );
 					}
-					wc_stripe_form.form.trigger( 'submit' );
+					wc_monilypay_form.form.trigger( 'submit' );
 					return;
 				} else if ( 'requires_action' !== serverResponse.status ) {
 					$( document.body ).trigger( 'stripeError', serverResponse );
@@ -625,9 +625,9 @@ jQuery( function( $ ) {
 						}
 
 						if ( $( 'form#add_payment_method' ).length ) {
-							$( wc_stripe_form.form ).off( 'submit', wc_stripe_form.form.onSubmit );
+							$( wc_monilypay_form.form ).off( 'submit', wc_monilypay_form.form.onSubmit );
 						}
-						wc_stripe_form.form.trigger( 'submit' );
+						wc_monilypay_form.form.trigger( 'submit' );
 					} )
 					.catch( function( err ) {
 						console.log( err );
@@ -643,43 +643,43 @@ jQuery( function( $ ) {
 		 *                   WooCommerce's checkout.js stops only on `false`, so this needs to be explicit.
 		 */
 		onSubmit: function() {
-			if ( ! wc_stripe_form.isStripeChosen() ) {
+			if ( ! wc_monilypay_form.isStripeChosen() ) {
 				return true;
 			}
 
 			// If a source is already in place, submit the form as usual.
-			if ( wc_stripe_form.isStripeSaveCardChosen() || wc_stripe_form.hasSource() ) {
+			if ( wc_monilypay_form.isStripeSaveCardChosen() || wc_monilypay_form.hasSource() ) {
 				return true;
 			}
 
 			// For methods that needs redirect, we will create the source server side so we can obtain the order ID.
 			if (
-				wc_stripe_form.isBancontactChosen() ||
-				wc_stripe_form.isGiropayChosen() ||
-				wc_stripe_form.isIdealChosen() ||
-				wc_stripe_form.isAlipayChosen() ||
-				wc_stripe_form.isSofortChosen() ||
-				wc_stripe_form.isP24Chosen() ||
-				wc_stripe_form.isEpsChosen() ||
-				wc_stripe_form.isMultibancoChosen()
+				wc_monilypay_form.isBancontactChosen() ||
+				wc_monilypay_form.isGiropayChosen() ||
+				wc_monilypay_form.isIdealChosen() ||
+				wc_monilypay_form.isAlipayChosen() ||
+				wc_monilypay_form.isSofortChosen() ||
+				wc_monilypay_form.isP24Chosen() ||
+				wc_monilypay_form.isEpsChosen() ||
+				wc_monilypay_form.isMultibancoChosen()
 			) {
 				return true;
 			}
 
-			wc_stripe_form.block();
+			wc_monilypay_form.block();
 
-			if( wc_stripe_form.isBoletoChosen() ) {
+			if( wc_monilypay_form.isBoletoChosen() ) {
 				if( ! $( '#stripe_boleto_tax_id' ).val() ) {
-					wc_stripe_form.submitError( wc_stripe_params.cpf_cnpj_required_msg );
-					wc_stripe_form.unblock();
+					wc_monilypay_form.submitError( wc_monilypay_params.cpf_cnpj_required_msg );
+					wc_monilypay_form.unblock();
 					return false;
 				}
 
-				wc_stripe_form.handleBoleto();
-			} else if ( wc_stripe_form.isOxxoChosen() ) {
-				wc_stripe_form.handleOxxo();
+				wc_monilypay_form.handleBoleto();
+			} else if ( wc_monilypay_form.isOxxoChosen() ) {
+				wc_monilypay_form.handleOxxo();
 			} else {
-				wc_stripe_form.createSource();
+				wc_monilypay_form.createSource();
 			}
 
 			return false;
@@ -690,13 +690,13 @@ jQuery( function( $ ) {
 		 * After the customer closes the modal proceeds with checkout normally
 		 */
 		handleBoleto: function () {
-			wc_stripe_form.executeCheckout( 'boleto', function ( checkout_response ) {
+			wc_monilypay_form.executeCheckout( 'boleto', function ( checkout_response ) {
 				stripe.confirmBoletoPayment(
 					checkout_response.client_secret,
 					checkout_response.confirm_payment_data
 				)
 					.then(function ( response ) {
-						wc_stripe_form.handleConfirmResponse( checkout_response, response );
+						wc_monilypay_form.handleConfirmResponse( checkout_response, response );
 					});
 			} );
 		},
@@ -706,24 +706,24 @@ jQuery( function( $ ) {
 		 * @param callback
 		 */
 		executeCheckout: function ( payment_method, callback ) {
-			const formFields = wc_stripe_form.form.serializeArray().reduce( ( obj, field ) => {
+			const formFields = wc_monilypay_form.form.serializeArray().reduce( ( obj, field ) => {
 				obj[ field.name ] = field.value;
 				return obj;
 			}, {} );
 
-			if( wc_stripe_form.form.attr('id') === 'order_review' ) {
-				formFields._ajax_nonce = wc_stripe_params.updatePaymentIntentNonce;
-				formFields.order_id = wc_stripe_params.orderId;
+			if( wc_monilypay_form.form.attr('id') === 'order_review' ) {
+				formFields._ajax_nonce = wc_monilypay_params.updatePaymentIntentNonce;
+				formFields.order_id = wc_monilypay_params.orderId;
 
 				$.ajax( {
-					url: wc_stripe_form.getAjaxURL( payment_method + '_update_payment_intent' ),
+					url: wc_monilypay_form.getAjaxURL( payment_method + '_update_payment_intent' ),
 					type: 'POST',
 					data: formFields,
 					success: function ( response ) {
 
 						if( 'success' !== response.result ) {
-							wc_stripe_form.submitError( response.messages );
-							wc_stripe_form.unblock();
+							wc_monilypay_form.submitError( response.messages );
+							wc_monilypay_form.unblock();
 							return;
 						}
 
@@ -733,14 +733,14 @@ jQuery( function( $ ) {
 
 			} else {
 				$.ajax( {
-					url: wc_stripe_params.checkout_url,
+					url: wc_monilypay_params.checkout_url,
 					type: 'POST',
 					data: formFields,
 					success: function ( checkout_response ) {
 
 						if( 'success' !== checkout_response.result ) {
-							wc_stripe_form.submitError( checkout_response.messages, true );
-							wc_stripe_form.unblock();
+							wc_monilypay_form.submitError( checkout_response.messages, true );
+							wc_monilypay_form.unblock();
 							return;
 						}
 
@@ -773,13 +773,13 @@ jQuery( function( $ ) {
 		 * After the customer closes the modal proceeds with checkout normally
 		 */
 		handleOxxo: function () {
-			wc_stripe_form.executeCheckout( 'oxxo', function ( checkout_response ) {
+			wc_monilypay_form.executeCheckout( 'oxxo', function ( checkout_response ) {
 				stripe.confirmOxxoPayment(
 					checkout_response.client_secret,
 					checkout_response.confirm_payment_data
 				)
 					.then(function (response) {
-						wc_stripe_form.handleConfirmResponse( checkout_response, response );
+						wc_monilypay_form.handleConfirmResponse( checkout_response, response );
 					} );
 			} );
 		},
@@ -788,7 +788,7 @@ jQuery( function( $ ) {
 		 * If a new credit card is entered, reset sources.
 		 */
 		onCCFormChange: function() {
-			wc_stripe_form.reset();
+			wc_monilypay_form.reset();
 		},
 
 		/**
@@ -804,7 +804,7 @@ jQuery( function( $ ) {
 		 * @param {Event} e The event with the error.
 		 */
 		onSepaError: function( e ) {
-			var errorContainer = wc_stripe_form.getSelectedPaymentElement().parents( 'li' ).eq( 0 ).find( '.stripe-source-errors' );
+			var errorContainer = wc_monilypay_form.getSelectedPaymentElement().parents( 'li' ).eq( 0 ).find( '.stripe-source-errors' );
 
 			if ( ! e.error ) {
 				$( errorContainer ).html( '' );
@@ -824,7 +824,7 @@ jQuery( function( $ ) {
 		 */
 		onError: function( e, result ) {
 			var message = result.error.message;
-			var selectedMethodElement = wc_stripe_form.getSelectedPaymentElement().closest( 'li' );
+			var selectedMethodElement = wc_monilypay_form.getSelectedPaymentElement().closest( 'li' );
 			var savedTokens = selectedMethodElement.find( '.woocommerce-SavedPaymentMethods-tokenInput' );
 			var errorContainer;
 
@@ -855,16 +855,16 @@ jQuery( function( $ ) {
 			 * Billing name is required error message on top of form instead
 			 * of inline.
 			 */
-			if ( wc_stripe_form.isSepaChosen() ) {
-				if ( 'invalid_owner_name' === result.error.code && wc_stripe_params.hasOwnProperty( result.error.code ) ) {
-					wc_stripe_form.submitError( wc_stripe_params[ result.error.code ] );
+			if ( wc_monilypay_form.isSepaChosen() ) {
+				if ( 'invalid_owner_name' === result.error.code && wc_monilypay_params.hasOwnProperty( result.error.code ) ) {
+					wc_monilypay_form.submitError( wc_monilypay_params[ result.error.code ] );
 					return;
 				}
 			}
 
 			// Notify users that the email is invalid.
 			if ( 'email_invalid' === result.error.code ) {
-				message = wc_stripe_params.email_invalid;
+				message = wc_monilypay_params.email_invalid;
 			} else if (
 				/*
 				 * Customers do not need to know the specifics of the below type of errors
@@ -876,14 +876,14 @@ jQuery( function( $ ) {
 				'authentication_error'  === result.error.type ||
 				'rate_limit_error'      === result.error.type
 			) {
-				message = wc_stripe_params.invalid_request_error;
+				message = wc_monilypay_params.invalid_request_error;
 			}
 
-			if ( wc_stripe_params.hasOwnProperty(result.error.code) ) {
-				message = wc_stripe_params[ result.error.code ];
+			if ( wc_monilypay_params.hasOwnProperty(result.error.code) ) {
+				message = wc_monilypay_params[ result.error.code ];
 			}
 
-			wc_stripe_form.reset();
+			wc_monilypay_form.reset();
 			$( '.woocommerce-NoticeGroup-checkout' ).remove();
 			console.log( result.error.message ); // Leave for troubleshooting.
 			$( errorContainer ).html( '<ul class="woocommerce_error woocommerce-error wc-stripe-error"><li /></ul>' );
@@ -894,7 +894,7 @@ jQuery( function( $ ) {
 					scrollTop: ( $( '.wc-stripe-error' ).offset().top - 200 )
 				}, 200 );
 			}
-			wc_stripe_form.unblock();
+			wc_monilypay_form.unblock();
 			$.unblockUI(); // If arriving via Payment Request Button.
 		},
 
@@ -911,9 +911,9 @@ jQuery( function( $ ) {
 			}
 
 			$( '.woocommerce-NoticeGroup-checkout, .woocommerce-error, .woocommerce-message' ).remove();
-			wc_stripe_form.form.prepend( '<div class="woocommerce-NoticeGroup woocommerce-NoticeGroup-checkout">' + error_message + '</div>' );
-			wc_stripe_form.form.removeClass( 'processing' ).unblock();
-			wc_stripe_form.form.find( '.input-text, select, input:checkbox' ).trigger( 'blur' );
+			wc_monilypay_form.form.prepend( '<div class="woocommerce-NoticeGroup woocommerce-NoticeGroup-checkout">' + error_message + '</div>' );
+			wc_monilypay_form.form.removeClass( 'processing' ).unblock();
+			wc_monilypay_form.form.find( '.input-text, select, input:checkbox' ).trigger( 'blur' );
 
 			var selector = '';
 
@@ -936,7 +936,7 @@ jQuery( function( $ ) {
 			}
 
 			$( document.body ).trigger( 'checkout_error' );
-			wc_stripe_form.unblock();
+			wc_monilypay_form.unblock();
 		},
 
 		/**
@@ -965,7 +965,7 @@ jQuery( function( $ ) {
 			// Cleanup the URL
 			window.location.hash = '';
 
-			wc_stripe_form.openIntentModal( intentClientSecret, redirectURL, false, 'si' === type );
+			wc_monilypay_form.openIntentModal( intentClientSecret, redirectURL, false, 'si' === type );
 		},
 
 		maybeConfirmIntent: function() {
@@ -976,7 +976,7 @@ jQuery( function( $ ) {
 			var intentSecret = $( '#stripe-intent-id' ).val();
 			var returnURL    = $( '#stripe-intent-return' ).val();
 
-			wc_stripe_form.openIntentModal( intentSecret, returnURL, true, false );
+			wc_monilypay_form.openIntentModal( intentSecret, returnURL, true, false );
 		},
 
 		/**
@@ -1010,7 +1010,7 @@ jQuery( function( $ ) {
 					}
 
 					$( document.body ).trigger( 'stripeError', { error: error } );
-					wc_stripe_form.form && wc_stripe_form.form.removeClass( 'processing' );
+					wc_monilypay_form.form && wc_monilypay_form.form.removeClass( 'processing' );
 
 					// Report back to the server.
 					$.get( redirectURL + '&is_ajax' );
@@ -1033,7 +1033,7 @@ jQuery( function( $ ) {
 					var response = JSON.parse( html );
 
 					if ( response.stripe_sca_required ) {
-						wc_stripe_form.openIntentModal( response.intent_secret, response.redirect_url, true, false );
+						wc_monilypay_form.openIntentModal( response.intent_secret, response.redirect_url, true, false );
 					} else {
 						window.location = response.redirect_url;
 					}
@@ -1044,5 +1044,5 @@ jQuery( function( $ ) {
 		},
 	};
 
-	wc_stripe_form.init();
+	wc_monilypay_form.init();
 } );

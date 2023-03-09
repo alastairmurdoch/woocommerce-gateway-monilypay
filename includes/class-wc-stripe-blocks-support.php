@@ -239,7 +239,7 @@ final class WC_Monilypay_Blocks_Support extends AbstractPaymentMethodType {
 	 */
 	private function get_payment_request_javascript_params() {
 		return apply_filters(
-			'WC_Monilypay_Payment_Request_params',
+			'wc_monilypay_payment_request_params',
 			$this->payment_request_configuration->javascript_params()
 		);
 	}

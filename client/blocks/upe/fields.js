@@ -240,7 +240,7 @@ const UPEField = ( {
 						paymentMethodData: {
 							paymentMethod: PAYMENT_METHOD_NAME,
 							wc_payment_intent_id: paymentIntentId,
-							wc_stripe_selected_upe_payment_type: selectedUpePaymentType,
+							wc_monilypay_selected_upe_payment_type: selectedUpePaymentType,
 						},
 					},
 				};
