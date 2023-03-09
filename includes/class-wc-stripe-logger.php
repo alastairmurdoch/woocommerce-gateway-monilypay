@@ -25,7 +25,7 @@ class WC_Monilypay_Logger {
 			return;
 		}
 
-		if ( apply_filters( 'wc_stripe_logging', true, $message ) ) {
+		if ( apply_filters( 'wc_monilypay_logging', true, $message ) ) {
 			if ( empty( self::$logger ) ) {
 				self::$logger = wc_get_logger();
 			}

@@ -116,7 +116,7 @@ class WC_Gateway_Monilypay_Sepa extends WC_Monilypay_Payment_Gateway {
 	 */
 	public function get_supported_currency() {
 		return apply_filters(
-			'wc_stripe_sepa_supported_currencies',
+			'wc_monilypay_sepa_supported_currencies',
 			[
 				'EUR',
 			]

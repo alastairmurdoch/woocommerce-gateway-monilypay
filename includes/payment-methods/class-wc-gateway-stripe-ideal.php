@@ -107,7 +107,7 @@ class WC_Gateway_Monilypay_Ideal extends WC_Monilypay_Payment_Gateway {
 	 */
 	public function get_supported_currency() {
 		return apply_filters(
-			'wc_stripe_ideal_supported_currencies',
+			'wc_monilypay_ideal_supported_currencies',
 			[
 				'EUR',
 			]
@@ -223,7 +223,7 @@ class WC_Gateway_Monilypay_Ideal extends WC_Monilypay_Payment_Gateway {
 
 		WC_Monilypay_Logger::log( 'Info: Begin creating iDEAL source' );
 
-		return WC_Monilypay_API::request( apply_filters( 'wc_stripe_ideal_source', $post_data, $order ), 'sources' );
+		return WC_Monilypay_API::request( apply_filters( 'wc_monilypay_ideal_source', $post_data, $order ), 'sources' );
 	}
 
 	/**

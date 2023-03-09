@@ -15,7 +15,7 @@ class WC_REST_Monilypay_Connection_Tokens_Controller extends WC_Monilypay_REST_B
 	 *
 	 * @var string
 	 */
-	protected $rest_base = 'wc_stripe/connection_tokens';
+	protected $rest_base = 'wc_monilypay/connection_tokens';
 
 	/**
 	 * Stripe payment gateway.
@@ -57,7 +57,7 @@ class WC_REST_Monilypay_Connection_Tokens_Controller extends WC_Monilypay_REST_B
 		$response = WC_Monilypay_API::request( [], 'terminal/connection_tokens' );
 
 		if ( ! isset( $response->secret ) ) {
-			return rest_ensure_response( new WP_Error( 'wc_stripe_no_token', __( 'Stripe API did not return a connection token.', 'woocommerce-gateway-monilypay' ) ) );
+			return rest_ensure_response( new WP_Error( 'wc_monilypay_no_token', __( 'Stripe API did not return a connection token.', 'woocommerce-gateway-monilypay' ) ) );
 		}
 
 		$response->test_mode = $this->gateway->is_in_test_mode();

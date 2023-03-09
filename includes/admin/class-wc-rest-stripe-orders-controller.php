@@ -15,7 +15,7 @@ class WC_REST_Monilypay_Orders_Controller extends WC_Monilypay_REST_Base_Control
 	 *
 	 * @var string
 	 */
-	protected $rest_base = 'wc_stripe/orders';
+	protected $rest_base = 'wc_moniylpay/orders';
 
 	/**
 	 * Stripe payment gateway.
@@ -78,9 +78,9 @@ class WC_REST_Monilypay_Orders_Controller extends WC_Monilypay_REST_Base_Control
 		}
 
 		// Validate order status before creating customer.
-		$disallowed_order_statuses = apply_filters( 'wc_stripe_create_customer_disallowed_order_statuses', [ 'completed', 'cancelled', 'refunded', 'failed' ] );
+		$disallowed_order_statuses = apply_filters( 'wc_monilypay_create_customer_disallowed_order_statuses', [ 'completed', 'cancelled', 'refunded', 'failed' ] );
 		if ( $order->has_status( $disallowed_order_statuses ) ) {
-			return new WP_Error( 'wc_stripe_invalid_order_status', __( 'Invalid order status', 'woocommerce-gateway-monilypay' ), [ 'status' => 400 ] );
+			return new WP_Error( 'wc_monilypay_invalid_order_status', __( 'Invalid order status', 'woocommerce-gateway-monilypay' ), [ 'status' => 400 ] );
 		}
 
 		// Get a customer object with the order's user, if available.
@@ -122,12 +122,12 @@ class WC_REST_Monilypay_Orders_Controller extends WC_Monilypay_REST_Base_Control
 
 			// Check that order exists before capturing payment.
 			if ( ! $order ) {
-				return new WP_Error( 'wc_stripe_missing_order', __( 'Order not found', 'woocommerce-gateway-monilypay' ), [ 'status' => 404 ] );
+				return new WP_Error( 'wc_monilypay_missing_order', __( 'Order not found', 'woocommerce-gateway-monilypay' ), [ 'status' => 404 ] );
 			}
 
 			// Do not process refunded orders.
 			if ( 0 < $order->get_total_refunded() ) {
-				return new WP_Error( 'wc_stripe_refunded_order_uncapturable', __( 'Payment cannot be captured for partially or fully refunded orders.', 'woocommerce-gateway-monilypay' ), [ 'status' => 400 ] );
+				return new WP_Error( 'wc_monilypay_refunded_order_uncapturable', __( 'Payment cannot be captured for partially or fully refunded orders.', 'woocommerce-gateway-monilypay' ), [ 'status' => 400 ] );
 			}
 
 			// Retrieve intent from Stripe.
@@ -140,7 +140,7 @@ class WC_REST_Monilypay_Orders_Controller extends WC_Monilypay_REST_Base_Control
 
 			// Ensure that intent can be captured.
 			if ( ! in_array( $intent->status, [ 'processing', 'requires_capture' ], true ) ) {
-				return new WP_Error( 'wc_stripe_payment_uncapturable', __( 'The payment cannot be captured', 'woocommerce-gateway-monilypay' ), [ 'status' => 409 ] );
+				return new WP_Error( 'wc_monilypay_payment_uncapturable', __( 'The payment cannot be captured', 'woocommerce-gateway-monilypay' ), [ 'status' => 409 ] );
 			}
 
 			// Update order with payment method and intent details.
@@ -156,7 +156,7 @@ class WC_REST_Monilypay_Orders_Controller extends WC_Monilypay_REST_Base_Control
 			// Check for failure to capture payment.
 			if ( empty( $result ) || empty( $result->status ) || 'succeeded' !== $result->status ) {
 				return new WP_Error(
-					'wc_stripe_capture_error',
+					'wc_monilypay_capture_error',
 					sprintf(
 						// translators: %s: the error message.
 						__( 'Payment capture failed to complete with the following message: %s', 'woocommerce-gateway-monilypay' ),

@@ -142,7 +142,7 @@ class WC_Monilypay_Webhook_Handler extends WC_Monilypay_Payment_Gateway {
 	 */
 	private function validate_request_user_agent( $request_headers ) {
 		$ua_is_valid = empty( $request_headers['USER-AGENT'] ) || preg_match( '/Stripe/', $request_headers['USER-AGENT'] );
-		$ua_is_valid = apply_filters( 'wc_stripe_webhook_is_user_agent_valid', $ua_is_valid, $request_headers );
+		$ua_is_valid = apply_filters( 'wc_monilypay_webhook_is_user_agent_valid', $ua_is_valid, $request_headers );
 
 		return $ua_is_valid ? WC_Monilypay_Webhook_State::VALIDATION_SUCCEEDED : WC_Monilypay_Webhook_State::VALIDATION_FAILED_USER_AGENT_INVALID;
 	}
@@ -356,7 +356,7 @@ class WC_Monilypay_Webhook_Handler extends WC_Monilypay_Payment_Gateway {
 			return;
 		}
 
-		if ( apply_filters( 'wc_stripe_webhook_dispute_change_order_status', true, $order, $notification ) ) {
+		if ( apply_filters( 'wc_monilypay_webhook_dispute_change_order_status', true, $order, $notification ) ) {
 			// Mark final so that order status is not overridden by out-of-sequence events.
 			$order->update_meta_data( '_stripe_status_final', true );
 
@@ -715,7 +715,7 @@ class WC_Monilypay_Webhook_Handler extends WC_Monilypay_Payment_Gateway {
 			esc_html( $notification->data->object->reason )
 		);
 
-		if ( apply_filters( 'wc_stripe_webhook_review_change_order_status', true, $order, $notification ) && ! $order->get_meta( '_stripe_status_final', false ) ) {
+		if ( apply_filters( 'wc_monilypay_webhook_review_change_order_status', true, $order, $notification ) && ! $order->get_meta( '_stripe_status_final', false ) ) {
 			$order->update_status( 'on-hold', $message );
 		} else {
 			$order->add_order_note( $message );
@@ -750,7 +750,7 @@ class WC_Monilypay_Webhook_Handler extends WC_Monilypay_Payment_Gateway {
 
 		if (
 			$order->has_status( 'on-hold' ) &&
-			apply_filters( 'wc_stripe_webhook_review_change_order_status', true, $order, $notification ) &&
+			apply_filters( 'wc_monilypay_webhook_review_change_order_status', true, $order, $notification ) &&
 			! $order->get_meta( '_stripe_status_final', false )
 		) {
 			$order->update_status( $order->get_meta( '_stripe_status_before_hold', 'processing' ), $message );

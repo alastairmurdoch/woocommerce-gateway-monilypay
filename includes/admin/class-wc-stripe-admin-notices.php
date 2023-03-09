@@ -63,7 +63,7 @@ class WC_Monilypay_Admin_Notices {
 
 			if ( $notice['dismissible'] ) {
 				?>
-				<a href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'wc-stripe-hide-notice', $notice_key ), 'wc_stripe_hide_notices_nonce', '_wc_stripe_notice_nonce' ) ); ?>" class="woocommerce-message-close notice-dismiss" style="position:relative;float:right;padding:9px 0px 9px 9px 9px;text-decoration:none;"></a>
+				<a href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'wc-stripe-hide-notice', $notice_key ), 'wc_monilypay_hide_notices_nonce', '_wc_monilypay_notice_nonce' ) ); ?>" class="woocommerce-message-close notice-dismiss" style="position:relative;float:right;padding:9px 0px 9px 9px 9px;text-decoration:none;"></a>
 				<?php
 			}
 
@@ -299,7 +299,7 @@ class WC_Monilypay_Admin_Notices {
 		$payment_methods = $this->get_payment_methods();
 
 		foreach ( $payment_methods as $method => $class ) {
-			$show_notice = get_option( 'wc_stripe_show_' . $method . '_notice' );
+			$show_notice = get_option( 'wc_monilypay_show_' . $method . '_notice' );
 			$gateway     = new $class();
 
 			if ( 'yes' !== $gateway->enabled || 'no' === $show_notice ) {
@@ -321,7 +321,7 @@ class WC_Monilypay_Admin_Notices {
 				continue;
 			}
 			$method      = $method_class::STRIPE_ID;
-			$show_notice = get_option( 'wc_stripe_show_' . $method . '_upe_notice' );
+			$show_notice = get_option( 'wc_monilypay_show_' . $method . '_upe_notice' );
 			$upe_method  = new $method_class();
 			if ( ! $upe_method->is_enabled() || 'no' === $show_notice ) {
 				continue;
@@ -340,8 +340,8 @@ class WC_Monilypay_Admin_Notices {
 	 * @version 4.0.0
 	 */
 	public function hide_notices() {
-		if ( isset( $_GET['wc-stripe-hide-notice'] ) && isset( $_GET['_wc_stripe_notice_nonce'] ) ) {
-			if ( ! wp_verify_nonce( wc_clean( wp_unslash( $_GET['_wc_stripe_notice_nonce'] ) ), 'wc_stripe_hide_notices_nonce' ) ) {
+		if ( isset( $_GET['wc-stripe-hide-notice'] ) && isset( $_GET['_wc_monilypay_notice_nonce'] ) ) {
+			if ( ! wp_verify_nonce( wc_clean( wp_unslash( $_GET['_wc_monilypay_notice_nonce'] ) ), 'wc_monilypay_hide_notices_nonce' ) ) {
 				wp_die( __( 'Action failed. Please refresh the page and retry.', 'woocommerce-gateway-monilypay' ) );
 			}
 
@@ -408,7 +408,7 @@ class WC_Monilypay_Admin_Notices {
 					break;
 				default:
 					if ( false !== strpos( $notice, '_upe' ) ) {
-						update_option( 'wc_stripe_show_' . $notice . '_notice', 'no' );
+						update_option( 'wc_monilypay_show_' . $notice . '_notice', 'no' );
 					}
 					break;
 			}

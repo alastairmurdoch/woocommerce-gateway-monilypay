@@ -350,7 +350,7 @@ class WC_Monilypay_Privacy extends WC_Abstract_Privacy {
 			return [ false, true, [ sprintf( __( 'Order ID %d is less than set retention days. Personal data retained. (Stripe)', 'woocommerce-gateway-monilypay' ), $order->get_id() ) ] ];
 		}
 
-		if ( $subscription->has_status( apply_filters( 'wc_stripe_privacy_eraser_subs_statuses', [ 'on-hold', 'active' ] ) ) ) {
+		if ( $subscription->has_status( apply_filters( 'wc_monilypay_privacy_eraser_subs_statuses', [ 'on-hold', 'active' ] ) ) ) {
 			/* translators: %d Order ID */
 			return [ false, true, [ sprintf( __( 'Order ID %d contains an active Subscription. Personal data retained. (Stripe)', 'woocommerce-gateway-monilypay' ), $order->get_id() ) ] ];
 		}

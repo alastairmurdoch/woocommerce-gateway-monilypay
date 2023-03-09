@@ -281,7 +281,7 @@ abstract class WC_Monilypay_UPE_Payment_Method {
 	 */
 	public function get_supported_currencies() {
 		return apply_filters(
-			'wc_stripe_' . static::STRIPE_ID . '_upe_supported_currencies',
+			'wc_monilypay_' . static::STRIPE_ID . '_upe_supported_currencies',
 			$this->supported_currencies
 		);
 	}

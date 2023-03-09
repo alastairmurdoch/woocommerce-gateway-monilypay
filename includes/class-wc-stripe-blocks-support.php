@@ -227,7 +227,7 @@ final class WC_Monilypay_Blocks_Support extends AbstractPaymentMethodType {
 		}
 
 		return apply_filters(
-			'wc_stripe_params',
+			'wc_monilypay_params',
 			$js_configuration
 		);
 	}

@@ -157,7 +157,7 @@ abstract class WC_Monilypay_Payment_Gateway_Voucher extends WC_Monilypay_Payment
 
 		add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, [ $this, 'process_admin_options' ] );
 		add_action(
-			'wc_ajax_wc_stripe_' . $this->stripe_id . '_update_payment_intent',
+			'wc_ajax_wc_monilypay_' . $this->stripe_id . '_update_payment_intent',
 			[
 				$this,
 				'update_payment_intent_ajax',
@@ -201,7 +201,7 @@ abstract class WC_Monilypay_Payment_Gateway_Voucher extends WC_Monilypay_Payment
 	 */
 	public function get_supported_currency() {
 		return apply_filters(
-			'wc_stripe_' . $this->stripe_id . '_supported_currencies',
+			'wc_monilypay_' . $this->stripe_id . '_supported_currencies',
 			$this->supported_currencies
 		);
 	}
@@ -366,7 +366,7 @@ abstract class WC_Monilypay_Payment_Gateway_Voucher extends WC_Monilypay_Payment
 	 */
 	public function update_payment_intent_ajax() {
 		try {
-			$is_nonce_valid = check_ajax_referer( 'wc_stripe_update_payment_intent_nonce', false, false );
+			$is_nonce_valid = check_ajax_referer( 'wc_monilypay_update_payment_intent_nonce', false, false );
 			if ( ! $is_nonce_valid ) {
 				throw new Exception( __( "We're not able to process this payment. Please refresh the page and try again.", 'woocommerce-gateway-monilypay' ) );
 			}

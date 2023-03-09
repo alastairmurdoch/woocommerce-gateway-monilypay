@@ -107,7 +107,7 @@ class WC_Gateway_Monilypay_Eps extends WC_Monilypay_Payment_Gateway {
 	 */
 	public function get_supported_currency() {
 		return apply_filters(
-			'wc_stripe_eps_supported_currencies',
+			'wc_monilypay_eps_supported_currencies',
 			[
 				'EUR',
 			]

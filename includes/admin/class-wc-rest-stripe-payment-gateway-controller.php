@@ -15,7 +15,7 @@ class WC_REST_Monilypay_Payment_Gateway_Controller extends WC_Monilypay_REST_Bas
 	 *
 	 * @var string
 	 */
-	protected $rest_base = 'wc_stripe/payment-gateway';
+	protected $rest_base = 'wc_monilypay/payment-gateway';
 
 	/**
 	 * Stripe payment gateway.

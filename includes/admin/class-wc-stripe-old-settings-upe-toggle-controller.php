@@ -63,7 +63,7 @@ class WC_Monilypay_Old_Settings_UPE_Toggle_Controller {
 		);
 		wp_localize_script(
 			'woocommerce_stripe_old_settings_upe_toggle',
-			'wc_stripe_old_settings_param',
+			'wc_monilypay_old_settings_param',
 			[
 				'was_upe_enabled' => $this->was_upe_checkout_enabled,
 				'is_upe_enabled'  => WC_Monilypay_Feature_Flags::is_upe_checkout_enabled(),

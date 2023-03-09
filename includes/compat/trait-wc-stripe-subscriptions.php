@@ -40,8 +40,8 @@ trait WC_Monilypay_Subscriptions_Trait {
 		add_action( 'woocommerce_subscription_failing_payment_method_updated_' . $this->id, [ $this, 'update_failing_payment_method' ], 10, 2 );
 		add_action( 'wcs_resubscribe_order_created', [ $this, 'delete_resubscribe_meta' ], 10 );
 		add_action( 'wcs_renewal_order_created', [ $this, 'delete_renewal_meta' ], 10 );
-		add_action( 'wc_stripe_payment_fields_' . $this->id, [ $this, 'display_update_subs_payment_checkout' ] );
-		add_action( 'wc_stripe_add_payment_method_' . $this->id . '_success', [ $this, 'handle_add_payment_method_success' ], 10, 2 );
+		add_action( 'wc_monilypay_payment_fields_' . $this->id, [ $this, 'display_update_subs_payment_checkout' ] );
+		add_action( 'wc_monilypay_add_payment_method_' . $this->id . '_success', [ $this, 'handle_add_payment_method_success' ], 10, 2 );
 		add_action( 'woocommerce_subscriptions_change_payment_before_submit', [ $this, 'differentiate_change_payment_method_form' ] );
 
 		// Display the payment method used for a subscription in the "My Subscriptions" table.
@@ -69,20 +69,20 @@ trait WC_Monilypay_Subscriptions_Trait {
 	 * @since 4.1.11
 	 */
 	public function display_update_subs_payment_checkout() {
-		$subs_statuses = apply_filters( 'wc_stripe_update_subs_payment_method_card_statuses', [ 'active' ] );
+		$subs_statuses = apply_filters( 'wc_monilypay_update_subs_payment_method_card_statuses', [ 'active' ] );
 		if (
-			apply_filters( 'wc_stripe_display_update_subs_payment_method_card_checkbox', true ) &&
+			apply_filters( 'wc_monilypay_display_update_subs_payment_method_card_checkbox', true ) &&
 			wcs_user_has_subscription( get_current_user_id(), '', $subs_statuses ) &&
 			is_add_payment_method_page()
 		) {
-			$label = esc_html( apply_filters( 'wc_stripe_save_to_subs_text', __( 'Update the Payment Method used for all of my active subscriptions.', 'woocommerce-gateway-monilypay' ) ) );
+			$label = esc_html( apply_filters( 'wc_monilypay_save_to_subs_text', __( 'Update the Payment Method used for all of my active subscriptions.', 'woocommerce-gateway-monilypay' ) ) );
 			$id    = sprintf( 'wc-%1$s-update-subs-payment-method-card', $this->id );
 			woocommerce_form_field(
 				$id,
 				[
 					'type'    => 'checkbox',
 					'label'   => $label,
-					'default' => apply_filters( 'wc_stripe_save_to_subs_checked', false ),
+					'default' => apply_filters( 'wc_monilypay_save_to_subs_checked', false ),
 				]
 			);
 		}
@@ -99,7 +99,7 @@ trait WC_Monilypay_Subscriptions_Trait {
 	public function handle_add_payment_method_success( $source_id, $source_object ) {
 		if ( isset( $_POST[ 'wc-' . $this->id . '-update-subs-payment-method-card' ] ) ) {
 			$all_subs        = wcs_get_users_subscriptions();
-			$subs_statuses   = apply_filters( 'wc_stripe_update_subs_payment_method_card_statuses', [ 'active' ] );
+			$subs_statuses   = apply_filters( 'wc_monilypay_update_subs_payment_method_card_statuses', [ 'active' ] );
 			$stripe_customer = new WC_Monilypay_Customer( get_current_user_id() );
 
 			if ( ! empty( $all_subs ) ) {
@@ -164,7 +164,7 @@ trait WC_Monilypay_Subscriptions_Trait {
 			$this->check_source( $prepared_source );
 			$this->save_source_to_order( $subscription, $prepared_source );
 
-			do_action( 'wc_stripe_change_subs_payment_method_success', $prepared_source->source, $prepared_source );
+			do_action( 'wc_monilypay_change_subs_payment_method_success', $prepared_source->source, $prepared_source );
 
 			return [
 				'result'   => 'success',
@@ -263,7 +263,7 @@ trait WC_Monilypay_Subscriptions_Trait {
 				add_filter( 'wc_monilypay_idempotency_key', [ $this, 'change_idempotency_key' ], 10, 2 );
 			}
 
-			if ( ( $this->is_no_such_source_error( $previous_error ) || $this->is_no_linked_source_error( $previous_error ) ) && apply_filters( 'wc_stripe_use_default_customer_source', true ) ) {
+			if ( ( $this->is_no_such_source_error( $previous_error ) || $this->is_no_linked_source_error( $previous_error ) ) && apply_filters( 'wc_monilypay_use_default_customer_source', true ) ) {
 				// Passing empty source will charge customer default.
 				$prepared_source->source = '';
 			}

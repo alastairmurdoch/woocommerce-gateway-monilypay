@@ -24,17 +24,17 @@ class WC_Monilypay_Intent_Controller {
 	 */
 	public function __construct() {
 		add_action( 'wc_ajax_wc_monilypay_verify_intent', [ $this, 'verify_intent' ] );
-		add_action( 'wc_ajax_wc_stripe_create_setup_intent', [ $this, 'create_setup_intent' ] );
+		add_action( 'wc_ajax_wc_monilypay_create_setup_intent', [ $this, 'create_setup_intent' ] );
 
-		add_action( 'wc_ajax_wc_stripe_create_payment_intent', [ $this, 'create_payment_intent_ajax' ] );
-		add_action( 'wc_ajax_wc_stripe_update_payment_intent', [ $this, 'update_payment_intent_ajax' ] );
-		add_action( 'wc_ajax_wc_stripe_init_setup_intent', [ $this, 'init_setup_intent_ajax' ] );
+		add_action( 'wc_ajax_wc_monilypay_create_payment_intent', [ $this, 'create_payment_intent_ajax' ] );
+		add_action( 'wc_ajax_wc_monilypay_update_payment_intent', [ $this, 'update_payment_intent_ajax' ] );
+		add_action( 'wc_ajax_wc_monilypay_init_setup_intent', [ $this, 'init_setup_intent_ajax' ] );
 
-		add_action( 'wc_ajax_wc_stripe_save_upe_appearance', [ $this, 'save_upe_appearance_ajax' ] );
-		add_action( 'wc_ajax_nopriv_wc_stripe_save_upe_appearance', [ $this, 'save_upe_appearance_ajax' ] );
+		add_action( 'wc_ajax_wc_monilypay_save_upe_appearance', [ $this, 'save_upe_appearance_ajax' ] );
+		add_action( 'wc_ajax_nopriv_wc_monilypay_save_upe_appearance', [ $this, 'save_upe_appearance_ajax' ] );
 
-		add_action( 'wc_ajax_wc_stripe_update_order_status', [ $this, 'update_order_status_ajax' ] );
-		add_action( 'wc_ajax_wc_stripe_update_failed_order', [ $this, 'update_failed_order_ajax' ] );
+		add_action( 'wc_ajax_wc_monilypay_update_order_status', [ $this, 'update_order_status_ajax' ] );
+		add_action( 'wc_ajax_wc_monilypay_update_failed_order', [ $this, 'update_failed_order_ajax' ] );
 
 		add_action( 'switch_theme', [ $this, 'clear_upe_appearance_transient' ] );
 
@@ -196,7 +196,7 @@ class WC_Monilypay_Intent_Controller {
 
 			// 1. Verify.
 			if (
-				! wp_verify_nonce( sanitize_key( $_POST['nonce'] ), 'wc_stripe_create_si' )
+				! wp_verify_nonce( sanitize_key( $_POST['nonce'] ), 'wc_monilypay_create_si' )
 				|| ! preg_match( '/^src_.*$/', $source_id )
 			) {
 				throw new Exception( __( 'Unable to verify your request. Please reload the page and try again.', 'woocommerce-gateway-monilypay' ) );
@@ -285,7 +285,7 @@ class WC_Monilypay_Intent_Controller {
 	 */
 	public function create_payment_intent_ajax() {
 		try {
-			$is_nonce_valid = check_ajax_referer( 'wc_stripe_create_payment_intent_nonce', false, false );
+			$is_nonce_valid = check_ajax_referer( 'wc_monilypay_create_payment_intent_nonce', false, false );
 			if ( ! $is_nonce_valid ) {
 				throw new Exception( __( "We're not able to process this payment. Please refresh the page and try again.", 'woocommerce-gateway-monilypay' ) );
 			}
@@ -353,7 +353,7 @@ class WC_Monilypay_Intent_Controller {
 	 */
 	public function update_payment_intent_ajax() {
 		try {
-			$is_nonce_valid = check_ajax_referer( 'wc_stripe_update_payment_intent_nonce', false, false );
+			$is_nonce_valid = check_ajax_referer( 'wc_monilypay_update_payment_intent_nonce', false, false );
 			if ( ! $is_nonce_valid ) {
 				throw new Exception( __( "We're not able to process this payment. Please refresh the page and try again.", 'woocommerce-gateway-monilypay' ) );
 			}
@@ -463,7 +463,7 @@ class WC_Monilypay_Intent_Controller {
 	 */
 	public function init_setup_intent_ajax() {
 		try {
-			$is_nonce_valid = check_ajax_referer( 'wc_stripe_create_setup_intent_nonce', false, false );
+			$is_nonce_valid = check_ajax_referer( 'wc_monilypay_create_setup_intent_nonce', false, false );
 			if ( ! $is_nonce_valid ) {
 				throw new Exception( __( "We're not able to add this payment method. Please refresh the page and try again.", 'woocommerce-gateway-monilypay' ) );
 			}
@@ -528,7 +528,7 @@ class WC_Monilypay_Intent_Controller {
 	 */
 	public function save_upe_appearance_ajax() {
 		try {
-			$is_nonce_valid = check_ajax_referer( 'wc_stripe_save_upe_appearance_nonce', false, false );
+			$is_nonce_valid = check_ajax_referer( 'wc_monilypay_save_upe_appearance_nonce', false, false );
 			if ( ! $is_nonce_valid ) {
 				throw new Exception(
 					__( 'Unable to update UPE appearance values at this time.', 'woocommerce-gateway-monilypay' )
@@ -578,7 +578,7 @@ class WC_Monilypay_Intent_Controller {
 	 */
 	public function update_order_status_ajax() {
 		try {
-			$is_nonce_valid = check_ajax_referer( 'wc_stripe_update_order_status_nonce', false, false );
+			$is_nonce_valid = check_ajax_referer( 'wc_monilypay_update_order_status_nonce', false, false );
 			if ( ! $is_nonce_valid ) {
 				throw new WC_Monilypay_Exception( 'missing-nonce', __( 'CSRF verification failed.', 'woocommerce-gateway-monilypay' ) );
 			}
@@ -638,7 +638,7 @@ class WC_Monilypay_Intent_Controller {
 	 */
 	public function update_failed_order_ajax() {
 		try {
-			$is_nonce_valid = check_ajax_referer( 'wc_stripe_update_failed_order_nonce', false, false );
+			$is_nonce_valid = check_ajax_referer( 'wc_monilypay_update_failed_order_nonce', false, false );
 			if ( ! $is_nonce_valid ) {
 				throw new WC_Monilypay_Exception( 'missing-nonce', __( 'CSRF verification failed.', 'woocommerce-gateway-monilypay' ) );
 			}

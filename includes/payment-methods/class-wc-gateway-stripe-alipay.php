@@ -107,7 +107,7 @@ class WC_Gateway_Monilypay_Alipay extends WC_Monilypay_Payment_Gateway {
 	 */
 	public function get_supported_currency() {
 		return apply_filters(
-			'wc_stripe_alipay_supported_currencies',
+			'wc_monilypay_alipay_supported_currencies',
 			[
 				'EUR',
 				'AUD',
@@ -236,7 +236,7 @@ class WC_Gateway_Monilypay_Alipay extends WC_Monilypay_Payment_Gateway {
 
 		WC_Monilypay_Logger::log( 'Info: Begin creating Alipay source' );
 
-		return WC_Monilypay_API::request( apply_filters( 'wc_stripe_alipay_source', $post_data, $order ), 'sources' );
+		return WC_Monilypay_API::request( apply_filters( 'wc_monilypay_alipay_source', $post_data, $order ), 'sources' );
 	}
 
 	/**

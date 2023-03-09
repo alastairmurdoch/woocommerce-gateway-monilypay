@@ -13,7 +13,7 @@ class WC_REST_Monilypay_Tokens_Controller extends WC_Monilypay_REST_Base_Control
 	/**
 	 * Endpoint path.
 	 */
-	protected $rest_base = 'wc_stripe/tokens';
+	protected $rest_base = 'wc_monilypay/tokens';
 
 	/**
 	 * Register REST API routes for Stripe tokens.

@@ -14,7 +14,7 @@ class WC_Monilypay_REST_UPE_Flag_Toggle_Controller extends WC_Monilypay_REST_Bas
 	 *
 	 * @var string
 	 */
-	protected $rest_base = 'wc_stripe/upe_flag_toggle';
+	protected $rest_base = 'wc_monilypay/upe_flag_toggle';
 
 	/**
 	 * Configure REST API routes.

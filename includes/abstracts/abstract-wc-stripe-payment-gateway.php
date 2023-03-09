@@ -120,7 +120,7 @@ abstract class WC_Monilypay_Payment_Gateway extends WC_Payment_Gateway_CC {
 			<p class="form-row woocommerce-SavedPaymentMethods-saveNew">
 				<input id="<?php echo esc_attr( $id ); ?>" name="<?php echo esc_attr( $id ); ?>" type="checkbox" value="true" style="width:auto;" <?php echo $force_checked ? 'checked' : ''; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped */ ?> />
 				<label for="<?php echo esc_attr( $id ); ?>" style="display:inline;">
-					<?php echo esc_html( apply_filters( 'wc_stripe_save_to_account_text', __( 'Save payment information to my account for future purchases.', 'woocommerce-gateway-monilypay' ) ) ); ?>
+					<?php echo esc_html( apply_filters( 'wc_monilypay_save_to_account_text', __( 'Save payment information to my account for future purchases.', 'woocommerce-gateway-monilypay' ) ) ); ?>
 				</label>
 			</p>
 		</fieldset>
@@ -306,7 +306,7 @@ abstract class WC_Monilypay_Payment_Gateway extends WC_Payment_Gateway_CC {
 	 */
 	public function payment_icons() {
 		return apply_filters(
-			'wc_stripe_payment_icons',
+			'wc_monilypay_payment_icons',
 			[
 				'alipay'     => '<img src="' . WC_MONILYPAY_PLUGIN_URL . '/assets/images/alipay.svg" class="stripe-alipay-icon stripe-icon" alt="Alipay" />',
 				'wechat'     => '<img src="' . WC_MONILYPAY_PLUGIN_URL . '/assets/images/wechat.svg" class="stripe-wechat-icon stripe-icon" alt="Wechat Pay" />',
@@ -423,7 +423,7 @@ abstract class WC_Monilypay_Payment_Gateway extends WC_Payment_Gateway_CC {
 		$billing_first_name       = $order->get_billing_first_name();
 		$billing_last_name        = $order->get_billing_last_name();
 
-		if ( ! empty( $billing_email ) && apply_filters( 'wc_stripe_send_stripe_receipt', false ) ) {
+		if ( ! empty( $billing_email ) && apply_filters( 'wc_monilypay_send_stripe_receipt', false ) ) {
 			$post_data['receipt_email'] = $billing_email;
 		}
 
@@ -478,7 +478,7 @@ abstract class WC_Monilypay_Payment_Gateway extends WC_Payment_Gateway_CC {
 			];
 		}
 
-		$post_data['metadata'] = apply_filters( 'wc_stripe_payment_metadata', $metadata, $order, $prepared_payment_method );
+		$post_data['metadata'] = apply_filters( 'wc_monilypay_payment_metadata', $metadata, $order, $prepared_payment_method );
 
 		if ( $prepared_payment_method->customer ) {
 			$post_data['customer'] = $prepared_payment_method->customer;
@@ -500,7 +500,7 @@ abstract class WC_Monilypay_Payment_Gateway extends WC_Payment_Gateway_CC {
 		 * @param WC_Order $order
 		 * @param object $source
 		 */
-		return apply_filters( 'wc_stripe_generate_payment_request', $post_data, $order, $prepared_payment_method );
+		return apply_filters( 'wc_monilypay_generate_payment_request', $post_data, $order, $prepared_payment_method );
 	}
 
 	/**
@@ -622,7 +622,7 @@ abstract class WC_Monilypay_Payment_Gateway extends WC_Payment_Gateway_CC {
 		$details['address']['postal_code'] = $order->get_billing_postcode();
 		$details['address']['country']     = $order->get_billing_country();
 
-		return (object) apply_filters( 'wc_stripe_owner_details', $details, $order );
+		return (object) apply_filters( 'wc_monilypay_owner_details', $details, $order );
 	}
 
 	/**
@@ -716,7 +716,7 @@ abstract class WC_Monilypay_Payment_Gateway extends WC_Payment_Gateway_CC {
 	 */
 	public function maybe_disallow_prepaid_card( $payment_method ) {
 		// Check if we don't allow prepaid credit cards.
-		if ( apply_filters( 'wc_stripe_allow_prepaid_card', true ) || ! $this->is_prepaid_card( $payment_method ) ) {
+		if ( apply_filters( 'wc_monilypay_allow_prepaid_card', true ) || ! $this->is_prepaid_card( $payment_method ) ) {
 			return;
 		}
 
@@ -909,7 +909,7 @@ abstract class WC_Monilypay_Payment_Gateway extends WC_Payment_Gateway_CC {
 			if ( $source_id ) {
 				$stripe_source = $source_id;
 				$source_object = WC_Monilypay_API::retrieve( 'sources/' . $source_id );
-			} elseif ( apply_filters( 'wc_stripe_use_default_customer_source', true ) ) {
+			} elseif ( apply_filters( 'wc_monilypay_use_default_customer_source', true ) ) {
 				/*
 				 * We can attempt to charge the customer's default source
 				 * by sending empty source id.
@@ -1061,7 +1061,7 @@ abstract class WC_Monilypay_Payment_Gateway extends WC_Payment_Gateway_CC {
 		$request['charge'] = $charge_id;
 		WC_Monilypay_Logger::log( "Info: Beginning refund for order {$charge_id} for the amount of {$amount}" );
 
-		$request = apply_filters( 'wc_stripe_refund_request', $request, $order );
+		$request = apply_filters( 'wc_monilypay_refund_request', $request, $order );
 
 		$intent           = $this->get_intent_from_order( $order );
 		$intent_cancelled = false;
@@ -1183,7 +1183,7 @@ abstract class WC_Monilypay_Payment_Gateway extends WC_Payment_Gateway_CC {
 			return;
 		}
 
-		do_action( 'wc_stripe_add_payment_method_' . ( isset( $_POST['payment_method'] ) ? wc_clean( wp_unslash( $_POST['payment_method'] ) ) : '' ) . '_success', $source_id, $source_object );
+		do_action( 'wc_monilypay_add_payment_method_' . ( isset( $_POST['payment_method'] ) ? wc_clean( wp_unslash( $_POST['payment_method'] ) ) : '' ) . '_success', $source_id, $source_object );
 
 		return [
 			'result'   => 'success',
@@ -1304,7 +1304,7 @@ abstract class WC_Monilypay_Payment_Gateway extends WC_Payment_Gateway_CC {
 		 * @param WC_Order $order
 		 * @param object $source
 		 */
-		return apply_filters( 'wc_stripe_generate_create_intent_request', $request, $order, $prepared_source );
+		return apply_filters( 'wc_monilypay_generate_create_intent_request', $request, $order, $prepared_source );
 	}
 
 	/**
@@ -1438,7 +1438,7 @@ abstract class WC_Monilypay_Payment_Gateway extends WC_Payment_Gateway_CC {
 		 * @param WC_Order $order Order that the intent is associated with.
 		 * @param object $source  Currently selected source.
 		 */
-		$request = apply_filters( 'wc_stripe_update_existing_intent_request', $request, $order, $prepared_source );
+		$request = apply_filters( 'wc_monilypay_update_existing_intent_request', $request, $order, $prepared_source );
 
 		$level3_data = $this->get_level3_data_from_order( $order );
 		return WC_Monilypay_API::request_with_level3_data(
@@ -1569,7 +1569,7 @@ abstract class WC_Monilypay_Payment_Gateway extends WC_Payment_Gateway_CC {
 	 */
 	public function lock_order_payment( $order, $intent = null ) {
 		$order_id       = $order->get_id();
-		$transient_name = 'wc_stripe_processing_intent_' . $order_id;
+		$transient_name = 'wc_monilypay_processing_intent_' . $order_id;
 		$processing     = get_transient( $transient_name );
 
 		// Block the process if the same intent is already being handled.
@@ -1591,7 +1591,7 @@ abstract class WC_Monilypay_Payment_Gateway extends WC_Payment_Gateway_CC {
 	 */
 	public function unlock_order_payment( $order ) {
 		$order_id = $order->get_id();
-		delete_transient( 'wc_stripe_processing_intent_' . $order_id );
+		delete_transient( 'wc_monilypay_processing_intent_' . $order_id );
 	}
 
 	/**
@@ -1691,7 +1691,7 @@ abstract class WC_Monilypay_Payment_Gateway extends WC_Payment_Gateway_CC {
 		 * @param WC_Order $order
 		 * @param object $source
 		 */
-		$request = apply_filters( 'wc_stripe_generate_create_intent_request', $request, $order, $prepared_source );
+		$request = apply_filters( 'wc_monilypay_generate_create_intent_request', $request, $order, $prepared_source );
 
 		if ( isset( $full_request['shipping'] ) ) {
 			$request['shipping'] = $full_request['shipping'];
@@ -1829,8 +1829,8 @@ abstract class WC_Monilypay_Payment_Gateway extends WC_Payment_Gateway_CC {
 
 		wp_localize_script(
 			'woocommerce_stripe',
-			'wc_stripe_params',
-			apply_filters( 'wc_stripe_params', $this->javascript_params() )
+			'wc_monilypay_params',
+			apply_filters( 'wc_monilypay_params', $this->javascript_params() )
 		);
 
 		$this->tokenization_script();
@@ -1852,8 +1852,8 @@ abstract class WC_Monilypay_Payment_Gateway extends WC_Payment_Gateway_CC {
 			'key'                      => $this->publishable_key,
 			'i18n_terms'               => __( 'Please accept the terms and conditions first', 'woocommerce-gateway-monilypay' ),
 			'i18n_required_fields'     => __( 'Please fill in required checkout fields first', 'woocommerce-gateway-monilypay' ),
-			'updateFailedOrderNonce'   => wp_create_nonce( 'wc_stripe_update_failed_order_nonce' ),
-			'updatePaymentIntentNonce' => wp_create_nonce( 'wc_stripe_update_payment_intent_nonce' ),
+			'updateFailedOrderNonce'   => wp_create_nonce( 'wc_monilypay_update_failed_order_nonce' ),
+			'updatePaymentIntentNonce' => wp_create_nonce( 'wc_monilypay_update_payment_intent_nonce' ),
 			'orderId'                  => $order_id,
 			'checkout_url'             => WC_AJAX::get_endpoint( 'checkout' ),
 			//'stripeAccount'			   => $this->monilypay_account_id
@@ -1877,7 +1877,7 @@ abstract class WC_Monilypay_Payment_Gateway extends WC_Payment_Gateway_CC {
 		}
 
 		$sepa_elements_options = apply_filters(
-			'wc_stripe_sepa_elements_options',
+			'wc_monilypay_sepa_elements_options',
 			[
 				'supportedCountries' => [ 'SEPA' ],
 				'placeholderCountry' => WC()->countries->get_base_country(),
@@ -1890,24 +1890,24 @@ abstract class WC_Monilypay_Payment_Gateway extends WC_Payment_Gateway_CC {
 		$stripe_params['no_sepa_owner_msg']           = __( 'Please enter your IBAN account name.', 'woocommerce-gateway-monilypay' );
 		$stripe_params['no_sepa_iban_msg']            = __( 'Please enter your IBAN account number.', 'woocommerce-gateway-monilypay' );
 		$stripe_params['payment_intent_error']        = __( 'We couldn\'t initiate the payment. Please try again.', 'woocommerce-gateway-monilypay' );
-		$stripe_params['sepa_mandate_notification']   = apply_filters( 'wc_stripe_sepa_mandate_notification', 'email' );
-		$stripe_params['allow_prepaid_card']          = apply_filters( 'wc_stripe_allow_prepaid_card', true ) ? 'yes' : 'no';
+		$stripe_params['sepa_mandate_notification']   = apply_filters( 'wc_monilypay_sepa_mandate_notification', 'email' );
+		$stripe_params['allow_prepaid_card']          = apply_filters( 'wc_monilypay_allow_prepaid_card', true ) ? 'yes' : 'no';
 		$stripe_params['inline_cc_form']              = ( isset( $this->inline_cc_form ) && $this->inline_cc_form ) ? 'yes' : 'no';
 		$stripe_params['is_checkout']                 = ( is_checkout() && empty( $_GET['pay_for_order'] ) ) ? 'yes' : 'no'; // wpcs: csrf ok.
 		$stripe_params['return_url']                  = $this->get_stripe_return_url();
 		$stripe_params['ajaxurl']                     = WC_AJAX::get_endpoint( '%%endpoint%%' );
-		$stripe_params['stripe_nonce']                = wp_create_nonce( '_wc_stripe_nonce' );
+		$stripe_params['stripe_nonce']                = wp_create_nonce( '_wc_monilypay_nonce' );
 		$stripe_params['statement_descriptor']        = $this->statement_descriptor;
-		$stripe_params['elements_options']            = apply_filters( 'wc_stripe_elements_options', [] );
+		$stripe_params['elements_options']            = apply_filters( 'wc_monilypay_elements_options', [] );
 		$stripe_params['sepa_elements_options']       = $sepa_elements_options;
 		$stripe_params['invalid_owner_name']          = __( 'Billing First Name and Last Name are required.', 'woocommerce-gateway-monilypay' );
 		$stripe_params['is_change_payment_page']      = isset( $_GET['change_payment_method'] ) ? 'yes' : 'no'; // wpcs: csrf ok.
 		$stripe_params['is_add_payment_page']         = is_wc_endpoint_url( 'add-payment-method' ) ? 'yes' : 'no';
 		$stripe_params['is_pay_for_order_page']       = is_wc_endpoint_url( 'order-pay' ) ? 'yes' : 'no';
-		$stripe_params['elements_styling']            = apply_filters( 'wc_stripe_elements_styling', false );
-		$stripe_params['elements_classes']            = apply_filters( 'wc_stripe_elements_classes', false );
-		$stripe_params['add_card_nonce']              = wp_create_nonce( 'wc_stripe_create_si' );
-		$stripe_params['create_payment_intent_nonce'] = wp_create_nonce( 'wc_stripe_create_payment_intent_nonce' );
+		$stripe_params['elements_styling']            = apply_filters( 'wc_monilypay_elements_styling', false );
+		$stripe_params['elements_classes']            = apply_filters( 'wc_monilypay_elements_classes', false );
+		$stripe_params['add_card_nonce']              = wp_create_nonce( 'wc_monilypay_create_si' );
+		$stripe_params['create_payment_intent_nonce'] = wp_create_nonce( 'wc_monilypay_create_payment_intent_nonce' );
 		$stripe_params['cpf_cnpj_required_msg']       = __( 'CPF/CNPJ is a required field', 'woocommerce-gateway-monilypay' );
 
 		// Merge localized messages to be use in JS.

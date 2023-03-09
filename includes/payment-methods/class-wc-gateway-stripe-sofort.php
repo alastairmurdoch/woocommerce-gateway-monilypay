@@ -107,7 +107,7 @@ class WC_Gateway_Monilypay_Sofort extends WC_Monilypay_Payment_Gateway {
 	 */
 	public function get_supported_currency() {
 		return apply_filters(
-			'wc_stripe_sofort_supported_currencies',
+			'wc_monilypay_sofort_supported_currencies',
 			[
 				'EUR',
 			]
@@ -228,7 +228,7 @@ class WC_Gateway_Monilypay_Sofort extends WC_Monilypay_Payment_Gateway {
 
 		WC_Monilypay_Logger::log( 'Info: Begin creating Sofort source' );
 
-		return WC_Monilypay_API::request( apply_filters( 'wc_stripe_sofort_source', $post_data, $order ), 'sources' );
+		return WC_Monilypay_API::request( apply_filters( 'wc_monilypay_sofort_source', $post_data, $order ), 'sources' );
 	}
 
 	/**

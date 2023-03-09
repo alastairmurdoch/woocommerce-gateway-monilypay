@@ -15,7 +15,7 @@ class WC_REST_Monilypay_Locations_Controller extends WC_Monilypay_REST_Base_Cont
 	 *
 	 * @var string
 	 */
-	protected $rest_base = 'wc_stripe/terminal/locations';
+	protected $rest_base = 'wc_monilypay/terminal/locations';
 
 	/**
 	 * Configure REST API routes.

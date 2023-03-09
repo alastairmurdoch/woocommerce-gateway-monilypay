@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 return apply_filters(
-	'wc_stripe_oxxo_settings',
+	'wc_monilypay_oxxo_settings',
 	[
 		'geo_target'  => [
 			'description' => __( 'Customer Geography: Mexico', 'woocommerce-gateway-monilypay' ),

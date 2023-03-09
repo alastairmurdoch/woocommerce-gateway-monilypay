@@ -23,7 +23,7 @@ class WC_Monilypay_Payment_Gateways_Controller {
 
 		if ( count( $enabled_upe_payment_methods ) > 0 || $upe_payment_requests_enabled ) {
 			add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_payments_scripts' ] );
-			add_action( 'woocommerce_admin_field_payment_gateways', [ $this, 'wc_stripe_gateway_container' ] );
+			add_action( 'woocommerce_admin_field_payment_gateways', [ $this, 'wc_monilypay_gateway_container' ] );
 		}
 	}
 

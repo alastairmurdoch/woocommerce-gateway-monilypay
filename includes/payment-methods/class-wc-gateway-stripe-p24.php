@@ -107,7 +107,7 @@ class WC_Gateway_Monilypay_P24 extends WC_Monilypay_Payment_Gateway {
 	 */
 	public function get_supported_currency() {
 		return apply_filters(
-			'wc_stripe_p24_supported_currencies',
+			'wc_monilypay_p24_supported_currencies',
 			[
 				'EUR',
 				'PLN',
@@ -220,7 +220,7 @@ class WC_Gateway_Monilypay_P24 extends WC_Monilypay_Payment_Gateway {
 
 		WC_Monilypay_Logger::log( 'Info: Begin creating P24 source' );
 
-		return WC_Monilypay_API::request( apply_filters( 'wc_stripe_p24_source', $post_data, $order ), 'sources' );
+		return WC_Monilypay_API::request( apply_filters( 'wc_monilypay_p24_source', $post_data, $order ), 'sources' );
 	}
 
 	/**

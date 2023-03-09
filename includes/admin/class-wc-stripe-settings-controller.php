@@ -118,7 +118,7 @@ class WC_Monilypay_Settings_Controller {
 		];
 		wp_localize_script(
 			'woocommerce_stripe_admin',
-			'wc_stripe_settings_params',
+			'wc_monilypay_settings_params',
 			$params
 		);
 		wp_set_script_translations(

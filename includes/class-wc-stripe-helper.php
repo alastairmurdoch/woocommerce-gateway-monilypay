@@ -194,7 +194,7 @@ class WC_Monilypay_Helper {
 	 */
 	public static function get_localized_messages() {
 		return apply_filters(
-			'wc_stripe_localized_messages',
+			'wc_monilypay_localized_messages',
 			[
 				'invalid_number'           => __( 'The card number is not a valid credit card number.', 'woocommerce-gateway-monilypay' ),
 				'invalid_expiry_month'     => __( 'The card\'s expiration month is invalid.', 'woocommerce-gateway-monilypay' ),
@@ -687,7 +687,7 @@ class WC_Monilypay_Helper {
 			return true;
 		}
 
-		return apply_filters( 'wc_stripe_load_scripts_on_product_page_when_prbs_disabled', true );
+		return apply_filters( 'wc_monilypay_load_scripts_on_product_page_when_prbs_disabled', true );
 	}
 
 	/**
@@ -704,7 +704,7 @@ class WC_Monilypay_Helper {
 			return true;
 		}
 
-		return apply_filters( 'wc_stripe_load_scripts_on_cart_page_when_prbs_disabled', true );
+		return apply_filters( 'wc_monilypay_load_scripts_on_cart_page_when_prbs_disabled', true );
 	}
 
 	/**

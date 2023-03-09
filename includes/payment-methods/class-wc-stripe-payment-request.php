@@ -226,14 +226,14 @@ class WC_Monilypay_Payment_Request {
 		add_action( 'woocommerce_checkout_before_customer_details', [ $this, 'display_payment_request_button_html' ], 1 );
 		add_action( 'woocommerce_checkout_before_customer_details', [ $this, 'display_payment_request_button_separator_html' ], 2 );
 
-		add_action( 'wc_ajax_wc_stripe_get_cart_details', [ $this, 'ajax_get_cart_details' ] );
-		add_action( 'wc_ajax_wc_stripe_get_shipping_options', [ $this, 'ajax_get_shipping_options' ] );
-		add_action( 'wc_ajax_wc_stripe_update_shipping_method', [ $this, 'ajax_update_shipping_method' ] );
-		add_action( 'wc_ajax_wc_stripe_create_order', [ $this, 'ajax_create_order' ] );
-		add_action( 'wc_ajax_wc_stripe_add_to_cart', [ $this, 'ajax_add_to_cart' ] );
-		add_action( 'wc_ajax_wc_stripe_get_selected_product_data', [ $this, 'ajax_get_selected_product_data' ] );
-		add_action( 'wc_ajax_wc_stripe_clear_cart', [ $this, 'ajax_clear_cart' ] );
-		add_action( 'wc_ajax_wc_stripe_log_errors', [ $this, 'ajax_log_errors' ] );
+		add_action( 'wc_ajax_wc_monilypay_get_cart_details', [ $this, 'ajax_get_cart_details' ] );
+		add_action( 'wc_ajax_wc_monilypay_get_shipping_options', [ $this, 'ajax_get_shipping_options' ] );
+		add_action( 'wc_ajax_wc_monilypay_update_shipping_method', [ $this, 'ajax_update_shipping_method' ] );
+		add_action( 'wc_ajax_wc_monilypay_create_order', [ $this, 'ajax_create_order' ] );
+		add_action( 'wc_ajax_wc_monilypay_add_to_cart', [ $this, 'ajax_add_to_cart' ] );
+		add_action( 'wc_ajax_wc_monilypay_get_selected_product_data', [ $this, 'ajax_get_selected_product_data' ] );
+		add_action( 'wc_ajax_wc_monilypay_clear_cart', [ $this, 'ajax_clear_cart' ] );
+		add_action( 'wc_ajax_wc_monilypay_log_errors', [ $this, 'ajax_log_errors' ] );
 
 		add_filter( 'woocommerce_gateway_title', [ $this, 'filter_gateway_title' ], 10, 2 );
 		add_action( 'woocommerce_checkout_order_processed', [ $this, 'add_order_meta' ], 10, 2 );
@@ -706,7 +706,7 @@ class WC_Monilypay_Payment_Request {
 			'ajax_url'           => WC_AJAX::get_endpoint( '%%endpoint%%' ),
 			'stripe'             => [
 				'key'                => $this->publishable_key,
-				'allow_prepaid_card' => apply_filters( 'wc_stripe_allow_prepaid_card', true ) ? 'yes' : 'no',
+				'allow_prepaid_card' => apply_filters( 'wc_monilypay_allow_prepaid_card', true ) ? 'yes' : 'no',
 				'locale'             => WC_Monilypay_Helper::convert_wc_locale_to_stripe_locale( get_locale() ),
 			],
 			'nonce'              => [

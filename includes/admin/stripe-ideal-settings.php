@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 return apply_filters(
-	'wc_stripe_ideal_settings',
+	'wc_monilypay_ideal_settings',
 	[
 		'geo_target'  => [
 			'description' => __( 'Customer Geography: The Netherlands', 'woocommerce-gateway-monilypay' ),

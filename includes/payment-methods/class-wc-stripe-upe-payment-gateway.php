@@ -265,8 +265,8 @@ class WC_Monilypay_UPE_Payment_Gateway extends WC_Gateway_Monilypay {
 
 		wp_localize_script(
 			'wc-stripe-upe-classic',
-			'wc_stripe_upe_params',
-			apply_filters( 'wc_stripe_upe_params', $this->javascript_params() )
+			'wc_monilypay_upe_params',
+			apply_filters( 'wc_monilypay_upe_params', $this->javascript_params() )
 		);
 
 		wp_register_style(
@@ -309,13 +309,13 @@ class WC_Monilypay_UPE_Payment_Gateway extends WC_Gateway_Monilypay {
 		$stripe_params['isCheckout']               = is_checkout() && empty( $_GET['pay_for_order'] ); // wpcs: csrf ok.
 		$stripe_params['return_url']               = $this->get_stripe_return_url();
 		$stripe_params['ajax_url']                 = WC_AJAX::get_endpoint( '%%endpoint%%' );
-		$stripe_params['createPaymentIntentNonce'] = wp_create_nonce( 'wc_stripe_create_payment_intent_nonce' );
-		$stripe_params['updatePaymentIntentNonce'] = wp_create_nonce( 'wc_stripe_update_payment_intent_nonce' );
-		$stripe_params['createSetupIntentNonce']   = wp_create_nonce( 'wc_stripe_create_setup_intent_nonce' );
-		$stripe_params['updateFailedOrderNonce']   = wp_create_nonce( 'wc_stripe_update_failed_order_nonce' );
+		$stripe_params['createPaymentIntentNonce'] = wp_create_nonce( 'wc_monilypay_create_payment_intent_nonce' );
+		$stripe_params['updatePaymentIntentNonce'] = wp_create_nonce( 'wc_monilypay_update_payment_intent_nonce' );
+		$stripe_params['createSetupIntentNonce']   = wp_create_nonce( 'wc_monilypay_create_setup_intent_nonce' );
+		$stripe_params['updateFailedOrderNonce']   = wp_create_nonce( 'wc_monilypay_update_failed_order_nonce' );
 		$stripe_params['upeAppearance']            = get_transient( self::UPE_APPEARANCE_TRANSIENT );
 		$stripe_params['wcBlocksUPEAppearance']    = get_transient( self::WC_BLOCKS_UPE_APPEARANCE_TRANSIENT );
-		$stripe_params['saveUPEAppearanceNonce']   = wp_create_nonce( 'wc_stripe_save_upe_appearance_nonce' );
+		$stripe_params['saveUPEAppearanceNonce']   = wp_create_nonce( 'wc_monilypay_save_upe_appearance_nonce' );
 		$stripe_params['paymentMethodsConfig']     = $this->get_enabled_payment_method_config();
 		$stripe_params['genericErrorMessage']      = __( 'There was a problem processing the payment. Please check your email inbox and refresh the page to try again.', 'woocommerce-gateway-monilypay' );
 		$stripe_params['accountDescriptor']        = $this->statement_descriptor;
@@ -346,7 +346,7 @@ class WC_Monilypay_UPE_Payment_Gateway extends WC_Gateway_Monilypay {
 						[
 							'order_id'          => $order_id,
 							'wc_payment_method' => self::ID,
-							'_wpnonce'          => wp_create_nonce( 'wc_stripe_process_redirect_order_nonce' ),
+							'_wpnonce'          => wp_create_nonce( 'wc_monilypay_process_redirect_order_nonce' ),
 						],
 						$this->get_return_url( $order )
 					)
@@ -520,7 +520,7 @@ class WC_Monilypay_UPE_Payment_Gateway extends WC_Gateway_Monilypay {
 		$order                     = wc_get_order( $order_id );
 		$payment_needed            = $this->is_payment_needed( $order_id );
 		$save_payment_method       = $this->has_subscription( $order_id ) || ! empty( $_POST[ 'wc-' . self::ID . '-new-payment-method' ] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
-		$selected_upe_payment_type = ! empty( $_POST['wc_stripe_selected_upe_payment_type'] ) ? wc_clean( wp_unslash( $_POST['wc_stripe_selected_upe_payment_type'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$selected_upe_payment_type = ! empty( $_POST['wc_monilypay_selected_upe_payment_type'] ) ? wc_clean( wp_unslash( $_POST['wc_monilypay_selected_upe_payment_type'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		$statement_descriptor                  = ! empty( $this->get_option( 'statement_descriptor' ) ) ? str_replace( "'", '', $this->get_option( 'statement_descriptor' ) ) : '';
 		$short_statement_descriptor            = ! empty( $this->get_option( 'short_statement_descriptor' ) ) ? str_replace( "'", '', $this->get_option( 'short_statement_descriptor' ) ) : '';
@@ -616,7 +616,7 @@ class WC_Monilypay_UPE_Payment_Gateway extends WC_Gateway_Monilypay {
 						[
 							'order_id'            => $order_id,
 							'wc_payment_method'   => self::ID,
-							'_wpnonce'            => wp_create_nonce( 'wc_stripe_process_redirect_order_nonce' ),
+							'_wpnonce'            => wp_create_nonce( 'wc_monilypay_process_redirect_order_nonce' ),
 							'save_payment_method' => $save_payment_method ? 'yes' : 'no',
 						],
 						$this->get_return_url( $order )
@@ -736,7 +736,7 @@ class WC_Monilypay_UPE_Payment_Gateway extends WC_Gateway_Monilypay {
 							$payment_needed ? 'pi' : 'si',
 							$order_id,
 							$intent->client_secret,
-							wp_create_nonce( 'wc_stripe_update_order_status_nonce' )
+							wp_create_nonce( 'wc_monilypay_update_order_status_nonce' )
 						),
 					];
 				}
@@ -834,7 +834,7 @@ class WC_Monilypay_UPE_Payment_Gateway extends WC_Gateway_Monilypay {
 			return;
 		}
 
-		$is_nonce_valid = isset( $_GET['_wpnonce'] ) && wp_verify_nonce( wc_clean( wp_unslash( $_GET['_wpnonce'] ) ), 'wc_stripe_process_redirect_order_nonce' );
+		$is_nonce_valid = isset( $_GET['_wpnonce'] ) && wp_verify_nonce( wc_clean( wp_unslash( $_GET['_wpnonce'] ) ), 'wc_monilypay_process_redirect_order_nonce' );
 		if ( ! $is_nonce_valid || empty( $_GET['wc_payment_method'] ) ) {
 			return;
 		}

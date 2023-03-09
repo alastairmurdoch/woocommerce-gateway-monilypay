@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 $is_gte_wc6_6 = defined( WC_VERSION ) && version_compare( WC_VERSION, '6.6', '>=' );
 
 $stripe_settings = apply_filters(
-	'wc_stripe_settings',
+	'wc_monilypay_settings',
 	[
 		'enabled'                             => [
 			'title'       => __( 'Enable/Disable', 'woocommerce-gateway-monilypay' ),
@@ -319,6 +319,6 @@ if ( WC_Monilypay_Feature_Flags::is_upe_preview_enabled() ) {
 }
 
 return apply_filters(
-	'wc_stripe_settings',
+	'wc_monilypay_settings',
 	$stripe_settings
 );

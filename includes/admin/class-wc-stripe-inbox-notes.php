@@ -13,8 +13,8 @@ class WC_Monilypay_Inbox_Notes {
 	const SUCCESS_NOTE_NAME = 'stripe-apple-pay-marketing-guide-holiday-2020';
 	const FAILURE_NOTE_NAME = 'stripe-apple-pay-domain-verification-needed';
 
-	const POST_SETUP_SUCCESS_ACTION    = 'wc_stripe_apple_pay_post_setup_success';
-	const CAMPAIGN_2020_CLEANUP_ACTION = 'wc_stripe_apple_pay_2020_cleanup';
+	const POST_SETUP_SUCCESS_ACTION    = 'wc_monilypay_apple_pay_post_setup_success';
+	const CAMPAIGN_2020_CLEANUP_ACTION = 'wc_monilypay_apple_pay_2020_cleanup';
 
 	public function __construct() {
 		add_action( self::POST_SETUP_SUCCESS_ACTION, [ self::class, 'create_marketing_note' ] );

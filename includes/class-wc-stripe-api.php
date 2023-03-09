@@ -275,7 +275,7 @@ class WC_Monilypay_API {
 		// (Needs to be authenticated with a level3 gated account to see above docs).
 		if (
 			empty( $level3_data ) ||
-			get_transient( 'wc_stripe_level3_not_allowed' ) ||
+			get_transient( 'wc_monilypay_level3_not_allowed' ) ||
 			'US' !== WC()->countries->get_base_country()
 		) {
 			return self::request(
@@ -309,7 +309,7 @@ class WC_Monilypay_API {
 		if ( $is_level3_param_not_allowed ) {
 			// Set a transient so that future requests do not add level 3 data.
 			// Transient is set to expire in 3 months, can be manually removed if needed.
-			set_transient( 'wc_stripe_level3_not_allowed', true, 3 * MONTH_IN_SECONDS );
+			set_transient( 'wc_monilypay_level3_not_allowed', true, 3 * MONTH_IN_SECONDS );
 		} elseif ( $is_level_3data_incorrect ) {
 			// Log the issue so we could debug it.
 			WC_Monilypay_Logger::log(

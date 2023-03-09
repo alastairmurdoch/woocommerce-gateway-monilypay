@@ -16,7 +16,7 @@ class WC_REST_Monilypay_Account_Controller extends WC_Monilypay_REST_Base_Contro
 	 *
 	 * @var string
 	 */
-	protected $rest_base = 'wc_stripe/account';
+	protected $rest_base = 'wc_monilypay/account';
 
 	/**
 	 * The account data utility.

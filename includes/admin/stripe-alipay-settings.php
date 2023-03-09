@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 return apply_filters(
-	'wc_stripe_alipay_settings',
+	'wc_monilypay_alipay_settings',
 	[
 		'geo_target'  => [
 			'description' => __( 'Customer Geography: China', 'woocommerce-gateway-monilypay' ),

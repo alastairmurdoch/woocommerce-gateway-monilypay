@@ -184,7 +184,7 @@ class WC_Monilypay_Customer {
 	 */
 	public function create_customer( $args = [] ) {
 		$args     = $this->generate_customer_request( $args );
-		$response = WC_Monilypay_API::request( apply_filters( 'wc_stripe_create_customer_args', $args ), 'customers' );
+		$response = WC_Monilypay_API::request( apply_filters( 'wc_monilypay_create_customer_args', $args ), 'customers' );
 
 		if ( ! empty( $response->error ) ) {
 			throw new WC_Monilypay_Exception( print_r( $response, true ), $response->error->message );
@@ -219,7 +219,7 @@ class WC_Monilypay_Customer {
 		}
 
 		$args     = $this->generate_customer_request( $args );
-		$args     = apply_filters( 'wc_stripe_update_customer_args', $args );
+		$args     = apply_filters( 'wc_monilypay_update_customer_args', $args );
 		$response = WC_Monilypay_API::request( $args, 'customers/' . $this->get_id() );
 
 		if ( ! empty( $response->error ) ) {
@@ -479,7 +479,7 @@ class WC_Monilypay_Customer {
 		$this->clear_cache();
 
 		if ( empty( $response->error ) ) {
-			do_action( 'wc_stripe_delete_source', $this->get_id(), $response );
+			do_action( 'wc_monilypay_delete_source', $this->get_id(), $response );
 
 			return true;
 		}
@@ -502,7 +502,7 @@ class WC_Monilypay_Customer {
 		$this->clear_cache();
 
 		if ( empty( $response->error ) ) {
-			do_action( 'wc_stripe_detach_payment_method', $this->get_id(), $response );
+			do_action( 'wc_monilypay_detach_payment_method', $this->get_id(), $response );
 
 			return true;
 		}
@@ -527,7 +527,7 @@ class WC_Monilypay_Customer {
 		$this->clear_cache();
 
 		if ( empty( $response->error ) ) {
-			do_action( 'wc_stripe_set_default_source', $this->get_id(), $response );
+			do_action( 'wc_monilypay_set_default_source', $this->get_id(), $response );
 
 			return true;
 		}
@@ -554,7 +554,7 @@ class WC_Monilypay_Customer {
 		$this->clear_cache();
 
 		if ( empty( $response->error ) ) {
-			do_action( 'wc_stripe_set_default_payment_method', $this->get_id(), $response );
+			do_action( 'wc_monilypay_set_default_payment_method', $this->get_id(), $response );
 
 			return true;
 		}
