@@ -5,7 +5,7 @@
  * Description: Take credit card payments on your store using MonilyPay. A fork of the official Woocommerce Stripe Plugin
  * Author: MonilyPay
  * Author URI: https://moni.ly/
- * Version: 7.0.2
+ * Version: 7.1.0
  * Requires at least: 5.9
  * Tested up to: 6.1
  * WC requires at least: 6.9
@@ -315,9 +315,9 @@ function woocommerce_gateway_monilypay() {
 				if ( ! empty( $stripe_settings ) && empty( $prb_locations ) ) {
 					global $post;
 
-					$should_show_on_product_page  = ! apply_filters( 'wc_stripe_hide_payment_request_on_product_page', false, $post );
-					$should_show_on_cart_page     = apply_filters( 'wc_stripe_show_payment_request_on_cart', true );
-					$should_show_on_checkout_page = apply_filters( 'wc_stripe_show_payment_request_on_checkout', false, $post );
+					$should_show_on_product_page  = ! apply_filters( 'wc_monilypay_hide_payment_request_on_product_page', false, $post );
+					$should_show_on_cart_page     = apply_filters( 'wc_monilypay_show_payment_request_on_cart', true );
+					$should_show_on_checkout_page = apply_filters( 'wc_monilypay_show_payment_request_on_checkout', false, $post );
 
 					$new_prb_locations = [];
 
@@ -757,8 +757,8 @@ function woocommerce_gateway_monilypay_woocommerce_block_support() {
 				$container->register(
 					WC_Monilypay_Blocks_Support::class,
 					function() {
-						if ( class_exists( 'WC_Stripe' ) ) {
-							return new WC_Monilypay_Blocks_Support( WC_Stripe::get_instance()->payment_request_configuration );
+						if ( class_exists( 'WC_Monilypay' ) ) {
+							return new WC_Monilypay_Blocks_Support( WC_Monilypay::get_instance()->payment_request_configuration );
 						} else {
 							return new WC_Monilypay_Blocks_Support();
 						}

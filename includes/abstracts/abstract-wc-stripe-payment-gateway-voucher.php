@@ -287,7 +287,7 @@ abstract class WC_Monilypay_Payment_Gateway_Voucher extends WC_Monilypay_Payment
 			do_action( 'WC_Gateway_Monilypay_process_payment_error', $e, $order );
 
 			$statuses = apply_filters(
-				'wc_stripe_allowed_payment_processing_statuses',
+				'wc_monilypay_allowed_payment_processing_statuses',
 				[ 'pending', 'failed' ],
 				$order
 			);

@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from '@emotion/styled';
-import icon from './icon.svg';
+import icon from './Monilypay-black-text-white-bg.png';
 
 const Image = styled.img`
 	max-width: 100%;

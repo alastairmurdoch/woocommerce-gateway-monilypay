@@ -112,7 +112,7 @@ class WC_Monilypay_Order_Handler extends WC_Monilypay_Payment_Gateway {
 			 * a different idempotency key and retry for success.
 			 */
 			if ( $this->need_update_idempotency_key( $prepared_source, $previous_error ) ) {
-				add_filter( 'wc_stripe_idempotency_key', [ $this, 'change_idempotency_key' ], 10, 2 );
+				add_filter( 'wc_monilypay_idempotency_key', [ $this, 'change_idempotency_key' ], 10, 2 );
 			}
 
 			// Make the request.

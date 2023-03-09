@@ -23,7 +23,7 @@ class WC_Monilypay_Intent_Controller {
 	 * @since 4.2.0
 	 */
 	public function __construct() {
-		add_action( 'wc_ajax_wc_stripe_verify_intent', [ $this, 'verify_intent' ] );
+		add_action( 'wc_ajax_wc_monilypay_verify_intent', [ $this, 'verify_intent' ] );
 		add_action( 'wc_ajax_wc_stripe_create_setup_intent', [ $this, 'create_setup_intent' ] );
 
 		add_action( 'wc_ajax_wc_stripe_create_payment_intent', [ $this, 'create_payment_intent_ajax' ] );
@@ -80,7 +80,7 @@ class WC_Monilypay_Intent_Controller {
 	 * @return WC_Order
 	 */
 	protected function get_order_from_request() {
-		if ( ! isset( $_GET['nonce'] ) || ! wp_verify_nonce( sanitize_key( $_GET['nonce'] ), 'wc_stripe_confirm_pi' ) ) {
+		if ( ! isset( $_GET['nonce'] ) || ! wp_verify_nonce( sanitize_key( $_GET['nonce'] ), 'wc_monilypay_confirm_pi' ) ) {
 			throw new WC_Monilypay_Exception( 'missing-nonce', __( 'CSRF verification failed.', 'woocommerce-gateway-monilypay' ) );
 		}
 

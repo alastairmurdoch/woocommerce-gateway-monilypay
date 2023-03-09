@@ -924,7 +924,7 @@ class WC_Monilypay_Payment_Request {
 		$should_show_on_cart_page = in_array( 'cart', $this->get_button_locations(), true );
 
 		return apply_filters(
-			'wc_stripe_show_payment_request_on_cart',
+			'wc_monilypay_show_payment_request_on_cart',
 			$should_show_on_cart_page
 		);
 	}
@@ -943,7 +943,7 @@ class WC_Monilypay_Payment_Request {
 		$should_show_on_checkout_page = in_array( 'checkout', $this->get_button_locations(), true );
 
 		return apply_filters(
-			'wc_stripe_show_payment_request_on_checkout',
+			'wc_monilypay_show_payment_request_on_checkout',
 			$should_show_on_checkout_page,
 			$post
 		);
@@ -964,7 +964,7 @@ class WC_Monilypay_Payment_Request {
 
 		// Note the negation because if the filter returns `true` that means we should hide the PRB.
 		return ! apply_filters(
-			'wc_stripe_hide_payment_request_on_product_page',
+			'wc_monilypay_hide_payment_request_on_product_page',
 			! $should_show_on_product_page,
 			$post
 		);

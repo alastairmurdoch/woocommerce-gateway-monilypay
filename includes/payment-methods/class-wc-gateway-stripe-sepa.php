@@ -250,7 +250,7 @@ class WC_Gateway_Monilypay_Sepa extends WC_Monilypay_Payment_Gateway {
 
 		$description = trim( $description );
 
-		echo apply_filters( 'wc_stripe_description', wpautop( wp_kses_post( $description ) ), $this->id );
+		echo apply_filters( 'wc_monilypay_description', wpautop( wp_kses_post( $description ) ), $this->id );
 
 		if ( $display_tokenization ) {
 			$this->tokenization_script();
@@ -259,11 +259,11 @@ class WC_Gateway_Monilypay_Sepa extends WC_Monilypay_Payment_Gateway {
 
 		$this->form();
 
-		if ( apply_filters( 'wc_stripe_display_save_payment_method_checkbox', $display_tokenization ) && ! is_add_payment_method_page() && ! isset( $_GET['change_payment_method'] ) ) {
+		if ( apply_filters( 'wc_monilypay_display_save_payment_method_checkbox', $display_tokenization ) && ! is_add_payment_method_page() && ! isset( $_GET['change_payment_method'] ) ) {
 			$this->save_payment_method_checkbox();
 		}
 
-		do_action( 'wc_stripe_payment_fields_stripe_sepa', $this->id );
+		do_action( 'wc_monilypay_payment_fields_stripe_sepa', $this->id );
 
 		echo '</div>';
 	}
@@ -396,7 +396,7 @@ class WC_Gateway_Monilypay_Sepa extends WC_Monilypay_Payment_Gateway {
 
 			if ( $order->has_status(
 				apply_filters(
-					'wc_stripe_allowed_payment_processing_statuses',
+					'wc_monilypay_allowed_payment_processing_statuses',
 					[ 'pending', 'failed' ],
 					$order
 				)

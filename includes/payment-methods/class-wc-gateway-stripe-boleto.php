@@ -52,7 +52,7 @@ class WC_Gateway_Monilypay_Boleto extends WC_Monilypay_Payment_Gateway_Voucher {
 		$this->method_title = __( 'Stripe Boleto', 'woocommerce-gateway-monilypay' );
 		parent::__construct();
 
-		add_filter( 'wc_stripe_allowed_payment_processing_statuses', [ $this, 'add_allowed_payment_processing_statuses' ], 10, 2 );
+		add_filter( 'wc_monilypay_allowed_payment_processing_statuses', [ $this, 'add_allowed_payment_processing_statuses' ], 10, 2 );
 	}
 
 	/**
@@ -138,7 +138,7 @@ class WC_Gateway_Monilypay_Boleto extends WC_Monilypay_Payment_Gateway_Voucher {
 	 */
 	public function payment_fields() {
 		$description = $this->get_description();
-		apply_filters( 'wc_stripe_description', wpautop( wp_kses_post( $description ) ), $this->id )
+		apply_filters( 'wc_monilypay_description', wpautop( wp_kses_post( $description ) ), $this->id )
 
 		?>
 		<label>CPF/CNPJ: <abbr class="required" title="required">*</abbr></label><br>

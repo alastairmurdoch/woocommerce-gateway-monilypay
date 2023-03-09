@@ -777,7 +777,7 @@ abstract class WC_Monilypay_Payment_Gateway extends WC_Payment_Gateway_CC {
 			$customer->set_id( $existing_customer_id );
 		}
 
-		$force_save_source = apply_filters( 'wc_stripe_force_save_source', $force_save_source, $customer );
+		$force_save_source = apply_filters( 'wc_monilypay_force_save_source', $force_save_source, $customer );
 		$source_object     = '';
 		$source_id         = '';
 		$wc_token_id       = false;
@@ -1273,7 +1273,7 @@ abstract class WC_Monilypay_Payment_Gateway extends WC_Payment_Gateway_CC {
 			'payment_method_types' => $payment_method_types,
 		];
 
-		$force_save_source = apply_filters( 'wc_stripe_force_save_source', false, $prepared_source->source );
+		$force_save_source = apply_filters( 'wc_monilypay_force_save_source', false, $prepared_source->source );
 
 		if ( $this->save_payment_method_requested() || $this->has_subscription( $order->get_id() ) || $force_save_source ) {
 			$request['setup_future_usage']              = 'off_session';

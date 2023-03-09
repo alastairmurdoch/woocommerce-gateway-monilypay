@@ -11,15 +11,15 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 5.0.0
  */
 class WC_Monilypay_Webhook_State {
-	const OPTION_LIVE_MONITORING_BEGAN_AT = 'wc_stripe_wh_monitor_began_at';
-	const OPTION_LIVE_LAST_SUCCESS_AT     = 'wc_stripe_wh_last_success_at';
-	const OPTION_LIVE_LAST_FAILURE_AT     = 'wc_stripe_wh_last_failure_at';
-	const OPTION_LIVE_LAST_ERROR          = 'wc_stripe_wh_last_error';
+	const OPTION_LIVE_MONITORING_BEGAN_AT = 'wc_monilypay_wh_monitor_began_at';
+	const OPTION_LIVE_LAST_SUCCESS_AT     = 'wc_monilypay_wh_last_success_at';
+	const OPTION_LIVE_LAST_FAILURE_AT     = 'wc_monilypay_wh_last_failure_at';
+	const OPTION_LIVE_LAST_ERROR          = 'wc_monilypay_wh_last_error';
 
-	const OPTION_TEST_MONITORING_BEGAN_AT = 'wc_stripe_wh_test_monitor_began_at';
-	const OPTION_TEST_LAST_SUCCESS_AT     = 'wc_stripe_wh_test_last_success_at';
-	const OPTION_TEST_LAST_FAILURE_AT     = 'wc_stripe_wh_test_last_failure_at';
-	const OPTION_TEST_LAST_ERROR          = 'wc_stripe_wh_test_last_error';
+	const OPTION_TEST_MONITORING_BEGAN_AT = 'wc_monilypay_wh_test_monitor_began_at';
+	const OPTION_TEST_LAST_SUCCESS_AT     = 'wc_monilypay_wh_test_last_success_at';
+	const OPTION_TEST_LAST_FAILURE_AT     = 'wc_monilypay_wh_test_last_failure_at';
+	const OPTION_TEST_LAST_ERROR          = 'wc_monilypay_wh_test_last_error';
 
 	const VALIDATION_SUCCEEDED                 = 'validation_succeeded';
 	const VALIDATION_FAILED_EMPTY_HEADERS      = 'empty_headers';

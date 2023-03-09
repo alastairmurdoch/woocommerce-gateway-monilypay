@@ -183,7 +183,7 @@ class WC_Monilypay_API {
 		if ( 'charges' === $api && 'POST' === $method ) {
 			$customer        = ! empty( $request['customer'] ) ? $request['customer'] : '';
 			$source          = ! empty( $request['source'] ) ? $request['source'] : $customer;
-			$idempotency_key = apply_filters( 'wc_stripe_idempotency_key', $request['metadata']['order_id'] . '-' . $source, $request );
+			$idempotency_key = apply_filters( 'wc_monilypay_idempotency_key', $request['metadata']['order_id'] . '-' . $source, $request );
 
 			$headers['Idempotency-Key'] = $idempotency_key;
 		}

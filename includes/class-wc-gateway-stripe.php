@@ -242,7 +242,7 @@ class WC_Gateway_Monilypay extends WC_Monilypay_Payment_Gateway {
 
 		$description = trim( $description );
 
-		echo apply_filters( 'wc_stripe_description', wpautop( wp_kses_post( $description ) ), $this->id ); // wpcs: xss ok.
+		echo apply_filters( 'wc_monilypay_description', wpautop( wp_kses_post( $description ) ), $this->id ); // wpcs: xss ok.
 
 		if ( $display_tokenization ) {
 			$this->tokenization_script();
@@ -251,12 +251,12 @@ class WC_Gateway_Monilypay extends WC_Monilypay_Payment_Gateway {
 
 		$this->elements_form();
 
-		if ( apply_filters( 'wc_stripe_display_save_payment_method_checkbox', $display_tokenization ) && ! is_add_payment_method_page() && ! isset( $_GET['change_payment_method'] ) ) { // wpcs: csrf ok.
+		if ( apply_filters( 'wc_monilypay_display_save_payment_method_checkbox', $display_tokenization ) && ! is_add_payment_method_page() && ! isset( $_GET['change_payment_method'] ) ) { // wpcs: csrf ok.
 
 			$this->save_payment_method_checkbox();
 		}
 
-		do_action( 'wc_stripe_payment_fields_stripe', $this->id );
+		do_action( 'wc_monilypay_payment_fields_stripe', $this->id );
 
 		echo '</div>';
 
@@ -444,7 +444,7 @@ class WC_Gateway_Monilypay extends WC_Monilypay_Payment_Gateway {
 				$intent = $this->confirm_intent( $intent, $order, $prepared_source );
 			}
 
-			$force_save_source_value = apply_filters( 'wc_stripe_force_save_source', $force_save_source, $prepared_source->source );
+			$force_save_source_value = apply_filters( 'wc_monilypay_force_save_source', $force_save_source, $prepared_source->source );
 
 			if ( ! empty( $intent->error ) ) {
 				$this->maybe_remove_non_existent_customer( $intent->error, $order );
@@ -557,7 +557,7 @@ class WC_Gateway_Monilypay extends WC_Monilypay_Payment_Gateway {
 	 * @param int $order_id The ID of the order.
 	 */
 	public function display_order_fee( $order_id ) {
-		if ( apply_filters( 'wc_stripe_hide_display_order_fee', false, $order_id ) ) {
+		if ( apply_filters( 'wc_monilypay_hide_display_order_fee', false, $order_id ) ) {
 			return;
 		}
 
@@ -594,7 +594,7 @@ class WC_Gateway_Monilypay extends WC_Monilypay_Payment_Gateway {
 	 * @param int $order_id The ID of the order.
 	 */
 	public function display_order_payout( $order_id ) {
-		if ( apply_filters( 'wc_stripe_hide_display_order_payout', false, $order_id ) ) {
+		if ( apply_filters( 'wc_monilypay_hide_display_order_payout', false, $order_id ) ) {
 			return;
 		}
 
@@ -758,11 +758,11 @@ class WC_Gateway_Monilypay extends WC_Monilypay_Payment_Gateway {
 		$verification_url = add_query_arg(
 			[
 				'order'            => $order->get_id(),
-				'nonce'            => wp_create_nonce( 'wc_stripe_confirm_pi' ),
+				'nonce'            => wp_create_nonce( 'wc_monilypay_confirm_pi' ),
 				'redirect_to'      => rawurlencode( $this->get_return_url( $order ) ),
 				'is_pay_for_order' => true,
 			],
-			WC_AJAX::get_endpoint( 'wc_stripe_verify_intent' )
+			WC_AJAX::get_endpoint( 'wc_monilypay_verify_intent' )
 		);
 
 		echo '<input type="hidden" id="stripe-intent-id" value="' . esc_attr( $this->order_pay_intent->client_secret ) . '" />';
@@ -824,17 +824,17 @@ class WC_Gateway_Monilypay extends WC_Monilypay_Payment_Gateway {
 		// Put the final thank you page redirect into the verification URL.
 		$query_params = [
 			'order'       => $order_id,
-			'nonce'       => wp_create_nonce( 'wc_stripe_confirm_pi' ),
+			'nonce'       => wp_create_nonce( 'wc_monilypay_confirm_pi' ),
 			'redirect_to' => rawurlencode( $result['redirect'] ),
 		];
 
-		$force_save_source_value = apply_filters( 'wc_stripe_force_save_source', false );
+		$force_save_source_value = apply_filters( 'wc_monilypay_force_save_source', false );
 
 		if ( $this->save_payment_method_requested() || $force_save_source_value ) {
 			$query_params['save_payment_method'] = true;
 		}
 
-		$verification_url = add_query_arg( $query_params, WC_AJAX::get_endpoint( 'wc_stripe_verify_intent' ) );
+		$verification_url = add_query_arg( $query_params, WC_AJAX::get_endpoint( 'wc_monilypay_verify_intent' ) );
 
 		if ( isset( $result['payment_intent_secret'] ) ) {
 			$redirect = sprintf( '#confirm-pi-%s:%s', $result['payment_intent_secret'], rawurlencode( $verification_url ) );
@@ -881,7 +881,7 @@ class WC_Gateway_Monilypay extends WC_Monilypay_Payment_Gateway {
 
 		if ( ! $order->has_status(
 			apply_filters(
-				'wc_stripe_allowed_payment_processing_statuses',
+				'wc_monilypay_allowed_payment_processing_statuses',
 				[ 'pending', 'failed' ],
 				$order
 			)
@@ -1013,7 +1013,7 @@ class WC_Gateway_Monilypay extends WC_Monilypay_Payment_Gateway {
 			|| $has_changed( $old_monilypay_key, $new_monilypay_key )
 			|| $has_changed( $old_monilypay_account_id, $new_monilypay_account_id )
 		) {
-			update_option( 'wc_stripe_show_changed_keys_notice', 'yes' );
+			update_option( 'wc_monilypay_show_changed_keys_notice', 'yes' );
 		}
 	}
 

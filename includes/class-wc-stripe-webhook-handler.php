@@ -843,7 +843,7 @@ class WC_Monilypay_Webhook_Handler extends WC_Monilypay_Payment_Gateway {
 
 		if ( ! $order->has_status(
 			apply_filters(
-				'wc_stripe_allowed_payment_processing_statuses',
+				'wc_monilypay_allowed_payment_processing_statuses',
 				[ 'pending', 'failed' ],
 				$order
 			)

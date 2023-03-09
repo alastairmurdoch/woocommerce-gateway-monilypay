@@ -50,7 +50,7 @@ trait WC_Monilypay_Subscriptions_Trait {
 		// Allow store managers to manually set Stripe as the payment method on a subscription.
 		add_filter( 'woocommerce_subscription_payment_meta', [ $this, 'add_subscription_payment_meta' ], 10, 2 );
 		add_filter( 'woocommerce_subscription_validate_payment_meta', [ $this, 'validate_subscription_payment_meta' ], 10, 2 );
-		add_filter( 'wc_stripe_display_save_payment_method_checkbox', [ $this, 'display_save_payment_method_checkbox' ] );
+		add_filter( 'wc_monilypay_display_save_payment_method_checkbox', [ $this, 'display_save_payment_method_checkbox' ] );
 
 		/*
 		* WC subscriptions hooks into the "template_redirect" hook with priority 100.
@@ -213,11 +213,11 @@ trait WC_Monilypay_Subscriptions_Trait {
 					$verification_url = add_query_arg(
 						[
 							'order'         => $order_id,
-							'nonce'         => wp_create_nonce( 'wc_stripe_confirm_pi' ),
+							'nonce'         => wp_create_nonce( 'wc_monilypay_confirm_pi' ),
 							'redirect_to'   => esc_url_raw( remove_query_arg( [ 'process_early_renewal', 'subscription_id', 'wcs_nonce' ] ) ),
 							'early_renewal' => true,
 						],
-						WC_AJAX::get_endpoint( 'wc_stripe_verify_intent' )
+						WC_AJAX::get_endpoint( 'wc_monilypay_verify_intent' )
 					);
 
 					echo wp_json_encode(
@@ -260,7 +260,7 @@ trait WC_Monilypay_Subscriptions_Trait {
 			 * a different idempotency key and retry for success.
 			 */
 			if ( is_object( $source_object ) && empty( $source_object->error ) && $this->need_update_idempotency_key( $source_object, $previous_error ) ) {
-				add_filter( 'wc_stripe_idempotency_key', [ $this, 'change_idempotency_key' ], 10, 2 );
+				add_filter( 'wc_monilypay_idempotency_key', [ $this, 'change_idempotency_key' ], 10, 2 );
 			}
 
 			if ( ( $this->is_no_such_source_error( $previous_error ) || $this->is_no_linked_source_error( $previous_error ) ) && apply_filters( 'wc_stripe_use_default_customer_source', true ) ) {

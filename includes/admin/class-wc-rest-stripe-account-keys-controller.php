@@ -20,7 +20,7 @@ class WC_REST_Monilypay_Account_Keys_Controller extends WC_Monilypay_REST_Base_C
 	 *
 	 * @var string
 	 */
-	protected $rest_base = 'wc_stripe/account_keys';
+	protected $rest_base = 'wc_monilypay/account_keys';
 
 	/**
 	 * The instance of the Stripe account.

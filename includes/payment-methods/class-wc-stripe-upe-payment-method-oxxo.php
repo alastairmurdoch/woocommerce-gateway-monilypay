@@ -31,7 +31,7 @@ class WC_Monilypay_UPE_Payment_Method_Oxxo extends WC_Monilypay_UPE_Payment_Meth
 			'woocommerce-gateway-monilypay'
 		);
 
-		add_filter( 'wc_stripe_allowed_payment_processing_statuses', [ $this, 'add_allowed_payment_processing_statuses' ], 10, 2 );
+		add_filter( 'wc_monilypay_allowed_payment_processing_statuses', [ $this, 'add_allowed_payment_processing_statuses' ], 10, 2 );
 	}
 
 	/**

@@ -264,7 +264,7 @@ final class WC_Monilypay_Blocks_Support extends AbstractPaymentMethodType {
 		// https://github.com/woocommerce/woocommerce-gateway-monilypay/blob/master/includes/class-wc-gateway-stripe.php#L95 .
 		// See https://github.com/woocommerce/woocommerce-gateway-monilypay/blob/ad19168b63df86176cbe35c3e95203a245687640/includes/class-wc-gateway-stripe.php#L271 and
 		// https://github.com/woocommerce/woocommerce/wiki/Payment-Token-API .
-		return apply_filters( 'wc_stripe_display_save_payment_method_checkbox', filter_var( $saved_cards, FILTER_VALIDATE_BOOLEAN ) );
+		return apply_filters( 'wc_monilypay_display_save_payment_method_checkbox', filter_var( $saved_cards, FILTER_VALIDATE_BOOLEAN ) );
 	}
 
 	/**
@@ -363,10 +363,10 @@ final class WC_Monilypay_Blocks_Support extends AbstractPaymentMethodType {
 			$verification_endpoint = add_query_arg(
 				[
 					'order'       => $context->order->get_id(),
-					'nonce'       => wp_create_nonce( 'wc_stripe_confirm_pi' ),
+					'nonce'       => wp_create_nonce( 'wc_monilypay_confirm_pi' ),
 					'redirect_to' => rawurlencode( $result->redirect_url ),
 				],
-				home_url() . \WC_Ajax::get_endpoint( 'wc_stripe_verify_intent' )
+				home_url() . \WC_Ajax::get_endpoint( 'wc_monilypay_verify_intent' )
 			);
 
 			if ( ! empty( $payment_details['save_payment_method'] ) ) {
