@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @since 5.6.0
  */
-class Allowed_Payment_Request_Button_Types_Update {
+class Allowed_Payment_Request_Button_Types_Update_Monilypay {
 	/**
 	 * Allowed_Payment_Request_Button_Types_Update constructor.
 	 */
