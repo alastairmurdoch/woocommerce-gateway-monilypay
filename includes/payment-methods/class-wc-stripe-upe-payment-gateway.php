@@ -244,7 +244,7 @@ class WC_Monilypay_UPE_Payment_Gateway extends WC_Gateway_Monilypay {
 		}
 
 		wp_register_script(
-			'stripe',
+			'monilypay',
 			'https://js.stripe.com/v3/',
 			[],
 			'3.0',
@@ -254,7 +254,7 @@ class WC_Monilypay_UPE_Payment_Gateway extends WC_Gateway_Monilypay {
 		wp_register_script(
 			'wc-stripe-upe-classic',
 			WC_MONILYPAY_PLUGIN_URL . '/build/upe_classic.js',
-			array_merge( [ 'stripe', 'wc-checkout' ], $dependencies ),
+			array_merge( [ 'monilypay', 'wc-checkout' ], $dependencies ),
 			$version,
 			true
 		);

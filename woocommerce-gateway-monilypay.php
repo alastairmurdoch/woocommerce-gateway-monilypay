@@ -406,7 +406,7 @@ function woocommerce_gateway_monilypay() {
 			 * @version 4.0.0
 			 */
 			public function filter_gateway_order_admin( $sections ) {
-				unset( $sections['stripe'] );
+				unset( $sections['monilypay'] );
 				if ( WC_Monilypay_Feature_Flags::is_upe_preview_enabled() ) {
 					unset( $sections['stripe_upe'] );
 				}
@@ -420,7 +420,7 @@ function woocommerce_gateway_monilypay() {
 				// unset( $sections['stripe_sepa'] );
 				// unset( $sections['stripe_multibanco'] );
 
-				$sections['stripe'] = 'Stripe';
+				$sections['monilypay'] = 'Monilypay';
 				if ( WC_Monilypay_Feature_Flags::is_upe_preview_enabled() ) {
 					$sections['stripe_upe'] = 'Stripe checkout experience';
 				}
@@ -499,7 +499,7 @@ function woocommerce_gateway_monilypay() {
 					$lpm_gateway_id = constant( $method_class::LPM_GATEWAY_CLASS . '::ID' );
 					if ( isset( $payment_gateways[ $lpm_gateway_id ] ) && 'yes' === $payment_gateways[ $lpm_gateway_id ]->enabled ) {
 						// DISABLE LPM
-						if ( 'stripe' !== $lpm_gateway_id ) {
+						if ( 'monilypay' !== $lpm_gateway_id ) {
 							/**
 							 * TODO: This can be replaced with:
 							 *

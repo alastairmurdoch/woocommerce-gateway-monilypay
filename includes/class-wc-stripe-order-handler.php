@@ -217,7 +217,7 @@ class WC_Monilypay_Order_Handler extends WC_Monilypay_Payment_Gateway {
 	public function capture_payment( $order_id ) {
 		$order = wc_get_order( $order_id );
 
-		if ( 'stripe' === $order->get_payment_method() ) {
+		if ( 'monilypay' === $order->get_payment_method() ) {
 			$charge             = $order->get_transaction_id();
 			$captured           = $order->get_meta( '_stripe_charge_captured', true );
 			$is_stripe_captured = false;
@@ -321,7 +321,7 @@ class WC_Monilypay_Order_Handler extends WC_Monilypay_Payment_Gateway {
 	public function cancel_payment( $order_id ) {
 		$order = wc_get_order( $order_id );
 
-		if ( 'stripe' === $order->get_payment_method() ) {
+		if ( 'monilypay' === $order->get_payment_method() ) {
 			$captured = $order->get_meta( '_stripe_charge_captured', true );
 			if ( 'no' === $captured ) {
 				$this->process_refund( $order_id );
@@ -357,7 +357,7 @@ class WC_Monilypay_Order_Handler extends WC_Monilypay_Payment_Gateway {
 		}
 
 		// Not stripe? Bail.
-		if ( 'stripe' != $properties['payment_method'] ) {
+		if ( 'monilypay' != $properties['payment_method'] ) {
 			return $properties;
 		}
 

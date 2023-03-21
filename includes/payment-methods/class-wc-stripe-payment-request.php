@@ -53,6 +53,8 @@ class WC_Monilypay_Payment_Request {
 	 * @var bool
 	 */
 	public $testmode;
+	
+	public $accountId;
 
 	/**
 	 * This Instance.
@@ -74,10 +76,11 @@ class WC_Monilypay_Payment_Request {
 		$this->publishable_key = ! empty( $this->stripe_settings['publishable_key'] ) ? $this->stripe_settings['publishable_key'] : '';
 		$this->secret_key      = ! empty( $this->stripe_settings['secret_key'] ) ? $this->stripe_settings['secret_key'] : '';
 		$this->total_label     = ! empty( $this->stripe_settings['statement_descriptor'] ) ? WC_Monilypay_Helper::clean_statement_descriptor( $this->stripe_settings['statement_descriptor'] ) : '';
-
+		$this->accountId	   = ! empty( $this->stripe_settings['monilypay_account_id']) ? $this->stripe_settings['monilypay_account_id'] : '';
 		if ( $this->testmode ) {
 			$this->publishable_key = ! empty( $this->stripe_settings['test_publishable_key'] ) ? $this->stripe_settings['test_publishable_key'] : '';
 			$this->secret_key      = ! empty( $this->stripe_settings['test_secret_key'] ) ? $this->stripe_settings['test_secret_key'] : '';
+			$this->accountId	   = ! empty( $this->stripe_settings['test_monilypay_account_id']) ? $this->stripe_settings['test_monilypay_account_id'] : '';
 		}
 
 		$this->total_label = str_replace( "'", '', $this->total_label ) . apply_filters( 'WC_Monilypay_Payment_Request_total_label_suffix', ' (via WooCommerce)' );
@@ -463,10 +466,10 @@ class WC_Monilypay_Payment_Request {
 		$order        = wc_get_order( $post->ID );
 		$method_title = is_object( $order ) ? $order->get_payment_method_title() : '';
 
-		if ( 'stripe' === $id && ! empty( $method_title ) ) {
-			if ( 'Apple Pay (Stripe)' === $method_title
-				|| 'Google Pay (Stripe)' === $method_title
-				|| 'Payment Request (Stripe)' === $method_title
+		if ( 'monilypay' === $id && ! empty( $method_title ) ) {
+			if ( 'Apple Pay (Monilypay)' === $method_title
+				|| 'Google Pay (Monilypay)' === $method_title
+				|| 'Payment Request (Monilypay)' === $method_title
 			) {
 				return $method_title;
 			}
@@ -475,8 +478,8 @@ class WC_Monilypay_Payment_Request {
 			// are supported by other browsers besides Chrome. As such, we need to check for the
 			// old title to make sure older orders still reflect that they were paid via Payment
 			// Request Buttons.
-			if ( 'Chrome Payment Request (Stripe)' === $method_title ) {
-				return 'Payment Request (Stripe)';
+			if ( 'Chrome Payment Request (Monilypay)' === $method_title ) {
+				return 'Payment Request (Monilypay)';
 			}
 
 			return $method_title;
@@ -522,7 +525,7 @@ class WC_Monilypay_Payment_Request {
 	 * @return  void
 	 */
 	public function add_order_meta( $order_id, $posted_data ) {
-		if ( empty( $_POST['payment_request_type'] ) || ! isset( $_POST['payment_method'] ) || 'stripe' !== $_POST['payment_method'] ) {
+		if ( empty( $_POST['payment_request_type'] ) || ! isset( $_POST['payment_method'] ) || 'monilypay' !== $_POST['payment_method'] ) {
 			return;
 		}
 
@@ -531,13 +534,13 @@ class WC_Monilypay_Payment_Request {
 		$payment_request_type = wc_clean( wp_unslash( $_POST['payment_request_type'] ) );
 
 		if ( 'apple_pay' === $payment_request_type ) {
-			$order->set_payment_method_title( 'Apple Pay (Stripe)' );
+			$order->set_payment_method_title( 'Apple Pay (Monilypay)' );
 			$order->save();
 		} elseif ( 'google_pay' === $payment_request_type ) {
-			$order->set_payment_method_title( 'Google Pay (Stripe)' );
+			$order->set_payment_method_title( 'Google Pay (Monilypay)' );
 			$order->save();
 		} elseif ( 'payment_request_api' === $payment_request_type ) {
-			$order->set_payment_method_title( 'Payment Request (Stripe)' );
+			$order->set_payment_method_title( 'Payment Request (Monilypay)' );
 			$order->save();
 		}
 	}
@@ -704,8 +707,9 @@ class WC_Monilypay_Payment_Request {
 
 		return [
 			'ajax_url'           => WC_AJAX::get_endpoint( '%%endpoint%%' ),
-			'stripe'             => [
+			'monilypay'             => [
 				'key'                => $this->publishable_key,
+				'accountId'			 => $this->accountId,
 				'allow_prepaid_card' => apply_filters( 'wc_monilypay_allow_prepaid_card', true ) ? 'yes' : 'no',
 				'locale'             => WC_Monilypay_Helper::convert_wc_locale_to_stripe_locale( get_locale() ),
 			],
@@ -760,11 +764,11 @@ class WC_Monilypay_Payment_Request {
 
 		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
-		wp_register_script( 'stripe', 'https://js.stripe.com/v3/', '', '3.0', true );
-		wp_register_script( 'WC_Monilypay_Payment_Request', plugins_url( 'assets/js/stripe-payment-request' . $suffix . '.js', WC_MONILYPAY_MAIN_FILE ), [ 'jquery', 'stripe' ], wc_monilypay_stripe_version, true );
+		wp_register_script( 'monilypay', 'https://js.stripe.com/v3/', '', '3.0', true );
+		wp_register_script( 'wc_monilypay_payment_request', plugins_url( 'assets/js/stripe-payment-request' . $suffix . '.js', WC_MONILYPAY_MAIN_FILE ), [ 'jquery', 'monilypay' ], wc_monilypay_stripe_version, true );
 
 		wp_localize_script(
-			'WC_Monilypay_Payment_Request',
+			'wc_monilypay_payment_request',
 			'wc_monilypay_payment_request_params',
 			apply_filters(
 				'wc_monilypay_payment_request_params',
@@ -797,7 +801,7 @@ class WC_Monilypay_Payment_Request {
 	public function display_payment_request_button_html() {
 		$gateways = WC()->payment_gateways->get_available_payment_gateways();
 
-		if ( ! isset( $gateways['stripe'] ) ) {
+		if ( ! isset( $gateways['monilypay'] ) ) {
 			return;
 		}
 
@@ -835,7 +839,7 @@ class WC_Monilypay_Payment_Request {
 	public function display_payment_request_button_separator_html() {
 		$gateways = WC()->payment_gateways->get_available_payment_gateways();
 
-		if ( ! isset( $gateways['stripe'] ) ) {
+		if ( ! isset( $gateways['monilypay'] ) ) {
 			return;
 		}
 

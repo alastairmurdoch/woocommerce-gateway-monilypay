@@ -271,7 +271,7 @@ abstract class WC_Monilypay_Payment_Gateway extends WC_Payment_Gateway_CC {
 	}
 
 	public function save_payment_method_requested() {
-		$payment_method = isset( $_POST['payment_method'] ) ? wc_clean( wp_unslash( $_POST['payment_method'] ) ) : 'stripe';
+		$payment_method = isset( $_POST['payment_method'] ) ? wc_clean( wp_unslash( $_POST['payment_method'] ) ) : 'monilypay';
 
 		return isset( $_POST[ 'wc-' . $payment_method . '-new-payment-method' ] ) && ! empty( $_POST[ 'wc-' . $payment_method . '-new-payment-method' ] );
 	}
@@ -753,7 +753,7 @@ abstract class WC_Monilypay_Payment_Gateway extends WC_Payment_Gateway_CC {
 	 * @return bool
 	 */
 	public function is_using_saved_payment_method() {
-		$payment_method = isset( $_POST['payment_method'] ) ? wc_clean( wp_unslash( $_POST['payment_method'] ) ) : 'stripe';
+		$payment_method = isset( $_POST['payment_method'] ) ? wc_clean( wp_unslash( $_POST['payment_method'] ) ) : 'monilypay';
 
 		return ( isset( $_POST[ 'wc-' . $payment_method . '-payment-token' ] ) && 'new' !== $_POST[ 'wc-' . $payment_method . '-payment-token' ] );
 	}
@@ -781,7 +781,7 @@ abstract class WC_Monilypay_Payment_Gateway extends WC_Payment_Gateway_CC {
 		$source_object     = '';
 		$source_id         = '';
 		$wc_token_id       = false;
-		$payment_method    = isset( $_POST['payment_method'] ) ? wc_clean( wp_unslash( $_POST['payment_method'] ) ) : 'stripe';
+		$payment_method    = isset( $_POST['payment_method'] ) ? wc_clean( wp_unslash( $_POST['payment_method'] ) ) : 'monilypay';
 		$is_token          = false;
 
 		// New CC info was entered and we have a new source to process.
@@ -1824,17 +1824,17 @@ abstract class WC_Monilypay_Payment_Gateway extends WC_Payment_Gateway_CC {
 		wp_register_style( 'stripe_styles', plugins_url( 'assets/css/stripe-styles.css', WC_MONILYPAY_MAIN_FILE ), [], wc_monilypay_stripe_version );
 		wp_enqueue_style( 'stripe_styles' );
 
-		wp_register_script( 'stripe', 'https://js.stripe.com/v3/', '', '3.0', true );
-		wp_register_script( 'woocommerce_stripe', plugins_url( 'assets/js/stripe' . $suffix . '.js', WC_MONILYPAY_MAIN_FILE ), [ 'jquery-payment', 'stripe' ], wc_monilypay_stripe_version, true );
+		wp_register_script( 'monilypay', 'https://js.stripe.com/v3/', '', '3.0', true );
+		wp_register_script( 'woocommerce_monilypay', plugins_url( 'assets/js/stripe' . $suffix . '.js', WC_MONILYPAY_MAIN_FILE ), [ 'jquery-payment', 'monilypay' ], wc_monilypay_stripe_version, true );
 
 		wp_localize_script(
-			'woocommerce_stripe',
+			'woocommerce_monilypay',
 			'wc_monilypay_params',
 			apply_filters( 'wc_monilypay_params', $this->javascript_params() )
 		);
 
 		$this->tokenization_script();
-		wp_enqueue_script( 'woocommerce_stripe' );
+		wp_enqueue_script( 'woocommerce_monilypay' );
 	}
 
 	/**

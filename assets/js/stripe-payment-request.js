@@ -2,8 +2,9 @@
 jQuery( function( $ ) {
 	'use strict';
 
-	var stripe = Stripe( wc_monilypay_payment_request_params.stripe.key, {
-		locale: wc_monilypay_payment_request_params.stripe.locale
+	var stripe = Stripe( wc_monilypay_payment_request_params.monilypay.key, {
+		locale: wc_monilypay_payment_request_params.monilypay.locale,
+		//stripeAccount: wc_monilypay_payment_request_params.monilypay.accountId
 	} ),
 		paymentRequestType;
 
@@ -114,7 +115,7 @@ jQuery( function( $ ) {
 				shipping_postcode:         '',
 				shipping_method:           [ null === evt.shippingOption ? null : evt.shippingOption.id ],
 				order_comments:            '',
-				payment_method:            'stripe',
+				payment_method:            'monilypay',
 				ship_to_different_address: 1,
 				terms:                     1,
 				stripe_source:             source.id,
@@ -409,8 +410,8 @@ jQuery( function( $ ) {
 
 				paymentRequest.on( 'source', function( evt ) {
 					// Check if we allow prepaid cards.
-					if ( 'no' === wc_monilypay_payment_request_params.stripe.allow_prepaid_card && 'prepaid' === evt.source.card.funding ) {
-						wc_monilypay_payment_request.abortPayment( evt, wc_stripe_payment_request.getErrorMessageHTML( wc_monilypay_payment_request_params.i18n.no_prepaid_card ) );
+					if ( 'no' === wc_monilypay_payment_request_params.monilypay.allow_prepaid_card && 'prepaid' === evt.source.card.funding ) {
+						wc_monilypay_payment_request.abortPayment( evt, wc_monilypay_payment_request.getErrorMessageHTML( wc_monilypay_payment_request_params.i18n.no_prepaid_card ) );
 					} else {
 						$.when( wc_monilypay_payment_request.processSource( evt, paymentRequestType ) ).then( function( response ) {
 							if ( 'success' === response.result ) {
@@ -620,7 +621,7 @@ jQuery( function( $ ) {
 
 				wc_monilypay_payment_request.addToCart();
 
-				if ( wc_monilypay_payment_request.isCustomPaymentRequestButton( prButton ) || wc_stripe_payment_request.isBrandedPaymentRequestButton( prButton ) ) {
+				if ( wc_monilypay_payment_request.isCustomPaymentRequestButton( prButton ) || wc_monilypay_payment_request.isBrandedPaymentRequestButton( prButton ) ) {
 					evt.preventDefault();
 					paymentRequest.show();
 				}

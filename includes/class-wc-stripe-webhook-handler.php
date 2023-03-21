@@ -384,7 +384,7 @@ class WC_Monilypay_Webhook_Handler extends WC_Monilypay_Payment_Gateway {
 			return;
 		}
 
-		if ( 'stripe' === $order->get_payment_method() ) {
+		if ( 'monilypay' === $order->get_payment_method() ) {
 			$charge   = $order->get_transaction_id();
 			$captured = $order->get_meta( '_stripe_charge_captured', true );
 
@@ -522,7 +522,7 @@ class WC_Monilypay_Webhook_Handler extends WC_Monilypay_Payment_Gateway {
 		}
 
 		// Don't proceed if payment method isn't Stripe.
-		if ( 'stripe' !== $order->get_payment_method() ) {
+		if ( 'monilypay' !== $order->get_payment_method() ) {
 			WC_Monilypay_Logger::log( 'Canceled webhook abort: Order was not processed by Stripe: ' . $order->get_id() );
 			return;
 		}
@@ -554,7 +554,7 @@ class WC_Monilypay_Webhook_Handler extends WC_Monilypay_Payment_Gateway {
 
 		$order_id = $order->get_id();
 
-		if ( 'stripe' === $order->get_payment_method() ) {
+		if ( 'monilypay' === $order->get_payment_method() ) {
 			$charge        = $order->get_transaction_id();
 			$captured      = $order->get_meta( '_stripe_charge_captured' );
 			$refund_id     = $order->get_meta( '_stripe_refund_id' );
@@ -630,7 +630,7 @@ class WC_Monilypay_Webhook_Handler extends WC_Monilypay_Payment_Gateway {
 
 		$order_id = $order->get_id();
 
-		if ( 'stripe' === $order->get_payment_method() ) {
+		if ( 'monilypay' === $order->get_payment_method() ) {
 			$charge     = $order->get_transaction_id();
 			$refund_id  = $order->get_meta( '_stripe_refund_id' );
 			$currency   = $order->get_currency();

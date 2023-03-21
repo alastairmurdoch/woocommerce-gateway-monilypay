@@ -94,7 +94,7 @@ class WC_Monilypay_Payment_Tokens {
 	 * @return bool
 	 */
 	public static function customer_has_saved_methods( $customer_id ) {
-		$gateways = [ 'stripe', 'stripe_sepa' ];
+		$gateways = [ 'monilypay', 'stripe_sepa' ];
 
 		if ( empty( $customer_id ) ) {
 			return false;
@@ -147,7 +147,7 @@ class WC_Monilypay_Payment_Tokens {
 				$stored_tokens[ $token->get_token() ] = $token;
 			}
 
-			if ( 'stripe' === $gateway_id ) {
+			if ( 'monilypay' === $gateway_id ) {
 				$stripe_customer = new WC_Monilypay_Customer( $customer_id );
 				$stripe_sources  = $stripe_customer->get_sources();
 
@@ -156,7 +156,7 @@ class WC_Monilypay_Payment_Tokens {
 						if ( ! isset( $stored_tokens[ $source->id ] ) ) {
 							$token = new WC_Payment_Token_CC();
 							$token->set_token( $source->id );
-							$token->set_gateway_id( 'stripe' );
+							$token->set_gateway_id( 'monilypay' );
 
 							if ( 'source' === $source->object && 'card' === $source->type ) {
 								$token->set_card_type( strtolower( $source->card->brand ) );
@@ -175,7 +175,7 @@ class WC_Monilypay_Payment_Tokens {
 						if ( ! isset( $stored_tokens[ $source->id ] ) && 'card' === $source->object ) {
 							$token = new WC_Payment_Token_CC();
 							$token->set_token( $source->id );
-							$token->set_gateway_id( 'stripe' );
+							$token->set_gateway_id( 'monilypay' );
 							$token->set_card_type( strtolower( $source->brand ) );
 							$token->set_last4( $source->last4 );
 							$token->set_expiry_month( $source->exp_month );
@@ -367,7 +367,7 @@ class WC_Monilypay_Payment_Tokens {
 				$stripe_customer->detach_payment_method( $token->get_token() );
 			}
 		} else {
-			if ( 'stripe' === $token->get_gateway_id() || 'stripe_sepa' === $token->get_gateway_id() ) {
+			if ( 'monilypay' === $token->get_gateway_id() || 'stripe_sepa' === $token->get_gateway_id() ) {
 				$stripe_customer->delete_source( $token->get_token() );
 			}
 		}
@@ -388,7 +388,7 @@ class WC_Monilypay_Payment_Tokens {
 				$stripe_customer->set_default_payment_method( $token->get_token() );
 			}
 		} else {
-			if ( 'stripe' === $token->get_gateway_id() || 'stripe_sepa' === $token->get_gateway_id() ) {
+			if ( 'monilypay' === $token->get_gateway_id() || 'stripe_sepa' === $token->get_gateway_id() ) {
 				$stripe_customer->set_default_source( $token->get_token() );
 			}
 		}

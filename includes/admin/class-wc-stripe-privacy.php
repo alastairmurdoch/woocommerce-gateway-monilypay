@@ -71,7 +71,7 @@ class WC_Monilypay_Privacy extends WC_Abstract_Privacy {
 		$user = get_user_by( 'email', $email_address ); // Check if user has an ID in the DB to load stored personal data.
 
 		$order_query = [
-			'payment_method' => [ 'stripe', 'stripe_alipay', 'stripe_bancontact', 'stripe_eps', 'stripe_giropay', 'stripe_ideal', 'stripe_multibanco', 'stripe_p24', 'stripe_sepa', 'stripe_sofort' ],
+			'payment_method' => [ 'monilypay', 'stripe_alipay', 'stripe_bancontact', 'stripe_eps', 'stripe_giropay', 'stripe_ideal', 'stripe_multibanco', 'stripe_p24', 'stripe_sepa', 'stripe_sofort' ],
 			'limit'          => 10,
 			'page'           => $page,
 		];
@@ -161,7 +161,7 @@ class WC_Monilypay_Privacy extends WC_Abstract_Privacy {
 			'relation' => 'AND',
 			[
 				'key'     => '_payment_method',
-				'value'   => [ 'stripe', 'stripe_alipay', 'stripe_bancontact', 'stripe_eps', 'stripe_giropay', 'stripe_ideal', 'stripe_multibanco', 'stripe_p24', 'stripe_sepa', 'stripe_sofort' ],
+				'value'   => [ 'monilypay', 'stripe_alipay', 'stripe_bancontact', 'stripe_eps', 'stripe_giropay', 'stripe_ideal', 'stripe_multibanco', 'stripe_p24', 'stripe_sepa', 'stripe_sofort' ],
 				'compare' => 'IN',
 			],
 			[
@@ -347,12 +347,12 @@ class WC_Monilypay_Privacy extends WC_Abstract_Privacy {
 
 		if ( ! $this->is_retention_expired( $order->get_date_created()->getTimestamp() ) ) {
 			/* translators: %d Order ID */
-			return [ false, true, [ sprintf( __( 'Order ID %d is less than set retention days. Personal data retained. (Stripe)', 'woocommerce-gateway-monilypay' ), $order->get_id() ) ] ];
+			return [ false, true, [ sprintf( __( 'Order ID %d is less than set retention days. Personal data retained. (Monilypay)', 'woocommerce-gateway-monilypay' ), $order->get_id() ) ] ];
 		}
 
 		if ( $subscription->has_status( apply_filters( 'wc_monilypay_privacy_eraser_subs_statuses', [ 'on-hold', 'active' ] ) ) ) {
 			/* translators: %d Order ID */
-			return [ false, true, [ sprintf( __( 'Order ID %d contains an active Subscription. Personal data retained. (Stripe)', 'woocommerce-gateway-monilypay' ), $order->get_id() ) ] ];
+			return [ false, true, [ sprintf( __( 'Order ID %d contains an active Subscription. Personal data retained. (Monilypay)', 'woocommerce-gateway-monilypay' ), $order->get_id() ) ] ];
 		}
 
 		$renewal_orders = WC_Subscriptions_Renewal_Order::get_renewal_orders( $order->get_id() );
@@ -384,7 +384,7 @@ class WC_Monilypay_Privacy extends WC_Abstract_Privacy {
 
 		if ( ! $this->is_retention_expired( $order->get_date_created()->getTimestamp() ) ) {
 			/* translators: %d Order ID */
-			return [ false, true, [ sprintf( __( 'Order ID %d is less than set retention days. Personal data retained. (Stripe)', 'woocommerce-gateway-monilypay' ), $order->get_id() ) ] ];
+			return [ false, true, [ sprintf( __( 'Order ID %d is less than set retention days. Personal data retained. (Monilypay)', 'woocommerce-gateway-monilypay' ), $order->get_id() ) ] ];
 		}
 
 		if ( empty( $stripe_source_id ) && empty( $stripe_refund_id ) && empty( $stripe_customer_id ) ) {

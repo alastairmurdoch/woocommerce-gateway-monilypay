@@ -189,7 +189,7 @@ class WC_Monilypay_Admin_Notices {
 			if ( empty( $show_keys_notice ) ) {
 				$secret = WC_Monilypay_API::get_secret_key();
 				// phpcs:ignore
-				$should_show_notice_on_page = ! ( isset( $_GET['page'], $_GET['section'] ) && 'wc-settings' === $_GET['page'] && 0 === strpos( $_GET['section'], 'stripe' ) );
+				$should_show_notice_on_page = ! ( isset( $_GET['page'], $_GET['section'] ) && 'wc-settings' === $_GET['page'] && 0 === strpos( $_GET['section'], 'monilypay' ) );
 
 				if ( empty( $secret ) && $should_show_notice_on_page ) {
 					$setting_link = $this->get_setting_link();

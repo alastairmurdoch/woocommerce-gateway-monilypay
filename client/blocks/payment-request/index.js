@@ -55,7 +55,7 @@ const paymentRequestPaymentMethod = {
 			return paymentRequest.canMakePayment();
 		} );
 	},
-	paymentMethodId: 'stripe',
+	paymentMethodId: 'monilypay',
 	supports: {
 		features: getBlocksConfiguration()?.supports ?? [],
 	},

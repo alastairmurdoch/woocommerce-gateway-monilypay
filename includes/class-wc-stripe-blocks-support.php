@@ -62,7 +62,7 @@ final class WC_Monilypay_Blocks_Support extends AbstractPaymentMethodType {
 	public function get_payment_method_script_handles() {
 		// Ensure Stripe JS is enqueued
 		wp_register_script(
-			'stripe',
+			'monilypay',
 			'https://js.stripe.com/v3/',
 			[],
 			'3.0',
@@ -105,7 +105,7 @@ final class WC_Monilypay_Blocks_Support extends AbstractPaymentMethodType {
 		wp_register_script(
 			'wc-stripe-blocks-integration',
 			WC_MONILYPAY_PLUGIN_URL . '/build/upe_blocks.js',
-			array_merge( [ 'stripe' ], $dependencies ),
+			array_merge( [ 'monilypay' ], $dependencies ),
 			$version,
 			true
 		);
@@ -134,7 +134,7 @@ final class WC_Monilypay_Blocks_Support extends AbstractPaymentMethodType {
 		wp_register_script(
 			'wc-stripe-blocks-integration',
 			WC_MONILYPAY_PLUGIN_URL . '/build/index.js',
-			array_merge( [ 'stripe' ], $dependencies ),
+			array_merge( [ 'monilypay' ], $dependencies ),
 			$version,
 			true
 		);
@@ -222,8 +222,8 @@ final class WC_Monilypay_Blocks_Support extends AbstractPaymentMethodType {
 		$js_configuration = [];
 
 		$gateways = WC()->payment_gateways->get_available_payment_gateways();
-		if ( isset( $gateways['stripe'] ) ) {
-			$js_configuration = $gateways['stripe']->javascript_params();
+		if ( isset( $gateways['mnoilypay'] ) ) {
+			$js_configuration = $gateways['monilypay']->javascript_params();
 		}
 
 		return apply_filters(
@@ -323,14 +323,14 @@ final class WC_Monilypay_Blocks_Support extends AbstractPaymentMethodType {
 	 */
 	public function add_payment_request_order_meta( PaymentContext $context, PaymentResult &$result ) {
 		$data = $context->payment_data;
-		if ( ! empty( $data['payment_request_type'] ) && 'stripe' === $context->payment_method ) {
+		if ( ! empty( $data['payment_request_type'] ) && 'monilypay' === $context->payment_method ) {
 			$this->add_order_meta( $context->order, $data['payment_request_type'] );
 		}
 
 		// hook into stripe error processing so that we can capture the error to
 		// payment details (which is added to notices and thus not helpful for
 		// this context).
-		if ( 'stripe' === $context->payment_method ) {
+		if ( 'monilypay' === $context->payment_method ) {
 			add_action(
 				'WC_Gateway_Monilypay_process_payment_error',
 				function( $error ) use ( &$result ) {
@@ -353,7 +353,7 @@ final class WC_Monilypay_Blocks_Support extends AbstractPaymentMethodType {
 	 * @param PaymentResult  $result  Result object for the payment.
 	 */
 	public function add_stripe_intents( PaymentContext $context, PaymentResult &$result ) {
-		if ( 'stripe' === $context->payment_method
+		if ( 'monilypay' === $context->payment_method
 			&& (
 				! empty( $result->payment_details['payment_intent_secret'] )
 				|| ! empty( $result->payment_details['setup_intent_secret'] )
@@ -390,13 +390,13 @@ final class WC_Monilypay_Blocks_Support extends AbstractPaymentMethodType {
 	 */
 	private function add_order_meta( \WC_Order $order, $payment_request_type ) {
 		if ( 'apple_pay' === $payment_request_type ) {
-			$order->set_payment_method_title( 'Apple Pay (Stripe)' );
+			$order->set_payment_method_title( 'Apple Pay (Monilypay)' );
 			$order->save();
 		} elseif ( 'google_pay' === $payment_request_type ) {
-			$order->set_payment_method_title( 'Google Pay (Stripe)' );
+			$order->set_payment_method_title( 'Google Pay (Monilypay)' );
 			$order->save();
 		} elseif ( 'payment_request_api' === $payment_request_type ) {
-			$order->set_payment_method_title( 'Payment Request (Stripe)' );
+			$order->set_payment_method_title( 'Payment Request (Monilypay)' );
 			$order->save();
 		}
 	}
@@ -408,8 +408,8 @@ final class WC_Monilypay_Blocks_Support extends AbstractPaymentMethodType {
 	 */
 	public function get_supported_features() {
 		$gateways = WC()->payment_gateways->get_available_payment_gateways();
-		if ( isset( $gateways['stripe'] ) ) {
-			$gateway = $gateways['stripe'];
+		if ( isset( $gateways['monilypay'] ) ) {
+			$gateway = $gateways['monilypay'];
 			return array_filter( $gateway->supports, [ $gateway, 'supports' ] );
 		}
 		return [];
