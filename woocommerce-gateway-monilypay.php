@@ -5,11 +5,11 @@
  * Description: Take credit card payments on your store using MonilyPay. A fork of the official Woocommerce Stripe Plugin
  * Author: MonilyPay
  * Author URI: https://moni.ly/
- * Version: 7.1.0
+ * Version: 7.2.0
  * Requires at least: 5.9
  * Tested up to: 6.1
- * WC requires at least: 6.9
- * WC tested up to: 7.3
+ * WC requires at least: 7.1
+ * WC tested up to: 7.4
  * Text Domain: woocommerce-gateway-monilypay
  * Domain Path: /languages
  */
@@ -21,10 +21,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Required minimums and constants
  */
-define( 'wc_monilypay_stripe_version', '7.0.2' ); // WRCS: DEFINED_VERSION.
+define( 'wc_monilypay_stripe_version', '7.2.0' ); // WRCS: DEFINED_VERSION.
 define( 'WC_MONILYPAY_MIN_PHP_VER', '7.3.0' );
-define( 'WC_MONILYPAY_MIN_WC_VER', '6.9' );
-define( 'WC_MONILYPAY_FUTURE_MIN_WC_VER', '7.1' );
+define( 'WC_MONILYPAY_MIN_WC_VER', '7.1' );
+define( 'WC_MONILYPAY_FUTURE_MIN_WC_VER', '7.2' );
 define( 'WC_MONILYPAY_MAIN_FILE', __FILE__ );
 define( 'WC_MONILYPAY_ABSPATH', __DIR__ . '/' );
 define( 'WC_MONILYPAY_PLUGIN_URL', untrailingslashit( plugins_url( basename( plugin_dir_path( __FILE__ ) ), basename( __FILE__ ) ) ) );

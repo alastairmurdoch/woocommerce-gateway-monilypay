@@ -253,7 +253,7 @@ const StyledConfirmationModal = styled( ConfirmationModal )`
 		margin: 0 -24px 24px;
 	}
 	.wcstripe-inline-notice {
-		margin-top: 0px;
+		margin-top: 0;
 		margin-bottom: 0;
 	}
 	.wcstripe-confirmation-modal__separator {
