@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @extends WC_Email_Customer_Invoice
  */
-class WC_Stripe_Email_Failed_Renewal_Authentication extends WC_Stripe_Email_Failed_Authentication {
+class WC_Monilypay_Email_Failed_Renewal_Authentication extends WC_Monilypay_Email_Failed_Authentication {
 	/**
 	 * Constructor.
 	 *
@@ -16,16 +16,16 @@ class WC_Stripe_Email_Failed_Renewal_Authentication extends WC_Stripe_Email_Fail
 	 */
 	public function __construct( $email_classes = [] ) {
 		$this->id             = 'failed_renewal_authentication';
-		$this->title          = __( 'Failed Subscription Renewal SCA Authentication', 'woocommerce-gateway-stripe' );
-		$this->description    = __( 'Sent to a customer when a renewal fails because the transaction requires an SCA verification. The email contains renewal order information and payment links.', 'woocommerce-gateway-stripe' );
+		$this->title          = __( 'Failed Subscription Renewal SCA Authentication', 'woocommerce-gateway-monilypay' );
+		$this->description    = __( 'Sent to a customer when a renewal fails because the transaction requires an SCA verification. The email contains renewal order information and payment links.', 'woocommerce-gateway-monilypay' );
 		$this->customer_email = true;
 
 		$this->template_html  = 'emails/failed-renewal-authentication.php';
 		$this->template_plain = 'emails/plain/failed-renewal-authentication.php';
-		$this->template_base  = plugin_dir_path( WC_STRIPE_MAIN_FILE ) . 'templates/';
+		$this->template_base  = plugin_dir_path( WC_MONILYPAY_MAIN_FILE ) . 'templates/';
 
 		// Triggers the email at the correct hook.
-		add_action( 'wc_gateway_stripe_process_payment_authentication_required', [ $this, 'trigger' ] );
+		add_action( 'WC_Gateway_Monilypay_process_payment_authentication_required', [ $this, 'trigger' ] );
 
 		if ( isset( $email_classes['WCS_Email_Customer_Renewal_Invoice'] ) ) {
 			$this->original_email = $email_classes['WCS_Email_Customer_Renewal_Invoice'];
@@ -64,7 +64,7 @@ class WC_Stripe_Email_Failed_Renewal_Authentication extends WC_Stripe_Email_Fail
 	 * @return string
 	 */
 	public function get_default_subject() {
-		return __( 'Payment authorization needed for renewal of {site_title} order {order_number}', 'woocommerce-gateway-stripe' );
+		return __( 'Payment authorization needed for renewal of {site_title} order {order_number}', 'woocommerce-gateway-monilypay' );
 	}
 
 	/**
@@ -73,7 +73,7 @@ class WC_Stripe_Email_Failed_Renewal_Authentication extends WC_Stripe_Email_Fail
 	 * @return string
 	 */
 	public function get_default_heading() {
-		return __( 'Payment authorization needed for renewal of order {order_number}', 'woocommerce-gateway-stripe' );
+		return __( 'Payment authorization needed for renewal of order {order_number}', 'woocommerce-gateway-monilypay' );
 	}
 
 	/**
@@ -105,7 +105,7 @@ class WC_Stripe_Email_Failed_Renewal_Authentication extends WC_Stripe_Email_Fail
 			wcs_get_objects_property( $this->object, 'id' ) === $order_id &&
 			'' !== $rule_array['email_template_admin'] // Only send our email if a retry admin email was already going to be sent.
 		) {
-			$rule_array['email_template_admin'] = 'WC_Stripe_Email_Failed_Authentication_Retry';
+			$rule_array['email_template_admin'] = 'WC_Monilypay_Email_Failed_Authentication_Retry';
 		}
 
 		return $rule_array;

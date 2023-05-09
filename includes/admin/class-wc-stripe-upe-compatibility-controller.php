@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 5.5.0
  */
-class WC_Stripe_UPE_Compatibility_Controller {
+class WC_Monilypay_UPE_Compatibility_Controller {
 	public function __construct() {
 		add_action( 'admin_notices', [ $this, 'add_compatibility_notice' ] );
 	}
@@ -39,21 +39,21 @@ class WC_Stripe_UPE_Compatibility_Controller {
 				[
 					'name'         => 'WordPress',
 					'version'      => get_bloginfo( 'version' ),
-					'is_supported' => WC_Stripe_UPE_Compatibility::is_wp_supported(),
+					'is_supported' => WC_Monilypay_UPE_Compatibility::is_wp_supported(),
 					/* translators: %s. WordPress version installed. */
-					'message'      => sprintf( __( 'WordPress %s or greater', 'woocommerce-gateway-stripe' ), WC_Stripe_UPE_Compatibility::MIN_WP_VERSION ),
+					'message'      => sprintf( __( 'WordPress %s or greater', 'woocommerce-gateway-monilypay' ), WC_Monilypay_UPE_Compatibility::MIN_WP_VERSION ),
 				],
 				[
 					'name'         => 'WooCommerce',
 					'version'      => $this->get_wc_version(),
-					'is_supported' => version_compare( $this->get_wc_version(), WC_Stripe_UPE_Compatibility::MIN_WC_VERSION, '>=' ),
+					'is_supported' => version_compare( $this->get_wc_version(), WC_Monilypay_UPE_Compatibility::MIN_WC_VERSION, '>=' ),
 					'message'      => sprintf(
 					/* translators: %s. WooCommerce version installed. */
 						__(
 							'WooCommerce %s or greater to be installed and active',
-							'woocommerce-gateway-stripe'
+							'woocommerce-gateway-monilypay'
 						),
-						WC_Stripe_UPE_Compatibility::MIN_WC_VERSION
+						WC_Monilypay_UPE_Compatibility::MIN_WC_VERSION
 					),
 				],
 			],
@@ -71,7 +71,7 @@ class WC_Stripe_UPE_Compatibility_Controller {
 
 	private function get_installed_versions_message( $unsatisfied_requirements ) {
 		return join(
-			__( ' and ', 'woocommerce-gateway-stripe' ),
+			__( ' and ', 'woocommerce-gateway-monilypay' ),
 			array_map(
 				function ( $requirement ) {
 					return $requirement['name'] . ' ' . $requirement['version'];
@@ -83,7 +83,7 @@ class WC_Stripe_UPE_Compatibility_Controller {
 
 	private function get_unsatisfied_requirements_message( $unsatisfied_requirements ) {
 		return join(
-			__( ' and ', 'woocommerce-gateway-stripe' ),
+			__( ' and ', 'woocommerce-gateway-monilypay' ),
 			array_map(
 				function ( $requirement ) {
 					return $requirement['message'];
@@ -113,7 +113,7 @@ class WC_Stripe_UPE_Compatibility_Controller {
 					'WooCommerce Stripe requires %1$s. Your version of %2$s is no longer supported.',
 					'WooCommerce Stripe requires %1$s. Your versions of %2$s are no longer supported.',
 					count( $unsatisfied_requirements ),
-					'woocommerce-gateway-stripe'
+					'woocommerce-gateway-monilypay'
 				),
 				$unsatisfied_requirements_message,
 				$unsatisfied_requirements_versions

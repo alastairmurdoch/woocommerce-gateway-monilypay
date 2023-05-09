@@ -13,10 +13,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Extendable abstract class for payment methods.
  */
-abstract class WC_Stripe_UPE_Payment_Method {
+abstract class WC_Monilypay_UPE_Payment_Method {
 
-	use WC_Stripe_Subscriptions_Utilities_Trait;
-	use WC_Stripe_Pre_Orders_Trait;
+	use WC_Monilypay_Subscriptions_Utilities_Trait;
+	use WC_Monilypay_Pre_Orders_Trait;
 
 	/**
 	 * Stripe key name
@@ -85,12 +85,12 @@ abstract class WC_Stripe_UPE_Payment_Method {
 	 * Create instance of payment method
 	 */
 	public function __construct() {
-		$main_settings = get_option( 'woocommerce_stripe_settings' );
+		$main_settings = get_option( 'woocommerce_monilypay_settings' );
 
 		if ( isset( $main_settings['upe_checkout_experience_accepted_payments'] ) ) {
 			$enabled_upe_methods = $main_settings['upe_checkout_experience_accepted_payments'];
 		} else {
-			$enabled_upe_methods = [ WC_Stripe_UPE_Payment_Method_CC::STRIPE_ID ];
+			$enabled_upe_methods = [ WC_Monilypay_UPE_Payment_Method_CC::STRIPE_ID ];
 		}
 
 		$this->enabled = in_array( static::STRIPE_ID, $enabled_upe_methods, true );
@@ -217,7 +217,7 @@ abstract class WC_Stripe_UPE_Payment_Method {
 	 */
 	public function is_capability_active() {
 		// Treat all capabilities as active when in test mode.
-		$plugin_settings   = get_option( 'woocommerce_stripe_settings' );
+		$plugin_settings   = get_option( 'woocommerce_monilypay_settings' );
 		$test_mode_setting = ! empty( $plugin_settings['testmode'] ) ? $plugin_settings['testmode'] : 'no';
 
 		if ( 'yes' === $test_mode_setting ) {
@@ -252,7 +252,7 @@ abstract class WC_Stripe_UPE_Payment_Method {
 	 * to query to retrieve saved payment methods from Stripe.
 	 */
 	public function get_retrievable_type() {
-		return $this->is_reusable() ? WC_Stripe_UPE_Payment_Method_Sepa::STRIPE_ID : null;
+		return $this->is_reusable() ? WC_Monilypay_UPE_Payment_Method_Sepa::STRIPE_ID : null;
 	}
 
 	/**
@@ -261,12 +261,12 @@ abstract class WC_Stripe_UPE_Payment_Method {
 	 * @param int $user_id        WP_User ID
 	 * @param object $payment_method Stripe payment method object
 	 *
-	 * @return WC_Payment_Token_SEPA
+	 * @return WC_Monilypay_Payment_Token_SEPA
 	 */
 	public function create_payment_token_for_user( $user_id, $payment_method ) {
-		$token = new WC_Payment_Token_SEPA();
+		$token = new WC_Monilypay_Payment_Token_SEPA();
 		$token->set_last4( $payment_method->sepa_debit->last4 );
-		$token->set_gateway_id( WC_Stripe_UPE_Payment_Gateway::ID );
+		$token->set_gateway_id( WC_Monilypay_UPE_Payment_Gateway::ID );
 		$token->set_token( $payment_method->id );
 		$token->set_payment_method_type( $this->get_id() );
 		$token->set_user_id( $user_id );
@@ -281,7 +281,7 @@ abstract class WC_Stripe_UPE_Payment_Method {
 	 */
 	public function get_supported_currencies() {
 		return apply_filters(
-			'wc_stripe_' . static::STRIPE_ID . '_upe_supported_currencies',
+			'wc_monilypay_' . static::STRIPE_ID . '_upe_supported_currencies',
 			$this->supported_currencies
 		);
 	}
@@ -314,10 +314,10 @@ abstract class WC_Stripe_UPE_Payment_Method {
 		$messages = [];
 
 		if ( ! empty( $stripe_method_status ) && 'active' !== $stripe_method_status ) {
-			$text            = __( 'Pending activation', 'woocommerce-gateway-stripe' );
+			$text            = __( 'Pending activation', 'woocommerce-gateway-monilypay' );
 			$tooltip_content = sprintf(
 				/* translators: %1: Payment method name */
-				esc_attr__( '%1$s won\'t be visible to your customers until you provide the required information. Follow the instructions Stripe has sent to your e-mail address.', 'woocommerce-gateway-stripe' ),
+				esc_attr__( '%1$s won\'t be visible to your customers until you provide the required information. Follow the instructions Stripe has sent to your e-mail address.', 'woocommerce-gateway-monilypay' ),
 				$this->get_label()
 			);
 			$messages[] = $text . '<span class="tips" data-tip="' . $tooltip_content . '"><span class="woocommerce-help-tip" style="margin-top: 0;"></span></span>';
@@ -326,8 +326,8 @@ abstract class WC_Stripe_UPE_Payment_Method {
 		$currencies = $this->get_supported_currencies();
 		if ( ! empty( $currencies ) && ! in_array( get_woocommerce_currency(), $currencies, true ) ) {
 			/* translators: %s: List of comma-separated currencies. */
-			$tooltip_content = sprintf( esc_attr__( 'In order to be used at checkout, the payment method requires the store currency to be set to one of: %s', 'woocommerce-gateway-stripe' ), implode( ', ', $currencies ) );
-			$text            = __( 'Requires currency', 'woocommerce-gateway-stripe' );
+			$tooltip_content = sprintf( esc_attr__( 'In order to be used at checkout, the payment method requires the store currency to be set to one of: %s', 'woocommerce-gateway-monilypay' ), implode( ', ', $currencies ) );
+			$text            = __( 'Requires currency', 'woocommerce-gateway-monilypay' );
 
 			$messages[] = $text . '<span class="tips" data-tip="' . $tooltip_content . '"><span class="woocommerce-help-tip" style="margin-top: 0;"></span></span>';
 		}

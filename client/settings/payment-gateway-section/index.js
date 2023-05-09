@@ -56,7 +56,7 @@ const PaymentGatewaySection = () => {
 									/* translators: %s: Payment Gateway name */
 									__(
 										'Enable %s',
-										'woocommerce-gateway-stripe'
+										'woocommerce-gateway-monilypay'
 									),
 									info.title
 								) }
@@ -75,7 +75,7 @@ const PaymentGatewaySection = () => {
 							/* translators: %s: Payment Gateway name */
 							__(
 								'When enabled, %s will appear on checkout.',
-								'woocommerce-gateway-stripe'
+								'woocommerce-gateway-monilypay'
 							),
 							info.title
 						) }
@@ -83,26 +83,26 @@ const PaymentGatewaySection = () => {
 					<h4>
 						{ __(
 							'Display settings',
-							'woocommerce-gateway-stripe'
+							'woocommerce-gateway-monilypay'
 						) }
 					</h4>
 					<TextControl
 						help={ __(
 							'Enter a name which customers will see during checkout.',
-							'woocommerce-gateway-stripe'
+							'woocommerce-gateway-monilypay'
 						) }
-						label={ __( 'Name', 'woocommerce-gateway-stripe' ) }
+						label={ __( 'Name', 'woocommerce-gateway-monilypay' ) }
 						value={ gatewayName }
 						onChange={ setGatewayName }
 					/>
 					<TextControl
 						help={ __(
 							'Describe how customers should use this payment method during checkout.',
-							'woocommerce-gateway-stripe'
+							'woocommerce-gateway-monilypay'
 						) }
 						label={ __(
 							'Description',
-							'woocommerce-gateway-stripe'
+							'woocommerce-gateway-monilypay'
 						) }
 						value={ gatewayDescription }
 						onChange={ setGatewayDescription }
@@ -111,7 +111,7 @@ const PaymentGatewaySection = () => {
 					<h4>
 						{ __(
 							'Webhook endpoints',
-							'woocommerce-gateway-stripe'
+							'woocommerce-gateway-monilypay'
 						) }
 					</h4>
 					<WebhookInformation />
@@ -123,7 +123,7 @@ const PaymentGatewaySection = () => {
 							isBusy={ requestStatus === 'pending' }
 							isLink
 						>
-							{ __( 'Refresh', 'woocommerce-gateway-stripe' ) }
+							{ __( 'Refresh', 'woocommerce-gateway-monilypay' ) }
 						</Button>
 					</p>
 				</CardBody>

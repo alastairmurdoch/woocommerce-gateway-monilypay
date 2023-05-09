@@ -4,11 +4,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * WC_Stripe_Customer class.
+ * WC_Monilypay_Customer class.
  *
  * Represents a Stripe Customer.
  */
-class WC_Stripe_Customer {
+class WC_Monilypay_Customer {
 
 	/**
 	 * String prefix for Stripe payment methods request transient.
@@ -19,8 +19,8 @@ class WC_Stripe_Customer {
 	 * Queryable Stripe payment method types.
 	 */
 	const STRIPE_PAYMENT_METHODS = [
-		WC_Stripe_UPE_Payment_Method_CC::STRIPE_ID,
-		WC_Stripe_UPE_Payment_Method_Sepa::STRIPE_ID,
+		WC_Monilypay_UPE_Payment_Method_CC::STRIPE_ID,
+		WC_Monilypay_UPE_Payment_Method_Sepa::STRIPE_ID,
 	];
 
 	/**
@@ -140,7 +140,7 @@ class WC_Stripe_Customer {
 			}
 
 			// translators: %1$s First name, %2$s Second name, %3$s Username.
-			$description = sprintf( __( 'Name: %1$s %2$s, Username: %3$s', 'woocommerce-gateway-stripe' ), $billing_first_name, $billing_last_name, $user->user_login );
+			$description = sprintf( __( 'Name: %1$s %2$s, Username: %3$s', 'woocommerce-gateway-monilypay' ), $billing_first_name, $billing_last_name, $user->user_login );
 
 			$defaults = [
 				'email'       => $user->user_email,
@@ -156,7 +156,7 @@ class WC_Stripe_Customer {
 			$billing_last_name  = isset( $_POST['billing_last_name'] ) ? filter_var( wp_unslash( $_POST['billing_last_name'] ), FILTER_SANITIZE_STRING ) : ''; // phpcs:ignore WordPress.Security.NonceVerification
 
 			// translators: %1$s First name, %2$s Second name.
-			$description = sprintf( __( 'Name: %1$s %2$s, Guest', 'woocommerce-gateway-stripe' ), $billing_first_name, $billing_last_name );
+			$description = sprintf( __( 'Name: %1$s %2$s, Guest', 'woocommerce-gateway-monilypay' ), $billing_first_name, $billing_last_name );
 
 			$defaults = [
 				'email'       => $billing_email,
@@ -170,7 +170,7 @@ class WC_Stripe_Customer {
 		}
 
 		$metadata                      = [];
-		$defaults['metadata']          = apply_filters( 'wc_stripe_customer_metadata', $metadata, $user );
+		$defaults['metadata']          = apply_filters( 'WC_Monilypay_Customer_metadata', $metadata, $user );
 		$defaults['preferred_locales'] = $this->get_customer_preferred_locale( $user );
 
 		return wp_parse_args( $args, $defaults );
@@ -184,10 +184,10 @@ class WC_Stripe_Customer {
 	 */
 	public function create_customer( $args = [] ) {
 		$args     = $this->generate_customer_request( $args );
-		$response = WC_Stripe_API::request( apply_filters( 'wc_stripe_create_customer_args', $args ), 'customers' );
+		$response = WC_Monilypay_API::request( apply_filters( 'wc_monilypay_create_customer_args', $args ), 'customers' );
 
 		if ( ! empty( $response->error ) ) {
-			throw new WC_Stripe_Exception( print_r( $response, true ), $response->error->message );
+			throw new WC_Monilypay_Exception( print_r( $response, true ), $response->error->message );
 		}
 
 		$this->set_id( $response->id );
@@ -211,16 +211,16 @@ class WC_Stripe_Customer {
 	 *
 	 * @return string Customer ID
 	 *
-	 * @throws WC_Stripe_Exception
+	 * @throws WC_Monilypay_Exception
 	 */
 	public function update_customer( $args = [], $is_retry = false ) {
 		if ( empty( $this->get_id() ) ) {
-			throw new WC_Stripe_Exception( 'id_required_to_update_user', __( 'Attempting to update a Stripe customer without a customer ID.', 'woocommerce-gateway-stripe' ) );
+			throw new WC_Monilypay_Exception( 'id_required_to_update_user', __( 'Attempting to update a Stripe customer without a customer ID.', 'woocommerce-gateway-monilypay' ) );
 		}
 
 		$args     = $this->generate_customer_request( $args );
-		$args     = apply_filters( 'wc_stripe_update_customer_args', $args );
-		$response = WC_Stripe_API::request( $args, 'customers/' . $this->get_id() );
+		$args     = apply_filters( 'wc_monilypay_update_customer_args', $args );
+		$response = WC_Monilypay_API::request( $args, 'customers/' . $this->get_id() );
 
 		if ( ! empty( $response->error ) ) {
 			if ( $this->is_no_such_customer_error( $response->error ) && ! $is_retry ) {
@@ -230,7 +230,7 @@ class WC_Stripe_Customer {
 				return $this->update_customer( $args, true );
 			}
 
-			throw new WC_Stripe_Exception( print_r( $response, true ), $response->error->message );
+			throw new WC_Monilypay_Exception( print_r( $response, true ), $response->error->message );
 		}
 
 		$this->clear_cache();
@@ -249,7 +249,7 @@ class WC_Stripe_Customer {
 	 *
 	 * @return string Customer ID
 	 *
-	 * @throws WC_Stripe_Exception
+	 * @throws WC_Monilypay_Exception
 	 */
 	public function update_or_create_customer( $args = [], $is_retry = false ) {
 		if ( empty( $this->get_id() ) ) {
@@ -297,7 +297,7 @@ class WC_Stripe_Customer {
 	 * @return WP_Error|int
 	 */
 	public function add_source( $source_id ) {
-		$response = WC_Stripe_API::retrieve( 'sources/' . $source_id );
+		$response = WC_Monilypay_API::retrieve( 'sources/' . $source_id );
 
 		if ( ! empty( $response->error ) || is_wp_error( $response ) ) {
 			return $response;
@@ -312,7 +312,7 @@ class WC_Stripe_Customer {
 					case 'alipay':
 						break;
 					case 'sepa_debit':
-						$wc_token = new WC_Payment_Token_SEPA();
+						$wc_token = new WC_Monilypay_Payment_Token_SEPA();
 						$wc_token->set_token( $response->id );
 						$wc_token->set_gateway_id( 'stripe_sepa' );
 						$wc_token->set_last4( $response->sepa_debit->last4 );
@@ -321,7 +321,7 @@ class WC_Stripe_Customer {
 						if ( 'source' === $response->object && 'card' === $response->type ) {
 							$wc_token = new WC_Payment_Token_CC();
 							$wc_token->set_token( $response->id );
-							$wc_token->set_gateway_id( 'stripe' );
+							$wc_token->set_gateway_id( 'monilypay' );
 							$wc_token->set_card_type( strtolower( $response->card->brand ) );
 							$wc_token->set_last4( $response->card->last4 );
 							$wc_token->set_expiry_month( $response->card->exp_month );
@@ -333,7 +333,7 @@ class WC_Stripe_Customer {
 				// Legacy.
 				$wc_token = new WC_Payment_Token_CC();
 				$wc_token->set_token( $response->id );
-				$wc_token->set_gateway_id( 'stripe' );
+				$wc_token->set_gateway_id( 'monilypay' );
 				$wc_token->set_card_type( strtolower( $response->brand ) );
 				$wc_token->set_last4( $response->last4 );
 				$wc_token->set_expiry_month( $response->exp_month );
@@ -362,7 +362,7 @@ class WC_Stripe_Customer {
 			$this->set_id( $this->create_customer() );
 		}
 
-		$response = WC_Stripe_API::request(
+		$response = WC_Monilypay_API::request(
 			[
 				'source' => $source_id,
 			],
@@ -377,12 +377,12 @@ class WC_Stripe_Customer {
 				$this->recreate_customer();
 				return $this->attach_source( $source_id );
 			} elseif ( $this->is_source_already_attached_error( $response->error ) ) {
-				return WC_Stripe_API::request( [], 'sources/' . $source_id, 'GET' );
+				return WC_Monilypay_API::request( [], 'sources/' . $source_id, 'GET' );
 			} else {
 				return $response;
 			}
 		} elseif ( empty( $response->id ) ) {
-			return new WP_Error( 'error', __( 'Unable to add payment source.', 'woocommerce-gateway-stripe' ) );
+			return new WP_Error( 'error', __( 'Unable to add payment source.', 'woocommerce-gateway-monilypay' ) );
 		} else {
 			return $response;
 		}
@@ -402,7 +402,7 @@ class WC_Stripe_Customer {
 		$sources = get_transient( 'stripe_sources_' . $this->get_id() );
 
 		if ( false === $sources ) {
-			$response = WC_Stripe_API::request(
+			$response = WC_Monilypay_API::request(
 				[
 					'limit' => 100,
 				],
@@ -439,8 +439,8 @@ class WC_Stripe_Customer {
 		$payment_methods = get_transient( self::PAYMENT_METHODS_TRANSIENT_KEY . $payment_method_type . $this->get_id() );
 
 		if ( false === $payment_methods ) {
-			$params   = WC_Stripe_UPE_Payment_Method_Sepa::STRIPE_ID === $payment_method_type ? '?expand[]=data.sepa_debit.generated_from.charge&expand[]=data.sepa_debit.generated_from.setup_attempt' : '';
-			$response = WC_Stripe_API::request(
+			$params   = WC_Monilypay_UPE_Payment_Method_Sepa::STRIPE_ID === $payment_method_type ? '?expand[]=data.sepa_debit.generated_from.charge&expand[]=data.sepa_debit.generated_from.setup_attempt' : '';
+			$response = WC_Monilypay_API::request(
 				[
 					'customer' => $this->get_id(),
 					'type'     => $payment_method_type,
@@ -474,12 +474,12 @@ class WC_Stripe_Customer {
 			return false;
 		}
 
-		$response = WC_Stripe_API::request( [], 'customers/' . $this->get_id() . '/sources/' . sanitize_text_field( $source_id ), 'DELETE' );
+		$response = WC_Monilypay_API::request( [], 'customers/' . $this->get_id() . '/sources/' . sanitize_text_field( $source_id ), 'DELETE' );
 
 		$this->clear_cache();
 
 		if ( empty( $response->error ) ) {
-			do_action( 'wc_stripe_delete_source', $this->get_id(), $response );
+			do_action( 'wc_monilypay_delete_source', $this->get_id(), $response );
 
 			return true;
 		}
@@ -497,12 +497,12 @@ class WC_Stripe_Customer {
 			return false;
 		}
 
-		$response = WC_Stripe_API::request( [], "payment_methods/$payment_method_id/detach", 'POST' );
+		$response = WC_Monilypay_API::request( [], "payment_methods/$payment_method_id/detach", 'POST' );
 
 		$this->clear_cache();
 
 		if ( empty( $response->error ) ) {
-			do_action( 'wc_stripe_detach_payment_method', $this->get_id(), $response );
+			do_action( 'wc_monilypay_detach_payment_method', $this->get_id(), $response );
 
 			return true;
 		}
@@ -516,7 +516,7 @@ class WC_Stripe_Customer {
 	 * @param string $source_id
 	 */
 	public function set_default_source( $source_id ) {
-		$response = WC_Stripe_API::request(
+		$response = WC_Monilypay_API::request(
 			[
 				'default_source' => sanitize_text_field( $source_id ),
 			],
@@ -527,7 +527,7 @@ class WC_Stripe_Customer {
 		$this->clear_cache();
 
 		if ( empty( $response->error ) ) {
-			do_action( 'wc_stripe_set_default_source', $this->get_id(), $response );
+			do_action( 'wc_monilypay_set_default_source', $this->get_id(), $response );
 
 			return true;
 		}
@@ -541,7 +541,7 @@ class WC_Stripe_Customer {
 	 * @param string $payment_method_id
 	 */
 	public function set_default_payment_method( $payment_method_id ) {
-		$response = WC_Stripe_API::request(
+		$response = WC_Monilypay_API::request(
 			[
 				'invoice_settings' => [
 					'default_payment_method' => sanitize_text_field( $payment_method_id ),
@@ -554,7 +554,7 @@ class WC_Stripe_Customer {
 		$this->clear_cache();
 
 		if ( empty( $response->error ) ) {
-			do_action( 'wc_stripe_set_default_payment_method', $this->get_id(), $response );
+			do_action( 'wc_monilypay_set_default_payment_method', $this->get_id(), $response );
 
 			return true;
 		}
@@ -685,11 +685,11 @@ class WC_Stripe_Customer {
 		if ( null !== $wc_customer && ! empty( $wc_customer->get_username() ) ) {
 			// We have a logged in user, so add their username to the customer description.
 			// translators: %1$s Name, %2$s Username.
-			$description = sprintf( __( 'Name: %1$s, Username: %2$s', 'woocommerce-gateway-stripe' ), $name, $wc_customer->get_username() );
+			$description = sprintf( __( 'Name: %1$s, Username: %2$s', 'woocommerce-gateway-monilypay' ), $name, $wc_customer->get_username() );
 		} else {
 			// Current user is not logged in.
 			// translators: %1$s Name.
-			$description = sprintf( __( 'Name: %1$s, Guest', 'woocommerce-gateway-stripe' ), $name );
+			$description = sprintf( __( 'Name: %1$s, Guest', 'woocommerce-gateway-monilypay' ), $name );
 		}
 
 		$data = [

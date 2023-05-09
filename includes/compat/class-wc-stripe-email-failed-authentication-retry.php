@@ -6,7 +6,7 @@
  * with the `authentication_needed` error, and a retry rule has been applied to retry the payment in the future.
  *
  * @version     4.3.0
- * @package     WooCommerce_Stripe/Classes/WC_Stripe_Email_Failed_Authentication_Retry
+ * @package     WooCommerce_Stripe/Classes/WC_Monilypay_Email_Failed_Authentication_Retry
  * @extends     WC_Email_Failed_Order
  */
 
@@ -19,22 +19,22 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 4.3.0
  */
-class WC_Stripe_Email_Failed_Authentication_Retry extends WC_Email_Failed_Order {
+class WC_Monilypay_Email_Failed_Authentication_Retry extends WC_Email_Failed_Order {
 
 	/**
 	 * Constructor
 	 */
 	public function __construct() {
 		$this->id          = 'failed_authentication_requested';
-		$this->title       = __( 'Payment Authentication Requested Email', 'woocommerce-gateway-stripe' );
-		$this->description = __( 'Payment authentication requested emails are sent to chosen recipient(s) when an attempt to automatically process a subscription renewal payment fails because the transaction requires an SCA verification, the customer is requested to authenticate the payment, and a retry rule has been applied to notify the customer again within a certain time period.', 'woocommerce-gateway-stripe' );
+		$this->title       = __( 'Payment Authentication Requested Email', 'woocommerce-gateway-monilypay' );
+		$this->description = __( 'Payment authentication requested emails are sent to chosen recipient(s) when an attempt to automatically process a subscription renewal payment fails because the transaction requires an SCA verification, the customer is requested to authenticate the payment, and a retry rule has been applied to notify the customer again within a certain time period.', 'woocommerce-gateway-monilypay' );
 
-		$this->heading = __( 'Automatic renewal payment failed due to authentication required', 'woocommerce-gateway-stripe' );
-		$this->subject = __( '[{site_title}] Automatic payment failed for {order_number}. Customer asked to authenticate payment and will be notified again {retry_time}', 'woocommerce-gateway-stripe' );
+		$this->heading = __( 'Automatic renewal payment failed due to authentication required', 'woocommerce-gateway-monilypay' );
+		$this->subject = __( '[{site_title}] Automatic payment failed for {order_number}. Customer asked to authenticate payment and will be notified again {retry_time}', 'woocommerce-gateway-monilypay' );
 
 		$this->template_html  = 'emails/failed-renewal-authentication-requested.php';
 		$this->template_plain = 'emails/plain/failed-renewal-authentication-requested.php';
-		$this->template_base  = plugin_dir_path( WC_STRIPE_MAIN_FILE ) . 'templates/';
+		$this->template_base  = plugin_dir_path( WC_MONILYPAY_MAIN_FILE ) . 'templates/';
 
 		$this->recipient = $this->get_option( 'recipient', get_option( 'admin_email' ) );
 
@@ -74,7 +74,7 @@ class WC_Stripe_Email_Failed_Authentication_Retry extends WC_Email_Failed_Order 
 			$this->retry                 = WCS_Retry_Manager::store()->get_last_retry_for_order( wcs_get_objects_property( $order, 'id' ) );
 			$this->replace['retry-time'] = wcs_get_human_time_diff( $this->retry->get_time() );
 		} else {
-			WC_Stripe_Logger::log( 'WCS_Retry_Manager class or does not exist. Not able to send admnin email about customer notification for authentication required for renewal payment.' );
+			WC_Monilypay_Logger::log( 'WCS_Retry_Manager class or does not exist. Not able to send admnin email about customer notification for authentication required for renewal payment.' );
 			return;
 		}
 

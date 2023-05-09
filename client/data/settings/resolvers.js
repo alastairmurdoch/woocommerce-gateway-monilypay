@@ -15,7 +15,7 @@ export function* getSettings() {
 		yield updateSettings( result );
 	} catch ( e ) {
 		yield dispatch( 'core/notices' ).createErrorNotice(
-			__( 'Error retrieving settings.', 'woocommerce-gateway-stripe' )
+			__( 'Error retrieving settings.', 'woocommerce-gateway-monilypay' )
 		);
 	}
 }

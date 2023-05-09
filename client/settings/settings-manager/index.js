@@ -22,11 +22,11 @@ const StyledTabPanel = styled( TabPanel )`
 const TABS_CONTENT = [
 	{
 		name: 'methods',
-		title: __( 'Payment Methods', 'woocommerce-gateway-stripe' ),
+		title: __( 'Payment Methods', 'woocommerce-gateway-monilypay' ),
 	},
 	{
 		name: 'settings',
-		title: __( 'Settings', 'woocommerce-gateway-stripe' ),
+		title: __( 'Settings', 'woocommerce-gateway-monilypay' ),
 	},
 ];
 

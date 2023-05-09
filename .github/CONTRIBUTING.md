@@ -1,6 +1,6 @@
 ### Create Bug Reports
 
-If you find a bug or suggest enhancement, let us know by [opening a new issue](https://github.com/woocommerce/woocommerce-gateway-stripe/issues/new).
+If you find a bug or suggest enhancement, let us know by [opening a new issue](https://github.com/woocommerce/woocommerce-gateway-monilypay/issues/new).
 
 ### Write and submit a patch
 

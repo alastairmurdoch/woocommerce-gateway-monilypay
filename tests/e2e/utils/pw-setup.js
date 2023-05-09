@@ -251,7 +251,7 @@ export const setupWoo = async () => {
 	const setupCommands = [
 		'wp config set WP_DEBUG false --raw',
 		'wp plugin install woocommerce --force --activate',
-		'wp plugin install woocommerce-gateway-stripe --activate',
+		'wp plugin install woocommerce-gateway-monilypay --activate',
 		'wp theme install storefront --activate',
 		'wp option set woocommerce_store_address "60 29th Street"',
 		'wp option set woocommerce_store_address_2 "#343"',
@@ -284,7 +284,7 @@ export const setupStripe = ( page, baseUrl ) =>
 			try {
 				// Clean up previous Stripe settings.
 				await sshExecCommands( [
-					'wp option delete woocommerce_stripe_settings',
+					'wp option delete woocommerce_monilypay_settings',
 				] );
 
 				const stripeClient = stripe( process.env.STRIPE_SECRET_KEY );
@@ -317,7 +317,7 @@ export const setupStripe = ( page, baseUrl ) =>
 					try {
 						console.log( '- Trying to setup the Stripe keys...' );
 						await page.goto(
-							`/wp-admin/admin.php?page=wc-settings&tab=checkout&section=stripe`
+							`/wp-admin/admin.php?page=wc-settings&tab=checkout&section=monilypay`
 						);
 
 						await page

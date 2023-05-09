@@ -6,11 +6,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Class that handles Sofort payment method.
  *
- * @extends WC_Gateway_Stripe
+ * @extends WC_Gateway_Monilypay
  *
  * @since 4.0.0
  */
-class WC_Gateway_Stripe_Sofort extends WC_Stripe_Payment_Gateway {
+class WC_Gateway_Monilypay_Sofort extends WC_Monilypay_Payment_Gateway {
 
 	const ID = 'stripe_sofort';
 
@@ -61,11 +61,11 @@ class WC_Gateway_Stripe_Sofort extends WC_Stripe_Payment_Gateway {
 	 */
 	public function __construct() {
 		$this->id                 = 'stripe_sofort';
-		$this->method_title       = __( 'Stripe Sofort', 'woocommerce-gateway-stripe' );
+		$this->method_title       = __( 'Stripe Sofort', 'woocommerce-gateway-monilypay' );
 		$this->method_description = sprintf(
 		/* translators: 1) HTML anchor open tag 2) HTML anchor closing tag */
-			__( 'All other general Stripe settings can be adjusted %1$shere%2$s.', 'woocommerce-gateway-stripe' ),
-			'<a href="' . esc_url( admin_url( 'admin.php?page=wc-settings&tab=checkout&section=stripe' ) ) . '">',
+			__( 'All other general Stripe settings can be adjusted %1$shere%2$s.', 'woocommerce-gateway-monilypay' ),
+			'<a href="' . esc_url( admin_url( 'admin.php?page=wc-settings&tab=checkout&section=monilypay' ) ) . '">',
 			'</a>'
 		);
 		$this->supports = [
@@ -79,7 +79,7 @@ class WC_Gateway_Stripe_Sofort extends WC_Stripe_Payment_Gateway {
 		// Load the settings.
 		$this->init_settings();
 
-		$main_settings              = get_option( 'woocommerce_stripe_settings' );
+		$main_settings              = get_option( 'woocommerce_monilypay_settings' );
 		$this->title                = $this->get_option( 'title' );
 		$this->description          = $this->get_option( 'description' );
 		$this->enabled              = $this->get_option( 'enabled' );
@@ -107,7 +107,7 @@ class WC_Gateway_Stripe_Sofort extends WC_Stripe_Payment_Gateway {
 	 */
 	public function get_supported_currency() {
 		return apply_filters(
-			'wc_stripe_sofort_supported_currencies',
+			'wc_monilypay_sofort_supported_currencies',
 			[
 				'EUR',
 			]
@@ -162,7 +162,7 @@ class WC_Gateway_Stripe_Sofort extends WC_Stripe_Payment_Gateway {
 	 * Initialize Gateway Settings Form Fields.
 	 */
 	public function init_form_fields() {
-		$this->form_fields = require WC_STRIPE_PLUGIN_PATH . '/includes/admin/stripe-sofort-settings.php';
+		$this->form_fields = require WC_MONILYPAY_PLUGIN_PATH . '/includes/admin/stripe-sofort-settings.php';
 	}
 
 	/**
@@ -181,7 +181,7 @@ class WC_Gateway_Stripe_Sofort extends WC_Stripe_Payment_Gateway {
 		}
 
 		if ( is_add_payment_method_page() ) {
-			$pay_button_text = __( 'Add Payment', 'woocommerce-gateway-stripe' );
+			$pay_button_text = __( 'Add Payment', 'woocommerce-gateway-monilypay' );
 			$total           = '';
 		} else {
 			$pay_button_text = '';
@@ -189,11 +189,11 @@ class WC_Gateway_Stripe_Sofort extends WC_Stripe_Payment_Gateway {
 
 		echo '<div
 			id="stripe-sofort-payment-data"
-			data-amount="' . esc_attr( WC_Stripe_Helper::get_stripe_amount( $total ) ) . '"
+			data-amount="' . esc_attr( WC_Monilypay_Helper::get_stripe_amount( $total ) ) . '"
 			data-currency="' . esc_attr( strtolower( get_woocommerce_currency() ) ) . '">';
 
 		if ( $description ) {
-			echo apply_filters( 'wc_stripe_description', wpautop( wp_kses_post( $description ) ), $this->id );
+			echo apply_filters( 'wc_monilypay_description', wpautop( wp_kses_post( $description ) ), $this->id );
 		}
 
 		echo '</div>';
@@ -212,7 +212,7 @@ class WC_Gateway_Stripe_Sofort extends WC_Stripe_Payment_Gateway {
 		$bank_country          = $order->get_billing_country();
 		$return_url            = $this->get_stripe_return_url( $order );
 		$post_data             = [];
-		$post_data['amount']   = WC_Stripe_Helper::get_stripe_amount( $order->get_total(), $currency );
+		$post_data['amount']   = WC_Monilypay_Helper::get_stripe_amount( $order->get_total(), $currency );
 		$post_data['currency'] = strtolower( $currency );
 		$post_data['type']     = 'sofort';
 		$post_data['owner']    = $this->get_owner_details( $order );
@@ -223,12 +223,12 @@ class WC_Gateway_Stripe_Sofort extends WC_Stripe_Payment_Gateway {
 		];
 
 		if ( ! empty( $this->statement_descriptor ) ) {
-			$post_data['statement_descriptor'] = WC_Stripe_Helper::clean_statement_descriptor( $this->statement_descriptor );
+			$post_data['statement_descriptor'] = WC_Monilypay_Helper::clean_statement_descriptor( $this->statement_descriptor );
 		}
 
-		WC_Stripe_Logger::log( 'Info: Begin creating Sofort source' );
+		WC_Monilypay_Logger::log( 'Info: Begin creating Sofort source' );
 
-		return WC_Stripe_API::request( apply_filters( 'wc_stripe_sofort_source', $post_data, $order ), 'sources' );
+		return WC_Monilypay_API::request( apply_filters( 'wc_monilypay_sofort_source', $post_data, $order ), 'sources' );
 	}
 
 	/**
@@ -254,7 +254,7 @@ class WC_Gateway_Stripe_Sofort extends WC_Stripe_Payment_Gateway {
 
 			if ( $create_account ) {
 				$new_customer_id     = $order->get_customer_id();
-				$new_stripe_customer = new WC_Stripe_Customer( $new_customer_id );
+				$new_stripe_customer = new WC_Monilypay_Customer( $new_customer_id );
 				$new_stripe_customer->create_customer();
 			}
 
@@ -263,7 +263,7 @@ class WC_Gateway_Stripe_Sofort extends WC_Stripe_Payment_Gateway {
 			if ( ! empty( $response->error ) ) {
 				$order->add_order_note( $response->error->message );
 
-				$localized_messages = WC_Stripe_Helper::get_localized_messages();
+				$localized_messages = WC_Monilypay_Helper::get_localized_messages();
 
 				if ( 'invalid_sofort_country' === $response->error->code ) {
 					$localized_message = isset( $localized_messages[ $response->error->code ] ) ? $localized_messages[ $response->error->code ] : $response->error->message;
@@ -271,27 +271,27 @@ class WC_Gateway_Stripe_Sofort extends WC_Stripe_Payment_Gateway {
 					$localized_message = isset( $localized_messages[ $response->error->type ] ) ? $localized_messages[ $response->error->type ] : $response->error->message;
 				}
 
-				throw new WC_Stripe_Exception( print_r( $response, true ), $localized_message );
+				throw new WC_Monilypay_Exception( print_r( $response, true ), $localized_message );
 			}
 
 			$order->update_meta_data( '_stripe_source_id', $response->id );
 			$order->save();
 
-			WC_Stripe_Logger::log( 'Info: Redirecting to Sofort...' );
+			WC_Monilypay_Logger::log( 'Info: Redirecting to Sofort...' );
 
 			return [
 				'result'   => 'success',
 				'redirect' => esc_url_raw( $response->redirect->url ),
 			];
-		} catch ( WC_Stripe_Exception $e ) {
+		} catch ( WC_Monilypay_Exception $e ) {
 			wc_add_notice( $e->getLocalizedMessage(), 'error' );
-			WC_Stripe_Logger::log( 'Error: ' . $e->getMessage() );
+			WC_Monilypay_Logger::log( 'Error: ' . $e->getMessage() );
 
-			do_action( 'wc_gateway_stripe_process_payment_error', $e, $order );
+			do_action( 'WC_Gateway_Monilypay_process_payment_error', $e, $order );
 
 			if ( $order->has_status(
 				apply_filters(
-					'wc_stripe_allowed_payment_processing_statuses',
+					'wc_monilypay_allowed_payment_processing_statuses',
 					[ 'pending', 'failed' ],
 					$order
 				)

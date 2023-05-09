@@ -6,9 +6,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Trait for Subscriptions compatibility.
  */
-trait WC_Stripe_Subscriptions_Trait {
+trait WC_Monilypay_Subscriptions_Trait {
 
-	use WC_Stripe_Subscriptions_Utilities_Trait;
+	use WC_Monilypay_Subscriptions_Utilities_Trait;
 
 	/**
 	 * Initialize subscription support and hooks.
@@ -40,8 +40,8 @@ trait WC_Stripe_Subscriptions_Trait {
 		add_action( 'woocommerce_subscription_failing_payment_method_updated_' . $this->id, [ $this, 'update_failing_payment_method' ], 10, 2 );
 		add_action( 'wcs_resubscribe_order_created', [ $this, 'delete_resubscribe_meta' ], 10 );
 		add_action( 'wcs_renewal_order_created', [ $this, 'delete_renewal_meta' ], 10 );
-		add_action( 'wc_stripe_payment_fields_' . $this->id, [ $this, 'display_update_subs_payment_checkout' ] );
-		add_action( 'wc_stripe_add_payment_method_' . $this->id . '_success', [ $this, 'handle_add_payment_method_success' ], 10, 2 );
+		add_action( 'wc_monilypay_payment_fields_' . $this->id, [ $this, 'display_update_subs_payment_checkout' ] );
+		add_action( 'wc_monilypay_add_payment_method_' . $this->id . '_success', [ $this, 'handle_add_payment_method_success' ], 10, 2 );
 		add_action( 'woocommerce_subscriptions_change_payment_before_submit', [ $this, 'differentiate_change_payment_method_form' ] );
 
 		// Display the payment method used for a subscription in the "My Subscriptions" table.
@@ -50,7 +50,7 @@ trait WC_Stripe_Subscriptions_Trait {
 		// Allow store managers to manually set Stripe as the payment method on a subscription.
 		add_filter( 'woocommerce_subscription_payment_meta', [ $this, 'add_subscription_payment_meta' ], 10, 2 );
 		add_filter( 'woocommerce_subscription_validate_payment_meta', [ $this, 'validate_subscription_payment_meta' ], 10, 2 );
-		add_filter( 'wc_stripe_display_save_payment_method_checkbox', [ $this, 'display_save_payment_method_checkbox' ] );
+		add_filter( 'wc_monilypay_display_save_payment_method_checkbox', [ $this, 'display_save_payment_method_checkbox' ] );
 
 		/*
 		* WC subscriptions hooks into the "template_redirect" hook with priority 100.
@@ -69,20 +69,20 @@ trait WC_Stripe_Subscriptions_Trait {
 	 * @since 4.1.11
 	 */
 	public function display_update_subs_payment_checkout() {
-		$subs_statuses = apply_filters( 'wc_stripe_update_subs_payment_method_card_statuses', [ 'active' ] );
+		$subs_statuses = apply_filters( 'wc_monilypay_update_subs_payment_method_card_statuses', [ 'active' ] );
 		if (
-			apply_filters( 'wc_stripe_display_update_subs_payment_method_card_checkbox', true ) &&
+			apply_filters( 'wc_monilypay_display_update_subs_payment_method_card_checkbox', true ) &&
 			wcs_user_has_subscription( get_current_user_id(), '', $subs_statuses ) &&
 			is_add_payment_method_page()
 		) {
-			$label = esc_html( apply_filters( 'wc_stripe_save_to_subs_text', __( 'Update the Payment Method used for all of my active subscriptions.', 'woocommerce-gateway-stripe' ) ) );
+			$label = esc_html( apply_filters( 'wc_monilypay_save_to_subs_text', __( 'Update the Payment Method used for all of my active subscriptions.', 'woocommerce-gateway-monilypay' ) ) );
 			$id    = sprintf( 'wc-%1$s-update-subs-payment-method-card', $this->id );
 			woocommerce_form_field(
 				$id,
 				[
 					'type'    => 'checkbox',
 					'label'   => $label,
-					'default' => apply_filters( 'wc_stripe_save_to_subs_checked', false ),
+					'default' => apply_filters( 'wc_monilypay_save_to_subs_checked', false ),
 				]
 			);
 		}
@@ -99,8 +99,8 @@ trait WC_Stripe_Subscriptions_Trait {
 	public function handle_add_payment_method_success( $source_id, $source_object ) {
 		if ( isset( $_POST[ 'wc-' . $this->id . '-update-subs-payment-method-card' ] ) ) {
 			$all_subs        = wcs_get_users_subscriptions();
-			$subs_statuses   = apply_filters( 'wc_stripe_update_subs_payment_method_card_statuses', [ 'active' ] );
-			$stripe_customer = new WC_Stripe_Customer( get_current_user_id() );
+			$subs_statuses   = apply_filters( 'wc_monilypay_update_subs_payment_method_card_statuses', [ 'active' ] );
+			$stripe_customer = new WC_Monilypay_Customer( get_current_user_id() );
 
 			if ( ! empty( $all_subs ) ) {
 				foreach ( $all_subs as $sub ) {
@@ -164,15 +164,15 @@ trait WC_Stripe_Subscriptions_Trait {
 			$this->check_source( $prepared_source );
 			$this->save_source_to_order( $subscription, $prepared_source );
 
-			do_action( 'wc_stripe_change_subs_payment_method_success', $prepared_source->source, $prepared_source );
+			do_action( 'wc_monilypay_change_subs_payment_method_success', $prepared_source->source, $prepared_source );
 
 			return [
 				'result'   => 'success',
 				'redirect' => $this->get_return_url( $subscription ),
 			];
-		} catch ( WC_Stripe_Exception $e ) {
+		} catch ( WC_Monilypay_Exception $e ) {
 			wc_add_notice( $e->getLocalizedMessage(), 'error' );
-			WC_Stripe_Logger::log( 'Error: ' . $e->getMessage() );
+			WC_Monilypay_Logger::log( 'Error: ' . $e->getMessage() );
 		}
 	}
 
@@ -206,18 +206,18 @@ trait WC_Stripe_Subscriptions_Trait {
 			// Unlike regular off-session subscription payments, early renewals are treated as on-session payments, involving the customer.
 			// This makes the SCA authorization popup show up for the "Renew early" modal (Subscriptions settings > Accept Early Renewal Payments via a Modal).
 			// Note: Currently available for non-UPE credit card only.
-			if ( isset( $_REQUEST['process_early_renewal'] ) && 'stripe' === $this->id && ! WC_Stripe_Feature_Flags::is_upe_checkout_enabled() ) { // phpcs:ignore WordPress.Security.NonceVerification
+			if ( isset( $_REQUEST['process_early_renewal'] ) && 'monilypay' === $this->id && ! WC_Monilypay_Feature_Flags::is_upe_checkout_enabled() ) { // phpcs:ignore WordPress.Security.NonceVerification
 				$response = $this->process_payment( $order_id, true, false, $previous_error, true );
 
 				if ( 'success' === $response['result'] && isset( $response['payment_intent_secret'] ) ) {
 					$verification_url = add_query_arg(
 						[
 							'order'         => $order_id,
-							'nonce'         => wp_create_nonce( 'wc_stripe_confirm_pi' ),
+							'nonce'         => wp_create_nonce( 'wc_monilypay_confirm_pi' ),
 							'redirect_to'   => esc_url_raw( remove_query_arg( [ 'process_early_renewal', 'subscription_id', 'wcs_nonce' ] ) ),
 							'early_renewal' => true,
 						],
-						WC_AJAX::get_endpoint( 'wc_stripe_verify_intent' )
+						WC_AJAX::get_endpoint( 'wc_monilypay_verify_intent' )
 					);
 
 					echo wp_json_encode(
@@ -247,23 +247,23 @@ trait WC_Stripe_Subscriptions_Trait {
 			$source_object   = $prepared_source->source_object;
 
 			if ( ! $prepared_source->customer ) {
-				throw new WC_Stripe_Exception(
+				throw new WC_Monilypay_Exception(
 					'Failed to process renewal for order ' . $renewal_order->get_id() . '. Stripe customer id is missing in the order',
-					__( 'Customer not found', 'woocommerce-gateway-stripe' )
+					__( 'Customer not found', 'woocommerce-gateway-monilypay' )
 				);
 			}
 
-			WC_Stripe_Logger::log( "Info: Begin processing subscription payment for order {$order_id} for the amount of {$amount}" );
+			WC_Monilypay_Logger::log( "Info: Begin processing subscription payment for order {$order_id} for the amount of {$amount}" );
 
 			/*
 			 * If we're doing a retry and source is chargeable, we need to pass
 			 * a different idempotency key and retry for success.
 			 */
 			if ( is_object( $source_object ) && empty( $source_object->error ) && $this->need_update_idempotency_key( $source_object, $previous_error ) ) {
-				add_filter( 'wc_stripe_idempotency_key', [ $this, 'change_idempotency_key' ], 10, 2 );
+				add_filter( 'wc_monilypay_idempotency_key', [ $this, 'change_idempotency_key' ], 10, 2 );
 			}
 
-			if ( ( $this->is_no_such_source_error( $previous_error ) || $this->is_no_linked_source_error( $previous_error ) ) && apply_filters( 'wc_stripe_use_default_customer_source', true ) ) {
+			if ( ( $this->is_no_such_source_error( $previous_error ) || $this->is_no_linked_source_error( $previous_error ) ) && apply_filters( 'wc_monilypay_use_default_customer_source', true ) ) {
 				// Passing empty source will charge customer default.
 				$prepared_source->source = '';
 			}
@@ -273,8 +273,8 @@ trait WC_Stripe_Subscriptions_Trait {
 			if ( 'stripe_sepa' === $this->id ) {
 				$request            = $this->generate_payment_request( $renewal_order, $prepared_source );
 				$request['capture'] = 'true';
-				$request['amount']  = WC_Stripe_Helper::get_stripe_amount( $amount, $request['currency'] );
-				$response           = WC_Stripe_API::request( $request );
+				$request['amount']  = WC_Monilypay_Helper::get_stripe_amount( $amount, $request['currency'] );
+				$response           = WC_Monilypay_API::request( $request );
 
 				$is_authentication_required = false;
 			} else {
@@ -300,13 +300,13 @@ trait WC_Stripe_Subscriptions_Trait {
 
 						return $this->process_subscription_payment( $amount, $renewal_order, true, $response->error );
 					} else {
-						$localized_message = __( 'Sorry, we are unable to process your payment at this time. Please retry later.', 'woocommerce-gateway-stripe' );
+						$localized_message = __( 'Sorry, we are unable to process your payment at this time. Please retry later.', 'woocommerce-gateway-monilypay' );
 						$renewal_order->add_order_note( $localized_message );
-						throw new WC_Stripe_Exception( print_r( $response, true ), $localized_message );
+						throw new WC_Monilypay_Exception( print_r( $response, true ), $localized_message );
 					}
 				}
 
-				$localized_messages = WC_Stripe_Helper::get_localized_messages();
+				$localized_messages = WC_Monilypay_Helper::get_localized_messages();
 
 				if ( 'card_error' === $response->error->type ) {
 					$localized_message = isset( $localized_messages[ $response->error->code ] ) ? $localized_messages[ $response->error->code ] : $response->error->message;
@@ -316,14 +316,14 @@ trait WC_Stripe_Subscriptions_Trait {
 
 				$renewal_order->add_order_note( $localized_message );
 
-				throw new WC_Stripe_Exception( print_r( $response, true ), $localized_message );
+				throw new WC_Monilypay_Exception( print_r( $response, true ), $localized_message );
 			}
 
 			// Either the charge was successfully captured, or it requires further authentication.
 			if ( $is_authentication_required ) {
-				do_action( 'wc_gateway_stripe_process_payment_authentication_required', $renewal_order, $response );
+				do_action( 'WC_Gateway_Monilypay_process_payment_authentication_required', $renewal_order, $response );
 
-				$error_message = __( 'This transaction requires authentication.', 'woocommerce-gateway-stripe' );
+				$error_message = __( 'This transaction requires authentication.', 'woocommerce-gateway-monilypay' );
 				$renewal_order->add_order_note( $error_message );
 
 				$charge   = end( $response->error->payment_intent->charges->data );
@@ -332,13 +332,13 @@ trait WC_Stripe_Subscriptions_Trait {
 
 				$renewal_order->set_transaction_id( $id );
 				/* translators: %s is the charge Id */
-				$renewal_order->update_status( 'failed', sprintf( __( 'Stripe charge awaiting authentication by user: %s.', 'woocommerce-gateway-stripe' ), $id ) );
+				$renewal_order->update_status( 'failed', sprintf( __( 'Stripe charge awaiting authentication by user: %s.', 'woocommerce-gateway-monilypay' ), $id ) );
 				if ( is_callable( [ $renewal_order, 'save' ] ) ) {
 					$renewal_order->save();
 				}
 			} else {
 				// The charge was successfully captured
-				do_action( 'wc_gateway_stripe_process_payment', $response, $renewal_order );
+				do_action( 'WC_Gateway_Monilypay_process_payment', $response, $renewal_order );
 
 				// Use the last charge within the intent or the full response body in case of SEPA.
 				$this->process_response( isset( $response->charges ) ? end( $response->charges->data ) : $response, $renewal_order );
@@ -348,10 +348,10 @@ trait WC_Stripe_Subscriptions_Trait {
 			if ( 'stripe_sepa' !== $this->id ) {
 				$this->unlock_order_payment( $renewal_order );
 			}
-		} catch ( WC_Stripe_Exception $e ) {
-			WC_Stripe_Logger::log( 'Error: ' . $e->getMessage() );
+		} catch ( WC_Monilypay_Exception $e ) {
+			WC_Monilypay_Logger::log( 'Error: ' . $e->getMessage() );
 
-			do_action( 'wc_gateway_stripe_process_payment_error', $e, $renewal_order );
+			do_action( 'WC_Gateway_Monilypay_process_payment_error', $e, $renewal_order );
 
 			/* translators: error message */
 			$renewal_order->update_status( 'failed' );
@@ -415,8 +415,8 @@ trait WC_Stripe_Subscriptions_Trait {
 	 * @param int $resubscribe_order The order created for the customer to resubscribe to the old expired/cancelled subscription
 	 */
 	public function delete_renewal_meta( $renewal_order ) {
-		WC_Stripe_Helper::delete_stripe_fee( $renewal_order );
-		WC_Stripe_Helper::delete_stripe_net( $renewal_order );
+		WC_Monilypay_Helper::delete_stripe_fee( $renewal_order );
+		WC_Monilypay_Helper::delete_stripe_net( $renewal_order );
 
 		// Delete payment intent ID.
 		$renewal_order->delete_meta_data( '_stripe_intent_id' );
@@ -496,10 +496,10 @@ trait WC_Stripe_Subscriptions_Trait {
 
 				// Allow empty stripe customer id during subscription renewal. It will be added when processing payment if required.
 				if ( ! isset( $_POST['wc_order_action'] ) || 'wcs_process_renewal' !== $_POST['wc_order_action'] ) {
-					throw new Exception( __( 'A "Stripe Customer ID" value is required.', 'woocommerce-gateway-stripe' ) );
+					throw new Exception( __( 'A "Stripe Customer ID" value is required.', 'woocommerce-gateway-monilypay' ) );
 				}
 			} elseif ( 0 !== strpos( $payment_meta['post_meta']['_stripe_customer_id']['value'], 'cus_' ) ) {
-				throw new Exception( __( 'Invalid customer ID. A valid "Stripe Customer ID" must begin with "cus_".', 'woocommerce-gateway-stripe' ) );
+				throw new Exception( __( 'Invalid customer ID. A valid "Stripe Customer ID" must begin with "cus_".', 'woocommerce-gateway-monilypay' ) );
 			}
 
 			if (
@@ -509,7 +509,7 @@ trait WC_Stripe_Subscriptions_Trait {
 					&& 0 !== strpos( $payment_meta['post_meta']['_stripe_source_id']['value'], 'pm_' )
 				)
 			) {
-				throw new Exception( __( 'Invalid source ID. A valid source "Stripe Source ID" must begin with "src_", "pm_", or "card_".', 'woocommerce-gateway-stripe' ) );
+				throw new Exception( __( 'Invalid source ID. A valid source "Stripe Source ID" must begin with "src_", "pm_", or "card_".', 'woocommerce-gateway-monilypay' ) );
 			}
 		}
 	}
@@ -543,7 +543,7 @@ trait WC_Stripe_Subscriptions_Trait {
 			$subscription->save();
 		}
 
-		$stripe_customer    = new WC_Stripe_Customer();
+		$stripe_customer    = new WC_Monilypay_Customer();
 		$stripe_customer_id = $subscription->get_meta( '_stripe_customer_id', true );
 
 		// If we couldn't find a Stripe customer linked to the subscription, fallback to the user meta data.
@@ -584,7 +584,7 @@ trait WC_Stripe_Subscriptions_Trait {
 			$stripe_customer->get_payment_methods( 'card' ),
 			$stripe_customer->get_payment_methods( 'sepa_debit' )
 		);
-		$payment_method_to_display = __( 'N/A', 'woocommerce-gateway-stripe' );
+		$payment_method_to_display = __( 'N/A', 'woocommerce-gateway-monilypay' );
 
 		if ( $sources ) {
 			foreach ( $sources as $source ) {
@@ -598,10 +598,10 @@ trait WC_Stripe_Subscriptions_Trait {
 
 					if ( $card ) {
 						/* translators: 1) card brand 2) last 4 digits */
-						$payment_method_to_display = sprintf( __( 'Via %1$s card ending in %2$s', 'woocommerce-gateway-stripe' ), ( isset( $card->brand ) ? $card->brand : __( 'N/A', 'woocommerce-gateway-stripe' ) ), $card->last4 );
+						$payment_method_to_display = sprintf( __( 'Via %1$s card ending in %2$s', 'woocommerce-gateway-monilypay' ), ( isset( $card->brand ) ? $card->brand : __( 'N/A', 'woocommerce-gateway-monilypay' ) ), $card->last4 );
 					} elseif ( $source->sepa_debit ) {
 						/* translators: 1) last 4 digits of SEPA Direct Debit */
-						$payment_method_to_display = sprintf( __( 'Via SEPA Direct Debit ending in %1$s', 'woocommerce-gateway-stripe' ), $source->sepa_debit->last4 );
+						$payment_method_to_display = sprintf( __( 'Via SEPA Direct Debit ending in %1$s', 'woocommerce-gateway-monilypay' ), $source->sepa_debit->last4 );
 					}
 
 					break;
@@ -660,13 +660,13 @@ trait WC_Stripe_Subscriptions_Trait {
 		 *
 		 * @param WC_Order $renewal_order The order that is being renewed.
 		 */
-		do_action( 'wc_gateway_stripe_process_payment_authentication_required', $renewal_order );
+		do_action( 'WC_Gateway_Monilypay_process_payment_authentication_required', $renewal_order );
 
 		// Fail the payment attempt (order would be currently pending because of retry rules).
 		$charge    = end( $existing_intent->charges->data );
 		$charge_id = $charge->id;
 		/* translators: %s is the stripe charge Id */
-		$renewal_order->update_status( 'failed', sprintf( __( 'Stripe charge awaiting authentication by user: %s.', 'woocommerce-gateway-stripe' ), $charge_id ) );
+		$renewal_order->update_status( 'failed', sprintf( __( 'Stripe charge awaiting authentication by user: %s.', 'woocommerce-gateway-monilypay' ), $charge_id ) );
 
 		return true;
 	}
@@ -697,7 +697,7 @@ trait WC_Stripe_Subscriptions_Trait {
 	protected function maybe_process_subscription_early_renewal_success( $order, $intent ) {
 		if ( $this->is_subscriptions_enabled() && isset( $_GET['early_renewal'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
 			wcs_update_dates_after_early_renewal( wcs_get_subscription( $order->get_meta( '_subscription_renewal' ) ), $order );
-			wc_add_notice( __( 'Your early renewal order was successful.', 'woocommerce-gateway-stripe' ), 'success' );
+			wc_add_notice( __( 'Your early renewal order was successful.', 'woocommerce-gateway-monilypay' ), 'success' );
 		}
 	}
 
@@ -710,7 +710,7 @@ trait WC_Stripe_Subscriptions_Trait {
 	protected function maybe_process_subscription_early_renewal_failure( $order, $intent ) {
 		if ( $this->is_subscriptions_enabled() && isset( $_GET['early_renewal'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
 			$order->delete( true );
-			wc_add_notice( __( 'Payment authorization for the renewal order was unsuccessful, please try again.', 'woocommerce-gateway-stripe' ), 'error' );
+			wc_add_notice( __( 'Payment authorization for the renewal order was unsuccessful, please try again.', 'woocommerce-gateway-monilypay' ), 'error' );
 			$renewal_url = wcs_get_early_renewal_url( wcs_get_subscription( $order->get_meta( '_subscription_renewal' ) ) );
 			wp_safe_redirect( $renewal_url );
 			exit;

@@ -8,16 +8,16 @@ const DebugMode = () => {
 
 	return (
 		<>
-			<h4>{ __( 'Debug mode', 'woocommerce-gateway-stripe' ) }</h4>
+			<h4>{ __( 'Debug mode', 'woocommerce-gateway-monilypay' ) }</h4>
 			<CheckboxControl
 				data-testid="logging-checkbox"
 				label={ __(
 					'Log error messages',
-					'woocommerce-gateway-stripe'
+					'woocommerce-gateway-monilypay'
 				) }
 				help={ __(
 					'When enabled, payment error logs will be saved to WooCommerce > Status > Logs.',
-					'woocommerce-gateway-stripe'
+					'woocommerce-gateway-monilypay'
 				) }
 				checked={ isLoggingChecked }
 				onChange={ setIsLoggingChecked }

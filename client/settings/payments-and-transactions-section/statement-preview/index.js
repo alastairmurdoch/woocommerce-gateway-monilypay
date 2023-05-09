@@ -33,8 +33,8 @@ const StatementPreview = ( { title, icon, text, className = '' } ) => {
 			<div className="statement-icon-and-title">
 				<StatementIcon icon={ icon } /> <p>{ title }</p>
 			</div>
-			<span>{ __( 'Transaction', 'woocommerce-gateway-stripe' ) }</span>
-			<span>{ __( 'Amount', 'woocommerce-gateway-stripe' ) }</span>
+			<span>{ __( 'Transaction', 'woocommerce-gateway-monilypay' ) }</span>
+			<span>{ __( 'Amount', 'woocommerce-gateway-monilypay' ) }</span>
 			<hr />
 			<span className="transaction-detail description">{ text }</span>
 			<span className="transaction-detail amount">

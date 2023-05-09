@@ -17,8 +17,8 @@ services:
     volumes:
       - ./docker/wordpress:/var/www/html/
       - ./docker/logs/apache2/:/var/log/apache2
-      - .:/var/www/html/wp-content/plugins/woocommerce-gateway-stripe
-      - ./tests/phpunit:/var/www/html/wp-content/plugins/woocommerce-gateway-stripe/tests/phpunit
+      - .:/var/www/html/wp-content/plugins/woocommerce-gateway-monilypay
+      - ./tests/phpunit:/var/www/html/wp-content/plugins/woocommerce-gateway-monilypay/tests/phpunit
       - ./docker/dev-php.ini:/usr/local/etc/php/conf.d/dev-php.ini
       - ./docker/bin:/var/scripts
     extra_hosts:

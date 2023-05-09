@@ -115,7 +115,7 @@ export const deleteZip = async ( zipFilePath ) => {
  * @return string Download URL for the release zip file.
  */
 export const getReleaseZipUrl = async ( version ) => {
-	return `https://github.com/woocommerce/woocommerce-gateway-stripe/releases/download/${ version }/woocommerce-gateway-stripe.zip`;
+	return `https://github.com/woocommerce/woocommerce-gateway-monilypay/releases/download/${ version }/woocommerce-gateway-monilypay.zip`;
 };
 
 /**

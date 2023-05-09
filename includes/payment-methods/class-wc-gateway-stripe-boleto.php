@@ -6,11 +6,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Class that handles Boleto payment method.
  *
- * @extends WC_Gateway_Stripe
+ * @extends WC_Gateway_Monilypay
  *
  * @since 5.8.0
  */
-class WC_Gateway_Stripe_Boleto extends WC_Stripe_Payment_Gateway_Voucher {
+class WC_Gateway_Monilypay_Boleto extends WC_Monilypay_Payment_Gateway_Voucher {
 
 	/**
 	 * ID used by UPE
@@ -49,10 +49,10 @@ class WC_Gateway_Stripe_Boleto extends WC_Stripe_Payment_Gateway_Voucher {
 	 * @since 5.8.0
 	 */
 	public function __construct() {
-		$this->method_title = __( 'Stripe Boleto', 'woocommerce-gateway-stripe' );
+		$this->method_title = __( 'Stripe Boleto', 'woocommerce-gateway-monilypay' );
 		parent::__construct();
 
-		add_filter( 'wc_stripe_allowed_payment_processing_statuses', [ $this, 'add_allowed_payment_processing_statuses' ], 10, 2 );
+		add_filter( 'wc_monilypay_allowed_payment_processing_statuses', [ $this, 'add_allowed_payment_processing_statuses' ], 10, 2 );
 	}
 
 	/**
@@ -128,7 +128,7 @@ class WC_Gateway_Stripe_Boleto extends WC_Stripe_Payment_Gateway_Voucher {
 		}
 
 		parent::payment_scripts();
-		wp_enqueue_script( 'jquery-mask', plugins_url( 'assets/js/jquery.mask.min.js', WC_STRIPE_MAIN_FILE ), [], WC_STRIPE_VERSION );
+		wp_enqueue_script( 'jquery-mask', plugins_url( 'assets/js/jquery.mask.min.js', WC_MONILYPAY_MAIN_FILE ), [], wc_monilypay_stripe_version );
 	}
 
 	/**
@@ -138,7 +138,7 @@ class WC_Gateway_Stripe_Boleto extends WC_Stripe_Payment_Gateway_Voucher {
 	 */
 	public function payment_fields() {
 		$description = $this->get_description();
-		apply_filters( 'wc_stripe_description', wpautop( wp_kses_post( $description ) ), $this->id )
+		apply_filters( 'wc_monilypay_description', wpautop( wp_kses_post( $description ) ), $this->id )
 
 		?>
 		<label>CPF/CNPJ: <abbr class="required" title="required">*</abbr></label><br>
@@ -156,16 +156,16 @@ class WC_Gateway_Stripe_Boleto extends WC_Stripe_Payment_Gateway_Voucher {
 	 *
 	 * @param $amount
 	 *
-	 * @throws WC_Stripe_Exception
+	 * @throws WC_Monilypay_Exception
 	 */
 	protected function validate_amount_limits( $amount ) {
 
 		if ( $amount < 5.00 ) {
 			/* translators: 1) amount (including currency symbol) */
-			throw new WC_Stripe_Exception( sprintf( __( 'Sorry, the minimum allowed order total is %1$s to use this payment method.', 'woocommerce-gateway-stripe' ), wc_price( 5.00 ) ) );
+			throw new WC_Monilypay_Exception( sprintf( __( 'Sorry, the minimum allowed order total is %1$s to use this payment method.', 'woocommerce-gateway-monilypay' ), wc_price( 5.00 ) ) );
 		} elseif ( $amount > 49999.99 ) {
 			/* translators: 1) amount (including currency symbol) */
-			throw new WC_Stripe_Exception( sprintf( __( 'Sorry, the maximum allowed order total is %1$s to use this payment method.', 'woocommerce-gateway-stripe' ), wc_price( 49999.99 ) ) );
+			throw new WC_Monilypay_Exception( sprintf( __( 'Sorry, the maximum allowed order total is %1$s to use this payment method.', 'woocommerce-gateway-monilypay' ), wc_price( 49999.99 ) ) );
 		}
 	}
 

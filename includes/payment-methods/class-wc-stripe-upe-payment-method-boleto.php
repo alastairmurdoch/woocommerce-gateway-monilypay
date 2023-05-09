@@ -6,11 +6,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Boleto Payment Method class extending UPE base class
  */
-class WC_Stripe_UPE_Payment_Method_Boleto extends WC_Stripe_UPE_Payment_Method {
+class WC_Monilypay_UPE_Payment_Method_Boleto extends WC_Monilypay_UPE_Payment_Method {
 
 	const STRIPE_ID = 'boleto';
 
-	const LPM_GATEWAY_CLASS = WC_Gateway_Stripe_Boleto::class;
+	const LPM_GATEWAY_CLASS = WC_Gateway_Monilypay_Boleto::class;
 
 	/**
 	 * Constructor for Boleto payment method
@@ -25,13 +25,13 @@ class WC_Stripe_UPE_Payment_Method_Boleto extends WC_Stripe_UPE_Payment_Method {
 		$this->is_reusable          = false;
 		$this->supported_currencies = [ 'BRL' ];
 		$this->supported_countries  = [ 'BR' ];
-		$this->label                = __( 'Boleto', 'woocommerce-gateway-stripe' );
+		$this->label                = __( 'Boleto', 'woocommerce-gateway-monilypay' );
 		$this->description          = __(
 			'Boleto is an official payment method in Brazil. Customers receive a voucher that can be paid at authorized agencies or banks, ATMs, or online bank portals.',
-			'woocommerce-gateway-stripe'
+			'woocommerce-gateway-monilypay'
 		);
 
-		add_filter( 'wc_stripe_allowed_payment_processing_statuses', [ $this, 'add_allowed_payment_processing_statuses' ], 10, 2 );
+		add_filter( 'wc_monilypay_allowed_payment_processing_statuses', [ $this, 'add_allowed_payment_processing_statuses' ], 10, 2 );
 	}
 
 	/**

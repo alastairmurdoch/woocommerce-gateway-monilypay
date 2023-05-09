@@ -13,10 +13,10 @@ import OxxoIcon from './payment-method-icons/oxxo';
 export default {
 	card: {
 		id: 'card',
-		label: __( 'Credit card / debit card', 'woocommerce-gateway-stripe' ),
+		label: __( 'Credit card / debit card', 'woocommerce-gateway-monilypay' ),
 		description: __(
 			'Let your customers pay with major credit and debit cards without leaving your store.',
-			'woocommerce-gateway-stripe'
+			'woocommerce-gateway-monilypay'
 		),
 		Icon: CreditCardIcon,
 		currencies: [],
@@ -25,10 +25,10 @@ export default {
 	},
 	giropay: {
 		id: 'giropay',
-		label: __( 'giropay', 'woocommerce-gateway-stripe' ),
+		label: __( 'giropay', 'woocommerce-gateway-monilypay' ),
 		description: __(
 			'Expand your business with giropay — Germany’s second most popular payment system.',
-			'woocommerce-gateway-stripe'
+			'woocommerce-gateway-monilypay'
 		),
 		Icon: GiropayIcon,
 		currencies: [ 'EUR' ],
@@ -36,10 +36,10 @@ export default {
 	},
 	sepa_debit: {
 		id: 'sepa_debit',
-		label: __( 'Direct debit payment', 'woocommerce-gateway-stripe' ),
+		label: __( 'Direct debit payment', 'woocommerce-gateway-monilypay' ),
 		description: __(
 			'Reach 500 million customers and over 20 million businesses across the European Union.',
-			'woocommerce-gateway-stripe'
+			'woocommerce-gateway-monilypay'
 		),
 		Icon: SepaIcon,
 		currencies: [ 'EUR' ],
@@ -47,10 +47,10 @@ export default {
 	},
 	sofort: {
 		id: 'sofort',
-		label: __( 'Sofort', 'woocommerce-gateway-stripe' ),
+		label: __( 'Sofort', 'woocommerce-gateway-monilypay' ),
 		description: __(
 			'Accept secure bank transfers from Austria, Belgium, Germany, Italy, Netherlands, and Spain.',
-			'woocommerce-gateway-stripe'
+			'woocommerce-gateway-monilypay'
 		),
 		Icon: SofortIcon,
 		currencies: [ 'EUR' ],
@@ -58,10 +58,10 @@ export default {
 	},
 	eps: {
 		id: 'eps',
-		label: __( 'EPS', 'woocommerce-gateway-stripe' ),
+		label: __( 'EPS', 'woocommerce-gateway-monilypay' ),
 		description: __(
 			'EPS is an Austria-based payment method that allows customers to complete transactions online using their bank credentials.',
-			'woocommerce-gateway-stripe'
+			'woocommerce-gateway-monilypay'
 		),
 		Icon: EpsIcon,
 		currencies: [ 'EUR' ],
@@ -69,10 +69,10 @@ export default {
 	},
 	bancontact: {
 		id: 'bancontact',
-		label: __( 'Bancontact', 'woocommerce-gateway-stripe' ),
+		label: __( 'Bancontact', 'woocommerce-gateway-monilypay' ),
 		description: __(
 			'Bancontact is the most popular online payment method in Belgium, with over 15 million cards in circulation.',
-			'woocommerce-gateway-stripe'
+			'woocommerce-gateway-monilypay'
 		),
 		Icon: BancontactIcon,
 		currencies: [ 'EUR' ],
@@ -80,10 +80,10 @@ export default {
 	},
 	ideal: {
 		id: 'ideal',
-		label: __( 'iDEAL', 'woocommerce-gateway-stripe' ),
+		label: __( 'iDEAL', 'woocommerce-gateway-monilypay' ),
 		description: __(
 			'iDEAL is a Netherlands-based payment method that allows customers to complete transactions online using their bank credentials.',
-			'woocommerce-gateway-stripe'
+			'woocommerce-gateway-monilypay'
 		),
 		Icon: IdealIcon,
 		currencies: [ 'EUR' ],
@@ -91,10 +91,10 @@ export default {
 	},
 	p24: {
 		id: 'p24',
-		label: __( 'Przelewy24', 'woocommerce-gateway-stripe' ),
+		label: __( 'Przelewy24', 'woocommerce-gateway-monilypay' ),
 		description: __(
 			'Przelewy24 is a Poland-based payment method aggregator that allows customers to complete transactions online using bank transfers and other methods.',
-			'woocommerce-gateway-stripe'
+			'woocommerce-gateway-monilypay'
 		),
 		Icon: P24Icon,
 		currencies: [ 'EUR', 'PLN' ],
@@ -102,10 +102,10 @@ export default {
 	},
 	boleto: {
 		id: 'boleto',
-		label: __( 'Boleto', 'woocommerce-gateway-stripe' ),
+		label: __( 'Boleto', 'woocommerce-gateway-monilypay' ),
 		description: __(
 			'Boleto is an official payment method in Brazil. Customers receive a voucher that can be paid at authorized agencies or banks, ATMs, or online bank portals.',
-			'woocommerce-gateway-stripe'
+			'woocommerce-gateway-monilypay'
 		),
 		Icon: BoletoIcon,
 		currencies: [ 'BRL' ],
@@ -113,10 +113,10 @@ export default {
 	},
 	oxxo: {
 		id: 'oxxo',
-		label: __( 'OXXO', 'woocommerce-gateway-stripe' ),
+		label: __( 'OXXO', 'woocommerce-gateway-monilypay' ),
 		description: __(
 			'OXXO is a Mexican chain of convenience stores that allows customers to pay bills and online purchases in-store with cash.',
-			'woocommerce-gateway-stripe'
+			'woocommerce-gateway-monilypay'
 		),
 		Icon: OxxoIcon,
 		currencies: [ 'MXN' ],
@@ -124,10 +124,10 @@ export default {
 	},
 	alipay: {
 		id: 'alipay',
-		label: __( 'Alipay', 'woocommerce-gateway-stripe' ),
+		label: __( 'Alipay', 'woocommerce-gateway-monilypay' ),
 		description: __(
 			'Alipay is a popular wallet in China, operated by Ant Financial Services Group, a financial services provider affiliated with Alibaba.',
-			'woocommerce-gateway-stripe'
+			'woocommerce-gateway-monilypay'
 		),
 		Icon: () => null,
 		currencies: [
@@ -146,10 +146,10 @@ export default {
 	},
 	multibanco: {
 		id: 'multibanco',
-		label: __( 'Multibanco', 'woocommerce-gateway-stripe' ),
+		label: __( 'Multibanco', 'woocommerce-gateway-monilypay' ),
 		description: __(
 			'Multibanco is an interbank network that links the ATMs of all major banks in Portugal, allowing customers to pay through either their ATM or online banking environment.',
-			'woocommerce-gateway-stripe'
+			'woocommerce-gateway-monilypay'
 		),
 		Icon: () => null,
 		currencies: [ 'EUR' ],

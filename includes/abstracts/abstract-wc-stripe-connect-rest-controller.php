@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Stripe Connect base REST controller class.
  */
-abstract class WC_Stripe_Connect_REST_Controller extends WP_REST_Controller {
+abstract class WC_Monilypay_Connect_REST_Controller extends WP_REST_Controller {
 
 	/**
 	 * Endpoint namespace.

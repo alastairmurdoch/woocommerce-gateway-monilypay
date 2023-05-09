@@ -8,4 +8,4 @@ The generated POT template file is not included in this repository. It gets gene
 npm run build
 ```
 
-After the build completes, you'll find a `woocommerce-gateway-stripe.pot` strings file in this directory. 
+After the build completes, you'll find a `woocommerce-gateway-monilypay.pot` strings file in this directory. 

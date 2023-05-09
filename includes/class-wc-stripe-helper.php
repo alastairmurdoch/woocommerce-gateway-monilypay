@@ -10,7 +10,7 @@ use Automattic\WooCommerce\Utilities\OrderUtil;
  *
  * @since 4.0.0
  */
-class WC_Stripe_Helper {
+class WC_Monilypay_Helper {
 	const LEGACY_META_NAME_FEE      = 'Stripe Fee';
 	const LEGACY_META_NAME_NET      = 'Net Revenue From Stripe';
 	const META_NAME_FEE             = '_stripe_fee';
@@ -194,33 +194,33 @@ class WC_Stripe_Helper {
 	 */
 	public static function get_localized_messages() {
 		return apply_filters(
-			'wc_stripe_localized_messages',
+			'wc_monilypay_localized_messages',
 			[
-				'invalid_number'           => __( 'The card number is not a valid credit card number.', 'woocommerce-gateway-stripe' ),
-				'invalid_expiry_month'     => __( 'The card\'s expiration month is invalid.', 'woocommerce-gateway-stripe' ),
-				'invalid_expiry_year'      => __( 'The card\'s expiration year is invalid.', 'woocommerce-gateway-stripe' ),
-				'invalid_cvc'              => __( 'The card\'s security code is invalid.', 'woocommerce-gateway-stripe' ),
-				'incorrect_number'         => __( 'The card number is incorrect.', 'woocommerce-gateway-stripe' ),
-				'incomplete_number'        => __( 'The card number is incomplete.', 'woocommerce-gateway-stripe' ),
-				'incomplete_cvc'           => __( 'The card\'s security code is incomplete.', 'woocommerce-gateway-stripe' ),
-				'incomplete_expiry'        => __( 'The card\'s expiration date is incomplete.', 'woocommerce-gateway-stripe' ),
-				'expired_card'             => __( 'The card has expired.', 'woocommerce-gateway-stripe' ),
-				'incorrect_cvc'            => __( 'The card\'s security code is incorrect.', 'woocommerce-gateway-stripe' ),
-				'incorrect_zip'            => __( 'The card\'s zip code failed validation.', 'woocommerce-gateway-stripe' ),
-				'postal_code_invalid'      => __( 'Invalid zip code, please correct and try again', 'woocommerce-gateway-stripe' ),
-				'invalid_expiry_year_past' => __( 'The card\'s expiration year is in the past', 'woocommerce-gateway-stripe' ),
-				'card_declined'            => __( 'The card was declined.', 'woocommerce-gateway-stripe' ),
-				'missing'                  => __( 'There is no card on a customer that is being charged.', 'woocommerce-gateway-stripe' ),
-				'processing_error'         => __( 'An error occurred while processing the card.', 'woocommerce-gateway-stripe' ),
-				'invalid_sofort_country'   => __( 'The billing country is not accepted by Sofort. Please try another country.', 'woocommerce-gateway-stripe' ),
-				'email_invalid'            => __( 'Invalid email address, please correct and try again.', 'woocommerce-gateway-stripe' ),
+				'invalid_number'           => __( 'The card number is not a valid credit card number.', 'woocommerce-gateway-monilypay' ),
+				'invalid_expiry_month'     => __( 'The card\'s expiration month is invalid.', 'woocommerce-gateway-monilypay' ),
+				'invalid_expiry_year'      => __( 'The card\'s expiration year is invalid.', 'woocommerce-gateway-monilypay' ),
+				'invalid_cvc'              => __( 'The card\'s security code is invalid.', 'woocommerce-gateway-monilypay' ),
+				'incorrect_number'         => __( 'The card number is incorrect.', 'woocommerce-gateway-monilypay' ),
+				'incomplete_number'        => __( 'The card number is incomplete.', 'woocommerce-gateway-monilypay' ),
+				'incomplete_cvc'           => __( 'The card\'s security code is incomplete.', 'woocommerce-gateway-monilypay' ),
+				'incomplete_expiry'        => __( 'The card\'s expiration date is incomplete.', 'woocommerce-gateway-monilypay' ),
+				'expired_card'             => __( 'The card has expired.', 'woocommerce-gateway-monilypay' ),
+				'incorrect_cvc'            => __( 'The card\'s security code is incorrect.', 'woocommerce-gateway-monilypay' ),
+				'incorrect_zip'            => __( 'The card\'s zip code failed validation.', 'woocommerce-gateway-monilypay' ),
+				'postal_code_invalid'      => __( 'Invalid zip code, please correct and try again', 'woocommerce-gateway-monilypay' ),
+				'invalid_expiry_year_past' => __( 'The card\'s expiration year is in the past', 'woocommerce-gateway-monilypay' ),
+				'card_declined'            => __( 'The card was declined.', 'woocommerce-gateway-monilypay' ),
+				'missing'                  => __( 'There is no card on a customer that is being charged.', 'woocommerce-gateway-monilypay' ),
+				'processing_error'         => __( 'An error occurred while processing the card.', 'woocommerce-gateway-monilypay' ),
+				'invalid_sofort_country'   => __( 'The billing country is not accepted by Sofort. Please try another country.', 'woocommerce-gateway-monilypay' ),
+				'email_invalid'            => __( 'Invalid email address, please correct and try again.', 'woocommerce-gateway-monilypay' ),
 				'invalid_request_error'    => is_add_payment_method_page()
-					? __( 'Unable to save this payment method, please try again or use alternative method.', 'woocommerce-gateway-stripe' )
-					: __( 'Unable to process this payment, please try again or use alternative method.', 'woocommerce-gateway-stripe' ),
-				'amount_too_large'         => __( 'The order total is too high for this payment method', 'woocommerce-gateway-stripe' ),
-				'amount_too_small'         => __( 'The order total is too low for this payment method', 'woocommerce-gateway-stripe' ),
-				'country_code_invalid'     => __( 'Invalid country code, please try again with a valid country code', 'woocommerce-gateway-stripe' ),
-				'tax_id_invalid'           => __( 'Invalid Tax Id, please try again with a valid tax id', 'woocommerce-gateway-stripe' ),
+					? __( 'Unable to save this payment method, please try again or use alternative method.', 'woocommerce-gateway-monilypay' )
+					: __( 'Unable to process this payment, please try again or use alternative method.', 'woocommerce-gateway-monilypay' ),
+				'amount_too_large'         => __( 'The order total is too high for this payment method', 'woocommerce-gateway-monilypay' ),
+				'amount_too_small'         => __( 'The order total is too low for this payment method', 'woocommerce-gateway-monilypay' ),
+				'country_code_invalid'     => __( 'Invalid country code, please try again with a valid country code', 'woocommerce-gateway-monilypay' ),
+				'tax_id_invalid'           => __( 'Invalid Tax Id, please try again with a valid tax id', 'woocommerce-gateway-monilypay' ),
 			]
 		);
 	}
@@ -332,7 +332,7 @@ class WC_Stripe_Helper {
 	 * @param string $setting The name of the setting to get.
 	 */
 	public static function get_settings( $method = null, $setting = null ) {
-		$all_settings = null === $method ? get_option( 'woocommerce_stripe_settings', [] ) : get_option( 'woocommerce_stripe_' . $method . '_settings', [] );
+		$all_settings = null === $method ? get_option( 'woocommerce_monilypay_settings', [] ) : get_option( 'woocommerce_stripe_' . $method . '_settings', [] );
 
 		if ( null === $setting ) {
 			return $all_settings;
@@ -687,7 +687,7 @@ class WC_Stripe_Helper {
 			return true;
 		}
 
-		return apply_filters( 'wc_stripe_load_scripts_on_product_page_when_prbs_disabled', true );
+		return apply_filters( 'wc_monilypay_load_scripts_on_product_page_when_prbs_disabled', true );
 	}
 
 	/**
@@ -704,7 +704,7 @@ class WC_Stripe_Helper {
 			return true;
 		}
 
-		return apply_filters( 'wc_stripe_load_scripts_on_cart_page_when_prbs_disabled', true );
+		return apply_filters( 'wc_monilypay_load_scripts_on_cart_page_when_prbs_disabled', true );
 	}
 
 	/**
@@ -744,7 +744,7 @@ class WC_Stripe_Helper {
 		$order->add_order_note(
 			sprintf(
 			/* translators: $1%s payment intent ID */
-				__( 'Stripe payment intent created (Payment Intent ID: %1$s)', 'woocommerce-gateway-stripe' ),
+				__( 'Stripe payment intent created (Payment Intent ID: %1$s)', 'woocommerce-gateway-monilypay' ),
 				$payment_intent_id
 			)
 		);

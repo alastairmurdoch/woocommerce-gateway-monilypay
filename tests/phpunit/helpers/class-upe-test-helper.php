@@ -13,7 +13,7 @@ class UPE_Test_Helper {
 				return 'yes';
 			}
 		);
-		delete_option( 'woocommerce_stripe_settings' );
+		delete_option( 'woocommerce_monilypay_settings' );
 		$this->reload_payment_gateways();
 	}
 
@@ -31,8 +31,8 @@ class UPE_Test_Helper {
 	}
 
 	public function enable_upe() {
-		$settings = get_option( 'woocommerce_stripe_settings', [] );
+		$settings = get_option( 'woocommerce_monilypay_settings', [] );
 		$settings[ WC_Stripe_Feature_Flags::UPE_CHECKOUT_FEATURE_ATTRIBUTE_NAME ] = 'yes';
-		update_option( 'woocommerce_stripe_settings', $settings );
+		update_option( 'woocommerce_monilypay_settings', $settings );
 	}
 }

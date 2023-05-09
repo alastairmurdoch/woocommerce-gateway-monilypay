@@ -21,10 +21,10 @@ export default class WCStripeAPI {
 	 * Construct WC AJAX endpoint URL.
 	 *
 	 * @param {string} endpoint Request endpoint URL.
-	 * @param {string} prefix Endpoint URI prefix (default: 'wc_stripe_').
+	 * @param {string} prefix Endpoint URI prefix (default: 'wc_monilypay_').
 	 * @return {string} URL with interpolated endpoint.
 	 */
-	getAjaxUrl( endpoint, prefix = 'wc_stripe_' ) {
+	getAjaxUrl( endpoint, prefix = 'wc_monilypay_' ) {
 		return this.options?.ajax_url
 			?.toString()
 			?.replace( '%%endpoint%%', prefix + endpoint );
@@ -36,18 +36,18 @@ export default class WCStripeAPI {
 			case 'timeout':
 				return __(
 					'A timeout occurred while connecting to the server. Please try again.',
-					'woocommerce-gateway-stripe'
+					'woocommerce-gateway-monilypay'
 				);
 			case 'abort':
 				return __(
 					'The connection to the server was aborted. Please try again.',
-					'woocommerce-gateway-stripe'
+					'woocommerce-gateway-monilypay'
 				);
 			case 'error':
 			default:
 				return __(
 					'An error occurred while connecting to the server. Please try again.',
-					'woocommerce-gateway-stripe'
+					'woocommerce-gateway-monilypay'
 				);
 		}
 	}

@@ -20,11 +20,11 @@ const DisableConfirmationModal = ( { onClose, onConfirm } ) => {
 		enabledPaymentMethodIds.length === 0 && paymentRequestEnabledSettings
 			? __(
 					'Are you sure you want to disable Stripe? Without it, your customers will no longer be able to pay using the express checkouts.',
-					'woocommerce-gateway-stripe'
+					'woocommerce-gateway-monilypay'
 			  )
 			: __(
 					'Are you sure you want to disable Stripe? Without it, your customers will no longer be able to pay using the payment methods below as well as express checkouts.',
-					'woocommerce-gateway-stripe'
+					'woocommerce-gateway-monilypay'
 			  );
 
 	return (
@@ -33,7 +33,7 @@ const DisableConfirmationModal = ( { onClose, onConfirm } ) => {
 				<AlertTitle
 					title={ __(
 						'Disable Stripe',
-						'woocommerce-gateway-stripe'
+						'woocommerce-gateway-monilypay'
 					) }
 				/>
 			}
@@ -56,7 +56,7 @@ const DisableConfirmationModal = ( { onClose, onConfirm } ) => {
 					<p>
 						{ __(
 							'Payment methods that need Stripe:',
-							'woocommerce-gateway-stripe'
+							'woocommerce-gateway-monilypay'
 						) }
 					</p>
 					<ul className="disable-confirmation-modal__payment-methods-list">

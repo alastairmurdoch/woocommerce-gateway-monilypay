@@ -46,12 +46,12 @@ export function* saveSettings() {
 		);
 
 		yield dispatch( 'core/notices' ).createSuccessNotice(
-			__( 'Settings saved.', 'woocommerce-gateway-stripe' )
+			__( 'Settings saved.', 'woocommerce-gateway-monilypay' )
 		);
 	} catch ( e ) {
 		error = e;
 		yield dispatch( 'core/notices' ).createErrorNotice(
-			__( 'Error saving settings.', 'woocommerce-gateway-stripe' )
+			__( 'Error saving settings.', 'woocommerce-gateway-monilypay' )
 		);
 	} finally {
 		yield updateIsSavingSettings( false, error );

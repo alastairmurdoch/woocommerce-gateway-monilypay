@@ -6,11 +6,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Bancontact Payment Method class extending UPE base class
  */
-class WC_Stripe_UPE_Payment_Method_Bancontact extends WC_Stripe_UPE_Payment_Method {
+class WC_Monilypay_UPE_Payment_Method_Bancontact extends WC_Monilypay_UPE_Payment_Method {
 
 	const STRIPE_ID = 'bancontact';
 
-	const LPM_GATEWAY_CLASS = WC_Gateway_Stripe_Bancontact::class;
+	const LPM_GATEWAY_CLASS = WC_Gateway_Monilypay_Bancontact::class;
 
 	/**
 	 * Constructor for Bancontact payment method
@@ -21,10 +21,10 @@ class WC_Stripe_UPE_Payment_Method_Bancontact extends WC_Stripe_UPE_Payment_Meth
 		$this->title                = 'Pay with Bancontact';
 		$this->is_reusable          = true;
 		$this->supported_currencies = [ 'EUR' ];
-		$this->label                = __( 'Bancontact', 'woocommerce-gateway-stripe' );
+		$this->label                = __( 'Bancontact', 'woocommerce-gateway-monilypay' );
 		$this->description          = __(
 			'Bancontact is the most popular online payment method in Belgium, with over 15 million cards in circulation.',
-			'woocommerce-gateway-stripe'
+			'woocommerce-gateway-monilypay'
 		);
 	}
 }

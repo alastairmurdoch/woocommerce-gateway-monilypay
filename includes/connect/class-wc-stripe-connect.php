@@ -10,7 +10,7 @@ if ( ! class_exists( 'WC_Stripe_Connect' ) ) {
 	 */
 	class WC_Stripe_Connect {
 
-		const SETTINGS_OPTION = 'woocommerce_stripe_settings';
+		const SETTINGS_OPTION = 'woocommerce_monilypay_settings';
 
 		/**
 		 * Stripe connect api.
@@ -40,11 +40,11 @@ if ( ! class_exists( 'WC_Stripe_Connect' ) ) {
 		public function get_oauth_url( $return_url = '' ) {
 
 			if ( empty( $return_url ) ) {
-				$return_url = admin_url( 'admin.php?page=wc-settings&tab=checkout&section=stripe&panel=settings' );
+				$return_url = admin_url( 'admin.php?page=wc-settings&tab=checkout&section=monilypay&panel=settings' );
 			}
 
 			if ( substr( $return_url, 0, 8 ) !== 'https://' ) {
-				return new WP_Error( 'invalid_url_protocol', __( 'Your site must be served over HTTPS in order to connect your Stripe account automatically.', 'woocommerce-gateway-stripe' ) );
+				return new WP_Error( 'invalid_url_protocol', __( 'Your site must be served over HTTPS in order to connect your Stripe account automatically.', 'woocommerce-gateway-monilypay' ) );
 			}
 
 			$result = $this->api->get_stripe_oauth_init( $return_url );
@@ -153,7 +153,7 @@ if ( ! class_exists( 'WC_Stripe_Connect' ) ) {
 		private function get_default_stripe_config() {
 
 			$result  = [];
-			$gateway = new WC_Gateway_Stripe();
+			$gateway = new WC_Gateway_Monilypay();
 			foreach ( $gateway->form_fields as $key => $value ) {
 				if ( isset( $value['default'] ) ) {
 					$result[ $key ] = $value['default'];

@@ -57,33 +57,33 @@ const GeneralSettingsSection = ( { setKeepModalContent } ) => {
 						checked={ isStripeEnabled }
 						onChange={ setIsStripeEnabled }
 						label={ __(
-							'Enable Stripe',
-							'woocommerce-gateway-stripe'
+							'Enable MonilyPay',
+							'woocommerce-gateway-monilypay'
 						) }
 						help={ __(
-							'When enabled, payment methods powered by Stripe will appear on checkout.',
-							'woocommerce-gateway-stripe'
+							'When enabled, payment methods powered by MonilyPay will appear on checkout.',
+							'woocommerce-gateway-monilypay'
 						) }
 					/>
 					<h4>
 						{ __(
 							'Display settings',
-							'woocommerce-gateway-stripe'
+							'woocommerce-gateway-monilypay'
 						) }
 					</h4>
 					<Description>
 						{ isUpeEnabled
 							? __(
 									'Enter the payment method name that will be displayed at checkout when there are multiple available payment methods.',
-									'woocommerce-gateway-stripe'
+									'woocommerce-gateway-monilypay'
 							  )
 							: __(
 									'Enter payment method details that will be displayed at checkout, in the order confirmation screen and in the order notes.',
-									'woocommerce-gateway-stripe'
+									'woocommerce-gateway-monilypay'
 							  ) }
 					</Description>
 					<TextControl
-						label={ __( 'Name', 'woocommerce-gateway-stripe' ) }
+						label={ __( 'Name', 'woocommerce-gateway-monilypay' ) }
 						value={ isUpeEnabled ? upeTitle : title }
 						onChange={ isUpeEnabled ? setUpeTitle : setTitle }
 					/>
@@ -91,7 +91,7 @@ const GeneralSettingsSection = ( { setKeepModalContent } ) => {
 						<TextControl
 							label={ __(
 								'Description',
-								'woocommerce-gateway-stripe'
+								'woocommerce-gateway-monilypay'
 							) }
 							value={ description }
 							onChange={ setDescription }
@@ -108,7 +108,7 @@ const GeneralSettingsSection = ( { setKeepModalContent } ) => {
 					>
 						{ __(
 							'Edit account keys',
-							'woocommerce-gateway-stripe'
+							'woocommerce-gateway-monilypay'
 						) }
 					</Button>
 				</CardFooter>

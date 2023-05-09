@@ -38,7 +38,7 @@ function _manually_load_plugin() {
 	require __DIR__ . '/setup.php';
 
 	$_plugin_dir = __DIR__ . '/../../';
-	require $_plugin_dir . 'woocommerce-gateway-stripe.php';
+	require $_plugin_dir . 'woocommerce-gateway-monilypay.php';
 
 	// REST API.
 	require_once WC_STRIPE_PLUGIN_PATH . '/includes/admin/class-wc-stripe-rest-base-controller.php';

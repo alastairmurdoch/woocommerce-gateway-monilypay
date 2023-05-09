@@ -2,18 +2,18 @@
 
 While we were in the process of migrating the Blocks integration from the WooCommerce Blocks plugin to Stripe we encountered several issues while adding support for Payment Requests with the Blocks API. The easiest way to fix these issues at the time was to use our pre-existing AJAX APIs and forego the Blocks API entirely.
 
-The WooCommerce Blocks API has since been significantly improved and we need to re-evaluate whether we can now use the Blocks API, see https://github.com/woocommerce/woocommerce-gateway-stripe/issues/1573.
+The WooCommerce Blocks API has since been significantly improved and we need to re-evaluate whether we can now use the Blocks API, see https://github.com/woocommerce/woocommerce-gateway-monilypay/issues/1573.
 
 This file is meant to document why we chose to forego the Blocks API at the time, and what the downsides and benefits of that approach are.
 
 ## What were the issues we encountered?
 
 -   3DS payments didn't work with saved cards and Payment Requests because some scripts weren't loaded in those contexts.
--   The Payment Request Dialog [didn't close during 3DS validation](https://github.com/woocommerce/woocommerce-gateway-stripe/pull/1467#discussion_r623877272).
+-   The Payment Request Dialog [didn't close during 3DS validation](https://github.com/woocommerce/woocommerce-gateway-monilypay/pull/1467#discussion_r623877272).
 
 Both of these have since been addressed in WooCommerce Blocks.
 
-We also encountered an issue where state and zip code normalization [didn't work](https://github.com/woocommerce/woocommerce-gateway-stripe/issues/1518) because we were missing some crucial normalization functionality.
+We also encountered an issue where state and zip code normalization [didn't work](https://github.com/woocommerce/woocommerce-gateway-monilypay/issues/1518) because we were missing some crucial normalization functionality.
 
 ## The Downsides of Using the AJAX API
 

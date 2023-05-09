@@ -6,7 +6,7 @@ import { recordEvent } from 'wcstripe/tracking';
 
 domReady( () => {
 	// eslint-disable-next-line camelcase
-	if ( ! wc_stripe_old_settings_param ) {
+	if ( ! wc_monilypay_old_settings_param ) {
 		return;
 	}
 
@@ -14,20 +14,20 @@ domReady( () => {
 		was_upe_enabled: wasUpeEnabled,
 		is_upe_enabled: isUpeEnabled,
 		// eslint-disable-next-line camelcase
-	} = wc_stripe_old_settings_param;
+	} = wc_monilypay_old_settings_param;
 
 	if ( isUpeEnabled !== '1' ) {
 		dispatch( 'core/notices' ).createSuccessNotice(
 			__(
 				'🤔 What made you disable the new payments experience?',
-				'woocommerce-gateway-stripe'
+				'woocommerce-gateway-monilypay'
 			),
 			{
 				actions: [
 					{
 						label: __(
 							'Share feedback (1 min)',
-							'woocommerce-gateway-stripe'
+							'woocommerce-gateway-monilypay'
 						),
 						url:
 							'https://woocommerce.survey.fm/woocommerce-stripe-upe-opt-out-survey',

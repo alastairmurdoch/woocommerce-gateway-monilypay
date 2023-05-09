@@ -1,15 +1,15 @@
-=== WooCommerce Stripe Payment Gateway ===
-Contributors: woocommerce, automattic, royho, akeda, mattyza, bor0, woothemes
+=== WooCommerce MonilyPay Payment Gateway ===
+Contributors: MonilyPay, woocommerce, automattic, royho, akeda, mattyza, bor0, woothemes
 Tags: credit card, stripe, apple pay, payment request, google pay, sepa, sofort, bancontact, alipay, giropay, ideal, p24, woocommerce, automattic
 Requires at least: 5.9
 Tested up to: 6.1
 Requires PHP: 7.3
-Stable tag: 7.0.2
+Stable tag: 7.2.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Attributions: thorsten-stripe
 
-Take credit card payments on your store using Stripe.
+Take credit card payments on your store using MonilyPay.
 
 == Description ==
 
@@ -79,7 +79,7 @@ WooCommerce Stripe includes [Web Payments API](https://www.w3.org/TR/payment-req
 
 == Installation ==
 
-You can download an [older version of this gateway for older versions of WooCommerce from here](https://wordpress.org/plugins/woocommerce-gateway-stripe/developers/).
+You can download an [older version of this gateway for older versions of WooCommerce from here](https://wordpress.org/plugins/woocommerce-gateway-monilypay/developers/).
 
 Please note, v4 of this gateway requires WooCommerce 3.0 and above.
 
@@ -128,10 +128,9 @@ If you get stuck, you can ask for help in the Plugin Forum.
 
 == Changelog ==
 
-= 7.1.0 - 2023-xx-xx =
-* Fix - Replace some post meta methods with equivalent methods compatible with HPOS.
-* Tweak - Update minimum supported versions for WordPress, WooCommerce, and PHP.
-* Update – Declare this plugin compatible with High-Performance Order Storage (HPOS).
+= 7.2.0 - 2023-03-09 =
+* Fix - Hide PRB box in checkout block when PRBs disabled.
+* Fix - Fix semi-hidden modal inline notices.
 
 
-[See changelog for all versions](https://raw.githubusercontent.com/woocommerce/woocommerce-gateway-stripe/trunk/changelog.txt).
+[See changelog for all versions](https://raw.githubusercontent.com/woocommerce/woocommerce-gateway-monilypay/trunk/changelog.txt).

@@ -23,7 +23,7 @@ if ( settingsContainer ) {
 	ReactDOM.render(
 		<UpeToggleContextProvider
 			defaultIsUpeEnabled={
-				wc_stripe_settings_params.is_upe_checkout_enabled === '1'
+				wc_monilypay_settings_params.is_upe_checkout_enabled === '1'
 			}
 		>
 			<SettingsManager />
@@ -36,7 +36,7 @@ if ( paymentGatewayContainer ) {
 	ReactDOM.render(
 		<UpeToggleContextProvider
 			defaultIsUpeEnabled={
-				wc_stripe_settings_params.is_upe_checkout_enabled === '1'
+				wc_monilypay_settings_params.is_upe_checkout_enabled === '1'
 			}
 		>
 			<PaymentGatewayManager />
@@ -48,7 +48,7 @@ if ( paymentGatewayContainer ) {
 if ( newAccountContainer ) {
 	ReactDOM.render(
 		<ConnectStripeAccount
-			oauthUrl={ wc_stripe_settings_params.stripe_oauth_url }
+			oauthUrl={ wc_monilypay_settings_params.stripe_oauth_url }
 		/>,
 		newAccountContainer
 	);

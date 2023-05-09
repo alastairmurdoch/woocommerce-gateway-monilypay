@@ -4,17 +4,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class WC_Stripe_UPE_Payment_Method_CC
+ * Class WC_Monilypay_UPE_Payment_Method_CC
  */
 
 /**
  * Credit card Payment Method class extending UPE base class
  */
-class WC_Stripe_UPE_Payment_Method_CC extends WC_Stripe_UPE_Payment_Method {
+class WC_Monilypay_UPE_Payment_Method_CC extends WC_Monilypay_UPE_Payment_Method {
 
 	const STRIPE_ID = 'card';
 
-	const LPM_GATEWAY_CLASS = WC_Gateway_Stripe::class;
+	const LPM_GATEWAY_CLASS = WC_Gateway_Monilypay::class;
 
 	/**
 	 * Constructor for card payment method
@@ -22,12 +22,12 @@ class WC_Stripe_UPE_Payment_Method_CC extends WC_Stripe_UPE_Payment_Method {
 	public function __construct() {
 		parent::__construct();
 		$this->stripe_id   = self::STRIPE_ID;
-		$this->title       = __( 'Pay with credit card / debit card', 'woocommerce-gateway-stripe' );
+		$this->title       = __( 'Pay with credit card / debit card', 'woocommerce-gateway-monilypay' );
 		$this->is_reusable = true;
-		$this->label       = __( 'Credit card / debit card', 'woocommerce-gateway-stripe' );
+		$this->label       = __( 'Credit card / debit card', 'woocommerce-gateway-monilypay' );
 		$this->description = __(
 			'Let your customers pay with major credit and debit cards without leaving your store.',
-			'woocommerce-gateway-stripe'
+			'woocommerce-gateway-monilypay'
 		);
 	}
 
@@ -45,15 +45,15 @@ class WC_Stripe_UPE_Payment_Method_CC extends WC_Stripe_UPE_Payment_Method {
 
 		$details       = $payment_details[ $this->stripe_id ];
 		$funding_types = [
-			'credit'  => __( 'credit', 'woocommerce-gateway-stripe' ),
-			'debit'   => __( 'debit', 'woocommerce-gateway-stripe' ),
-			'prepaid' => __( 'prepaid', 'woocommerce-gateway-stripe' ),
-			'unknown' => __( 'unknown', 'woocommerce-gateway-stripe' ),
+			'credit'  => __( 'credit', 'woocommerce-gateway-monilypay' ),
+			'debit'   => __( 'debit', 'woocommerce-gateway-monilypay' ),
+			'prepaid' => __( 'prepaid', 'woocommerce-gateway-monilypay' ),
+			'unknown' => __( 'unknown', 'woocommerce-gateway-monilypay' ),
 		];
 
 		return sprintf(
 			// Translators: %1$s card brand, %2$s card funding (prepaid, credit, etc.).
-			__( '%1$s %2$s card', 'woocommerce-gateway-stripe' ),
+			__( '%1$s %2$s card', 'woocommerce-gateway-monilypay' ),
 			ucfirst( $details->network ),
 			$funding_types[ $details->funding ]
 		);
@@ -70,8 +70,8 @@ class WC_Stripe_UPE_Payment_Method_CC extends WC_Stripe_UPE_Payment_Method {
 	/**
 	 * Create and return WC payment token for user.
 	 *
-	 * This will be used from the WC_Stripe_Payment_Tokens service
-	 * as opposed to WC_Stripe_UPE_Payment_Gateway.
+	 * This will be used from the WC_Monilypay_Payment_Tokens service
+	 * as opposed to WC_Monilypay_UPE_Payment_Gateway.
 	 *
 	 * @param string $user_id        WP_User ID
 	 * @param object $payment_method Stripe payment method object
@@ -84,7 +84,7 @@ class WC_Stripe_UPE_Payment_Method_CC extends WC_Stripe_UPE_Payment_Method {
 		$token->set_expiry_year( $payment_method->card->exp_year );
 		$token->set_card_type( strtolower( $payment_method->card->brand ) );
 		$token->set_last4( $payment_method->card->last4 );
-		$token->set_gateway_id( WC_Stripe_UPE_Payment_Gateway::ID );
+		$token->set_gateway_id( WC_Monilypay_UPE_Payment_Gateway::ID );
 		$token->set_token( $payment_method->id );
 		$token->set_user_id( $user_id );
 		$token->save();

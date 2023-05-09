@@ -54,7 +54,7 @@ export function* refreshAccount() {
 					/* translators: %s: one or more payment method names separated by commas (e.g.: giropay, EPS, Sofort, etc). */
 					__(
 						'You can now accept payments with %s.',
-						'woocommerce-gateway-stripe'
+						'woocommerce-gateway-monilypay'
 					),
 					newPaymentMethods
 						.map( ( method ) => {
@@ -71,7 +71,7 @@ export function* refreshAccount() {
 		}
 	} catch ( e ) {
 		yield dispatch( 'core/notices' ).createErrorNotice(
-			__( 'Error updating account data.', 'woocommerce-gateway-stripe' )
+			__( 'Error updating account data.', 'woocommerce-gateway-monilypay' )
 		);
 	} finally {
 		yield updateIsRefreshingAccount( false );

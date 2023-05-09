@@ -1,6 +1,6 @@
 <?php
 /**
- * Class WC_REST_Stripe_Payment_Gateway_Controller
+ * Class WC_REST_Monilypay_Payment_Gateway_Controller
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -8,19 +8,19 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Dynamic REST controller for payment gateway settings.
  */
-class WC_REST_Stripe_Payment_Gateway_Controller extends WC_Stripe_REST_Base_Controller {
+class WC_REST_Monilypay_Payment_Gateway_Controller extends WC_Monilypay_REST_Base_Controller {
 
 	/**
 	 * Endpoint path.
 	 *
 	 * @var string
 	 */
-	protected $rest_base = 'wc_stripe/payment-gateway';
+	protected $rest_base = 'wc_monilypay/payment-gateway';
 
 	/**
 	 * Stripe payment gateway.
 	 *
-	 * @var WC_Gateway_Stripe
+	 * @var WC_Gateway_Monilypay
 	 */
 	private $gateway;
 
@@ -30,21 +30,21 @@ class WC_REST_Stripe_Payment_Gateway_Controller extends WC_Stripe_REST_Base_Cont
 	 * @var array
 	 */
 	private $gateways = [
-		'stripe_sepa'       => WC_Gateway_Stripe_Sepa::class,
-		'stripe_giropay'    => WC_Gateway_Stripe_Giropay::class,
-		'stripe_ideal'      => WC_Gateway_Stripe_Ideal::class,
-		'stripe_bancontact' => WC_Gateway_Stripe_Bancontact::class,
-		'stripe_eps'        => WC_Gateway_Stripe_Eps::class,
-		'stripe_sofort'     => WC_Gateway_Stripe_Sofort::class,
-		'stripe_p24'        => WC_Gateway_Stripe_P24::class,
-		'stripe_alipay'     => WC_Gateway_Stripe_Alipay::class,
-		'stripe_multibanco' => WC_Gateway_Stripe_Multibanco::class,
-		'stripe_oxxo'       => WC_Gateway_Stripe_Oxxo::class,
-		'stripe_boleto'     => WC_Gateway_Stripe_Boleto::class,
+		//'stripe_sepa'       => WC_Gateway_Monilypay_Sepa::class,
+		//'stripe_giropay'    => WC_Gateway_Monilypay_Giropay::class,
+		//'stripe_ideal'      => WC_Gateway_Monilypay_Ideal::class,
+		//'stripe_bancontact' => WC_Gateway_Monilypay_Bancontact::class,
+		//'stripe_eps'        => WC_Gateway_Monilypay_Eps::class,
+		//'stripe_sofort'     => WC_Gateway_Monilypay_Sofort::class,
+		//'stripe_p24'        => WC_Gateway_Monilypay_P24::class,
+		//'stripe_alipay'     => WC_Gateway_Monilypay_Alipay::class,
+		//'stripe_multibanco' => WC_Gateway_Monilypay_Multibanco::class,
+		//'stripe_oxxo'       => WC_Gateway_Monilypay_Oxxo::class,
+		//'stripe_boleto'     => WC_Gateway_Monilypay_Boleto::class,
 	];
 
 	/**
-	 * Returns an instance of some WC_Gateway_Stripe.
+	 * Returns an instance of some WC_Gateway_Monilypay.
 	 *
 	 * @return void
 	 */

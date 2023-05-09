@@ -8,13 +8,13 @@ defined( 'ABSPATH' ) || exit;
 /**
  * REST controller for UPE feature flag.
  */
-class WC_Stripe_REST_UPE_Flag_Toggle_Controller extends WC_Stripe_REST_Base_Controller {
+class WC_Monilypay_REST_UPE_Flag_Toggle_Controller extends WC_Monilypay_REST_Base_Controller {
 	/**
 	 * Endpoint path.
 	 *
 	 * @var string
 	 */
-	protected $rest_base = 'wc_stripe/upe_flag_toggle';
+	protected $rest_base = 'wc_monilypay/upe_flag_toggle';
 
 	/**
 	 * Configure REST API routes.
@@ -38,7 +38,7 @@ class WC_Stripe_REST_UPE_Flag_Toggle_Controller extends WC_Stripe_REST_Base_Cont
 				'permission_callback' => [ $this, 'check_permission' ],
 				'args'                => [
 					'is_upe_enabled' => [
-						'description'       => __( 'Determines if the UPE feature flag is enabled.', 'woocommerce-gateway-stripe' ),
+						'description'       => __( 'Determines if the UPE feature flag is enabled.', 'woocommerce-gateway-monilypay' ),
 						'type'              => 'boolean',
 						'validate_callback' => 'rest_validate_request_arg',
 					],
@@ -55,7 +55,7 @@ class WC_Stripe_REST_UPE_Flag_Toggle_Controller extends WC_Stripe_REST_Base_Cont
 	public function get_flag() {
 		return new WP_REST_Response(
 			[
-				'is_upe_enabled' => WC_Stripe_Feature_Flags::is_upe_checkout_enabled(),
+				'is_upe_enabled' => WC_Monilypay_Feature_Flags::is_upe_checkout_enabled(),
 			]
 		);
 	}
@@ -72,17 +72,17 @@ class WC_Stripe_REST_UPE_Flag_Toggle_Controller extends WC_Stripe_REST_Base_Cont
 			return new WP_REST_Response( [ 'result' => 'bad_request' ], 400 );
 		}
 
-		$settings = get_option( 'woocommerce_stripe_settings', [] );
-		$settings[ WC_Stripe_Feature_Flags::UPE_CHECKOUT_FEATURE_ATTRIBUTE_NAME ] = $is_upe_enabled ? 'yes' : 'disabled';
+		$settings = get_option( 'woocommerce_monilypay_settings', [] );
+		$settings[ WC_Monilypay_Feature_Flags::UPE_CHECKOUT_FEATURE_ATTRIBUTE_NAME ] = $is_upe_enabled ? 'yes' : 'disabled';
 
-		update_option( 'woocommerce_stripe_settings', $settings );
+		update_option( 'woocommerce_monilypay_settings', $settings );
 
 		// including the class again because otherwise it's not present.
-		if ( WC_Stripe_Inbox_Notes::are_inbox_notes_supported() ) {
-			require_once WC_STRIPE_PLUGIN_PATH . '/includes/notes/class-wc-stripe-upe-availability-note.php';
+		if ( WC_Monilypay_Inbox_Notes::are_inbox_notes_supported() ) {
+			require_once WC_MONILYPAY_PLUGIN_PATH . '/includes/notes/class-wc-stripe-upe-availability-note.php';
 			WC_Stripe_UPE_Availability_Note::possibly_delete_note();
 
-			require_once WC_STRIPE_PLUGIN_PATH . '/includes/notes/class-wc-stripe-upe-stripelink-note.php';
+			require_once WC_MONILYPAY_PLUGIN_PATH . '/includes/notes/class-wc-stripe-upe-stripelink-note.php';
 			WC_Stripe_UPE_StripeLink_Note::possibly_delete_note();
 		}
 

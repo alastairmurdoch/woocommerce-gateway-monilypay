@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class WC_Stripe_Apple_Pay_Registration {
+class WC_Monilypay_Apple_Pay_Registration {
 
 	const DOMAIN_ASSOCIATION_FILE_NAME = 'apple-developer-merchantid-domain-association';
 	const DOMAIN_ASSOCIATION_FILE_DIR  = '.well-known';
@@ -50,10 +50,10 @@ class WC_Stripe_Apple_Pay_Registration {
 		add_action( 'parse_request', [ $this, 'parse_domain_association_request' ], 10, 1 );
 
 		add_action( 'woocommerce_stripe_updated', [ $this, 'verify_domain_if_configured' ] );
-		add_action( 'add_option_woocommerce_stripe_settings', [ $this, 'verify_domain_on_new_settings' ], 10, 2 );
-		add_action( 'update_option_woocommerce_stripe_settings', [ $this, 'verify_domain_on_updated_settings' ], 10, 2 );
+		add_action( 'add_option_woocommerce_monilypay_settings', [ $this, 'verify_domain_on_new_settings' ], 10, 2 );
+		add_action( 'update_option_woocommerce_monilypay_settings', [ $this, 'verify_domain_on_updated_settings' ], 10, 2 );
 
-		$this->stripe_settings         = get_option( 'woocommerce_stripe_settings', [] );
+		$this->stripe_settings         = get_option( 'woocommerce_monilypay_settings', [] );
 		$this->domain_name             = isset( $_SERVER['HTTP_HOST'] ) ? $_SERVER['HTTP_HOST'] : str_replace( array( 'https://', 'http://' ), '', get_site_url() ); // @codingStandardsIgnoreLine
 		$this->apple_pay_domain_set    = 'yes' === $this->get_option( 'apple_pay_domain_set', 'no' );
 		$this->apple_pay_verify_notice = '';
@@ -123,7 +123,7 @@ class WC_Stripe_Apple_Pay_Registration {
 	 */
 	private function verify_hosted_domain_association_file_is_up_to_date() {
 		// Contents of domain association file from plugin dir.
-		$new_contents = @file_get_contents( WC_STRIPE_PLUGIN_PATH . '/' . self::DOMAIN_ASSOCIATION_FILE_NAME ); // @codingStandardsIgnoreLine
+		$new_contents = @file_get_contents( WC_MONILYPAY_PLUGIN_PATH . '/' . self::DOMAIN_ASSOCIATION_FILE_NAME ); // @codingStandardsIgnoreLine
 		// Get file contents from local path and remote URL and check if either of which matches.
 		$fullpath        = untrailingslashit( ABSPATH ) . '/' . self::DOMAIN_ASSOCIATION_FILE_DIR . '/' . self::DOMAIN_ASSOCIATION_FILE_NAME;
 		$local_contents  = @file_get_contents( $fullpath ); // @codingStandardsIgnoreLine
@@ -146,12 +146,12 @@ class WC_Stripe_Apple_Pay_Registration {
 
 		if ( ! file_exists( $well_known_dir ) ) {
 			if ( ! @mkdir( $well_known_dir, 0755 ) ) { // @codingStandardsIgnoreLine
-				return __( 'Unable to create domain association folder to domain root.', 'woocommerce-gateway-stripe' );
+				return __( 'Unable to create domain association folder to domain root.', 'woocommerce-gateway-monilypay' );
 			}
 		}
 
-		if ( ! @copy( WC_STRIPE_PLUGIN_PATH . '/' . self::DOMAIN_ASSOCIATION_FILE_NAME, $fullpath ) ) { // @codingStandardsIgnoreLine
-			return __( 'Unable to copy domain association file to domain root.', 'woocommerce-gateway-stripe' );
+		if ( ! @copy( WC_MONILYPAY_PLUGIN_PATH . '/' . self::DOMAIN_ASSOCIATION_FILE_NAME, $fullpath ) ) { // @codingStandardsIgnoreLine
+			return __( 'Unable to copy domain association file to domain root.', 'woocommerce-gateway-monilypay' );
 		}
 	}
 
@@ -170,13 +170,13 @@ class WC_Stripe_Apple_Pay_Registration {
 
 		if ( isset( $error_message ) ) {
 			$url = get_site_url() . '/' . self::DOMAIN_ASSOCIATION_FILE_DIR . '/' . self::DOMAIN_ASSOCIATION_FILE_NAME;
-			WC_Stripe_Logger::log(
+			WC_Monilypay_Logger::log(
 				'Error: ' . $error_message . ' ' .
 				/* translators: expected domain association file URL */
-				sprintf( __( 'To enable Apple Pay, domain association file must be hosted at %s.', 'woocommerce-gateway-stripe' ), $url )
+				sprintf( __( 'To enable Apple Pay, domain association file must be hosted at %s.', 'woocommerce-gateway-monilypay' ), $url )
 			);
 		} else {
-			WC_Stripe_Logger::log( __( 'Domain association file updated.', 'woocommerce-gateway-stripe' ) );
+			WC_Monilypay_Logger::log( __( 'Domain association file updated.', 'woocommerce-gateway-monilypay' ) );
 		}
 	}
 
@@ -214,7 +214,7 @@ class WC_Stripe_Apple_Pay_Registration {
 			return;
 		}
 
-		$path = WC_STRIPE_PLUGIN_PATH . '/' . self::DOMAIN_ASSOCIATION_FILE_NAME;
+		$path = WC_MONILYPAY_PLUGIN_PATH . '/' . self::DOMAIN_ASSOCIATION_FILE_NAME;
 		header( 'Content-Type: text/plain;charset=utf-8' );
 		echo esc_html( file_get_contents( $path ) );
 		exit;
@@ -229,7 +229,7 @@ class WC_Stripe_Apple_Pay_Registration {
 	 */
 	private function make_domain_registration_request( $secret_key ) {
 		if ( empty( $secret_key ) ) {
-			throw new Exception( __( 'Unable to verify domain - missing secret key.', 'woocommerce-gateway-stripe' ) );
+			throw new Exception( __( 'Unable to verify domain - missing secret key.', 'woocommerce-gateway-monilypay' ) );
 		}
 
 		$endpoint = 'https://api.stripe.com/v1/apple_pay/domains';
@@ -254,7 +254,7 @@ class WC_Stripe_Apple_Pay_Registration {
 
 		if ( is_wp_error( $response ) ) {
 			/* translators: error message */
-			throw new Exception( sprintf( __( 'Unable to verify domain - %s', 'woocommerce-gateway-stripe' ), $response->get_error_message() ) );
+			throw new Exception( sprintf( __( 'Unable to verify domain - %s', 'woocommerce-gateway-monilypay' ), $response->get_error_message() ) );
 		}
 
 		if ( 200 !== $response['response']['code'] ) {
@@ -263,7 +263,7 @@ class WC_Stripe_Apple_Pay_Registration {
 			$this->apple_pay_verify_notice = $parsed_response->error->message;
 
 			/* translators: error message */
-			throw new Exception( sprintf( __( 'Unable to verify domain - %s', 'woocommerce-gateway-stripe' ), $parsed_response->error->message ) );
+			throw new Exception( sprintf( __( 'Unable to verify domain - %s', 'woocommerce-gateway-monilypay' ), $parsed_response->error->message ) );
 		}
 	}
 
@@ -286,9 +286,9 @@ class WC_Stripe_Apple_Pay_Registration {
 			$this->stripe_settings['apple_pay_domain_set']      = 'yes';
 			$this->apple_pay_domain_set                         = true;
 
-			update_option( 'woocommerce_stripe_settings', $this->stripe_settings );
+			update_option( 'woocommerce_monilypay_settings', $this->stripe_settings );
 
-			WC_Stripe_Logger::log( 'Your domain has been verified with Apple Pay!' );
+			WC_Monilypay_Logger::log( 'Your domain has been verified with Apple Pay!' );
 
 			return true;
 
@@ -297,9 +297,9 @@ class WC_Stripe_Apple_Pay_Registration {
 			$this->stripe_settings['apple_pay_domain_set']      = 'no';
 			$this->apple_pay_domain_set                         = false;
 
-			update_option( 'woocommerce_stripe_settings', $this->stripe_settings );
+			update_option( 'woocommerce_monilypay_settings', $this->stripe_settings );
 
-			WC_Stripe_Logger::log( 'Error: ' . $e->getMessage() );
+			WC_Monilypay_Logger::log( 'Error: ' . $e->getMessage() );
 
 			return false;
 		}
@@ -329,7 +329,7 @@ class WC_Stripe_Apple_Pay_Registration {
 		$verification_complete = $this->register_domain_with_apple( $secret_key );
 
 		// Show/hide notes if necessary.
-		WC_Stripe_Inbox_Notes::notify_on_apple_pay_domain_verification( $verification_complete );
+		WC_Monilypay_Inbox_Notes::notify_on_apple_pay_domain_verification( $verification_complete );
 	}
 
 	/**
@@ -391,11 +391,11 @@ class WC_Stripe_Apple_Pay_Registration {
 				'title' => [],
 			],
 		];
-		$verification_failed_without_error = __( 'Apple Pay domain verification failed.', 'woocommerce-gateway-stripe' );
-		$verification_failed_with_error    = __( 'Apple Pay domain verification failed with the following error:', 'woocommerce-gateway-stripe' );
+		$verification_failed_without_error = __( 'Apple Pay domain verification failed.', 'woocommerce-gateway-monilypay' );
+		$verification_failed_with_error    = __( 'Apple Pay domain verification failed with the following error:', 'woocommerce-gateway-monilypay' );
 		$check_log_text                    = sprintf(
 			/* translators: 1) HTML anchor open tag 2) HTML anchor closing tag */
-			esc_html__( 'Please check the %1$slogs%2$s for more details on this issue. Logging must be enabled to see recorded logs.', 'woocommerce-gateway-stripe' ),
+			esc_html__( 'Please check the %1$slogs%2$s for more details on this issue. Logging must be enabled to see recorded logs.', 'woocommerce-gateway-monilypay' ),
 			'<a href="' . admin_url( 'admin.php?page=wc-status&tab=logs' ) . '">',
 			'</a>'
 		);
@@ -414,4 +414,4 @@ class WC_Stripe_Apple_Pay_Registration {
 	}
 }
 
-new WC_Stripe_Apple_Pay_Registration();
+new WC_Monilypay_Apple_Pay_Registration();

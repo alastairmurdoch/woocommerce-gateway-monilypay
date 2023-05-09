@@ -50,7 +50,7 @@ export const InlineCard = ( {
 				<label htmlFor="wc-stripe-inline-card-element">
 					{ __(
 						'Credit Card Information',
-						'woocommerce-gateway-stripe'
+						'woocommerce-gateway-monilypay'
 					) }
 				</label>
 			</div>
@@ -114,7 +114,7 @@ export const CardElements = ( {
 					onBlur={ () => cardNumOnActive( isEmpty.cardNumber ) }
 				/>
 				<label htmlFor="wc-stripe-card-number-element">
-					{ __( 'Card Number', 'woocommerce-gateway-stripe' ) }
+					{ __( 'Card Number', 'woocommerce-gateway-monilypay' ) }
 				</label>
 				<ValidationInputError errorMessage={ cardNumError } />
 			</div>
@@ -131,7 +131,7 @@ export const CardElements = ( {
 					id="wc-stripe-card-expiry-element"
 				/>
 				<label htmlFor="wc-stripe-card-expiry-element">
-					{ __( 'Expiry Date', 'woocommerce-gateway-stripe' ) }
+					{ __( 'Expiry Date', 'woocommerce-gateway-monilypay' ) }
 				</label>
 				<ValidationInputError errorMessage={ cardExpiryError } />
 			</div>
@@ -145,7 +145,7 @@ export const CardElements = ( {
 					id="wc-stripe-card-code-element"
 				/>
 				<label htmlFor="wc-stripe-card-code-element">
-					{ __( 'CVV/CVC', 'woocommerce-gateway-stripe' ) }
+					{ __( 'CVV/CVC', 'woocommerce-gateway-monilypay' ) }
 				</label>
 				<ValidationInputError errorMessage={ cardCvcError } />
 			</div>

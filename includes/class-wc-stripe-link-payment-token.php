@@ -11,9 +11,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Representation of a payment token for Link.
  *
- * @class    WC_Payment_Token_Link
+ * @class    WC_Monilypay_Payment_Token_Link
  */
-class WC_Payment_Token_Link extends WC_Payment_Token {
+class WC_Monilypay_Payment_Token_Link extends WC_Payment_Token {
 
 	/**
 	 * Stores payment type.
@@ -40,7 +40,7 @@ class WC_Payment_Token_Link extends WC_Payment_Token {
 	public function get_display_name( $deprecated = '' ) {
 		$display = sprintf(
 			/* translators: customer email */
-			__( 'Stripe Link email %s', 'woocommerce-gateway-stripe' ),
+			__( 'Stripe Link email %s', 'woocommerce-gateway-monilypay' ),
 			$this->get_email()
 		);
 

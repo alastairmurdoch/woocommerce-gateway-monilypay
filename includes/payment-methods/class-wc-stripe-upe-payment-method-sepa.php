@@ -6,11 +6,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * SEPA Payment Method class extending UPE base class
  */
-class WC_Stripe_UPE_Payment_Method_Sepa extends WC_Stripe_UPE_Payment_Method {
+class WC_Monilypay_UPE_Payment_Method_Sepa extends WC_Monilypay_UPE_Payment_Method {
 
 	const STRIPE_ID = 'sepa_debit';
 
-	const LPM_GATEWAY_CLASS = WC_Gateway_Stripe_Sepa::class;
+	const LPM_GATEWAY_CLASS = WC_Gateway_Monilypay_Sepa::class;
 
 	/**
 	 * Constructor for SEPA payment method
@@ -20,13 +20,13 @@ class WC_Stripe_UPE_Payment_Method_Sepa extends WC_Stripe_UPE_Payment_Method {
 	public function __construct() {
 		parent::__construct();
 		$this->stripe_id            = self::STRIPE_ID;
-		$this->title                = __( 'Pay with SEPA Direct Debit', 'woocommerce-gateway-stripe' );
+		$this->title                = __( 'Pay with SEPA Direct Debit', 'woocommerce-gateway-monilypay' );
 		$this->is_reusable          = true;
 		$this->supported_currencies = [ 'EUR' ];
-		$this->label                = __( 'SEPA Direct Debit', 'woocommerce-gateway-stripe' );
+		$this->label                = __( 'SEPA Direct Debit', 'woocommerce-gateway-monilypay' );
 		$this->description          = __(
 			'Reach 500 million customers and over 20 million businesses across the European Union.',
-			'woocommerce-gateway-stripe'
+			'woocommerce-gateway-monilypay'
 		);
 	}
 

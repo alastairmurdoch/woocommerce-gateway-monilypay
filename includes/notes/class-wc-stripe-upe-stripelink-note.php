@@ -14,13 +14,13 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Class WC_Stripe_UPE_StripeLink_Note
  */
-class WC_Stripe_UPE_StripeLink_Note {
+class WC_Monilypay_UPE_StripeLink_Note {
 	use NoteTraits;
 
 	/**
 	 * Name of the note for use in the database.
 	 */
-	const NOTE_NAME = 'wc-stripe-upe-stripelink-note';
+	const NOTE_NAME = 'wc-monilypay-upe-stripelink-note';
 
 	/**
 	 * Link to Stripe Link documentation.
@@ -34,15 +34,15 @@ class WC_Stripe_UPE_StripeLink_Note {
 		$note_class = self::get_note_class();
 		$note       = new $note_class();
 
-		$note->set_title( __( 'Increase conversion at checkout', 'woocommerce-gateway-stripe' ) );
-		$note->set_content( __( 'Reduce cart abandonment and create a frictionless checkout experience with Link by Stripe. Link autofills your customer’s payment and shipping details so they can check out in just six seconds with the Link optimized experience.', 'woocommerce-gateway-stripe' ) );
+		$note->set_title( __( 'Increase conversion at checkout', 'woocommerce-gateway-monilypay' ) );
+		$note->set_content( __( 'Reduce cart abandonment and create a frictionless checkout experience with Link by Stripe. Link autofills your customer’s payment and shipping details so they can check out in just six seconds with the Link optimized experience.', 'woocommerce-gateway-monilypay' ) );
 
 		$note->set_type( $note_class::E_WC_ADMIN_NOTE_INFORMATIONAL );
 		$note->set_name( self::NOTE_NAME );
-		$note->set_source( 'woocommerce-gateway-stripe' );
+		$note->set_source( 'woocommerce-gateway-monilypay' );
 		$note->add_action(
 			self::NOTE_NAME,
-			__( 'Set up now', 'woocommerce-gateway-stripe' ),
+			__( 'Set up now', 'woocommerce-gateway-monilypay' ),
 			self::NOTE_DOCUMENTATION_URL,
 			$note_class::E_WC_ADMIN_NOTE_UNACTIONED,
 			true
@@ -67,24 +67,24 @@ class WC_Stripe_UPE_StripeLink_Note {
 	/**
 	 * Init Link payment method notification
 	 *
-	 * @param WC_Stripe_Payment_Gateway $gateway
+	 * @param WC_Monilypay_Payment_Gateway $gateway
 	 *
 	 * @return void
 	 * @throws \Automattic\WooCommerce\Admin\Notes\NotesUnavailableException
 	 */
-	public static function init( WC_Stripe_Payment_Gateway $gateway ) {
-		if ( ! WC_Stripe_Feature_Flags::is_upe_checkout_enabled() ) {
+	public static function init( WC_Monilypay_Payment_Gateway $gateway ) {
+		if ( ! WC_Monilypay_Feature_Flags::is_upe_checkout_enabled() ) {
 			return;
 		}
 
 		// Check if Link payment is available.
 		$available_upe_payment_methods = $gateway->get_upe_available_payment_methods();
 
-		if ( ! in_array( WC_Stripe_UPE_Payment_Method_Link::STRIPE_ID, $available_upe_payment_methods, true ) ) {
+		if ( ! in_array( WC_Monilypay_UPE_Payment_Method_Link::STRIPE_ID, $available_upe_payment_methods, true ) ) {
 			return;
 		}
 
-		if ( ! is_a( $gateway, 'WC_Stripe_UPE_Payment_Gateway' ) ) {
+		if ( ! is_a( $gateway, 'WC_Monilypay_UPE_Payment_Gateway' ) ) {
 			return;
 		}
 
@@ -97,8 +97,8 @@ class WC_Stripe_UPE_StripeLink_Note {
 		$enabled_payment_methods = $gateway->get_upe_enabled_at_checkout_payment_method_ids();
 		// If card payment method is not enabled, skip. If Link payment method is enabled, skip.
 		if (
-			! in_array( WC_Stripe_UPE_Payment_Method_CC::STRIPE_ID, $enabled_payment_methods, true ) ||
-			in_array( WC_Stripe_UPE_Payment_Method_Link::STRIPE_ID, $enabled_payment_methods, true )
+			! in_array( WC_Monilypay_UPE_Payment_Method_CC::STRIPE_ID, $enabled_payment_methods, true ) ||
+			in_array( WC_Monilypay_UPE_Payment_Method_Link::STRIPE_ID, $enabled_payment_methods, true )
 		) {
 			return;
 		}

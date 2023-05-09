@@ -54,6 +54,8 @@ export const AccountKeysConnectionStatus = ( { formRef } ) => {
 
 		let publishableKey;
 		let secretKey;
+		let monilypayKey;
+		let monilypayAccountId;
 
 		const isTestingLiveConnection =
 			keysToSave.publishable_key && keysToSave.secret_key;
@@ -61,7 +63,10 @@ export const AccountKeysConnectionStatus = ( { formRef } ) => {
 			keysToSave.test_publishable_key && keysToSave.test_secret_key;
 		if ( isTestingLiveConnection ) {
 			publishableKey = keysToSave.publishable_key;
-			secretKey = keysToSave.secret_key;
+			secretKey = keysToSave.secret_key;		
+			monilypayKey = keysToSave.test_monilypay_key
+			monilypayAccountId = keysToSave.test_monilypay_account_id
+				
 			if (
 				! publishableKey.startsWith( 'pk_live_' ) ||
 				! (
@@ -75,7 +80,7 @@ export const AccountKeysConnectionStatus = ( { formRef } ) => {
 				dispatch( 'core/notices' ).createErrorNotice(
 					__(
 						'Only live account keys should be entered.',
-						'woocommerce-gateway-stripe'
+						'woocommerce-gateway-monilypay'
 					)
 				);
 				return;
@@ -83,6 +88,9 @@ export const AccountKeysConnectionStatus = ( { formRef } ) => {
 		} else if ( isTestingTestConnection ) {
 			publishableKey = keysToSave.test_publishable_key;
 			secretKey = keysToSave.test_secret_key;
+			monilypayKey = keysToSave.test_monilypay_key
+			monilypayAccountId = keysToSave.test_monilypay_account_id
+
 			if (
 				! publishableKey.startsWith( 'pk_test_' ) ||
 				! (
@@ -96,7 +104,7 @@ export const AccountKeysConnectionStatus = ( { formRef } ) => {
 				dispatch( 'core/notices' ).createErrorNotice(
 					__(
 						'Only test account keys should be entered.',
-						'woocommerce-gateway-stripe'
+						'woocommerce-gateway-monilypay'
 					)
 				);
 				return;
@@ -108,9 +116,10 @@ export const AccountKeysConnectionStatus = ( { formRef } ) => {
 		}
 
 		try {
+			//TODO: need to pull account ID from somewhere
 			const stripe = await loadStripe( publishableKey );
 			const createTokenResult = await stripe.createToken( 'pii', {
-				personal_id_number: 'connection_test',
+				personal_id_number: 'connection_test'
 			} );
 
 			const tokenId = createTokenResult?.token?.id;
@@ -119,7 +128,8 @@ export const AccountKeysConnectionStatus = ( { formRef } ) => {
 				updateIsValidAccountKeys( false );
 				return;
 			}
-
+			
+			//TODO: replace this witgh MK_ key api call
 			const tokenResult = await apiFetch( {
 				path: `${ NAMESPACE }/tokens/${ tokenId }`,
 				method: 'GET',
@@ -140,7 +150,7 @@ export const AccountKeysConnectionStatus = ( { formRef } ) => {
 				dispatch( 'core/notices' ).createErrorNotice(
 					__(
 						'Live account keys must use a HTTPS connection.',
-						'woocommerce-gateway-stripe'
+						'woocommerce-gateway-monilypay'
 					)
 				);
 			}
@@ -169,7 +179,7 @@ export const AccountKeysConnectionStatus = ( { formRef } ) => {
 					<SpanConnectionText>
 						{ __(
 							'Testing connection…',
-							'woocommerce-gateway-stripe'
+							'woocommerce-gateway-monilypay'
 						) }
 					</SpanConnectionText>
 				</div>
@@ -178,7 +188,7 @@ export const AccountKeysConnectionStatus = ( { formRef } ) => {
 				<SpanConnectionLink
 					onClick={ () => handleTestConnection( formRef ) }
 				>
-					{ __( 'Test connection', 'woocommerce-gateway-stripe' ) }
+					{ __( 'Test connection', 'woocommerce-gateway-monilypay' ) }
 				</SpanConnectionLink>
 			) }
 			{ ! isTesting && isValid === true && (
@@ -197,13 +207,13 @@ export const AccountKeysConnectionStatus = ( { formRef } ) => {
 					<SpanConnectionText>
 						{ __(
 							'Connection successful!',
-							'woocommerce-gateway-stripe'
+							'woocommerce-gateway-monilypay'
 						) }
 					</SpanConnectionText>
 					<SpanConnectionLink
 						onClick={ () => handleTestConnection( formRef ) }
 					>
-						{ __( 'Test again', 'woocommerce-gateway-stripe' ) }
+						{ __( 'Test again', 'woocommerce-gateway-monilypay' ) }
 					</SpanConnectionLink>
 				</div>
 			) }
@@ -223,13 +233,13 @@ export const AccountKeysConnectionStatus = ( { formRef } ) => {
 					<SpanConnectionText>
 						{ __(
 							"We couldn't connect.",
-							'woocommerce-gateway-stripe'
+							'woocommerce-gateway-monilypay'
 						) }
 					</SpanConnectionText>
 					<SpanConnectionLink
 						onClick={ () => handleTestConnection( formRef ) }
 					>
-						{ __( 'Try again', 'woocommerce-gateway-stripe' ) }
+						{ __( 'Try again', 'woocommerce-gateway-monilypay' ) }
 					</SpanConnectionLink>
 				</div>
 			) }

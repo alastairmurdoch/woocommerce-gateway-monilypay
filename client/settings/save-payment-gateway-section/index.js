@@ -20,7 +20,7 @@ const SavePaymentGatewaySection = () => {
 				disabled={ isSaving || isLoading }
 				onClick={ savePaymentGateway }
 			>
-				{ __( 'Save changes', 'woocommerce-gateway-stripe' ) }
+				{ __( 'Save changes', 'woocommerce-gateway-monilypay' ) }
 			</Button>
 		</SaveSectionWrapper>
 	);

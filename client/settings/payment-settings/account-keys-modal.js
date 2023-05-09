@@ -7,9 +7,13 @@ import {
 	useAccountKeys,
 	useAccountKeysPublishableKey,
 	useAccountKeysSecretKey,
+	useAccountKeysMonilypayKey,
+	useAccountKeysMonilypayAccountId,
 	useAccountKeysWebhookSecret,
 	useAccountKeysTestPublishableKey,
 	useAccountKeysTestSecretKey,
+	useAccountKeysTestMonilypayKey,
+	useAccountKeysTestMonilypayAccountId,
 	useAccountKeysTestWebhookSecret,
 } from 'wcstripe/data/account-keys';
 import ConfirmationModal from 'wcstripe/components/confirmation-modal';
@@ -24,10 +28,10 @@ const PublishableKey = () => {
 
 	return (
 		<TextControl
-			label={ __( 'Live publishable key', 'woocommerce-gateway-stripe' ) }
+			label={ __( 'Live publishable key', 'woocommerce-gateway-monilypay' ) }
 			help={ __(
 				'Only values starting with "pk_live_" will be saved.',
-				'woocommerce-gateway-stripe'
+				'woocommerce-gateway-monilypay'
 			) }
 			value={ value }
 			onChange={ ( val ) => setValue( val ) }
@@ -45,10 +49,10 @@ const TestPublishableKey = () => {
 
 	return (
 		<TextControl
-			label={ __( 'Test publishable key', 'woocommerce-gateway-stripe' ) }
+			label={ __( 'Test publishable key', 'woocommerce-gateway-monilypay' ) }
 			help={ __(
 				'Only values starting with "pk_test_" will be saved.',
-				'woocommerce-gateway-stripe'
+				'woocommerce-gateway-monilypay'
 			) }
 			value={ value }
 			onChange={ ( val ) => setValue( val ) }
@@ -65,15 +69,95 @@ const SecretKey = () => {
 	const [ value, setValue ] = useState( secretKey );
 	return (
 		<TextControl
-			label={ __( 'Live secret key', 'woocommerce-gateway-stripe' ) }
+			label={ __( 'Live secret key', 'woocommerce-gateway-monilypay' ) }
 			help={ __(
 				'Only values starting with "sk_live_" or "rk_live_" will be saved.',
-				'woocommerce-gateway-stripe'
+				'woocommerce-gateway-monilypay'
 			) }
 			value={ value }
 			onChange={ ( val ) => setValue( val ) }
 			disabled={ isSaving }
 			name="secret_key"
+			autoComplete="off"
+		/>
+	);
+};
+
+const MonilyPayKey = () => {
+	const [ monilypayKey ] = useAccountKeysMonilypayKey();
+	const { isSaving } = useAccountKeys();
+	const [ value, setValue ] = useState( monilypayKey );
+	return (
+		<TextControl
+			label={ __( 'Live MonilyPay key', 'woocommerce-gateway-monilypay' ) }
+			help={ __(
+				'Only values starting with "mk_live_" will be saved.',
+				'woocommerce-gateway-monilypay'
+			) }
+			value={ value }
+			onChange={ ( val ) => setValue( val ) }
+			disabled={ isSaving }
+			name="monilypay_key"
+			autoComplete="off"
+		/>
+	);
+};
+
+const MonilyPayAccountId = () => {
+	const [ monilypayAccountId ] = useAccountKeysMonilypayAccountId();
+	const { isSaving } = useAccountKeys();
+	const [ value, setValue ] = useState( monilypayAccountId );
+	return (
+		<TextControl
+			label={ __( 'Live MonilyPay AccountId', 'woocommerce-gateway-monilypay' ) }
+			help={ __(
+				'Only values starting with "acct_" will be saved.',
+				'woocommerce-gateway-monilypay'
+			) }
+			value={ value }
+			onChange={ ( val ) => setValue( val ) }
+			disabled={ isSaving }
+			name="monilypay_account_id"
+			autoComplete="off"
+		/>
+	);
+};
+
+const TestMonilypayAccountId = () => {
+	const [ monilypayTestAccountId ] = useAccountKeysTestMonilypayAccountId();
+	const { isSaving } = useAccountKeys();
+	const [ value, setValue ] = useState( monilypayTestAccountId );
+	return (
+		<TextControl
+			label={ __( 'Test MonilyPay AccountId', 'woocommerce-gateway-monilypay' ) }
+			help={ __(
+				'Only values starting with "acct_" will be saved.',
+				'woocommerce-gateway-monilypay'
+			) }
+			value={ value }
+			onChange={ ( val ) => setValue( val ) }
+			disabled={ isSaving }
+			name="test_monilypay_account_id"
+			autoComplete="off"
+		/>
+	);
+};
+
+const TestMonilypayKey = () => {
+	const [ testMonilypaykey ] = useAccountKeysTestMonilypayKey();
+	const { isSaving } = useAccountKeys();
+	const [ value, setValue ] = useState( testMonilypaykey );
+	return (
+		<TextControl
+			label={ __( 'Test MonilyPay key', 'woocommerce-gateway-monilypay' ) }
+			help={ __(
+				'Only values starting with "mk_test_" will be saved.',
+				'woocommerce-gateway-monilypay'
+			) }
+			value={ value }
+			onChange={ ( val ) => setValue( val ) }
+			disabled={ isSaving }
+			name="test_monilypay_key"
 			autoComplete="off"
 		/>
 	);
@@ -85,10 +169,10 @@ const TestSecretKey = () => {
 	const [ value, setValue ] = useState( testSecretKey );
 	return (
 		<TextControl
-			label={ __( 'Test secret key', 'woocommerce-gateway-stripe' ) }
+			label={ __( 'Test secret key', 'woocommerce-gateway-monilypay' ) }
 			help={ __(
 				'Only values starting with "sk_test_" or "rk_test_" will be saved.',
-				'woocommerce-gateway-stripe'
+				'woocommerce-gateway-monilypay'
 			) }
 			value={ value }
 			onChange={ ( val ) => setValue( val ) }
@@ -105,10 +189,10 @@ const WebhookSecret = () => {
 	const [ value, setValue ] = useState( webhookSecret );
 	return (
 		<TextControl
-			label={ __( 'Webhook secret', 'woocommerce-gateway-stripe' ) }
+			label={ __( 'Webhook secret', 'woocommerce-gateway-monilypay' ) }
 			help={ __(
-				'Get your webhook signing secret from the webhooks section in your Stripe account.',
-				'woocommerce-gateway-stripe'
+				'Get your webhook signing secret from the webhooks section in your MonilyPay account.',
+				'woocommerce-gateway-monilypay'
 			) }
 			value={ value }
 			onChange={ ( val ) => setValue( val ) }
@@ -125,10 +209,10 @@ const TestWebhookSecret = () => {
 	const [ value, setValue ] = useState( testWebhookSecret );
 	return (
 		<TextControl
-			label={ __( 'Test Webhook secret', 'woocommerce-gateway-stripe' ) }
+			label={ __( 'Test Webhook secret', 'woocommerce-gateway-monilypay' ) }
 			help={ __(
-				'Get your webhook signing secret from the webhooks section in your Stripe account.',
-				'woocommerce-gateway-stripe'
+				'Get your webhook signing secret from the webhooks section in your MonilyPay account.',
+				'woocommerce-gateway-monilypay'
 			) }
 			value={ value }
 			onChange={ ( val ) => setValue( val ) }
@@ -144,6 +228,8 @@ const Form = ( { formRef, testMode } ) => {
 		<form ref={ formRef }>
 			{ testMode ? <TestPublishableKey /> : <PublishableKey /> }
 			{ testMode ? <TestSecretKey /> : <SecretKey /> }
+			{ testMode ? <TestMonilypayKey /> : <MonilyPayKey /> }			
+			{ testMode ? <TestMonilypayAccountId /> : <MonilyPayAccountId /> }	
 			<WebhookInformation />
 			{ testMode ? <TestWebhookSecret /> : <WebhookSecret /> }
 		</form>
@@ -167,7 +253,7 @@ const StyledConfirmationModal = styled( ConfirmationModal )`
 		margin: 0 -24px 24px;
 	}
 	.wcstripe-inline-notice {
-		margin-top: -24px;
+		margin-top: 0;
 		margin-bottom: 0;
 	}
 	.wcstripe-confirmation-modal__separator {
@@ -216,12 +302,16 @@ export const AccountKeysModal = ( {
 		const savingEmptyKeys =
 			! keysToSave.publishable_key &&
 			! keysToSave.secret_key &&
+			! keysToSave.monilypay_key &&	
+			! keysToSave.monilypay_account_id &&	
 			! keysToSave.test_publishable_key &&
-			! keysToSave.test_secret_key;
+			! keysToSave.test_secret_key &&
+			! keysToSave.test_monilypay_key &&
+			! keysToSave.test_monilypay_account_id;
 		const noLiveKeysSaved =
-			! accountKeys.publishable_key && ! accountKeys.secret_key;
+			! accountKeys.publishable_key && ! accountKeys.secret_key && ! accountKeys.monilypay_key && ! accountKeys.monilypay_account_id;
 		const noTestKeysSaved =
-			! accountKeys.test_publishable_key && ! accountKeys.test_secret_key;
+			! accountKeys.test_publishable_key && ! accountKeys.test_secret_key && ! accountKeys.test_monilypay_key && ! accountKeys.test_monilypay_account_id;
 		if (
 			savingEmptyKeys &&
 			( ( testMode && noLiveKeysSaved ) ||
@@ -271,7 +361,7 @@ export const AccountKeysModal = ( {
 							onClick={ onCloseHelper }
 							disabled={ isDisabled }
 						>
-							{ __( 'Cancel', 'woocommerce-gateway-stripe' ) }
+							{ __( 'Cancel', 'woocommerce-gateway-monilypay' ) }
 						</Button>
 						<Button
 							className="ml-unit-20"
@@ -285,11 +375,11 @@ export const AccountKeysModal = ( {
 							{ testMode
 								? __(
 										'Save test keys',
-										'woocommerce-gateway-stripe'
+										'woocommerce-gateway-monilypay'
 								  )
 								: __(
 										'Save live keys',
-										'woocommerce-gateway-stripe'
+										'woocommerce-gateway-monilypay'
 								  ) }
 						</Button>
 					</div>
@@ -299,11 +389,11 @@ export const AccountKeysModal = ( {
 				testMode
 					? __(
 							'Edit test account keys & webhooks',
-							'woocommerce-gateway-stripe'
+							'woocommerce-gateway-monilypay'
 					  )
 					: __(
 							'Edit live account keys & webhooks',
-							'woocommerce-gateway-stripe'
+							'woocommerce-gateway-monilypay'
 					  )
 			}
 		>
@@ -312,7 +402,7 @@ export const AccountKeysModal = ( {
 					? interpolateComponents( {
 							mixedString: __(
 								'To enable the test mode, get the test account keys from your {{accountLink}}Stripe Account{{/accountLink}}.',
-								'woocommerce-gateway-stripe'
+								'woocommerce-gateway-monilypay'
 							),
 							components: {
 								accountLink: (
@@ -324,7 +414,7 @@ export const AccountKeysModal = ( {
 					: interpolateComponents( {
 							mixedString: __(
 								'To enable the live mode, get the account keys from your {{accountLink}}Stripe Account{{/accountLink}}.',
-								'woocommerce-gateway-stripe'
+								'woocommerce-gateway-monilypay'
 							),
 							components: {
 								accountLink: (
@@ -340,12 +430,12 @@ export const AccountKeysModal = ( {
 				tabs={ [
 					{
 						name: 'live',
-						title: __( 'Live', 'woocommerce-gateway-stripe' ),
+						title: __( 'Live', 'woocommerce-gateway-monilypay' ),
 						className: 'live-tab',
 					},
 					{
 						name: 'test',
-						title: __( 'Test', 'woocommerce-gateway-stripe' ),
+						title: __( 'Test', 'woocommerce-gateway-monilypay' ),
 						className: 'test-tab',
 					},
 				] }

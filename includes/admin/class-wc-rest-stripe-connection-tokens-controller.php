@@ -1,6 +1,6 @@
 <?php
 /**
- * Class WC_REST_Stripe_Connection_Tokens_Controller
+ * Class WC_REST_Monilypay_Connection_Tokens_Controller
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -8,28 +8,28 @@ defined( 'ABSPATH' ) || exit;
 /**
  * REST controller for connection tokens.
  */
-class WC_REST_Stripe_Connection_Tokens_Controller extends WC_Stripe_REST_Base_Controller {
+class WC_REST_Monilypay_Connection_Tokens_Controller extends WC_Monilypay_REST_Base_Controller {
 
 	/**
 	 * Endpoint path.
 	 *
 	 * @var string
 	 */
-	protected $rest_base = 'wc_stripe/connection_tokens';
+	protected $rest_base = 'wc_monilypay/connection_tokens';
 
 	/**
 	 * Stripe payment gateway.
 	 *
-	 * @var WC_Gateway_Stripe
+	 * @var WC_Gateway_Monilypay
 	 */
 	private $gateway;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param WC_Gateway_Stripe $gateway Stripe payment gateway.
+	 * @param WC_Gateway_Monilypay $gateway Stripe payment gateway.
 	 */
-	public function __construct( WC_Gateway_Stripe $gateway ) {
+	public function __construct( WC_Gateway_Monilypay $gateway ) {
 		$this->gateway = $gateway;
 	}
 
@@ -54,10 +54,10 @@ class WC_REST_Stripe_Connection_Tokens_Controller extends WC_Stripe_REST_Base_Co
 	 * @param WP_REST_Request $request Full data about the request.
 	 */
 	public function create_token( $request ) {
-		$response = WC_Stripe_API::request( [], 'terminal/connection_tokens' );
+		$response = WC_Monilypay_API::request( [], 'terminal/connection_tokens' );
 
 		if ( ! isset( $response->secret ) ) {
-			return rest_ensure_response( new WP_Error( 'wc_stripe_no_token', __( 'Stripe API did not return a connection token.', 'woocommerce-gateway-stripe' ) ) );
+			return rest_ensure_response( new WP_Error( 'wc_monilypay_no_token', __( 'Stripe API did not return a connection token.', 'woocommerce-gateway-monilypay' ) ) );
 		}
 
 		$response->test_mode = $this->gateway->is_in_test_mode();

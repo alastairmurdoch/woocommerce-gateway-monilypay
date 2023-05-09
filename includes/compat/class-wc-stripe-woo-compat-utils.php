@@ -12,7 +12,7 @@ use Automattic\WooCommerce\Admin\Notes\WC_Admin_Notes;
 /**
  * Util class for handling compatibilities with different versions of WooCommerce core.
  */
-class WC_Stripe_Woo_Compat_Utils {
+class WC_Monilypay_Woo_Compat_Utils {
 	/**
 	 * Return non-deprecated class for instantiating WC-Admin notes.
 	 *

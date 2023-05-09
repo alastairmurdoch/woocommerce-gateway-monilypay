@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Trait for Pre-Orders compatibility.
  */
-trait WC_Stripe_Pre_Orders_Trait {
+trait WC_Monilypay_Pre_Orders_Trait {
 
 	/**
 	 * Initialize pre-orders hook.
@@ -173,7 +173,7 @@ trait WC_Stripe_Pre_Orders_Trait {
 
 			// We need a source on file to continue.
 			if ( empty( $prepared_source->customer ) || empty( $prepared_source->source ) ) {
-				throw new WC_Stripe_Exception( __( 'Unable to store payment details. Please try again.', 'woocommerce-gateway-stripe' ) );
+				throw new WC_Monilypay_Exception( __( 'Unable to store payment details. Please try again.', 'woocommerce-gateway-monilypay' ) );
 			}
 
 			// Setup the response early to allow later modifications.
@@ -199,9 +199,9 @@ trait WC_Stripe_Pre_Orders_Trait {
 
 			// Return thank you page redirect
 			return $response;
-		} catch ( WC_Stripe_Exception $e ) {
+		} catch ( WC_Monilypay_Exception $e ) {
 			wc_add_notice( $e->getLocalizedMessage(), 'error' );
-			WC_Stripe_Logger::log( 'Pre Orders Error: ' . $e->getMessage() );
+			WC_Monilypay_Logger::log( 'Pre Orders Error: ' . $e->getMessage() );
 
 			return [
 				'result'   => 'success',
@@ -237,16 +237,16 @@ trait WC_Stripe_Pre_Orders_Trait {
 
 				$order->set_transaction_id( $id );
 				/* translators: %s is the charge Id */
-				$order->update_status( 'failed', sprintf( __( 'Stripe charge awaiting authentication by user: %s.', 'woocommerce-gateway-stripe' ), $id ) );
+				$order->update_status( 'failed', sprintf( __( 'Stripe charge awaiting authentication by user: %s.', 'woocommerce-gateway-monilypay' ), $id ) );
 				if ( is_callable( [ $order, 'save' ] ) ) {
 					$order->save();
 				}
 
 				WC_Emails::instance();
 
-				do_action( 'wc_gateway_stripe_process_payment_authentication_required', $order );
+				do_action( 'WC_Gateway_Monilypay_process_payment_authentication_required', $order );
 
-				throw new WC_Stripe_Exception( print_r( $response, true ), $response->error->message );
+				throw new WC_Monilypay_Exception( print_r( $response, true ), $response->error->message );
 			} else {
 				// Successful
 				$this->process_response( end( $response->charges->data ), $order );
@@ -254,7 +254,7 @@ trait WC_Stripe_Pre_Orders_Trait {
 		} catch ( Exception $e ) {
 			$error_message = is_callable( [ $e, 'getLocalizedMessage' ] ) ? $e->getLocalizedMessage() : $e->getMessage();
 			/* translators: error message */
-			$order_note = sprintf( __( 'Stripe Transaction Failed (%s)', 'woocommerce-gateway-stripe' ), $error_message );
+			$order_note = sprintf( __( 'Stripe Transaction Failed (%s)', 'woocommerce-gateway-monilypay' ), $error_message );
 
 			// Mark order as failed if not already set,
 			// otherwise, make sure we add the order note so we can detect when someone fails to check out multiple times

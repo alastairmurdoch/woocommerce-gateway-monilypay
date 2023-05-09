@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 5.6.0
  */
-trait WC_Stripe_Subscriptions_Utilities_Trait {
+trait WC_Monilypay_Subscriptions_Utilities_Trait {
 
 	/**
 	 * Checks if subscriptions are enabled on the site.

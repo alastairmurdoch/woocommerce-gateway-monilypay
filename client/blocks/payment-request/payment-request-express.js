@@ -101,7 +101,7 @@ const PaymentRequestExpressComponent = ( {
 				isLoading={ isUpdatingPaymentRequest }
 				screenReaderLabel={ __(
 					'Loading payment request…',
-					'woocommerce-gateway-stripe'
+					'woocommerce-gateway-monilypay'
 				) }
 			>
 				<CustomButton
@@ -119,7 +119,7 @@ const PaymentRequestExpressComponent = ( {
 				isLoading={ isUpdatingPaymentRequest }
 				screenReaderLabel={ __(
 					'Loading payment request…',
-					'woocommerce-gateway-stripe'
+					'woocommerce-gateway-monilypay'
 				) }
 			>
 				<GooglePayButton
@@ -144,7 +144,7 @@ const PaymentRequestExpressComponent = ( {
 			isLoading={ isUpdatingPaymentRequest }
 			screenReaderLabel={ __(
 				'Loading payment request…',
-				'woocommerce-gateway-stripe'
+				'woocommerce-gateway-monilypay'
 			) }
 		>
 			<PaymentRequestButtonElement

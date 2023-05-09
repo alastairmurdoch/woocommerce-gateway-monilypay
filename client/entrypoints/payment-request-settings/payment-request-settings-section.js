@@ -34,7 +34,7 @@ const buttonSizeOptions = [
 		label: makeButtonSizeText(
 			__(
 				'Default {{helpText}}(40 px){{/helpText}}',
-				'woocommerce-gateway-stripe'
+				'woocommerce-gateway-monilypay'
 			)
 		),
 		value: 'default',
@@ -43,7 +43,7 @@ const buttonSizeOptions = [
 		label: makeButtonSizeText(
 			__(
 				'Medium {{helpText}}(48 px){{/helpText}}',
-				'woocommerce-gateway-stripe'
+				'woocommerce-gateway-monilypay'
 			)
 		),
 		value: 'medium',
@@ -52,7 +52,7 @@ const buttonSizeOptions = [
 		label: makeButtonSizeText(
 			__(
 				'Large {{helpText}}(56 px){{/helpText}}',
-				'woocommerce-gateway-stripe'
+				'woocommerce-gateway-monilypay'
 			)
 		),
 		value: 'large',
@@ -60,19 +60,19 @@ const buttonSizeOptions = [
 ];
 const buttonActionOptions = [
 	{
-		label: __( 'Only icon', 'woocommerce-gateway-stripe' ),
+		label: __( 'Only icon', 'woocommerce-gateway-monilypay' ),
 		value: 'default',
 	},
 	{
-		label: __( 'Buy', 'woocommerce-gateway-stripe' ),
+		label: __( 'Buy', 'woocommerce-gateway-monilypay' ),
 		value: 'buy',
 	},
 	{
-		label: __( 'Donate', 'woocommerce-gateway-stripe' ),
+		label: __( 'Donate', 'woocommerce-gateway-monilypay' ),
 		value: 'donate',
 	},
 	{
-		label: __( 'Book', 'woocommerce-gateway-stripe' ),
+		label: __( 'Book', 'woocommerce-gateway-monilypay' ),
 		value: 'book',
 	},
 ];
@@ -92,7 +92,7 @@ const buttonThemeOptions = [
 		label: makeButtonThemeText(
 			__(
 				'Dark {{br/}}{{helpText}}Recommended for white or light-colored backgrounds with high contrast.{{/helpText}}',
-				'woocommerce-gateway-stripe'
+				'woocommerce-gateway-monilypay'
 			)
 		),
 		value: 'dark',
@@ -101,7 +101,7 @@ const buttonThemeOptions = [
 		label: makeButtonThemeText(
 			__(
 				'Light {{br/}}{{helpText}}Recommended for dark or colored backgrounds with high contrast.{{/helpText}}',
-				'woocommerce-gateway-stripe'
+				'woocommerce-gateway-monilypay'
 			)
 		),
 		value: 'light',
@@ -110,7 +110,7 @@ const buttonThemeOptions = [
 		label: makeButtonThemeText(
 			__(
 				'Outline {{br/}}{{helpText}}Recommended for white or light-colored backgrounds with insufficient contrast.{{/helpText}}',
-				'woocommerce-gateway-stripe'
+				'woocommerce-gateway-monilypay'
 			)
 		),
 		value: 'light-outline',
@@ -161,7 +161,7 @@ const PaymentRequestsSettingsSection = () => {
 				<h4>
 					{ __(
 						'Show express checkouts on',
-						'woocommerce-gateway-stripe'
+						'woocommerce-gateway-monilypay'
 					) }
 				</h4>
 				<ul className="payment-request-settings__location">
@@ -175,7 +175,7 @@ const PaymentRequestsSettingsSection = () => {
 							onChange={ makeLocationChangeHandler( 'checkout' ) }
 							label={ __(
 								'Checkout',
-								'woocommerce-gateway-stripe'
+								'woocommerce-gateway-monilypay'
 							) }
 						/>
 					</li>
@@ -189,7 +189,7 @@ const PaymentRequestsSettingsSection = () => {
 							onChange={ makeLocationChangeHandler( 'product' ) }
 							label={ __(
 								'Product page',
-								'woocommerce-gateway-stripe'
+								'woocommerce-gateway-monilypay'
 							) }
 						/>
 					</li>
@@ -201,46 +201,46 @@ const PaymentRequestsSettingsSection = () => {
 								paymentRequestLocations.includes( 'cart' )
 							}
 							onChange={ makeLocationChangeHandler( 'cart' ) }
-							label={ __( 'Cart', 'woocommerce-gateway-stripe' ) }
+							label={ __( 'Cart', 'woocommerce-gateway-monilypay' ) }
 						/>
 					</li>
 				</ul>
 				<h4>
-					{ __( 'Call to action', 'woocommerce-gateway-stripe' ) }
+					{ __( 'Call to action', 'woocommerce-gateway-monilypay' ) }
 				</h4>
 				<RadioControl
 					className="payment-method-settings__cta-selection"
 					label={ __(
 						'Call to action',
-						'woocommerce-gateway-stripe'
+						'woocommerce-gateway-monilypay'
 					) }
 					// ideLabelFromVision
 					help={ __(
 						'Select a button label that fits best with the flow of purchase or payment experience on your store.',
-						'woocommerce-gateway-stripe'
+						'woocommerce-gateway-monilypay'
 					) }
 					selected={ buttonType }
 					options={ buttonActionOptions }
 					onChange={ setButtonType }
 				/>
-				<h4>{ __( 'Appearance', 'woocommerce-gateway-stripe' ) }</h4>
+				<h4>{ __( 'Appearance', 'woocommerce-gateway-monilypay' ) }</h4>
 				<RadioControl
 					help={ __(
 						'Note that larger buttons are more suitable for mobile use.',
-						'woocommerce-gateway-stripe'
+						'woocommerce-gateway-monilypay'
 					) }
-					label={ __( 'Size', 'woocommerce-gateway-stripe' ) }
+					label={ __( 'Size', 'woocommerce-gateway-monilypay' ) }
 					selected={ size }
 					options={ buttonSizeOptions }
 					onChange={ setSize }
 				/>
 				<RadioControl
-					label={ __( 'Theme', 'woocommerce-gateway-stripe' ) }
+					label={ __( 'Theme', 'woocommerce-gateway-monilypay' ) }
 					selected={ theme }
 					options={ buttonThemeOptions }
 					onChange={ setTheme }
 				/>
-				<p>{ __( 'Preview', 'woocommerce-gateway-stripe' ) }</p>
+				<p>{ __( 'Preview', 'woocommerce-gateway-monilypay' ) }</p>
 				<LoadableAccountSection numLines={ 7 }>
 					<Elements stripe={ stripePromise }>
 						<PaymentRequestButtonPreview />

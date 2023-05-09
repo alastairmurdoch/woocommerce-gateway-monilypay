@@ -4,22 +4,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class WC_Stripe_Webhook_State.
+ * Class WC_Monilypay_Webhook_State.
  *
  * Tracks the most recent successful and unsuccessful webhooks in test and live modes.
  *
  * @since 5.0.0
  */
-class WC_Stripe_Webhook_State {
-	const OPTION_LIVE_MONITORING_BEGAN_AT = 'wc_stripe_wh_monitor_began_at';
-	const OPTION_LIVE_LAST_SUCCESS_AT     = 'wc_stripe_wh_last_success_at';
-	const OPTION_LIVE_LAST_FAILURE_AT     = 'wc_stripe_wh_last_failure_at';
-	const OPTION_LIVE_LAST_ERROR          = 'wc_stripe_wh_last_error';
+class WC_Monilypay_Webhook_State {
+	const OPTION_LIVE_MONITORING_BEGAN_AT = 'wc_monilypay_wh_monitor_began_at';
+	const OPTION_LIVE_LAST_SUCCESS_AT     = 'wc_monilypay_wh_last_success_at';
+	const OPTION_LIVE_LAST_FAILURE_AT     = 'wc_monilypay_wh_last_failure_at';
+	const OPTION_LIVE_LAST_ERROR          = 'wc_monilypay_wh_last_error';
 
-	const OPTION_TEST_MONITORING_BEGAN_AT = 'wc_stripe_wh_test_monitor_began_at';
-	const OPTION_TEST_LAST_SUCCESS_AT     = 'wc_stripe_wh_test_last_success_at';
-	const OPTION_TEST_LAST_FAILURE_AT     = 'wc_stripe_wh_test_last_failure_at';
-	const OPTION_TEST_LAST_ERROR          = 'wc_stripe_wh_test_last_error';
+	const OPTION_TEST_MONITORING_BEGAN_AT = 'wc_monilypay_wh_test_monitor_began_at';
+	const OPTION_TEST_LAST_SUCCESS_AT     = 'wc_monilypay_wh_test_last_success_at';
+	const OPTION_TEST_LAST_FAILURE_AT     = 'wc_monilypay_wh_test_last_failure_at';
+	const OPTION_TEST_LAST_ERROR          = 'wc_monilypay_wh_test_last_error';
 
 	const VALIDATION_SUCCEEDED                 = 'validation_succeeded';
 	const VALIDATION_FAILED_EMPTY_HEADERS      = 'empty_headers';
@@ -36,7 +36,7 @@ class WC_Stripe_Webhook_State {
 	 * @return bool
 	 */
 	public static function get_testmode() {
-		$stripe_settings = get_option( 'woocommerce_stripe_settings', [] );
+		$stripe_settings = get_option( 'woocommerce_monilypay_settings', [] );
 		return ( ! empty( $stripe_settings['testmode'] ) && 'yes' === $stripe_settings['testmode'] ) ? true : false;
 	}
 
@@ -132,34 +132,34 @@ class WC_Stripe_Webhook_State {
 		$last_error = get_option( $option, false );
 
 		if ( self::VALIDATION_SUCCEEDED == $last_error ) {
-			return( __( 'No error', 'woocommerce-gateway-stripe' ) );
+			return( __( 'No error', 'woocommerce-gateway-monilypay' ) );
 		}
 
 		if ( self::VALIDATION_FAILED_EMPTY_HEADERS == $last_error ) {
-			return( __( 'The webhook was missing expected headers', 'woocommerce-gateway-stripe' ) );
+			return( __( 'The webhook was missing expected headers', 'woocommerce-gateway-monilypay' ) );
 		}
 
 		if ( self::VALIDATION_FAILED_EMPTY_BODY == $last_error ) {
-			return( __( 'The webhook was missing expected body', 'woocommerce-gateway-stripe' ) );
+			return( __( 'The webhook was missing expected body', 'woocommerce-gateway-monilypay' ) );
 		}
 
 		if ( self::VALIDATION_FAILED_USER_AGENT_INVALID == $last_error ) {
-			return( __( 'The webhook received did not come from Stripe', 'woocommerce-gateway-stripe' ) );
+			return( __( 'The webhook received did not come from Stripe', 'woocommerce-gateway-monilypay' ) );
 		}
 
 		if ( self::VALIDATION_FAILED_SIGNATURE_INVALID == $last_error ) {
-			return( __( 'The webhook signature was missing or was incorrectly formatted', 'woocommerce-gateway-stripe' ) );
+			return( __( 'The webhook signature was missing or was incorrectly formatted', 'woocommerce-gateway-monilypay' ) );
 		}
 
 		if ( self::VALIDATION_FAILED_TIMESTAMP_MISMATCH == $last_error ) {
-			return( __( 'The timestamp in the webhook differed more than five minutes from the site time', 'woocommerce-gateway-stripe' ) );
+			return( __( 'The timestamp in the webhook differed more than five minutes from the site time', 'woocommerce-gateway-monilypay' ) );
 		}
 
 		if ( self::VALIDATION_FAILED_SIGNATURE_MISMATCH == $last_error ) {
-			return( __( 'The webhook was not signed with the expected signing secret', 'woocommerce-gateway-stripe' ) );
+			return( __( 'The webhook was not signed with the expected signing secret', 'woocommerce-gateway-monilypay' ) );
 		}
 
-		return( __( 'Unknown error.', 'woocommerce-gateway-stripe' ) );
+		return( __( 'Unknown error.', 'woocommerce-gateway-monilypay' ) );
 	}
 
 	/**
@@ -182,9 +182,9 @@ class WC_Stripe_Webhook_State {
 			$message = sprintf(
 				$test_mode ?
 					/* translators: 1) date and time of last webhook received, e.g. 2020-06-28 10:30:50 UTC */
-					__( 'The most recent test webhook, timestamped %s, was processed successfully.', 'woocommerce-gateway-stripe' ) :
+					__( 'The most recent test webhook, timestamped %s, was processed successfully.', 'woocommerce-gateway-monilypay' ) :
 					/* translators: 1) date and time of last webhook received, e.g. 2020-06-28 10:30:50 UTC */
-					__( 'The most recent live webhook, timestamped %s, was processed successfully.', 'woocommerce-gateway-stripe' ),
+					__( 'The most recent live webhook, timestamped %s, was processed successfully.', 'woocommerce-gateway-monilypay' ),
 				gmdate( $date_format, $last_success_at )
 			);
 			return $message;
@@ -195,9 +195,9 @@ class WC_Stripe_Webhook_State {
 			$message = sprintf(
 				$test_mode ?
 					/* translators: 1) date and time webhook monitoring began, e.g. 2020-06-28 10:30:50 UTC */
-					__( 'No test webhooks have been received since monitoring began at %s.', 'woocommerce-gateway-stripe' ) :
+					__( 'No test webhooks have been received since monitoring began at %s.', 'woocommerce-gateway-monilypay' ) :
 					/* translators: 1) date and time webhook monitoring began, e.g. 2020-06-28 10:30:50 UTC */
-					__( 'No live webhooks have been received since monitoring began at %s.', 'woocommerce-gateway-stripe' ),
+					__( 'No live webhooks have been received since monitoring began at %s.', 'woocommerce-gateway-monilypay' ),
 				gmdate( $date_format, $monitoring_began_at )
 			);
 			return $message;
@@ -212,13 +212,13 @@ class WC_Stripe_Webhook_State {
 					 * translators: 2) reason webhook failed
 					 * translators: 3) date and time of last successful webhook e.g. 2020-05-28 10:30:50 UTC
 					 */
-					__( 'Warning: The most recent test webhook, received at %1$s, could not be processed. Reason: %2$s. (The last test webhook to process successfully was timestamped %3$s.)', 'woocommerce-gateway-stripe' ) :
+					__( 'Warning: The most recent test webhook, received at %1$s, could not be processed. Reason: %2$s. (The last test webhook to process successfully was timestamped %3$s.)', 'woocommerce-gateway-monilypay' ) :
 					/*
 					 * translators: 1) date and time of last failed webhook e.g. 2020-06-28 10:30:50 UTC
 					 * translators: 2) reason webhook failed
 					 * translators: 3) date and time of last successful webhook e.g. 2020-05-28 10:30:50 UTC
 					 */
-					__( 'Warning: The most recent live webhook, received at %1$s, could not be processed. Reason: %2$s. (The last live webhook to process successfully was timestamped %3$s.)', 'woocommerce-gateway-stripe' ),
+					__( 'Warning: The most recent live webhook, received at %1$s, could not be processed. Reason: %2$s. (The last live webhook to process successfully was timestamped %3$s.)', 'woocommerce-gateway-monilypay' ),
 				gmdate( $date_format, $last_failure_at ),
 				$last_error,
 				gmdate( $date_format, $last_success_at )
@@ -233,12 +233,12 @@ class WC_Stripe_Webhook_State {
 				 * translators: 2) reason webhook failed
 				 * translators: 3) date and time webhook monitoring began e.g. 2020-05-28 10:30:50 UTC
 				 */
-				__( 'Warning: The most recent test webhook, received at %1$s, could not be processed. Reason: %2$s. (No test webhooks have been processed successfully since monitoring began at %3$s.)', 'woocommerce-gateway-stripe' ) :
+				__( 'Warning: The most recent test webhook, received at %1$s, could not be processed. Reason: %2$s. (No test webhooks have been processed successfully since monitoring began at %3$s.)', 'woocommerce-gateway-monilypay' ) :
 				/* translators: 1) date and time of last failed webhook e.g. 2020-06-28 10:30:50 UTC
 				 * translators: 2) reason webhook failed
 				 * translators: 3) date and time webhook monitoring began e.g. 2020-05-28 10:30:50 UTC
 				 */
-				__( 'Warning: The most recent live webhook, received at %1$s, could not be processed. Reason: %2$s. (No live webhooks have been processed successfully since monitoring began at %3$s.)', 'woocommerce-gateway-stripe' ),
+				__( 'Warning: The most recent live webhook, received at %1$s, could not be processed. Reason: %2$s. (No live webhooks have been processed successfully since monitoring began at %3$s.)', 'woocommerce-gateway-monilypay' ),
 			gmdate( $date_format, $last_failure_at ),
 			$last_error,
 			gmdate( $date_format, $monitoring_began_at )

@@ -33,7 +33,7 @@ const PaymentMethodCapabilityStatusPill = ( { id, label } ) => {
 						/* translators: %s: a payment method name. */
 						__(
 							'%s requires activation in your {{stripeDashboardLink}}Stripe dashboard{{/stripeDashboardLink}}. Follow the instructions there and check back soon.',
-							'woocommerce-gateway-stripe'
+							'woocommerce-gateway-monilypay'
 						),
 						label
 					),
@@ -55,7 +55,7 @@ const PaymentMethodCapabilityStatusPill = ( { id, label } ) => {
 				<StyledPill>
 					{ __(
 						'Requires activation',
-						'woocommerce-gateway-stripe'
+						'woocommerce-gateway-monilypay'
 					) }
 				</StyledPill>
 			</Tooltip>

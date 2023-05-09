@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @since 5.6.0
  */
-class Allowed_Payment_Request_Button_Types_Update {
+class Allowed_Payment_Request_Button_Types_Update_Monilypay {
 	/**
 	 * Allowed_Payment_Request_Button_Types_Update constructor.
 	 */
@@ -76,6 +76,6 @@ class Allowed_Payment_Request_Button_Types_Update {
 	 * @return WC_Stripe_Payment_Gateway
 	 */
 	public function get_gateway() {
-		return woocommerce_gateway_stripe()->get_main_stripe_gateway();
+		return woocommerce_gateway_monilypay()->get_main_stripe_gateway();
 	}
 }

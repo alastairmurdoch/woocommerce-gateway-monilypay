@@ -4,13 +4,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class WC_Stripe_Webhook_Handler.
+ * Class WC_Monilypay_Webhook_Handler.
  *
  * Handles webhooks from Stripe on sources that are not immediately chargeable.
  *
  * @since 4.0.0
  */
-class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
+class WC_Monilypay_Webhook_Handler extends WC_Monilypay_Payment_Gateway {
 	/**
 	 * Is test mode active?
 	 *
@@ -33,7 +33,7 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 	 */
 	public function __construct() {
 		$this->retry_interval = 2;
-		$stripe_settings      = get_option( 'woocommerce_stripe_settings', [] );
+		$stripe_settings      = get_option( 'woocommerce_monilypay_settings', [] );
 		$this->testmode       = ( ! empty( $stripe_settings['testmode'] ) && 'yes' === $stripe_settings['testmode'] ) ? true : false;
 		$secret_key           = ( $this->testmode ? 'test_' : '' ) . 'webhook_secret';
 		$this->secret         = ! empty( $stripe_settings[ $secret_key ] ) ? $stripe_settings[ $secret_key ] : false;
@@ -43,7 +43,7 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 		// Get/set the time we began monitoring the health of webhooks by fetching it.
 		// This should be roughly the same as the activation time of the version of the
 		// plugin when this code first appears.
-		WC_Stripe_Webhook_State::get_monitoring_began_at();
+		WC_Monilypay_Webhook_State::get_monitoring_began_at();
 	}
 
 	/**
@@ -66,18 +66,18 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 
 		// Validate it to make sure it is legit.
 		$validation_result = $this->validate_request( $request_headers, $request_body );
-		if ( WC_Stripe_Webhook_State::VALIDATION_SUCCEEDED === $validation_result ) {
+		if ( WC_Monilypay_Webhook_State::VALIDATION_SUCCEEDED === $validation_result ) {
 			$this->process_webhook( $request_body );
 
 			$notification = json_decode( $request_body );
-			WC_Stripe_Webhook_State::set_last_webhook_success_at( $notification->created );
+			WC_Monilypay_Webhook_State::set_last_webhook_success_at( $notification->created );
 
 			status_header( 200 );
 			exit;
 		} else {
-			WC_Stripe_Logger::log( 'Incoming webhook failed validation: ' . print_r( $request_body, true ) );
-			WC_Stripe_Webhook_State::set_last_webhook_failure_at( time() );
-			WC_Stripe_Webhook_State::set_last_error_reason( $validation_result );
+			WC_Monilypay_Logger::log( 'Incoming webhook failed validation: ' . print_r( $request_body, true ) );
+			WC_Monilypay_Webhook_State::set_last_webhook_failure_at( time() );
+			WC_Monilypay_Webhook_State::set_last_error_reason( $validation_result );
 
 			// A webhook endpoint must return a 2xx HTTP status code to prevent future webhook
 			// delivery failures.
@@ -98,10 +98,10 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 	 */
 	public function validate_request( $request_headers, $request_body ) {
 		if ( empty( $request_headers ) ) {
-			return WC_Stripe_Webhook_State::VALIDATION_FAILED_EMPTY_HEADERS;
+			return WC_Monilypay_Webhook_State::VALIDATION_FAILED_EMPTY_HEADERS;
 		}
 		if ( empty( $request_body ) ) {
-			return WC_Stripe_Webhook_State::VALIDATION_FAILED_EMPTY_BODY;
+			return WC_Monilypay_Webhook_State::VALIDATION_FAILED_EMPTY_BODY;
 		}
 
 		if ( empty( $this->secret ) ) {
@@ -111,13 +111,13 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 		// Check for a valid signature.
 		$signature_format = '/^t=(?P<timestamp>\d+)(?P<signatures>(,v\d+=[a-z0-9]+){1,2})$/';
 		if ( empty( $request_headers['STRIPE-SIGNATURE'] ) || ! preg_match( $signature_format, $request_headers['STRIPE-SIGNATURE'], $matches ) ) {
-			return WC_Stripe_Webhook_State::VALIDATION_FAILED_SIGNATURE_INVALID;
+			return WC_Monilypay_Webhook_State::VALIDATION_FAILED_SIGNATURE_INVALID;
 		}
 
 		// Verify the timestamp.
 		$timestamp = intval( $matches['timestamp'] );
 		if ( abs( $timestamp - time() ) > 5 * MINUTE_IN_SECONDS ) {
-			return WC_Stripe_Webhook_State::VALIDATION_FAILED_TIMESTAMP_MISMATCH;
+			return WC_Monilypay_Webhook_State::VALIDATION_FAILED_TIMESTAMP_MISMATCH;
 		}
 
 		// Generate the expected signature.
@@ -126,10 +126,10 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 
 		// Check if the expected signature is present.
 		if ( ! preg_match( '/,v\d+=' . preg_quote( $expected_signature, '/' ) . '/', $matches['signatures'] ) ) {
-			return WC_Stripe_Webhook_State::VALIDATION_FAILED_SIGNATURE_MISMATCH;
+			return WC_Monilypay_Webhook_State::VALIDATION_FAILED_SIGNATURE_MISMATCH;
 		}
 
-		return WC_Stripe_Webhook_State::VALIDATION_SUCCEEDED;
+		return WC_Monilypay_Webhook_State::VALIDATION_SUCCEEDED;
 	}
 
 	/**
@@ -142,9 +142,9 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 	 */
 	private function validate_request_user_agent( $request_headers ) {
 		$ua_is_valid = empty( $request_headers['USER-AGENT'] ) || preg_match( '/Stripe/', $request_headers['USER-AGENT'] );
-		$ua_is_valid = apply_filters( 'wc_stripe_webhook_is_user_agent_valid', $ua_is_valid, $request_headers );
+		$ua_is_valid = apply_filters( 'wc_monilypay_webhook_is_user_agent_valid', $ua_is_valid, $request_headers );
 
-		return $ua_is_valid ? WC_Stripe_Webhook_State::VALIDATION_SUCCEEDED : WC_Stripe_Webhook_State::VALIDATION_FAILED_USER_AGENT_INVALID;
+		return $ua_is_valid ? WC_Monilypay_Webhook_State::VALIDATION_SUCCEEDED : WC_Monilypay_Webhook_State::VALIDATION_FAILED_USER_AGENT_INVALID;
 	}
 
 	/**
@@ -186,10 +186,10 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 			return;
 		}
 
-		$order = WC_Stripe_Helper::get_order_by_source_id( $notification->data->object->id );
+		$order = WC_Monilypay_Helper::get_order_by_source_id( $notification->data->object->id );
 
 		if ( ! $order ) {
-			WC_Stripe_Logger::log( 'Could not find order via source ID: ' . $notification->data->object->id );
+			WC_Monilypay_Logger::log( 'Could not find order via source ID: ' . $notification->data->object->id );
 			return;
 		}
 
@@ -212,13 +212,13 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 			// This will throw exception if not valid.
 			$this->validate_minimum_order_amount( $order );
 
-			WC_Stripe_Logger::log( "Info: (Webhook) Begin processing payment for order $order_id for the amount of {$order->get_total()}" );
+			WC_Monilypay_Logger::log( "Info: (Webhook) Begin processing payment for order $order_id for the amount of {$order->get_total()}" );
 
 			// Prep source object.
 			$prepared_source = $this->prepare_order_source( $order );
 
 			// Make the request.
-			$response = WC_Stripe_API::request( $this->generate_payment_request( $order, $prepared_source ), 'charges', 'POST', true );
+			$response = WC_Monilypay_API::request( $this->generate_payment_request( $order, $prepared_source ), 'charges', 'POST', true );
 			$headers  = $response['headers'];
 			$response = $response['body'];
 
@@ -234,9 +234,9 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 					// Source param wrong? The CARD may have been deleted on stripe's end. Remove token and show message.
 					$wc_token = WC_Payment_Tokens::get( $prepared_source->token_id );
 					$wc_token->delete();
-					$localized_message = __( 'This card is no longer available and has been removed.', 'woocommerce-gateway-stripe' );
+					$localized_message = __( 'This card is no longer available and has been removed.', 'woocommerce-gateway-monilypay' );
 					$order->add_order_note( $localized_message );
-					throw new WC_Stripe_Exception( print_r( $response, true ), $localized_message );
+					throw new WC_Monilypay_Exception( print_r( $response, true ), $localized_message );
 				}
 
 				// We want to retry.
@@ -253,13 +253,13 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 						$this->retry_interval++;
 						return $this->process_webhook_payment( $notification, true );
 					} else {
-						$localized_message = __( 'Sorry, we are unable to process your payment at this time. Please retry later.', 'woocommerce-gateway-stripe' );
+						$localized_message = __( 'Sorry, we are unable to process your payment at this time. Please retry later.', 'woocommerce-gateway-monilypay' );
 						$order->add_order_note( $localized_message );
-						throw new WC_Stripe_Exception( print_r( $response, true ), $localized_message );
+						throw new WC_Monilypay_Exception( print_r( $response, true ), $localized_message );
 					}
 				}
 
-				$localized_messages = WC_Stripe_Helper::get_localized_messages();
+				$localized_messages = WC_Monilypay_Helper::get_localized_messages();
 
 				if ( 'card_error' === $response->error->type ) {
 					$localized_message = isset( $localized_messages[ $response->error->code ] ) ? $localized_messages[ $response->error->code ] : $response->error->message;
@@ -269,7 +269,7 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 
 				$order->add_order_note( $localized_message );
 
-				throw new WC_Stripe_Exception( print_r( $response, true ), $localized_message );
+				throw new WC_Monilypay_Exception( print_r( $response, true ), $localized_message );
 			}
 
 			// To prevent double processing the order on WC side.
@@ -277,14 +277,14 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 				return;
 			}
 
-			do_action( 'wc_gateway_stripe_process_webhook_payment', $response, $order );
+			do_action( 'WC_Gateway_Monilypay_process_webhook_payment', $response, $order );
 
 			$this->process_response( $response, $order );
 
-		} catch ( WC_Stripe_Exception $e ) {
-			WC_Stripe_Logger::log( 'Error: ' . $e->getMessage() );
+		} catch ( WC_Monilypay_Exception $e ) {
+			WC_Monilypay_Logger::log( 'Error: ' . $e->getMessage() );
 
-			do_action( 'wc_gateway_stripe_process_webhook_payment_error', $order, $notification, $e );
+			do_action( 'WC_Gateway_Monilypay_process_webhook_payment_error', $order, $notification, $e );
 
 			$statuses = [ 'pending', 'failed' ];
 
@@ -303,10 +303,10 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 	 * @param object $notification
 	 */
 	public function process_webhook_dispute( $notification ) {
-		$order = WC_Stripe_Helper::get_order_by_charge_id( $notification->data->object->charge );
+		$order = WC_Monilypay_Helper::get_order_by_charge_id( $notification->data->object->charge );
 
 		if ( ! $order ) {
-			WC_Stripe_Logger::log( 'Could not find order via charge ID: ' . $notification->data->object->charge );
+			WC_Monilypay_Logger::log( 'Could not find order via charge ID: ' . $notification->data->object->charge );
 			return;
 		}
 
@@ -314,7 +314,7 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 
 		$message = sprintf(
 		/* translators: 1) HTML anchor open tag 2) HTML anchor closing tag */
-			__( 'A dispute was created for this order. Response is needed. Please go to your %1$sStripe Dashboard%2$s to review this dispute.', 'woocommerce-gateway-stripe' ),
+			__( 'A dispute was created for this order. Response is needed. Please go to your %1$sStripe Dashboard%2$s to review this dispute.', 'woocommerce-gateway-monilypay' ),
 			'<a href="' . esc_url( $this->get_transaction_url( $order ) ) . '" title="Stripe Dashboard" target="_blank">',
 			'</a>'
 		);
@@ -325,7 +325,7 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 			$order->add_order_note( $message );
 		}
 
-		do_action( 'wc_gateway_stripe_process_webhook_payment_error', $order, $notification );
+		do_action( 'WC_Gateway_Monilypay_process_webhook_payment_error', $order, $notification );
 
 		$order_id = $order->get_id();
 		$this->send_failed_order_email( $order_id );
@@ -338,25 +338,25 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 	 * @param object $notification
 	 */
 	public function process_webhook_dispute_closed( $notification ) {
-		$order  = WC_Stripe_Helper::get_order_by_charge_id( $notification->data->object->charge );
+		$order  = WC_Monilypay_Helper::get_order_by_charge_id( $notification->data->object->charge );
 		$status = $notification->data->object->status;
 
 		if ( ! $order ) {
-			WC_Stripe_Logger::log( 'Could not find order via charge ID: ' . $notification->data->object->charge );
+			WC_Monilypay_Logger::log( 'Could not find order via charge ID: ' . $notification->data->object->charge );
 			return;
 		}
 
 		if ( 'lost' === $status ) {
-			$message = __( 'The dispute was lost or accepted.', 'woocommerce-gateway-stripe' );
+			$message = __( 'The dispute was lost or accepted.', 'woocommerce-gateway-monilypay' );
 		} elseif ( 'won' === $status ) {
-			$message = __( 'The dispute was resolved in your favor.', 'woocommerce-gateway-stripe' );
+			$message = __( 'The dispute was resolved in your favor.', 'woocommerce-gateway-monilypay' );
 		} elseif ( 'warning_closed' === $status ) {
-			$message = __( 'The inquiry or retrieval was closed.', 'woocommerce-gateway-stripe' );
+			$message = __( 'The inquiry or retrieval was closed.', 'woocommerce-gateway-monilypay' );
 		} else {
 			return;
 		}
 
-		if ( apply_filters( 'wc_stripe_webhook_dispute_change_order_status', true, $order, $notification ) ) {
+		if ( apply_filters( 'wc_monilypay_webhook_dispute_change_order_status', true, $order, $notification ) ) {
 			// Mark final so that order status is not overridden by out-of-sequence events.
 			$order->update_meta_data( '_stripe_status_final', true );
 
@@ -377,14 +377,14 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 	 * @param object $notification
 	 */
 	public function process_webhook_capture( $notification ) {
-		$order = WC_Stripe_Helper::get_order_by_charge_id( $notification->data->object->id );
+		$order = WC_Monilypay_Helper::get_order_by_charge_id( $notification->data->object->id );
 
 		if ( ! $order ) {
-			WC_Stripe_Logger::log( 'Could not find order via charge ID: ' . $notification->data->object->id );
+			WC_Monilypay_Logger::log( 'Could not find order via charge ID: ' . $notification->data->object->id );
 			return;
 		}
 
-		if ( 'stripe' === $order->get_payment_method() ) {
+		if ( 'monilypay' === $order->get_payment_method() ) {
 			$charge   = $order->get_transaction_id();
 			$captured = $order->get_meta( '_stripe_charge_captured', true );
 
@@ -405,12 +405,12 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 					$refund_object = $this->get_refund_object( $notification );
 					$this->update_fees( $order, $refund_object->balance_transaction );
 					/* translators: partial captured amount */
-					$order->add_order_note( sprintf( __( 'This charge was partially captured via Stripe Dashboard in the amount of: %s', 'woocommerce-gateway-stripe' ), $partial_amount ) );
+					$order->add_order_note( sprintf( __( 'This charge was partially captured via Stripe Dashboard in the amount of: %s', 'woocommerce-gateway-monilypay' ), $partial_amount ) );
 				} else {
 					$order->payment_complete( $notification->data->object->id );
 
 					/* translators: transaction id */
-					$order->add_order_note( sprintf( __( 'Stripe charge complete (Charge ID: %s)', 'woocommerce-gateway-stripe' ), $notification->data->object->id ) );
+					$order->add_order_note( sprintf( __( 'Stripe charge complete (Charge ID: %s)', 'woocommerce-gateway-monilypay' ), $notification->data->object->id ) );
 				}
 
 				if ( is_callable( [ $order, 'save' ] ) ) {
@@ -434,10 +434,10 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 			return;
 		}
 
-		$order = WC_Stripe_Helper::get_order_by_charge_id( $notification->data->object->id );
+		$order = WC_Monilypay_Helper::get_order_by_charge_id( $notification->data->object->id );
 
 		if ( ! $order ) {
-			WC_Stripe_Logger::log( 'Could not find order via charge ID: ' . $notification->data->object->id );
+			WC_Monilypay_Logger::log( 'Could not find order via charge ID: ' . $notification->data->object->id );
 			return;
 		}
 
@@ -463,7 +463,7 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 		$order->payment_complete( $notification->data->object->id );
 
 		/* translators: transaction id */
-		$order->add_order_note( sprintf( __( 'Stripe charge complete (Charge ID: %s)', 'woocommerce-gateway-stripe' ), $notification->data->object->id ) );
+		$order->add_order_note( sprintf( __( 'Stripe charge complete (Charge ID: %s)', 'woocommerce-gateway-monilypay' ), $notification->data->object->id ) );
 
 		if ( is_callable( [ $order, 'save' ] ) ) {
 			$order->save();
@@ -478,10 +478,10 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 	 * @param object $notification
 	 */
 	public function process_webhook_charge_failed( $notification ) {
-		$order = WC_Stripe_Helper::get_order_by_charge_id( $notification->data->object->id );
+		$order = WC_Monilypay_Helper::get_order_by_charge_id( $notification->data->object->id );
 
 		if ( ! $order ) {
-			WC_Stripe_Logger::log( 'Could not find order via charge ID: ' . $notification->data->object->id );
+			WC_Monilypay_Logger::log( 'Could not find order via charge ID: ' . $notification->data->object->id );
 			return;
 		}
 
@@ -490,14 +490,14 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 			return;
 		}
 
-		$message = __( 'This payment failed to clear.', 'woocommerce-gateway-stripe' );
+		$message = __( 'This payment failed to clear.', 'woocommerce-gateway-monilypay' );
 		if ( ! $order->get_meta( '_stripe_status_final', false ) ) {
 			$order->update_status( 'failed', $message );
 		} else {
 			$order->add_order_note( $message );
 		}
 
-		do_action( 'wc_gateway_stripe_process_webhook_payment_error', $order, $notification );
+		do_action( 'WC_Gateway_Monilypay_process_webhook_payment_error', $order, $notification );
 	}
 
 	/**
@@ -509,32 +509,32 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 	 * @param object $notification
 	 */
 	public function process_webhook_source_canceled( $notification ) {
-		$order = WC_Stripe_Helper::get_order_by_charge_id( $notification->data->object->id );
+		$order = WC_Monilypay_Helper::get_order_by_charge_id( $notification->data->object->id );
 
 		// If can't find order by charge ID, try source ID.
 		if ( ! $order ) {
-			$order = WC_Stripe_Helper::get_order_by_source_id( $notification->data->object->id );
+			$order = WC_Monilypay_Helper::get_order_by_source_id( $notification->data->object->id );
 
 			if ( ! $order ) {
-				WC_Stripe_Logger::log( 'Could not find order via charge/source ID: ' . $notification->data->object->id );
+				WC_Monilypay_Logger::log( 'Could not find order via charge/source ID: ' . $notification->data->object->id );
 				return;
 			}
 		}
 
 		// Don't proceed if payment method isn't Stripe.
-		if ( 'stripe' !== $order->get_payment_method() ) {
-			WC_Stripe_Logger::log( 'Canceled webhook abort: Order was not processed by Stripe: ' . $order->get_id() );
+		if ( 'monilypay' !== $order->get_payment_method() ) {
+			WC_Monilypay_Logger::log( 'Canceled webhook abort: Order was not processed by Stripe: ' . $order->get_id() );
 			return;
 		}
 
-		$message = __( 'This payment was cancelled.', 'woocommerce-gateway-stripe' );
+		$message = __( 'This payment was cancelled.', 'woocommerce-gateway-monilypay' );
 		if ( ! $order->has_status( 'cancelled' ) && ! $order->get_meta( '_stripe_status_final', false ) ) {
 			$order->update_status( 'cancelled', $message );
 		} else {
 			$order->add_order_note( $message );
 		}
 
-		do_action( 'wc_gateway_stripe_process_webhook_payment_error', $order, $notification );
+		do_action( 'WC_Gateway_Monilypay_process_webhook_payment_error', $order, $notification );
 	}
 
 	/**
@@ -545,16 +545,16 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 	 * @param object $notification
 	 */
 	public function process_webhook_refund( $notification ) {
-		$order = WC_Stripe_Helper::get_order_by_charge_id( $notification->data->object->id );
+		$order = WC_Monilypay_Helper::get_order_by_charge_id( $notification->data->object->id );
 
 		if ( ! $order ) {
-			WC_Stripe_Logger::log( 'Could not find order via charge ID: ' . $notification->data->object->id );
+			WC_Monilypay_Logger::log( 'Could not find order via charge ID: ' . $notification->data->object->id );
 			return;
 		}
 
 		$order_id = $order->get_id();
 
-		if ( 'stripe' === $order->get_payment_method() ) {
+		if ( 'monilypay' === $order->get_payment_method() ) {
 			$charge        = $order->get_transaction_id();
 			$captured      = $order->get_meta( '_stripe_charge_captured' );
 			$refund_id     = $order->get_meta( '_stripe_refund_id' );
@@ -562,7 +562,7 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 			$refund_object = $this->get_refund_object( $notification );
 			$raw_amount    = $refund_object->amount;
 
-			if ( ! in_array( strtolower( $currency ), WC_Stripe_Helper::no_decimal_currencies(), true ) ) {
+			if ( ! in_array( strtolower( $currency ), WC_Monilypay_Helper::no_decimal_currencies(), true ) ) {
 				$raw_amount /= 100;
 			}
 
@@ -574,7 +574,7 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 				// the order was already cancelled, so we don't need a new note.
 				if ( 'cancelled' !== $order->get_status() ) {
 					/* translators: amount (including currency symbol) */
-					$order->add_order_note( sprintf( __( 'Pre-Authorization for %s voided from the Stripe Dashboard.', 'woocommerce-gateway-stripe' ), $amount ) );
+					$order->add_order_note( sprintf( __( 'Pre-Authorization for %s voided from the Stripe Dashboard.', 'woocommerce-gateway-monilypay' ), $amount ) );
 					$order->update_status( 'cancelled' );
 				}
 
@@ -587,7 +587,7 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 			}
 
 			if ( $charge ) {
-				$reason = __( 'Refunded via Stripe Dashboard', 'woocommerce-gateway-stripe' );
+				$reason = __( 'Refunded via Stripe Dashboard', 'woocommerce-gateway-monilypay' );
 
 				// Create the refund.
 				$refund = wc_create_refund(
@@ -599,7 +599,7 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 				);
 
 				if ( is_wp_error( $refund ) ) {
-					WC_Stripe_Logger::log( $refund->get_error_message() );
+					WC_Monilypay_Logger::log( $refund->get_error_message() );
 				}
 
 				$order->update_meta_data( '_stripe_refund_id', $refund_object->id );
@@ -609,7 +609,7 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 				}
 
 				/* translators: 1) amount (including currency symbol) 2) transaction id 3) refund message */
-				$order->add_order_note( sprintf( __( 'Refunded %1$s - Refund ID: %2$s - %3$s', 'woocommerce-gateway-stripe' ), $amount, $refund_object->id, $reason ) );
+				$order->add_order_note( sprintf( __( 'Refunded %1$s - Refund ID: %2$s - %3$s', 'woocommerce-gateway-monilypay' ), $amount, $refund_object->id, $reason ) );
 			}
 		}
 	}
@@ -621,22 +621,22 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 	 */
 	public function process_webhook_refund_updated( $notification ) {
 		$refund_object = $notification->data->object;
-		$order         = WC_Stripe_Helper::get_order_by_charge_id( $refund_object->charge );
+		$order         = WC_Monilypay_Helper::get_order_by_charge_id( $refund_object->charge );
 
 		if ( ! $order ) {
-			WC_Stripe_Logger::log( 'Could not find order to update refund via charge ID: ' . $refund_object->charge );
+			WC_Monilypay_Logger::log( 'Could not find order to update refund via charge ID: ' . $refund_object->charge );
 			return;
 		}
 
 		$order_id = $order->get_id();
 
-		if ( 'stripe' === $order->get_payment_method() ) {
+		if ( 'monilypay' === $order->get_payment_method() ) {
 			$charge     = $order->get_transaction_id();
 			$refund_id  = $order->get_meta( '_stripe_refund_id' );
 			$currency   = $order->get_currency();
 			$raw_amount = $refund_object->amount;
 
-			if ( ! in_array( strtolower( $currency ), WC_Stripe_Helper::no_decimal_currencies(), true ) ) {
+			if ( ! in_array( strtolower( $currency ), WC_Monilypay_Helper::no_decimal_currencies(), true ) ) {
 				$raw_amount /= 100;
 			}
 
@@ -670,10 +670,10 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 					do_action( 'woocommerce_refund_deleted', $refund_id, $order_id );
 					if ( 'failed' === $refund_object->status ) {
 						/* translators: 1) amount (including currency symbol) 2) transaction id 3) refund failure code */
-						$note = sprintf( __( 'Refund failed for %1$s - Refund ID: %2$s - Reason: %3$s', 'woocommerce-gateway-stripe' ), $amount, $refund_object->id, $refund_object->failure_reason );
+						$note = sprintf( __( 'Refund failed for %1$s - Refund ID: %2$s - Reason: %3$s', 'woocommerce-gateway-monilypay' ), $amount, $refund_object->id, $refund_object->failure_reason );
 					} else {
 						/* translators: 1) amount (including currency symbol) 2) transaction id 3) refund failure code */
-						$note = sprintf( __( 'Refund canceled for %1$s - Refund ID: %2$s - Reason: %3$s', 'woocommerce-gateway-stripe' ), $amount, $refund_object->id, $refund_object->failure_reason );
+						$note = sprintf( __( 'Refund canceled for %1$s - Refund ID: %2$s - Reason: %3$s', 'woocommerce-gateway-monilypay' ), $amount, $refund_object->id, $refund_object->failure_reason );
 					}
 
 					$order->add_order_note( $note );
@@ -690,17 +690,17 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 	 */
 	public function process_review_opened( $notification ) {
 		if ( isset( $notification->data->object->payment_intent ) ) {
-			$order = WC_Stripe_Helper::get_order_by_intent_id( $notification->data->object->payment_intent );
+			$order = WC_Monilypay_Helper::get_order_by_intent_id( $notification->data->object->payment_intent );
 
 			if ( ! $order ) {
-				WC_Stripe_Logger::log( '[Review Opened] Could not find order via intent ID: ' . $notification->data->object->payment_intent );
+				WC_Monilypay_Logger::log( '[Review Opened] Could not find order via intent ID: ' . $notification->data->object->payment_intent );
 				return;
 			}
 		} else {
-			$order = WC_Stripe_Helper::get_order_by_charge_id( $notification->data->object->charge );
+			$order = WC_Monilypay_Helper::get_order_by_charge_id( $notification->data->object->charge );
 
 			if ( ! $order ) {
-				WC_Stripe_Logger::log( '[Review Opened] Could not find order via charge ID: ' . $notification->data->object->charge );
+				WC_Monilypay_Logger::log( '[Review Opened] Could not find order via charge ID: ' . $notification->data->object->charge );
 				return;
 			}
 		}
@@ -709,13 +709,13 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 
 		$message = sprintf(
 		/* translators: 1) HTML anchor open tag 2) HTML anchor closing tag 3) The reason type. */
-			__( 'A review has been opened for this order. Action is needed. Please go to your %1$sStripe Dashboard%2$s to review the issue. Reason: (%3$s).', 'woocommerce-gateway-stripe' ),
+			__( 'A review has been opened for this order. Action is needed. Please go to your %1$sStripe Dashboard%2$s to review the issue. Reason: (%3$s).', 'woocommerce-gateway-monilypay' ),
 			'<a href="' . esc_url( $this->get_transaction_url( $order ) ) . '" title="Stripe Dashboard" target="_blank">',
 			'</a>',
 			esc_html( $notification->data->object->reason )
 		);
 
-		if ( apply_filters( 'wc_stripe_webhook_review_change_order_status', true, $order, $notification ) && ! $order->get_meta( '_stripe_status_final', false ) ) {
+		if ( apply_filters( 'wc_monilypay_webhook_review_change_order_status', true, $order, $notification ) && ! $order->get_meta( '_stripe_status_final', false ) ) {
 			$order->update_status( 'on-hold', $message );
 		} else {
 			$order->add_order_note( $message );
@@ -730,27 +730,27 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 	 */
 	public function process_review_closed( $notification ) {
 		if ( isset( $notification->data->object->payment_intent ) ) {
-			$order = WC_Stripe_Helper::get_order_by_intent_id( $notification->data->object->payment_intent );
+			$order = WC_Monilypay_Helper::get_order_by_intent_id( $notification->data->object->payment_intent );
 
 			if ( ! $order ) {
-				WC_Stripe_Logger::log( '[Review Closed] Could not find order via intent ID: ' . $notification->data->object->payment_intent );
+				WC_Monilypay_Logger::log( '[Review Closed] Could not find order via intent ID: ' . $notification->data->object->payment_intent );
 				return;
 			}
 		} else {
-			$order = WC_Stripe_Helper::get_order_by_charge_id( $notification->data->object->charge );
+			$order = WC_Monilypay_Helper::get_order_by_charge_id( $notification->data->object->charge );
 
 			if ( ! $order ) {
-				WC_Stripe_Logger::log( '[Review Closed] Could not find order via charge ID: ' . $notification->data->object->charge );
+				WC_Monilypay_Logger::log( '[Review Closed] Could not find order via charge ID: ' . $notification->data->object->charge );
 				return;
 			}
 		}
 
 		/* translators: 1) The reason type. */
-		$message = sprintf( __( 'The opened review for this order is now closed. Reason: (%s)', 'woocommerce-gateway-stripe' ), $notification->data->object->reason );
+		$message = sprintf( __( 'The opened review for this order is now closed. Reason: (%s)', 'woocommerce-gateway-monilypay' ), $notification->data->object->reason );
 
 		if (
 			$order->has_status( 'on-hold' ) &&
-			apply_filters( 'wc_stripe_webhook_review_change_order_status', true, $order, $notification ) &&
+			apply_filters( 'wc_monilypay_webhook_review_change_order_status', true, $order, $notification ) &&
 			! $order->get_meta( '_stripe_status_final', false )
 		) {
 			$order->update_status( $order->get_meta( '_stripe_status_before_hold', 'processing' ), $message );
@@ -801,7 +801,7 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 			$refund_object = $this->get_refund_object( $notification );
 			$amount        = $refund_object->amount / 100;
 
-			if ( in_array( strtolower( $notification->data->object->currency ), WC_Stripe_Helper::no_decimal_currencies() ) ) {
+			if ( in_array( strtolower( $notification->data->object->currency ), WC_Monilypay_Helper::no_decimal_currencies() ) ) {
 				$amount = $refund_object->amount;
 			}
 
@@ -822,7 +822,7 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 		if ( $this->is_partial_capture( $notification ) ) {
 			$amount = ( $notification->data->object->amount - $notification->data->object->amount_refunded ) / 100;
 
-			if ( in_array( strtolower( $notification->data->object->currency ), WC_Stripe_Helper::no_decimal_currencies() ) ) {
+			if ( in_array( strtolower( $notification->data->object->currency ), WC_Monilypay_Helper::no_decimal_currencies() ) ) {
 				$amount = ( $notification->data->object->amount - $notification->data->object->amount_refunded );
 			}
 
@@ -834,16 +834,16 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 
 	public function process_payment_intent_success( $notification ) {
 		$intent = $notification->data->object;
-		$order  = WC_Stripe_Helper::get_order_by_intent_id( $intent->id );
+		$order  = WC_Monilypay_Helper::get_order_by_intent_id( $intent->id );
 
 		if ( ! $order ) {
-			WC_Stripe_Logger::log( 'Could not find order via intent ID: ' . $intent->id );
+			WC_Monilypay_Logger::log( 'Could not find order via intent ID: ' . $intent->id );
 			return;
 		}
 
 		if ( ! $order->has_status(
 			apply_filters(
-				'wc_stripe_allowed_payment_processing_statuses',
+				'wc_monilypay_allowed_payment_processing_statuses',
 				[ 'pending', 'failed' ],
 				$order
 			)
@@ -861,7 +861,7 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 		switch ( $notification->type ) {
 			case 'payment_intent.requires_action':
 				if ( $is_voucher_payment ) {
-					$order->update_status( 'on-hold', __( 'Awaiting payment.', 'woocommerce-gateway-stripe' ) );
+					$order->update_status( 'on-hold', __( 'Awaiting payment.', 'woocommerce-gateway-monilypay' ) );
 					wc_reduce_stock_levels( $order_id );
 				}
 				break;
@@ -869,24 +869,24 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 			case 'payment_intent.amount_capturable_updated':
 				$charge = $this->get_latest_charge_from_intent( $intent );
 
-				WC_Stripe_Logger::log( "Stripe PaymentIntent $intent->id succeeded for order $order_id" );
+				WC_Monilypay_Logger::log( "Stripe PaymentIntent $intent->id succeeded for order $order_id" );
 
 				// TODO: This is a stop-gap to fix a critical issue, see
-				// https://github.com/woocommerce/woocommerce-gateway-stripe/issues/2536. It would
+				// https://github.com/woocommerce/woocommerce-gateway-monilypay/issues/2536. It would
 				// be better if we removed the need for additional meta data in favor of refactoring
 				// this part of the payment processing.
 				if ( $order->get_meta( '_stripe_upe_waiting_for_redirect' ) ?? false ) {
 					return;
 				}
 
-				do_action( 'wc_gateway_stripe_process_payment', $charge, $order );
+				do_action( 'WC_Gateway_Monilypay_process_payment', $charge, $order );
 
 				// Process valid response.
 				$this->process_response( $charge, $order );
 				break;
 			default:
 				if ( $is_voucher_payment && 'payment_intent.payment_failed' === $notification->type ) {
-					$order->update_status( 'failed', __( 'Payment not completed in time', 'woocommerce-gateway-stripe' ) );
+					$order->update_status( 'failed', __( 'Payment not completed in time', 'woocommerce-gateway-monilypay' ) );
 					wc_increase_stock_levels( $order_id );
 					break;
 				}
@@ -894,7 +894,7 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 				$error_message = $intent->last_payment_error ? $intent->last_payment_error->message : '';
 
 				/* translators: 1) The error message that was received from Stripe. */
-				$message = sprintf( __( 'Stripe SCA authentication failed. Reason: %s', 'woocommerce-gateway-stripe' ), $error_message );
+				$message = sprintf( __( 'Stripe SCA authentication failed. Reason: %s', 'woocommerce-gateway-monilypay' ), $error_message );
 
 				if ( ! $order->get_meta( '_stripe_status_final', false ) ) {
 					$order->update_status( 'failed', $message );
@@ -902,7 +902,7 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 					$order->add_order_note( $message );
 				}
 
-				do_action( 'wc_gateway_stripe_process_webhook_payment_error', $order, $notification );
+				do_action( 'WC_Gateway_Monilypay_process_webhook_payment_error', $order, $notification );
 
 				$this->send_failed_order_email( $order_id );
 				break;
@@ -913,16 +913,16 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 
 	public function process_setup_intent( $notification ) {
 		$intent = $notification->data->object;
-		$order  = WC_Stripe_Helper::get_order_by_setup_intent_id( $intent->id );
+		$order  = WC_Monilypay_Helper::get_order_by_setup_intent_id( $intent->id );
 
 		if ( ! $order ) {
-			WC_Stripe_Logger::log( 'Could not find order via setup intent ID: ' . $intent->id );
+			WC_Monilypay_Logger::log( 'Could not find order via setup intent ID: ' . $intent->id );
 			return;
 		}
 
 		if ( ! $order->has_status(
 			apply_filters(
-				'wc_gateway_stripe_allowed_payment_processing_statuses',
+				'WC_Gateway_Monilypay_allowed_payment_processing_statuses',
 				[ 'pending', 'failed' ]
 			)
 		) ) {
@@ -935,7 +935,7 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 
 		$order_id = $order->get_id();
 		if ( 'setup_intent.succeeded' === $notification->type ) {
-			WC_Stripe_Logger::log( "Stripe SetupIntent $intent->id succeeded for order $order_id" );
+			WC_Monilypay_Logger::log( "Stripe SetupIntent $intent->id succeeded for order $order_id" );
 			if ( $this->has_pre_order( $order ) ) {
 				$this->mark_order_as_pre_ordered( $order );
 			} else {
@@ -945,7 +945,7 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 			$error_message = $intent->last_setup_error ? $intent->last_setup_error->message : '';
 
 			/* translators: 1) The error message that was received from Stripe. */
-			$message = sprintf( __( 'Stripe SCA authentication failed. Reason: %s', 'woocommerce-gateway-stripe' ), $error_message );
+			$message = sprintf( __( 'Stripe SCA authentication failed. Reason: %s', 'woocommerce-gateway-monilypay' ), $error_message );
 
 			if ( ! $order->get_meta( '_stripe_status_final', false ) ) {
 				$order->update_status( 'failed', $message );
@@ -1029,4 +1029,4 @@ class WC_Stripe_Webhook_Handler extends WC_Stripe_Payment_Gateway {
 	}
 }
 
-new WC_Stripe_Webhook_Handler();
+new WC_Monilypay_Webhook_Handler();

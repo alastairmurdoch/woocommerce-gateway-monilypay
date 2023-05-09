@@ -200,7 +200,7 @@ const UPEField = ( {
 	useEffect(
 		() =>
 			onPaymentProcessing( () => {
-				if ( activePaymentMethod !== 'stripe' ) {
+				if ( activePaymentMethod !== 'monilypay' ) {
 					return;
 				}
 
@@ -209,7 +209,7 @@ const UPEField = ( {
 						type: 'error',
 						message: __(
 							'Your payment information is incomplete.',
-							'woocommerce-gateway-stripe'
+							'woocommerce-gateway-monilypay'
 						),
 					};
 				}
@@ -229,7 +229,7 @@ const UPEField = ( {
 						type: 'error',
 						message: __(
 							'This payment method can not be saved for future use.',
-							'woocommerce-gateway-stripe'
+							'woocommerce-gateway-monilypay'
 						),
 					};
 				}
@@ -240,7 +240,7 @@ const UPEField = ( {
 						paymentMethodData: {
 							paymentMethod: PAYMENT_METHOD_NAME,
 							wc_payment_intent_id: paymentIntentId,
-							wc_stripe_selected_upe_payment_type: selectedUpePaymentType,
+							wc_monilypay_selected_upe_payment_type: selectedUpePaymentType,
 						},
 					},
 				};
@@ -387,7 +387,7 @@ export const UPEPaymentForm = ( { api, ...props } ) => {
 					error?.message ??
 						__(
 							'There was an error loading the payment gateway',
-							'woocommerce-gateway-stripe'
+							'woocommerce-gateway-monilypay'
 						)
 				);
 			}

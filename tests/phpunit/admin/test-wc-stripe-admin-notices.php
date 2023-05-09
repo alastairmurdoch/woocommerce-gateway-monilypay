@@ -23,7 +23,7 @@ class WC_Stripe_Admin_Notices_Test extends WP_UnitTestCase {
 	}
 
 	public function test_no_notices_are_shown_when_user_is_not_admin() {
-		update_option( 'woocommerce_stripe_settings', [ 'enabled' => 'yes' ] );
+		update_option( 'woocommerce_monilypay_settings', [ 'enabled' => 'yes' ] );
 		$notices = new WC_Stripe_Admin_Notices();
 		ob_start();
 		$notices->admin_notices();
@@ -33,7 +33,7 @@ class WC_Stripe_Admin_Notices_Test extends WP_UnitTestCase {
 
 	public function test_no_notices_are_shown_when_stripe_is_not_enabled() {
 		wp_set_current_user( $this->factory->user->create( [ 'role' => 'administrator' ] ) );
-		update_option( 'woocommerce_stripe_settings', [ 'enabled' => 'no' ] );
+		update_option( 'woocommerce_monilypay_settings', [ 'enabled' => 'no' ] );
 		$notices = new WC_Stripe_Admin_Notices();
 		ob_start();
 		$notices->admin_notices();
@@ -82,7 +82,7 @@ class WC_Stripe_Admin_Notices_Test extends WP_UnitTestCase {
 		);
 		wp_set_current_user( $this->factory->user->create( [ 'role' => 'administrator' ] ) );
 		update_option(
-			'woocommerce_stripe_settings',
+			'woocommerce_monilypay_settings',
 			[
 				'enabled'                         => 'yes',
 				'testmode'                        => 'no',
@@ -93,7 +93,7 @@ class WC_Stripe_Admin_Notices_Test extends WP_UnitTestCase {
 		);
 
 		$stripe_settings = array_merge(
-			get_option( 'woocommerce_stripe_settings' ),
+			get_option( 'woocommerce_monilypay_settings' ),
 			[
 				'upe_checkout_experience_accepted_payments' => [
 					'giropay',
@@ -102,7 +102,7 @@ class WC_Stripe_Admin_Notices_Test extends WP_UnitTestCase {
 				],
 			]
 		);
-		update_option( 'woocommerce_stripe_settings', $stripe_settings );
+		update_option( 'woocommerce_monilypay_settings', $stripe_settings );
 
 		update_option( 'wc_stripe_show_style_notice', 'no' );
 		update_option( 'home', 'https://...' );
@@ -137,7 +137,7 @@ class WC_Stripe_Admin_Notices_Test extends WP_UnitTestCase {
 
 		wp_set_current_user( $this->factory->user->create( [ 'role' => 'administrator' ] ) );
 		update_option(
-			'woocommerce_stripe_settings',
+			'woocommerce_monilypay_settings',
 			[
 				'enabled'         => 'yes',
 				'testmode'        => 'no',
@@ -169,7 +169,7 @@ class WC_Stripe_Admin_Notices_Test extends WP_UnitTestCase {
 		return [
 			[
 				[
-					'woocommerce_stripe_settings' => [ 'enabled' => 'yes' ],
+					'woocommerce_monilypay_settings' => [ 'enabled' => 'yes' ],
 				],
 				[
 					'style',
@@ -177,7 +177,7 @@ class WC_Stripe_Admin_Notices_Test extends WP_UnitTestCase {
 			],
 			[
 				[
-					'woocommerce_stripe_settings' => [
+					'woocommerce_monilypay_settings' => [
 						'enabled'        => 'yes',
 						'three_d_secure' => 'yes',
 					],
@@ -189,7 +189,7 @@ class WC_Stripe_Admin_Notices_Test extends WP_UnitTestCase {
 			],
 			[
 				[
-					'woocommerce_stripe_settings' => [
+					'woocommerce_monilypay_settings' => [
 						'enabled'        => 'yes',
 						'three_d_secure' => 'yes',
 					],
@@ -201,7 +201,7 @@ class WC_Stripe_Admin_Notices_Test extends WP_UnitTestCase {
 			],
 			[
 				[
-					'woocommerce_stripe_settings' => [
+					'woocommerce_monilypay_settings' => [
 						'enabled'         => 'yes',
 						'three_d_secure'  => 'yes',
 						'publishable_key' => 'pk_live_valid_test_key',
@@ -222,7 +222,7 @@ class WC_Stripe_Admin_Notices_Test extends WP_UnitTestCase {
 			],
 			[
 				[
-					'woocommerce_stripe_settings' => [
+					'woocommerce_monilypay_settings' => [
 						'enabled' => 'yes',
 					],
 					'wc_stripe_show_style_notice' => 'no',
@@ -236,7 +236,7 @@ class WC_Stripe_Admin_Notices_Test extends WP_UnitTestCase {
 			],
 			[
 				[
-					'woocommerce_stripe_settings'    => [
+					'woocommerce_monilypay_settings'    => [
 						'enabled'         => 'yes',
 						'publishable_key' => 'pk_live_valid_test_key',
 						'secret_key'      => 'sk_live_valid_test_key',
@@ -255,7 +255,7 @@ class WC_Stripe_Admin_Notices_Test extends WP_UnitTestCase {
 			],
 			[
 				[
-					'woocommerce_stripe_settings'    => [
+					'woocommerce_monilypay_settings'    => [
 						'enabled' => 'yes',
 					],
 					'wc_stripe_show_style_notice'    => 'no',
@@ -274,7 +274,7 @@ class WC_Stripe_Admin_Notices_Test extends WP_UnitTestCase {
 			],
 			[
 				[
-					'woocommerce_stripe_settings' => [
+					'woocommerce_monilypay_settings' => [
 						'enabled'              => 'yes',
 						'testmode'             => 'yes',
 						'test_publishable_key' => 'invalid test key',
@@ -291,7 +291,7 @@ class WC_Stripe_Admin_Notices_Test extends WP_UnitTestCase {
 			],
 			[
 				[
-					'woocommerce_stripe_settings' => [
+					'woocommerce_monilypay_settings' => [
 						'enabled'              => 'yes',
 						'testmode'             => 'yes',
 						'test_publishable_key' => 'pk_test_valid_test_key',
@@ -304,7 +304,7 @@ class WC_Stripe_Admin_Notices_Test extends WP_UnitTestCase {
 			],
 			[
 				[
-					'woocommerce_stripe_settings' => [
+					'woocommerce_monilypay_settings' => [
 						'enabled'         => 'yes',
 						'testmode'        => 'no',
 						'publishable_key' => 'invalid live key',
@@ -321,7 +321,7 @@ class WC_Stripe_Admin_Notices_Test extends WP_UnitTestCase {
 			],
 			[
 				[
-					'woocommerce_stripe_settings' => [
+					'woocommerce_monilypay_settings' => [
 						'enabled'         => 'yes',
 						'testmode'        => 'no',
 						'publishable_key' => 'pk_live_valid_test_key',
@@ -334,7 +334,7 @@ class WC_Stripe_Admin_Notices_Test extends WP_UnitTestCase {
 			],
 			[
 				[
-					'woocommerce_stripe_settings' => [
+					'woocommerce_monilypay_settings' => [
 						'enabled'         => 'yes',
 						'testmode'        => 'no',
 						'publishable_key' => 'pk_live_valid_test_key',
@@ -349,7 +349,7 @@ class WC_Stripe_Admin_Notices_Test extends WP_UnitTestCase {
 			],
 			[
 				[
-					'woocommerce_stripe_settings' => [
+					'woocommerce_monilypay_settings' => [
 						'enabled'         => 'yes',
 						'testmode'        => 'no',
 						'publishable_key' => 'pk_live_valid_test_key',
@@ -364,7 +364,7 @@ class WC_Stripe_Admin_Notices_Test extends WP_UnitTestCase {
 			],
 			[
 				[
-					'woocommerce_stripe_settings'        => [
+					'woocommerce_monilypay_settings'        => [
 						'enabled'        => 'yes',
 						'testmode'       => 'no',
 						'three_d_secure' => 'yes',
@@ -383,7 +383,7 @@ class WC_Stripe_Admin_Notices_Test extends WP_UnitTestCase {
 			],
 			[
 				[
-					'woocommerce_stripe_settings'        => [
+					'woocommerce_monilypay_settings'        => [
 						'enabled'  => 'yes',
 						'testmode' => 'no',
 					],
@@ -400,7 +400,7 @@ class WC_Stripe_Admin_Notices_Test extends WP_UnitTestCase {
 			],
 			[
 				[
-					'woocommerce_stripe_settings'        => [
+					'woocommerce_monilypay_settings'        => [
 						'enabled'         => 'yes',
 						'testmode'        => 'no',
 						'publishable_key' => 'pk_live_valid_test_key',
@@ -417,7 +417,7 @@ class WC_Stripe_Admin_Notices_Test extends WP_UnitTestCase {
 			],
 			[
 				[
-					'woocommerce_stripe_settings'        => [
+					'woocommerce_monilypay_settings'        => [
 						'enabled'         => 'yes',
 						'testmode'        => 'no',
 						'publishable_key' => 'pk_live_valid_test_key',
@@ -434,7 +434,7 @@ class WC_Stripe_Admin_Notices_Test extends WP_UnitTestCase {
 			],
 			[
 				[
-					'woocommerce_stripe_settings'        => [
+					'woocommerce_monilypay_settings'        => [
 						'enabled'         => 'yes',
 						'testmode'        => 'no',
 						'publishable_key' => 'pk_live_valid_test_key',
@@ -451,7 +451,7 @@ class WC_Stripe_Admin_Notices_Test extends WP_UnitTestCase {
 			],
 			[
 				[
-					'woocommerce_stripe_settings' => [
+					'woocommerce_monilypay_settings' => [
 						'enabled'         => 'yes',
 						'testmode'        => 'no',
 						'publishable_key' => 'pk_live_valid_test_key',
@@ -464,7 +464,7 @@ class WC_Stripe_Admin_Notices_Test extends WP_UnitTestCase {
 			],
 			[
 				[
-					'woocommerce_stripe_settings'         => [
+					'woocommerce_monilypay_settings'         => [
 						'enabled'         => 'yes',
 						'testmode'        => 'no',
 						'publishable_key' => 'pk_live_valid_test_key',
@@ -473,7 +473,7 @@ class WC_Stripe_Admin_Notices_Test extends WP_UnitTestCase {
 					'wc_stripe_show_style_notice'         => 'no',
 					'home'                                => 'https://...',
 					'wc_stripe_show_sca_notice'           => 'no',
-					'woocommerce_stripe_giropay_settings' => [
+					'woocommerce_monilypay_giropay_settings' => [
 						'enabled' => 'yes',
 					],
 				],

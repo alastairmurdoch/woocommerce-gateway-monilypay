@@ -170,7 +170,7 @@ export async function setupCheckout( page, billingDetails = null ) {
 		}
 	}
 
-	await page.click( '.wc_payment_method.payment_method_stripe' );
+	await page.click( '.wc_payment_method.payment_method_monilypay' );
 }
 
 /**

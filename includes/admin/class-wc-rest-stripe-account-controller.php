@@ -1,6 +1,6 @@
 <?php
 /**
- * Class WC_REST_Stripe_Account_Controller
+ * Class WC_REST_Monilypay_Account_Controller
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -10,29 +10,29 @@ defined( 'ABSPATH' ) || exit;
  *
  * @since 5.6.0
  */
-class WC_REST_Stripe_Account_Controller extends WC_Stripe_REST_Base_Controller {
+class WC_REST_Monilypay_Account_Controller extends WC_Monilypay_REST_Base_Controller {
 	/**
 	 * Endpoint path.
 	 *
 	 * @var string
 	 */
-	protected $rest_base = 'wc_stripe/account';
+	protected $rest_base = 'wc_monilypay/account';
 
 	/**
 	 * The account data utility.
 	 *
-	 * @var WC_Stripe_Account
+	 * @var WC_Monilypay_Account
 	 */
 	private $account;
 
 	/**
 	 * Stripe payment gateway.
 	 *
-	 * @var WC_Gateway_Stripe
+	 * @var WC_Gateway_Monilypay
 	 */
 	private $gateway;
 
-	public function __construct( WC_Gateway_Stripe $gateway, WC_Stripe_Account $account ) {
+	public function __construct( WC_Gateway_Monilypay $gateway, WC_Monilypay_Account $account ) {
 		$this->gateway = $gateway;
 		$this->account = $account;
 	}
@@ -91,9 +91,9 @@ class WC_REST_Stripe_Account_Controller extends WC_Stripe_REST_Base_Controller {
 		return new WP_REST_Response(
 			[
 				'account'                => $this->account->get_cached_account_data(),
-				'testmode'               => WC_Stripe_Webhook_State::get_testmode(),
-				'webhook_status_message' => WC_Stripe_Webhook_State::get_webhook_status_message(),
-				'webhook_url'            => WC_Stripe_Helper::get_webhook_url(),
+				'testmode'               => WC_Monilypay_Webhook_State::get_testmode(),
+				'webhook_status_message' => WC_Monilypay_Webhook_State::get_webhook_status_message(),
+				'webhook_url'            => WC_Monilypay_Helper::get_webhook_url(),
 			]
 		);
 	}
@@ -107,7 +107,7 @@ class WC_REST_Stripe_Account_Controller extends WC_Stripe_REST_Base_Controller {
 		$account = $this->account->get_cached_account_data();
 
 		// Use statement descriptor from settings, falling back to Stripe account statement descriptor if needed.
-		$statement_descriptor = WC_Stripe_Helper::clean_statement_descriptor( $this->gateway->get_option( 'statement_descriptor' ) );
+		$statement_descriptor = WC_Monilypay_Helper::clean_statement_descriptor( $this->gateway->get_option( 'statement_descriptor' ) );
 		if ( empty( $statement_descriptor ) ) {
 			$statement_descriptor = $account['settings']['payments']['statement_descriptor'];
 		}
@@ -128,7 +128,7 @@ class WC_REST_Stripe_Account_Controller extends WC_Stripe_REST_Base_Controller {
 				],
 				'country'                  => $account['country'] ?? WC()->countries->get_base_country(),
 				'is_live'                  => $account['charges_enabled'] ?? false,
-				'test_mode'                => WC_Stripe_Webhook_State::get_testmode(),
+				'test_mode'                => WC_Monilypay_Webhook_State::get_testmode(),
 			]
 		);
 	}
@@ -139,7 +139,7 @@ class WC_REST_Stripe_Account_Controller extends WC_Stripe_REST_Base_Controller {
 	 * @return WP_REST_Response
 	 */
 	public function get_webhook_status_message() {
-		return new WP_REST_Response( WC_Stripe_Webhook_State::get_webhook_status_message() );
+		return new WP_REST_Response( WC_Monilypay_Webhook_State::get_webhook_status_message() );
 	}
 
 	/**

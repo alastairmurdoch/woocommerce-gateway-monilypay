@@ -5,7 +5,7 @@ export const CustomButton = ( { onButtonClicked } ) => {
 	const {
 		theme = 'dark',
 		height = '44',
-		customLabel = __( 'Buy now', 'woocommerce-gateway-stripe' ),
+		customLabel = __( 'Buy now', 'woocommerce-gateway-monilypay' ),
 	} = getBlocksConfiguration()?.button;
 	return (
 		<button

@@ -46,7 +46,7 @@ const GeneralSettingsSection = () => {
 						<VisuallyHidden>
 							{ __(
 								'Updating payment methods information, please wait.',
-								'woocommerce-gateway-stripe'
+								'woocommerce-gateway-monilypay'
 							) }
 						</VisuallyHidden>
 					) }

@@ -42,7 +42,7 @@ class WC_Stripe_Subscription_Initial_Test extends WP_UnitTestCase {
 		// Mocked in order to get metadata[payment_type] = recurring in the HTTP request.
 		$this->statement_descriptor = 'This is a statement descriptor.';
 		update_option(
-			'woocommerce_stripe_settings',
+			'woocommerce_monilypay_settings',
 			[
 				'statement_descriptor' => $this->statement_descriptor,
 			]
@@ -53,7 +53,7 @@ class WC_Stripe_Subscription_Initial_Test extends WP_UnitTestCase {
 	 * Tears down the stuff we set up.
 	 */
 	public function tear_down() {
-		delete_option( 'woocommerce_stripe_settings' );
+		delete_option( 'woocommerce_monilypay_settings' );
 
 		parent::tear_down();
 	}

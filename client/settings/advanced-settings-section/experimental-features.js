@@ -44,14 +44,14 @@ const ExperimentalFeatures = () => {
 					dispatch( 'core/notices' ).createSuccessNotice(
 						__(
 							'✅ New checkout experience enabled.',
-							'woocommerce-gateway-stripe'
+							'woocommerce-gateway-monilypay'
 						),
 						{
 							actions: [
 								{
 									label: __(
 										'Review accepted payment methods',
-										'woocommerce-gateway-stripe'
+										'woocommerce-gateway-monilypay'
 									),
 									onClick: () => {
 										updateQueryString(
@@ -95,19 +95,19 @@ const ExperimentalFeatures = () => {
 			<h4 ref={ headingRef } tabIndex="-1">
 				{ __(
 					'New checkout experience',
-					'woocommerce-gateway-stripe'
+					'woocommerce-gateway-monilypay'
 				) }
 			</h4>
 			<CheckboxControl
 				data-testid="new-checkout-experience-checkbox"
 				label={ __(
 					'Enable the updated checkout experience',
-					'woocommerce-gateway-stripe'
+					'woocommerce-gateway-monilypay'
 				) }
 				help={ createInterpolateElement(
 					__(
 						'Get access to a smarter payment experience on checkout and let us know what you think by <feedbackLink>submitting your feedback</feedbackLink>. We recommend this feature for experienced merchants as the functionality is currently limited. <learnMoreLink>Learn more</learnMoreLink>',
-						'woocommerce-gateway-stripe'
+						'woocommerce-gateway-monilypay'
 					),
 					{
 						feedbackLink: (

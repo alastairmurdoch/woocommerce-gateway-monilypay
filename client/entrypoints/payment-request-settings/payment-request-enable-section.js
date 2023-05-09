@@ -17,12 +17,12 @@ const PaymentRequestsEnableSection = () => {
 					onChange={ updateIsPaymentRequestEnabled }
 					label={ __(
 						'Enable Apple Pay / Google Pay',
-						'woocommerce-gateway-stripe'
+						'woocommerce-gateway-monilypay'
 					) }
 					help={ __(
 						'When enabled, customers who have configured Apple Pay or Google Pay enabled devices ' +
 							'will be able to pay with their respective choice of Wallet.',
-						'woocommerce-gateway-stripe'
+						'woocommerce-gateway-monilypay'
 					) }
 				/>
 			</CardBody>

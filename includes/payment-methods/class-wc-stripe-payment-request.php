@@ -13,11 +13,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * WC_Stripe_Payment_Request class.
+ * WC_Monilypay_Payment_Request class.
  */
-class WC_Stripe_Payment_Request {
+class WC_Monilypay_Payment_Request {
 
-	use WC_Stripe_Pre_Orders_Trait;
+	use WC_Monilypay_Pre_Orders_Trait;
 
 	/**
 	 * Enabled.
@@ -53,6 +53,8 @@ class WC_Stripe_Payment_Request {
 	 * @var bool
 	 */
 	public $testmode;
+	
+	public $accountId;
 
 	/**
 	 * This Instance.
@@ -69,18 +71,19 @@ class WC_Stripe_Payment_Request {
 	 */
 	public function __construct() {
 		self::$_this           = $this;
-		$this->stripe_settings = get_option( 'woocommerce_stripe_settings', [] );
+		$this->stripe_settings = get_option( 'woocommerce_monilypay_settings', [] );
 		$this->testmode        = ( ! empty( $this->stripe_settings['testmode'] ) && 'yes' === $this->stripe_settings['testmode'] ) ? true : false;
 		$this->publishable_key = ! empty( $this->stripe_settings['publishable_key'] ) ? $this->stripe_settings['publishable_key'] : '';
 		$this->secret_key      = ! empty( $this->stripe_settings['secret_key'] ) ? $this->stripe_settings['secret_key'] : '';
-		$this->total_label     = ! empty( $this->stripe_settings['statement_descriptor'] ) ? WC_Stripe_Helper::clean_statement_descriptor( $this->stripe_settings['statement_descriptor'] ) : '';
-
+		$this->total_label     = ! empty( $this->stripe_settings['statement_descriptor'] ) ? WC_Monilypay_Helper::clean_statement_descriptor( $this->stripe_settings['statement_descriptor'] ) : '';
+		$this->accountId	   = ! empty( $this->stripe_settings['monilypay_account_id']) ? $this->stripe_settings['monilypay_account_id'] : '';
 		if ( $this->testmode ) {
 			$this->publishable_key = ! empty( $this->stripe_settings['test_publishable_key'] ) ? $this->stripe_settings['test_publishable_key'] : '';
 			$this->secret_key      = ! empty( $this->stripe_settings['test_secret_key'] ) ? $this->stripe_settings['test_secret_key'] : '';
+			$this->accountId	   = ! empty( $this->stripe_settings['test_monilypay_account_id']) ? $this->stripe_settings['test_monilypay_account_id'] : '';
 		}
 
-		$this->total_label = str_replace( "'", '', $this->total_label ) . apply_filters( 'wc_stripe_payment_request_total_label_suffix', ' (via WooCommerce)' );
+		$this->total_label = str_replace( "'", '', $this->total_label ) . apply_filters( 'WC_Monilypay_Payment_Request_total_label_suffix', ' (via WooCommerce)' );
 
 		// Checks if Stripe Gateway is enabled.
 		if ( empty( $this->stripe_settings ) || ( isset( $this->stripe_settings['enabled'] ) && 'yes' !== $this->stripe_settings['enabled'] ) ) {
@@ -189,14 +192,14 @@ class WC_Stripe_Payment_Request {
 	 */
 	public function handle_payment_request_redirect() {
 		if (
-			! empty( $_GET['wc_stripe_payment_request_redirect_url'] )
+			! empty( $_GET['WC_Monilypay_Payment_Request_redirect_url'] )
 			&& ! empty( $_GET['_wpnonce'] )
 			&& wp_verify_nonce( $_GET['_wpnonce'], 'wc-stripe-set-redirect-url' ) // @codingStandardsIgnoreLine
 		) {
-			$url = rawurldecode( esc_url_raw( wp_unslash( $_GET['wc_stripe_payment_request_redirect_url'] ) ) );
+			$url = rawurldecode( esc_url_raw( wp_unslash( $_GET['WC_Monilypay_Payment_Request_redirect_url'] ) ) );
 			// Sets a redirect URL cookie for 10 minutes, which we will redirect to after authentication.
 			// Users will have a 10 minute timeout to login/create account, otherwise redirect URL expires.
-			wc_setcookie( 'wc_stripe_payment_request_redirect_url', $url, time() + MINUTE_IN_SECONDS * 10 );
+			wc_setcookie( 'WC_Monilypay_Payment_Request_redirect_url', $url, time() + MINUTE_IN_SECONDS * 10 );
 			// Redirects to "my-account" page.
 			wp_safe_redirect( get_permalink( get_option( 'woocommerce_myaccount_page_id' ) ) );
 			exit;
@@ -226,14 +229,14 @@ class WC_Stripe_Payment_Request {
 		add_action( 'woocommerce_checkout_before_customer_details', [ $this, 'display_payment_request_button_html' ], 1 );
 		add_action( 'woocommerce_checkout_before_customer_details', [ $this, 'display_payment_request_button_separator_html' ], 2 );
 
-		add_action( 'wc_ajax_wc_stripe_get_cart_details', [ $this, 'ajax_get_cart_details' ] );
-		add_action( 'wc_ajax_wc_stripe_get_shipping_options', [ $this, 'ajax_get_shipping_options' ] );
-		add_action( 'wc_ajax_wc_stripe_update_shipping_method', [ $this, 'ajax_update_shipping_method' ] );
-		add_action( 'wc_ajax_wc_stripe_create_order', [ $this, 'ajax_create_order' ] );
-		add_action( 'wc_ajax_wc_stripe_add_to_cart', [ $this, 'ajax_add_to_cart' ] );
-		add_action( 'wc_ajax_wc_stripe_get_selected_product_data', [ $this, 'ajax_get_selected_product_data' ] );
-		add_action( 'wc_ajax_wc_stripe_clear_cart', [ $this, 'ajax_clear_cart' ] );
-		add_action( 'wc_ajax_wc_stripe_log_errors', [ $this, 'ajax_log_errors' ] );
+		add_action( 'wc_ajax_wc_monilypay_get_cart_details', [ $this, 'ajax_get_cart_details' ] );
+		add_action( 'wc_ajax_wc_monilypay_get_shipping_options', [ $this, 'ajax_get_shipping_options' ] );
+		add_action( 'wc_ajax_wc_monilypay_update_shipping_method', [ $this, 'ajax_update_shipping_method' ] );
+		add_action( 'wc_ajax_wc_monilypay_create_order', [ $this, 'ajax_create_order' ] );
+		add_action( 'wc_ajax_wc_monilypay_add_to_cart', [ $this, 'ajax_add_to_cart' ] );
+		add_action( 'wc_ajax_wc_monilypay_get_selected_product_data', [ $this, 'ajax_get_selected_product_data' ] );
+		add_action( 'wc_ajax_wc_monilypay_clear_cart', [ $this, 'ajax_clear_cart' ] );
+		add_action( 'wc_ajax_wc_monilypay_log_errors', [ $this, 'ajax_log_errors' ] );
 
 		add_filter( 'woocommerce_gateway_title', [ $this, 'filter_gateway_title' ], 10, 2 );
 		add_action( 'woocommerce_checkout_order_processed', [ $this, 'add_order_meta' ], 10, 2 );
@@ -271,7 +274,7 @@ class WC_Stripe_Payment_Request {
 	 * @return  string
 	 */
 	public function get_button_height() {
-		if ( ! WC_Stripe_Feature_Flags::is_upe_preview_enabled() ) {
+		if ( ! WC_Monilypay_Feature_Flags::is_upe_preview_enabled() ) {
 			return isset( $this->stripe_settings['payment_request_button_height'] ) ? str_replace( 'px', '', $this->stripe_settings['payment_request_button_height'] ) : '64';
 		}
 
@@ -319,7 +322,7 @@ class WC_Stripe_Payment_Request {
 	 */
 	public function is_custom_button() {
 		// no longer a valid option
-		if ( WC_Stripe_Feature_Flags::is_upe_preview_enabled() ) {
+		if ( WC_Monilypay_Feature_Flags::is_upe_preview_enabled() ) {
 			return false;
 		}
 
@@ -346,7 +349,7 @@ class WC_Stripe_Payment_Request {
 	 */
 	public function get_button_label() {
 		// no longer a valid option
-		if ( WC_Stripe_Feature_Flags::is_upe_preview_enabled() ) {
+		if ( WC_Monilypay_Feature_Flags::is_upe_preview_enabled() ) {
 			return '';
 		}
 
@@ -411,12 +414,12 @@ class WC_Stripe_Payment_Request {
 
 		$items[] = [
 			'label'  => $product->get_name(),
-			'amount' => WC_Stripe_Helper::get_stripe_amount( $this->get_product_price( $product ) ),
+			'amount' => WC_Monilypay_Helper::get_stripe_amount( $this->get_product_price( $product ) ),
 		];
 
 		if ( wc_tax_enabled() ) {
 			$items[] = [
-				'label'   => __( 'Tax', 'woocommerce-gateway-stripe' ),
+				'label'   => __( 'Tax', 'woocommerce-gateway-monilypay' ),
 				'amount'  => 0,
 				'pending' => true,
 			];
@@ -424,14 +427,14 @@ class WC_Stripe_Payment_Request {
 
 		if ( wc_shipping_enabled() && $product->needs_shipping() ) {
 			$items[] = [
-				'label'   => __( 'Shipping', 'woocommerce-gateway-stripe' ),
+				'label'   => __( 'Shipping', 'woocommerce-gateway-monilypay' ),
 				'amount'  => 0,
 				'pending' => true,
 			];
 
 			$data['shippingOptions'] = [
 				'id'     => 'pending',
-				'label'  => __( 'Pending', 'woocommerce-gateway-stripe' ),
+				'label'  => __( 'Pending', 'woocommerce-gateway-monilypay' ),
 				'detail' => '',
 				'amount' => 0,
 			];
@@ -439,15 +442,15 @@ class WC_Stripe_Payment_Request {
 
 		$data['displayItems'] = $items;
 		$data['total']        = [
-			'label'   => apply_filters( 'wc_stripe_payment_request_total_label', $this->total_label ),
-			'amount'  => WC_Stripe_Helper::get_stripe_amount( $this->get_product_price( $product ) ),
+			'label'   => apply_filters( 'WC_Monilypay_Payment_Request_total_label', $this->total_label ),
+			'amount'  => WC_Monilypay_Helper::get_stripe_amount( $this->get_product_price( $product ) ),
 		];
 
 		$data['requestShipping'] = ( wc_shipping_enabled() && $product->needs_shipping() && 0 !== wc_get_shipping_method_count( true ) );
 		$data['currency']        = strtolower( get_woocommerce_currency() );
 		$data['country_code']    = substr( get_option( 'woocommerce_default_country' ), 0, 2 );
 
-		return apply_filters( 'wc_stripe_payment_request_product_data', $data, $product );
+		return apply_filters( 'WC_Monilypay_Payment_Request_product_data', $data, $product );
 	}
 
 	/**
@@ -463,10 +466,10 @@ class WC_Stripe_Payment_Request {
 		$order        = wc_get_order( $post->ID );
 		$method_title = is_object( $order ) ? $order->get_payment_method_title() : '';
 
-		if ( 'stripe' === $id && ! empty( $method_title ) ) {
-			if ( 'Apple Pay (Stripe)' === $method_title
-				|| 'Google Pay (Stripe)' === $method_title
-				|| 'Payment Request (Stripe)' === $method_title
+		if ( 'monilypay' === $id && ! empty( $method_title ) ) {
+			if ( 'Apple Pay (Monilypay)' === $method_title
+				|| 'Google Pay (Monilypay)' === $method_title
+				|| 'Payment Request (Monilypay)' === $method_title
 			) {
 				return $method_title;
 			}
@@ -475,8 +478,8 @@ class WC_Stripe_Payment_Request {
 			// are supported by other browsers besides Chrome. As such, we need to check for the
 			// old title to make sure older orders still reflect that they were paid via Payment
 			// Request Buttons.
-			if ( 'Chrome Payment Request (Stripe)' === $method_title ) {
-				return 'Payment Request (Stripe)';
+			if ( 'Chrome Payment Request (Monilypay)' === $method_title ) {
+				return 'Payment Request (Monilypay)';
 			}
 
 			return $method_title;
@@ -522,7 +525,7 @@ class WC_Stripe_Payment_Request {
 	 * @return  void
 	 */
 	public function add_order_meta( $order_id, $posted_data ) {
-		if ( empty( $_POST['payment_request_type'] ) || ! isset( $_POST['payment_method'] ) || 'stripe' !== $_POST['payment_method'] ) {
+		if ( empty( $_POST['payment_request_type'] ) || ! isset( $_POST['payment_method'] ) || 'monilypay' !== $_POST['payment_method'] ) {
 			return;
 		}
 
@@ -531,13 +534,13 @@ class WC_Stripe_Payment_Request {
 		$payment_request_type = wc_clean( wp_unslash( $_POST['payment_request_type'] ) );
 
 		if ( 'apple_pay' === $payment_request_type ) {
-			$order->set_payment_method_title( 'Apple Pay (Stripe)' );
+			$order->set_payment_method_title( 'Apple Pay (Monilypay)' );
 			$order->save();
 		} elseif ( 'google_pay' === $payment_request_type ) {
-			$order->set_payment_method_title( 'Google Pay (Stripe)' );
+			$order->set_payment_method_title( 'Google Pay (Monilypay)' );
 			$order->save();
 		} elseif ( 'payment_request_api' === $payment_request_type ) {
-			$order->set_payment_method_title( 'Payment Request (Stripe)' );
+			$order->set_payment_method_title( 'Payment Request (Monilypay)' );
 			$order->save();
 		}
 	}
@@ -551,7 +554,7 @@ class WC_Stripe_Payment_Request {
 	 */
 	public function supported_product_types() {
 		return apply_filters(
-			'wc_stripe_payment_request_supported_types',
+			'WC_Monilypay_Payment_Request_supported_types',
 			[
 				'simple',
 				'variable',
@@ -625,7 +628,7 @@ class WC_Stripe_Payment_Request {
 			if ( WC_Subscriptions_Product::is_subscription( $product ) ) {
 				return true;
 			}
-		} elseif ( WC_Stripe_Helper::has_cart_or_checkout_on_current_page() ) {
+		} elseif ( WC_Monilypay_Helper::has_cart_or_checkout_on_current_page() ) {
 			foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) {
 				$_product = apply_filters( 'woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key );
 				if ( WC_Subscriptions_Product::is_subscription( $_product ) ) {
@@ -681,12 +684,12 @@ class WC_Stripe_Payment_Request {
 	 * @return string Redirect URL.
 	 */
 	public function get_login_redirect_url( $redirect ) {
-		$url = esc_url_raw( wp_unslash( isset( $_COOKIE['wc_stripe_payment_request_redirect_url'] ) ? $_COOKIE['wc_stripe_payment_request_redirect_url'] : '' ) );
+		$url = esc_url_raw( wp_unslash( isset( $_COOKIE['WC_Monilypay_Payment_Request_redirect_url'] ) ? $_COOKIE['WC_Monilypay_Payment_Request_redirect_url'] : '' ) );
 
 		if ( empty( $url ) ) {
 			return $redirect;
 		}
-		wc_setcookie( 'wc_stripe_payment_request_redirect_url', null );
+		wc_setcookie( 'WC_Monilypay_Payment_Request_redirect_url', null );
 
 		return $url;
 	}
@@ -704,10 +707,11 @@ class WC_Stripe_Payment_Request {
 
 		return [
 			'ajax_url'           => WC_AJAX::get_endpoint( '%%endpoint%%' ),
-			'stripe'             => [
+			'monilypay'             => [
 				'key'                => $this->publishable_key,
-				'allow_prepaid_card' => apply_filters( 'wc_stripe_allow_prepaid_card', true ) ? 'yes' : 'no',
-				'locale'             => WC_Stripe_Helper::convert_wc_locale_to_stripe_locale( get_locale() ),
+				'accountId'			 => $this->accountId,
+				'allow_prepaid_card' => apply_filters( 'wc_monilypay_allow_prepaid_card', true ) ? 'yes' : 'no',
+				'locale'             => WC_Monilypay_Helper::convert_wc_locale_to_stripe_locale( get_locale() ),
 			],
 			'nonce'              => [
 				'payment'                   => wp_create_nonce( 'wc-stripe-payment-request' ),
@@ -720,9 +724,9 @@ class WC_Stripe_Payment_Request {
 				'clear_cart'                => wp_create_nonce( 'wc-stripe-clear-cart' ),
 			],
 			'i18n'               => [
-				'no_prepaid_card'  => __( 'Sorry, we\'re not accepting prepaid cards at this time.', 'woocommerce-gateway-stripe' ),
+				'no_prepaid_card'  => __( 'Sorry, we\'re not accepting prepaid cards at this time.', 'woocommerce-gateway-monilypay' ),
 				/* translators: Do not translate the [option] placeholder */
-				'unknown_shipping' => __( 'Unknown shipping option "[option]".', 'woocommerce-gateway-stripe' ),
+				'unknown_shipping' => __( 'Unknown shipping option "[option]".', 'woocommerce-gateway-monilypay' ),
 			],
 			'checkout'           => [
 				'url'               => wc_get_checkout_url(),
@@ -760,19 +764,19 @@ class WC_Stripe_Payment_Request {
 
 		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
-		wp_register_script( 'stripe', 'https://js.stripe.com/v3/', '', '3.0', true );
-		wp_register_script( 'wc_stripe_payment_request', plugins_url( 'assets/js/stripe-payment-request' . $suffix . '.js', WC_STRIPE_MAIN_FILE ), [ 'jquery', 'stripe' ], WC_STRIPE_VERSION, true );
+		wp_register_script( 'monilypay', 'https://js.stripe.com/v3/', '', '3.0', true );
+		wp_register_script( 'wc_monilypay_payment_request', plugins_url( 'assets/js/stripe-payment-request' . $suffix . '.js', WC_MONILYPAY_MAIN_FILE ), [ 'jquery', 'monilypay' ], wc_monilypay_stripe_version, true );
 
 		wp_localize_script(
-			'wc_stripe_payment_request',
-			'wc_stripe_payment_request_params',
+			'wc_monilypay_payment_request',
+			'wc_monilypay_payment_request_params',
 			apply_filters(
-				'wc_stripe_payment_request_params',
+				'wc_monilypay_payment_request_params',
 				$this->javascript_params()
 			)
 		);
 
-		wp_enqueue_script( 'wc_stripe_payment_request' );
+		wp_enqueue_script( 'wc_monilypay_payment_request' );
 	}
 
 	/**
@@ -784,7 +788,7 @@ class WC_Stripe_Payment_Request {
 	 */
 	private function is_page_supported() {
 		return $this->is_product()
-			|| WC_Stripe_Helper::has_cart_or_checkout_on_current_page()
+			|| WC_Monilypay_Helper::has_cart_or_checkout_on_current_page()
 			|| isset( $_GET['pay_for_order'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	}
 
@@ -797,7 +801,7 @@ class WC_Stripe_Payment_Request {
 	public function display_payment_request_button_html() {
 		$gateways = WC()->payment_gateways->get_available_payment_gateways();
 
-		if ( ! isset( $gateways['stripe'] ) ) {
+		if ( ! isset( $gateways['monilypay'] ) ) {
 			return;
 		}
 
@@ -835,7 +839,7 @@ class WC_Stripe_Payment_Request {
 	public function display_payment_request_button_separator_html() {
 		$gateways = WC()->payment_gateways->get_available_payment_gateways();
 
-		if ( ! isset( $gateways['stripe'] ) ) {
+		if ( ! isset( $gateways['monilypay'] ) ) {
 			return;
 		}
 
@@ -847,7 +851,7 @@ class WC_Stripe_Payment_Request {
 			return;
 		}
 		?>
-		<p id="wc-stripe-payment-request-button-separator" style="margin-top:1.5em;text-align:center;display:none;">&mdash; <?php esc_html_e( 'OR', 'woocommerce-gateway-stripe' ); ?> &mdash;</p>
+		<p id="wc-stripe-payment-request-button-separator" style="margin-top:1.5em;text-align:center;display:none;">&mdash; <?php esc_html_e( 'OR', 'woocommerce-gateway-monilypay' ); ?> &mdash;</p>
 		<?php
 	}
 
@@ -862,20 +866,20 @@ class WC_Stripe_Payment_Request {
 	public function should_show_payment_request_button() {
 		// If keys are not set bail.
 		if ( ! $this->are_keys_set() ) {
-			WC_Stripe_Logger::log( 'Keys are not set correctly.' );
+			WC_Monilypay_Logger::log( 'Keys are not set correctly.' );
 			return false;
 		}
 
 		// If no SSL bail.
 		if ( ! $this->testmode && ! is_ssl() ) {
-			WC_Stripe_Logger::log( 'Stripe Payment Request live mode requires SSL.' );
+			WC_Monilypay_Logger::log( 'Stripe Payment Request live mode requires SSL.' );
 			return false;
 		}
 
 		// Don't show if on the cart or checkout page, or if page contains the cart or checkout
 		// shortcodes, with items in the cart that aren't supported.
 		if (
-			WC_Stripe_Helper::has_cart_or_checkout_on_current_page()
+			WC_Monilypay_Helper::has_cart_or_checkout_on_current_page()
 			&& ! $this->allowed_items_in_cart()
 		) {
 			return false;
@@ -924,7 +928,7 @@ class WC_Stripe_Payment_Request {
 		$should_show_on_cart_page = in_array( 'cart', $this->get_button_locations(), true );
 
 		return apply_filters(
-			'wc_stripe_show_payment_request_on_cart',
+			'wc_monilypay_show_payment_request_on_cart',
 			$should_show_on_cart_page
 		);
 	}
@@ -943,7 +947,7 @@ class WC_Stripe_Payment_Request {
 		$should_show_on_checkout_page = in_array( 'checkout', $this->get_button_locations(), true );
 
 		return apply_filters(
-			'wc_stripe_show_payment_request_on_checkout',
+			'wc_monilypay_show_payment_request_on_checkout',
 			$should_show_on_checkout_page,
 			$post
 		);
@@ -964,7 +968,7 @@ class WC_Stripe_Payment_Request {
 
 		// Note the negation because if the filter returns `true` that means we should hide the PRB.
 		return ! apply_filters(
-			'wc_stripe_hide_payment_request_on_product_page',
+			'wc_monilypay_hide_payment_request_on_product_page',
 			! $should_show_on_product_page,
 			$post
 		);
@@ -1023,7 +1027,7 @@ class WC_Stripe_Payment_Request {
 
 		$errors = isset( $_POST['errors'] ) ? wc_clean( wp_unslash( $_POST['errors'] ) ) : '';
 
-		WC_Stripe_Logger::log( $errors );
+		WC_Monilypay_Logger::log( $errors );
 
 		exit;
 	}
@@ -1113,7 +1117,7 @@ class WC_Stripe_Payment_Request {
 
 			// Remember current shipping method before resetting.
 			$chosen_shipping_methods = WC()->session->get( 'chosen_shipping_methods' );
-			$this->calculate_shipping( apply_filters( 'wc_stripe_payment_request_shipping_posted_values', $shipping_address ) );
+			$this->calculate_shipping( apply_filters( 'WC_Monilypay_Payment_Request_shipping_posted_values', $shipping_address ) );
 
 			$packages          = WC()->shipping->get_packages();
 			$shipping_rate_ids = [];
@@ -1121,26 +1125,26 @@ class WC_Stripe_Payment_Request {
 			if ( ! empty( $packages ) && WC()->customer->has_calculated_shipping() ) {
 				foreach ( $packages as $package_key => $package ) {
 					if ( empty( $package['rates'] ) ) {
-						throw new Exception( __( 'Unable to find shipping method for address.', 'woocommerce-gateway-stripe' ) );
+						throw new Exception( __( 'Unable to find shipping method for address.', 'woocommerce-gateway-monilypay' ) );
 					}
 
 					foreach ( $package['rates'] as $key => $rate ) {
 						if ( in_array( $rate->id, $shipping_rate_ids, true ) ) {
 							// The Payment Requests will try to load indefinitely if there are duplicate shipping
 							// option IDs.
-							throw new Exception( __( 'Unable to provide shipping options for Payment Requests.', 'woocommerce-gateway-stripe' ) );
+							throw new Exception( __( 'Unable to provide shipping options for Payment Requests.', 'woocommerce-gateway-monilypay' ) );
 						}
 						$shipping_rate_ids[]        = $rate->id;
 						$data['shipping_options'][] = [
 							'id'     => $rate->id,
 							'label'  => $rate->label,
 							'detail' => '',
-							'amount' => WC_Stripe_Helper::get_stripe_amount( $rate->cost ),
+							'amount' => WC_Monilypay_Helper::get_stripe_amount( $rate->cost ),
 						];
 					}
 				}
 			} else {
-				throw new Exception( __( 'Unable to find shipping method for address.', 'woocommerce-gateway-stripe' ) );
+				throw new Exception( __( 'Unable to find shipping method for address.', 'woocommerce-gateway-monilypay' ) );
 			}
 
 			// The first shipping option is automatically applied on the client.
@@ -1240,7 +1244,7 @@ class WC_Stripe_Payment_Request {
 
 			if ( ! is_a( $product, 'WC_Product' ) ) {
 				/* translators: 1) The product Id */
-				throw new Exception( sprintf( __( 'Product with the ID (%1$s) cannot be found.', 'woocommerce-gateway-stripe' ), $product_id ) );
+				throw new Exception( sprintf( __( 'Product with the ID (%1$s) cannot be found.', 'woocommerce-gateway-monilypay' ), $product_id ) );
 			}
 
 			if ( 'variable' === $product->get_type() && isset( $_POST['attributes'] ) ) {
@@ -1256,12 +1260,12 @@ class WC_Stripe_Payment_Request {
 
 			// Force quantity to 1 if sold individually and check for existing item in cart.
 			if ( $product->is_sold_individually() ) {
-				$qty = apply_filters( 'wc_stripe_payment_request_add_to_cart_sold_individually_quantity', 1, $qty, $product_id, $variation_id );
+				$qty = apply_filters( 'WC_Monilypay_Payment_Request_add_to_cart_sold_individually_quantity', 1, $qty, $product_id, $variation_id );
 			}
 
 			if ( ! $product->has_enough_stock( $qty ) ) {
 				/* translators: 1) product name 2) quantity in stock */
-				throw new Exception( sprintf( __( 'You cannot add that amount of "%1$s"; to the cart because there is not enough stock (%2$s remaining).', 'woocommerce-gateway-stripe' ), $product->get_name(), wc_format_stock_quantity_for_display( $product->get_stock_quantity(), $product ) ) );
+				throw new Exception( sprintf( __( 'You cannot add that amount of "%1$s"; to the cart because there is not enough stock (%2$s remaining).', 'woocommerce-gateway-monilypay' ), $product->get_name(), wc_format_stock_quantity_for_display( $product->get_stock_quantity(), $product ) ) );
 			}
 
 			$total = $qty * $this->get_product_price( $product ) + $addon_value;
@@ -1273,12 +1277,12 @@ class WC_Stripe_Payment_Request {
 
 			$items[] = [
 				'label'  => $product->get_name() . $quantity_label,
-				'amount' => WC_Stripe_Helper::get_stripe_amount( $total ),
+				'amount' => WC_Monilypay_Helper::get_stripe_amount( $total ),
 			];
 
 			if ( wc_tax_enabled() ) {
 				$items[] = [
-					'label'   => __( 'Tax', 'woocommerce-gateway-stripe' ),
+					'label'   => __( 'Tax', 'woocommerce-gateway-monilypay' ),
 					'amount'  => 0,
 					'pending' => true,
 				];
@@ -1286,14 +1290,14 @@ class WC_Stripe_Payment_Request {
 
 			if ( wc_shipping_enabled() && $product->needs_shipping() ) {
 				$items[] = [
-					'label'   => __( 'Shipping', 'woocommerce-gateway-stripe' ),
+					'label'   => __( 'Shipping', 'woocommerce-gateway-monilypay' ),
 					'amount'  => 0,
 					'pending' => true,
 				];
 
 				$data['shippingOptions'] = [
 					'id'     => 'pending',
-					'label'  => __( 'Pending', 'woocommerce-gateway-stripe' ),
+					'label'  => __( 'Pending', 'woocommerce-gateway-monilypay' ),
 					'detail' => '',
 					'amount' => 0,
 				];
@@ -1302,7 +1306,7 @@ class WC_Stripe_Payment_Request {
 			$data['displayItems'] = $items;
 			$data['total']        = [
 				'label'   => $this->total_label,
-				'amount'  => WC_Stripe_Helper::get_stripe_amount( $total ),
+				'amount'  => WC_Monilypay_Helper::get_stripe_amount( $total ),
 			];
 
 			$data['requestShipping'] = ( wc_shipping_enabled() && $product->needs_shipping() );
@@ -1392,7 +1396,7 @@ class WC_Stripe_Payment_Request {
 		// @reykjalin: This HK specific sanitazation *should be removed* once Apple Pay fix
 		// the address bug. More info on that in pc4etw-bY-p2.
 		if ( 'HK' === $billing_country ) {
-			include_once WC_STRIPE_PLUGIN_PATH . '/includes/constants/class-wc-stripe-hong-kong-states.php';
+			include_once WC_MONILYPAY_PLUGIN_PATH . '/includes/constants/class-wc-stripe-hong-kong-states.php';
 
 			if ( ! WC_Stripe_Hong_Kong_States::is_valid_state( strtolower( $billing_state ) ) ) {
 				$billing_postcode = ! empty( $_POST['billing_postcode'] ) ? wc_clean( wp_unslash( $_POST['billing_postcode'] ) ) : '';
@@ -1402,7 +1406,7 @@ class WC_Stripe_Payment_Request {
 			}
 		}
 		if ( 'HK' === $shipping_country ) {
-			include_once WC_STRIPE_PLUGIN_PATH . '/includes/constants/class-wc-stripe-hong-kong-states.php';
+			include_once WC_MONILYPAY_PLUGIN_PATH . '/includes/constants/class-wc-stripe-hong-kong-states.php';
 
 			if ( ! WC_Stripe_Hong_Kong_States::is_valid_state( strtolower( $shipping_state ) ) ) {
 				$shipping_postcode = ! empty( $_POST['shipping_postcode'] ) ? wc_clean( wp_unslash( $_POST['shipping_postcode'] ) ) : '';
@@ -1465,8 +1469,8 @@ class WC_Stripe_Payment_Request {
 	 */
 	public function get_normalized_state_from_pr_states( $state, $country ) {
 		// Include Payment Request API State list for compatibility with WC countries/states.
-		include_once WC_STRIPE_PLUGIN_PATH . '/includes/constants/class-wc-stripe-payment-request-button-states.php';
-		$pr_states = WC_Stripe_Payment_Request_Button_States::STATES;
+		include_once WC_MONILYPAY_PLUGIN_PATH . '/includes/constants/class-wc-stripe-payment-request-button-states.php';
+		$pr_states = WC_Monilypay_Payment_Request_Button_States::STATES;
 
 		if ( ! isset( $pr_states[ $country ] ) ) {
 			return $state;
@@ -1572,7 +1576,7 @@ class WC_Stripe_Payment_Request {
 			wc_add_notice(
 				sprintf(
 					/* translators: 1) country. */
-					__( 'The Payment Request button is not supported in %1$s because some required fields couldn\'t be verified. Please proceed to the checkout page and try again.', 'woocommerce-gateway-stripe' ),
+					__( 'The Payment Request button is not supported in %1$s because some required fields couldn\'t be verified. Please proceed to the checkout page and try again.', 'woocommerce-gateway-monilypay' ),
 					isset( $countries[ $posted_data['billing_country'] ] ) ? $countries[ $posted_data['billing_country'] ] : $posted_data['billing_country']
 				),
 				'error'
@@ -1588,7 +1592,7 @@ class WC_Stripe_Payment_Request {
 	 */
 	public function ajax_create_order() {
 		if ( WC()->cart->is_empty() ) {
-			wp_send_json_error( __( 'Empty cart', 'woocommerce-gateway-stripe' ) );
+			wp_send_json_error( __( 'Empty cart', 'woocommerce-gateway-monilypay' ) );
 		}
 
 		if ( ! defined( 'WOOCOMMERCE_CHECKOUT' ) ) {
@@ -1680,13 +1684,13 @@ class WC_Stripe_Payment_Request {
 		// it would be DRYer to use `array_merge`,
 		// but I thought that this approach might be more straightforward to clean up when we remove the feature flag code.
 		$button_type = $this->get_button_type();
-		if ( WC_Stripe_Feature_Flags::is_upe_preview_enabled() ) {
+		if ( WC_Monilypay_Feature_Flags::is_upe_preview_enabled() ) {
 			return [
 				'type'         => $button_type,
 				'theme'        => $this->get_button_theme(),
 				'height'       => $this->get_button_height(),
 				// Default format is en_US.
-				'locale'       => apply_filters( 'wc_stripe_payment_request_button_locale', substr( get_locale(), 0, 2 ) ),
+				'locale'       => apply_filters( 'WC_Monilypay_Payment_Request_button_locale', substr( get_locale(), 0, 2 ) ),
 				'branded_type' => 'default' === $button_type ? 'short' : 'long',
 				// these values are no longer applicable - all the JS relying on them can be removed.
 				'css_selector' => '',
@@ -1700,7 +1704,7 @@ class WC_Stripe_Payment_Request {
 			'type'         => $button_type,
 			'theme'        => $this->get_button_theme(),
 			'height'       => $this->get_button_height(),
-			'locale'       => apply_filters( 'wc_stripe_payment_request_button_locale', substr( get_locale(), 0, 2 ) ),
+			'locale'       => apply_filters( 'WC_Monilypay_Payment_Request_button_locale', substr( get_locale(), 0, 2 ) ),
 			// Default format is en_US.
 			'is_custom'    => $this->is_custom_button(),
 			'is_branded'   => $this->is_branded_button(),
@@ -1727,7 +1731,7 @@ class WC_Stripe_Payment_Request {
 				'id'     => $method['id'],
 				'label'  => $method['label'],
 				'detail' => '',
-				'amount' => WC_Stripe_Helper::get_stripe_amount( $method['amount']['value'] ),
+				'amount' => WC_Monilypay_Helper::get_stripe_amount( $method['amount']['value'] ),
 			];
 		}
 
@@ -1749,7 +1753,7 @@ class WC_Stripe_Payment_Request {
 		$lines         = [];
 		$subtotal      = 0;
 		$discounts     = 0;
-		$display_items = ! apply_filters( 'wc_stripe_payment_request_hide_itemization', true ) || $itemized_display_items;
+		$display_items = ! apply_filters( 'WC_Monilypay_Payment_Request_hide_itemization', true ) || $itemized_display_items;
 
 		foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) {
 			$subtotal      += $cart_item['line_subtotal'];
@@ -1759,7 +1763,7 @@ class WC_Stripe_Payment_Request {
 
 			$lines[] = [
 				'label'  => $product_name . $quantity_label,
-				'amount' => WC_Stripe_Helper::get_stripe_amount( $amount ),
+				'amount' => WC_Monilypay_Helper::get_stripe_amount( $amount ),
 			];
 		}
 
@@ -1770,7 +1774,7 @@ class WC_Stripe_Payment_Request {
 
 			$items[] = [
 				'label'  => 'Subtotal',
-				'amount' => WC_Stripe_Helper::get_stripe_amount( $subtotal ),
+				'amount' => WC_Monilypay_Helper::get_stripe_amount( $subtotal ),
 			];
 		}
 
@@ -1792,22 +1796,22 @@ class WC_Stripe_Payment_Request {
 
 		if ( wc_tax_enabled() ) {
 			$items[] = [
-				'label'  => esc_html( __( 'Tax', 'woocommerce-gateway-stripe' ) ),
-				'amount' => WC_Stripe_Helper::get_stripe_amount( $tax ),
+				'label'  => esc_html( __( 'Tax', 'woocommerce-gateway-monilypay' ) ),
+				'amount' => WC_Monilypay_Helper::get_stripe_amount( $tax ),
 			];
 		}
 
 		if ( WC()->cart->needs_shipping() ) {
 			$items[] = [
-				'label'  => esc_html( __( 'Shipping', 'woocommerce-gateway-stripe' ) ),
-				'amount' => WC_Stripe_Helper::get_stripe_amount( $shipping ),
+				'label'  => esc_html( __( 'Shipping', 'woocommerce-gateway-monilypay' ) ),
+				'amount' => WC_Monilypay_Helper::get_stripe_amount( $shipping ),
 			];
 		}
 
 		if ( WC()->cart->has_discount() ) {
 			$items[] = [
-				'label'  => esc_html( __( 'Discount', 'woocommerce-gateway-stripe' ) ),
-				'amount' => WC_Stripe_Helper::get_stripe_amount( $discounts ),
+				'label'  => esc_html( __( 'Discount', 'woocommerce-gateway-monilypay' ) ),
+				'amount' => WC_Monilypay_Helper::get_stripe_amount( $discounts ),
 			];
 		}
 
@@ -1821,7 +1825,7 @@ class WC_Stripe_Payment_Request {
 		foreach ( $cart_fees as $key => $fee ) {
 			$items[] = [
 				'label'  => $fee->name,
-				'amount' => WC_Stripe_Helper::get_stripe_amount( $fee->amount ),
+				'amount' => WC_Monilypay_Helper::get_stripe_amount( $fee->amount ),
 			];
 		}
 
@@ -1829,7 +1833,7 @@ class WC_Stripe_Payment_Request {
 			'displayItems' => $items,
 			'total'        => [
 				'label'   => $this->total_label,
-				'amount'  => max( 0, apply_filters( 'woocommerce_stripe_calculated_total', WC_Stripe_Helper::get_stripe_amount( $order_total ), $order_total, WC()->cart ) ),
+				'amount'  => max( 0, apply_filters( 'woocommerce_stripe_calculated_total', WC_Monilypay_Helper::get_stripe_amount( $order_total ), $order_total, WC()->cart ) ),
 				'pending' => false,
 			],
 		];
@@ -1849,11 +1853,11 @@ class WC_Stripe_Payment_Request {
 		}
 
 		/* translators: The text encapsulated in `**` can be replaced with "Apple Pay" or "Google Pay". Please translate this text, but don't remove the `**`. */
-		$message      = __( 'To complete your transaction with **the selected payment method**, you must log in or create an account with our site.', 'woocommerce-gateway-stripe' );
+		$message      = __( 'To complete your transaction with **the selected payment method**, you must log in or create an account with our site.', 'woocommerce-gateway-monilypay' );
 		$redirect_url = add_query_arg(
 			[
 				'_wpnonce'                               => wp_create_nonce( 'wc-stripe-set-redirect-url' ),
-				'wc_stripe_payment_request_redirect_url' => rawurlencode( home_url( add_query_arg( [] ) ) ), // Current URL to redirect to after login.
+				'WC_Monilypay_Payment_Request_redirect_url' => rawurlencode( home_url( add_query_arg( [] ) ) ), // Current URL to redirect to after login.
 			],
 			home_url()
 		);

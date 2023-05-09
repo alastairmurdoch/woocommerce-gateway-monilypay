@@ -4,13 +4,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * WC_Gateway_Stripe class.
+ * WC_Gateway_Monilypay class.
  *
  * @extends WC_Payment_Gateway
  */
-class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
+class WC_Gateway_Monilypay extends WC_Monilypay_Payment_Gateway {
 
-	const ID = 'stripe';
+	const ID = 'monilypay';
 
 	/**
 	 * Should we capture Credit cards
@@ -48,6 +48,20 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 	public $publishable_key;
 
 	/**
+	 * MonilyPay API Key
+	 *
+	 * @var string
+	 */
+	public $monilypay_key;
+
+	/**
+	 * MonilyPay Account Key
+	 *
+	 * @var string
+	 */
+	public $monilypay_account_id;
+
+	/**
 	 * Do we accept Payment Request?
 	 *
 	 * @var bool
@@ -73,9 +87,9 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 	 */
 	public function __construct() {
 		$this->id           = self::ID;
-		$this->method_title = __( 'Stripe', 'woocommerce-gateway-stripe' );
+		$this->method_title = __( 'MonilyPay', 'woocommerce-gateway-monilypay' );
 		/* translators: 1) link to Stripe register page 2) link to Stripe api keys page */
-		$this->method_description = __( 'Stripe works by adding payment fields on the checkout and then sending the details to Stripe for verification.', 'woocommerce-gateway-stripe' );
+		$this->method_description = __( 'MonilyPay works by adding payment fields on the checkout and then sending the details to Stripe for verification.', 'woocommerce-gateway-monilypay' );
 		$this->has_fields         = true;
 		$this->supports           = [
 			'products',
@@ -95,6 +109,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 
 		// Check if pre-orders are enabled and add support for them.
 		$this->maybe_init_pre_orders();
+	
 
 		// Get setting values.
 		$this->title                = $this->get_validated_option( 'title' );
@@ -103,13 +118,16 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 		$this->testmode             = 'yes' === $this->get_option( 'testmode' );
 		$this->inline_cc_form       = 'yes' === $this->get_option( 'inline_cc_form' );
 		$this->capture              = 'yes' === $this->get_option( 'capture', 'yes' );
-		$this->statement_descriptor = WC_Stripe_Helper::clean_statement_descriptor( $this->get_validated_option( 'statement_descriptor' ) );
+		$this->statement_descriptor = WC_Monilypay_Helper::clean_statement_descriptor( $this->get_validated_option( 'statement_descriptor' ) );
 		$this->saved_cards          = 'yes' === $this->get_option( 'saved_cards' );
 		$this->secret_key           = $this->testmode ? $this->get_validated_option( 'test_secret_key' ) : $this->get_validated_option( 'secret_key' );
 		$this->publishable_key      = $this->testmode ? $this->get_validated_option( 'test_publishable_key' ) : $this->get_validated_option( 'publishable_key' );
+		$this->monilypay_key		= $this->testmode ? $this->get_validated_option( 'test_monilypay_key' ) : $this->get_validated_option( 'monilypay_key' );
+		$this->monilypay_account_id		= $this->testmode ? $this->get_validated_option( 'test_monilypay_account_id' ) : $this->get_validated_option( 'monilypay_account_id' );
+		
 		$this->payment_request      = 'yes' === $this->get_option( 'payment_request', 'yes' );
 
-		WC_Stripe_API::set_secret_key( $this->secret_key );
+		WC_Monilypay_API::set_secret_key( $this->secret_key );
 
 		// Hooks.
 		add_action( 'wp_enqueue_scripts', [ $this, 'payment_scripts' ] );
@@ -150,12 +168,12 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 	 * @param string $load_address The address to load.
 	 */
 	public function show_update_card_notice( $user_id, $load_address ) {
-		if ( ! $this->saved_cards || ! WC_Stripe_Payment_Tokens::customer_has_saved_methods( $user_id ) || 'billing' !== $load_address ) {
+		if ( ! $this->saved_cards || ! WC_Monilypay_Payment_Tokens::customer_has_saved_methods( $user_id ) || 'billing' !== $load_address ) {
 			return;
 		}
 
 		/* translators: 1) Opening anchor tag 2) closing anchor tag */
-		wc_add_notice( sprintf( __( 'If your billing address has been changed for saved payment methods, be sure to remove any %1$ssaved payment methods%2$s on file and re-add them.', 'woocommerce-gateway-stripe' ), '<a href="' . esc_url( wc_get_endpoint_url( 'payment-methods' ) ) . '" class="wc-stripe-update-card-notice" style="text-decoration:underline;">', '</a>' ), 'notice' );
+		wc_add_notice( sprintf( __( 'If your billing address has been changed for saved payment methods, be sure to remove any %1$ssaved payment methods%2$s on file and re-add them.', 'woocommerce-gateway-monilypay' ), '<a href="' . esc_url( wc_get_endpoint_url( 'payment-methods' ) ) . '" class="wc-stripe-update-card-notice" style="text-decoration:underline;">', '</a>' ), 'notice' );
 	}
 
 	/**
@@ -219,12 +237,12 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 
 		if ( $this->testmode ) {
 			/* translators: link to Stripe testing page */
-			$description .= ' ' . sprintf( __( 'TEST MODE ENABLED. In test mode, you can use the card number 4242424242424242 with any CVC and a valid expiration date or check the <a href="%s" target="_blank">Testing Stripe documentation</a> for more card numbers.', 'woocommerce-gateway-stripe' ), 'https://stripe.com/docs/testing' );
+			$description .= ' ' . sprintf( __( 'TEST MODE ENABLED. In test mode, you can use the card number 4242424242424242 with any CVC and a valid expiration date or check the <a href="%s" target="_blank">Testing Stripe documentation</a> for more card numbers.', 'woocommerce-gateway-monilypay' ), 'https://stripe.com/docs/testing' );
 		}
 
 		$description = trim( $description );
 
-		echo apply_filters( 'wc_stripe_description', wpautop( wp_kses_post( $description ) ), $this->id ); // wpcs: xss ok.
+		echo apply_filters( 'wc_monilypay_description', wpautop( wp_kses_post( $description ) ), $this->id ); // wpcs: xss ok.
 
 		if ( $display_tokenization ) {
 			$this->tokenization_script();
@@ -233,12 +251,12 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 
 		$this->elements_form();
 
-		if ( apply_filters( 'wc_stripe_display_save_payment_method_checkbox', $display_tokenization ) && ! is_add_payment_method_page() && ! isset( $_GET['change_payment_method'] ) ) { // wpcs: csrf ok.
+		if ( apply_filters( 'wc_monilypay_display_save_payment_method_checkbox', $display_tokenization ) && ! is_add_payment_method_page() && ! isset( $_GET['change_payment_method'] ) ) { // wpcs: csrf ok.
 
 			$this->save_payment_method_checkbox();
 		}
 
-		do_action( 'wc_stripe_payment_fields_stripe', $this->id );
+		do_action( 'wc_monilypay_payment_fields_stripe', $this->id );
 
 		echo '</div>';
 
@@ -258,7 +276,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 
 			<?php if ( $this->inline_cc_form ) { ?>
 				<label for="card-element">
-					<?php esc_html_e( 'Credit or debit card', 'woocommerce-gateway-stripe' ); ?>
+					<?php esc_html_e( 'Credit or debit card', 'woocommerce-gateway-monilypay' ); ?>
 				</label>
 
 				<div id="stripe-card-element" class="wc-stripe-elements-field">
@@ -266,7 +284,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 				</div>
 			<?php } else { ?>
 				<div class="form-row form-row-wide">
-					<label for="stripe-card-element"><?php esc_html_e( 'Card Number', 'woocommerce-gateway-stripe' ); ?> <span class="required">*</span></label>
+					<label for="stripe-card-element"><?php esc_html_e( 'Card Number', 'woocommerce-gateway-monilypay' ); ?> <span class="required">*</span></label>
 					<div class="stripe-card-group">
 						<div id="stripe-card-element" class="wc-stripe-elements-field">
 						<!-- a Stripe Element will be inserted here. -->
@@ -277,7 +295,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 				</div>
 
 				<div class="form-row form-row-first">
-					<label for="stripe-exp-element"><?php esc_html_e( 'Expiry Date', 'woocommerce-gateway-stripe' ); ?> <span class="required">*</span></label>
+					<label for="stripe-exp-element"><?php esc_html_e( 'Expiry Date', 'woocommerce-gateway-monilypay' ); ?> <span class="required">*</span></label>
 
 					<div id="stripe-exp-element" class="wc-stripe-elements-field">
 					<!-- a Stripe Element will be inserted here. -->
@@ -285,7 +303,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 				</div>
 
 				<div class="form-row form-row-last">
-					<label for="stripe-cvc-element"><?php esc_html_e( 'Card Code (CVC)', 'woocommerce-gateway-stripe' ); ?> <span class="required">*</span></label>
+					<label for="stripe-cvc-element"><?php esc_html_e( 'Card Code (CVC)', 'woocommerce-gateway-monilypay' ); ?> <span class="required">*</span></label>
 				<div id="stripe-cvc-element" class="wc-stripe-elements-field">
 				<!-- a Stripe Element will be inserted here. -->
 				</div>
@@ -305,7 +323,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 	 * Override the parent admin_options method.
 	 */
 	public function admin_options() {
-		do_action( 'wc_stripe_gateway_admin_options_wrapper', $this );
+		do_action( 'wc_monilypay_gateway_admin_options_wrapper', $this );
 	}
 
 	/**
@@ -397,7 +415,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 			// the process_payment() from the UPE gateway which uses the PaymentMethods API instead of Sources API.
 			// This happens when using a saved payment method that was added with the UPE gateway.
 			if ( $this->is_using_saved_payment_method() && ! empty( $prepared_source->source ) && substr( $prepared_source->source, 0, 3 ) === 'pm_' ) {
-				$upe_gateway = new WC_Stripe_UPE_Payment_Gateway();
+				$upe_gateway = new WC_Monilypay_UPE_Payment_Gateway();
 				return $upe_gateway->process_payment_with_saved_payment_method( $order_id );
 			}
 
@@ -412,7 +430,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 			// This will throw exception if not valid.
 			$this->validate_minimum_order_amount( $order );
 
-			WC_Stripe_Logger::log( "Info: Begin processing payment for order $order_id for the amount of {$order->get_total()}" );
+			WC_Monilypay_Logger::log( "Info: Begin processing payment for order $order_id for the amount of {$order->get_total()}" );
 
 			if ( $intent ) {
 				$intent = $this->update_existing_intent( $intent, $order, $prepared_source );
@@ -426,7 +444,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 				$intent = $this->confirm_intent( $intent, $order, $prepared_source );
 			}
 
-			$force_save_source_value = apply_filters( 'wc_stripe_force_save_source', $force_save_source, $prepared_source->source );
+			$force_save_source_value = apply_filters( 'wc_monilypay_force_save_source', $force_save_source, $prepared_source->source );
 
 			if ( ! empty( $intent->error ) ) {
 				$this->maybe_remove_non_existent_customer( $intent->error, $order );
@@ -493,11 +511,11 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 				'redirect' => $this->get_return_url( $order ),
 			];
 
-		} catch ( WC_Stripe_Exception $e ) {
+		} catch ( WC_Monilypay_Exception $e ) {
 			wc_add_notice( $e->getLocalizedMessage(), 'error' );
-			WC_Stripe_Logger::log( 'Error: ' . $e->getMessage() );
+			WC_Monilypay_Logger::log( 'Error: ' . $e->getMessage() );
 
-			do_action( 'wc_gateway_stripe_process_payment_error', $e, $order );
+			do_action( 'WC_Gateway_Monilypay_process_payment_error', $e, $order );
 
 			/* translators: error message */
 			$order->update_status( 'failed' );
@@ -513,20 +531,20 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 	 * Saves payment method
 	 *
 	 * @param object $source_object
-	 * @throws WC_Stripe_Exception
+	 * @throws WC_Monilypay_Exception
 	 */
 	public function save_payment_method( $source_object ) {
 		$user_id  = get_current_user_id();
-		$customer = new WC_Stripe_Customer( $user_id );
+		$customer = new WC_Monilypay_Customer( $user_id );
 
 		if ( ( $user_id && 'reusable' === $source_object->usage ) ) {
 			$response = $customer->add_source( $source_object->id );
 
 			if ( ! empty( $response->error ) ) {
-				throw new WC_Stripe_Exception( print_r( $response, true ), $this->get_localized_error_message_from_response( $response ) );
+				throw new WC_Monilypay_Exception( print_r( $response, true ), $this->get_localized_error_message_from_response( $response ) );
 			}
 			if ( is_wp_error( $response ) ) {
-				throw new WC_Stripe_Exception( $response->get_error_message(), $response->get_error_message() );
+				throw new WC_Monilypay_Exception( $response->get_error_message(), $response->get_error_message() );
 			}
 		}
 	}
@@ -539,14 +557,14 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 	 * @param int $order_id The ID of the order.
 	 */
 	public function display_order_fee( $order_id ) {
-		if ( apply_filters( 'wc_stripe_hide_display_order_fee', false, $order_id ) ) {
+		if ( apply_filters( 'wc_monilypay_hide_display_order_fee', false, $order_id ) ) {
 			return;
 		}
 
 		$order = wc_get_order( $order_id );
 
-		$fee      = WC_Stripe_Helper::get_stripe_fee( $order );
-		$currency = WC_Stripe_Helper::get_stripe_currency( $order );
+		$fee      = WC_Monilypay_Helper::get_stripe_fee( $order );
+		$currency = WC_Monilypay_Helper::get_stripe_currency( $order );
 
 		if ( ! $fee || ! $currency ) {
 			return;
@@ -556,8 +574,8 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 
 		<tr>
 			<td class="label stripe-fee">
-				<?php echo wc_help_tip( __( 'This represents the fee Stripe collects for the transaction.', 'woocommerce-gateway-stripe' ) ); // wpcs: xss ok. ?>
-				<?php esc_html_e( 'Stripe Fee:', 'woocommerce-gateway-stripe' ); ?>
+				<?php echo wc_help_tip( __( 'This represents the fee Stripe collects for the transaction.', 'woocommerce-gateway-monilypay' ) ); // wpcs: xss ok. ?>
+				<?php esc_html_e( 'Stripe Fee:', 'woocommerce-gateway-monilypay' ); ?>
 			</td>
 			<td width="1%"></td>
 			<td class="total">
@@ -576,14 +594,14 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 	 * @param int $order_id The ID of the order.
 	 */
 	public function display_order_payout( $order_id ) {
-		if ( apply_filters( 'wc_stripe_hide_display_order_payout', false, $order_id ) ) {
+		if ( apply_filters( 'wc_monilypay_hide_display_order_payout', false, $order_id ) ) {
 			return;
 		}
 
 		$order = wc_get_order( $order_id );
 
-		$net      = WC_Stripe_Helper::get_stripe_net( $order );
-		$currency = WC_Stripe_Helper::get_stripe_currency( $order );
+		$net      = WC_Monilypay_Helper::get_stripe_net( $order );
+		$currency = WC_Monilypay_Helper::get_stripe_currency( $order );
 
 		if ( ! $net || ! $currency ) {
 			return;
@@ -593,8 +611,8 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 
 		<tr>
 			<td class="label stripe-payout">
-				<?php echo wc_help_tip( __( 'This represents the net total that will be credited to your Stripe bank account. This may be in the currency that is set in your Stripe account.', 'woocommerce-gateway-stripe' ) ); // wpcs: xss ok. ?>
-				<?php esc_html_e( 'Stripe Payout:', 'woocommerce-gateway-stripe' ); ?>
+				<?php echo wc_help_tip( __( 'This represents the net total that will be credited to your Stripe bank account. This may be in the currency that is set in your Stripe account.', 'woocommerce-gateway-monilypay' ) ); // wpcs: xss ok. ?>
+				<?php esc_html_e( 'Stripe Payout:', 'woocommerce-gateway-monilypay' ); ?>
 			</td>
 			<td width="1%"></td>
 			<td class="total">
@@ -615,14 +633,14 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 	 * @param bool     $force_save_source Force save the payment source.
 	 * @param mixed    $previous_error    Any error message from previous request.
 	 * @param bool     $use_order_source  Whether to use the source, which should already be attached to the order.
-	 * @throws WC_Stripe_Exception        If the payment is not accepted.
+	 * @throws WC_Monilypay_Exception        If the payment is not accepted.
 	 * @return array|void
 	 */
 	public function retry_after_error( $response, $order, $retry, $force_save_source, $previous_error, $use_order_source ) {
 		if ( ! $retry ) {
-			$localized_message = __( 'Sorry, we are unable to process your payment at this time. Please retry later.', 'woocommerce-gateway-stripe' );
+			$localized_message = __( 'Sorry, we are unable to process your payment at this time. Please retry later.', 'woocommerce-gateway-monilypay' );
 			$order->add_order_note( $localized_message );
-			throw new WC_Stripe_Exception( print_r( $response, true ), $localized_message ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.
+			throw new WC_Monilypay_Exception( print_r( $response, true ), $localized_message ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.
 		}
 
 		// Don't do anymore retries after this.
@@ -651,7 +669,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 
 		try {
 			$this->prepare_intent_for_order_pay_page();
-		} catch ( WC_Stripe_Exception $e ) {
+		} catch ( WC_Monilypay_Exception $e ) {
 			// Just show the full order pay page if there was a problem preparing the Payment Intent
 			return $gateways;
 		}
@@ -673,7 +691,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 	 * @return string the new message.
 	 */
 	public function change_no_available_methods_message() {
-		return wpautop( __( "Almost there!\n\nYour order has already been created, the only thing that still needs to be done is for you to authorize the payment with your bank.", 'woocommerce-gateway-stripe' ) );
+		return wpautop( __( "Almost there!\n\nYour order has already been created, the only thing that still needs to be done is for you to authorize the payment with your bank.", 'woocommerce-gateway-monilypay' ) );
 	}
 
 	/**
@@ -681,7 +699,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 	 *
 	 * @param WC_Order|null $order Order object, or null to get the order from the "order-pay" URL parameter
 	 *
-	 * @throws WC_Stripe_Exception
+	 * @throws WC_Monilypay_Exception
 	 * @since 4.3
 	 */
 	public function prepare_intent_for_order_pay_page( $order = null ) {
@@ -691,11 +709,11 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 		$intent = $this->get_intent_from_order( $order );
 
 		if ( ! $intent ) {
-			throw new WC_Stripe_Exception(
+			throw new WC_Monilypay_Exception(
 				'Payment Intent not found',
 				sprintf(
 					/* translators: %s is the order Id */
-					__( 'Payment Intent not found for order #%s', 'woocommerce-gateway-stripe' ),
+					__( 'Payment Intent not found for order #%s', 'woocommerce-gateway-monilypay' ),
 					$order->get_id()
 				)
 			);
@@ -704,7 +722,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 		if ( 'requires_payment_method' === $intent->status && isset( $intent->last_payment_error )
 			 && 'authentication_required' === $intent->last_payment_error->code ) {
 			$level3_data = $this->get_level3_data_from_order( $order );
-			$intent      = WC_Stripe_API::request_with_level3_data(
+			$intent      = WC_Monilypay_API::request_with_level3_data(
 				[
 					'payment_method' => $intent->last_payment_error->source->id,
 				],
@@ -714,7 +732,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 			);
 
 			if ( isset( $intent->error ) ) {
-				throw new WC_Stripe_Exception( print_r( $intent, true ), $intent->error->message );
+				throw new WC_Monilypay_Exception( print_r( $intent, true ), $intent->error->message );
 			}
 		}
 
@@ -726,7 +744,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 	 *
 	 * @param WC_Order|null $order Order object, or null to get the order from the "order-pay" URL parameter
 	 *
-	 * @throws WC_Stripe_Exception
+	 * @throws WC_Monilypay_Exception
 	 * @since 4.2
 	 */
 	public function render_payment_intent_inputs( $order = null ) {
@@ -740,11 +758,11 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 		$verification_url = add_query_arg(
 			[
 				'order'            => $order->get_id(),
-				'nonce'            => wp_create_nonce( 'wc_stripe_confirm_pi' ),
+				'nonce'            => wp_create_nonce( 'wc_monilypay_confirm_pi' ),
 				'redirect_to'      => rawurlencode( $this->get_return_url( $order ) ),
 				'is_pay_for_order' => true,
 			],
-			WC_AJAX::get_endpoint( 'wc_stripe_verify_intent' )
+			WC_AJAX::get_endpoint( 'wc_monilypay_verify_intent' )
 		);
 
 		echo '<input type="hidden" id="stripe-intent-id" value="' . esc_attr( $this->order_pay_intent->client_secret ) . '" />';
@@ -806,17 +824,17 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 		// Put the final thank you page redirect into the verification URL.
 		$query_params = [
 			'order'       => $order_id,
-			'nonce'       => wp_create_nonce( 'wc_stripe_confirm_pi' ),
+			'nonce'       => wp_create_nonce( 'wc_monilypay_confirm_pi' ),
 			'redirect_to' => rawurlencode( $result['redirect'] ),
 		];
 
-		$force_save_source_value = apply_filters( 'wc_stripe_force_save_source', false );
+		$force_save_source_value = apply_filters( 'wc_monilypay_force_save_source', false );
 
 		if ( $this->save_payment_method_requested() || $force_save_source_value ) {
 			$query_params['save_payment_method'] = true;
 		}
 
-		$verification_url = add_query_arg( $query_params, WC_AJAX::get_endpoint( 'wc_stripe_verify_intent' ) );
+		$verification_url = add_query_arg( $query_params, WC_AJAX::get_endpoint( 'wc_monilypay_verify_intent' ) );
 
 		if ( isset( $result['payment_intent_secret'] ) ) {
 			$redirect = sprintf( '#confirm-pi-%s:%s', $result['payment_intent_secret'], rawurlencode( $verification_url ) );
@@ -863,7 +881,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 
 		if ( ! $order->has_status(
 			apply_filters(
-				'wc_stripe_allowed_payment_processing_statuses',
+				'wc_monilypay_allowed_payment_processing_statuses',
 				[ 'pending', 'failed' ],
 				$order
 			)
@@ -934,8 +952,8 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 		// Load the right message and update the status.
 		$status_message = isset( $intent->last_payment_error )
 			/* translators: 1) The error message that was received from Stripe. */
-			? sprintf( __( 'Stripe SCA authentication failed. Reason: %s', 'woocommerce-gateway-stripe' ), $intent->last_payment_error->message )
-			: __( 'Stripe SCA authentication failed.', 'woocommerce-gateway-stripe' );
+			? sprintf( __( 'Stripe SCA authentication failed. Reason: %s', 'woocommerce-gateway-monilypay' ), $intent->last_payment_error->message )
+			: __( 'Stripe SCA authentication failed.', 'woocommerce-gateway-monilypay' );
 		$order->update_status( 'failed', $status_message );
 	}
 
@@ -962,16 +980,23 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 		// Load all old values before the new settings get saved.
 		$old_publishable_key      = $this->get_option( 'publishable_key' );
 		$old_secret_key           = $this->get_option( 'secret_key' );
+		$old_monilypay_key		  = $this->get_option( 'monilypay_key' );
+		$old_monilypay_account_id		  = $this->get_option( 'monilypay_account_id' );
 		$old_test_publishable_key = $this->get_option( 'test_publishable_key' );
 		$old_test_secret_key      = $this->get_option( 'test_secret_key' );
+		$old_test_monilypay_key		  = $this->get_option( 'test_monilypay_key' );
+		$old_test_monilypay_account_id		  = $this->get_option( 'test_monilypay_account_id' );
 
 		parent::process_admin_options();
 
 		// Load all old values after the new settings have been saved.
 		$new_publishable_key      = $this->get_option( 'publishable_key' );
 		$new_secret_key           = $this->get_option( 'secret_key' );
+		$new_monilypay_key           = $this->get_option( 'monilypay_key' );
+		$new_monilypay_account_id           = $this->get_option( 'monilypay_account_id' );
 		$new_test_publishable_key = $this->get_option( 'test_publishable_key' );
 		$new_test_secret_key      = $this->get_option( 'test_secret_key' );
+		$new_test_monilypay_account_id           = $this->get_option( 'test_monilypay_account_id' );
 
 		// Checks whether a value has transitioned from a non-empty value to a new one.
 		$has_changed = function( $old_value, $new_value ) {
@@ -984,8 +1009,11 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 			|| $has_changed( $old_secret_key, $new_secret_key )
 			|| $has_changed( $old_test_publishable_key, $new_test_publishable_key )
 			|| $has_changed( $old_test_secret_key, $new_test_secret_key )
+			|| $has_changed( $old_test_monilypay_key, $new_test_monilypay_key )
+			|| $has_changed( $old_monilypay_key, $new_monilypay_key )
+			|| $has_changed( $old_monilypay_account_id, $new_monilypay_account_id )
 		) {
-			update_option( 'wc_stripe_show_changed_keys_notice', 'yes' );
+			update_option( 'wc_monilypay_show_changed_keys_notice', 'yes' );
 		}
 	}
 
@@ -1000,6 +1028,22 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 	public function validate_secret_key_field( $key, $value ) {
 		$value = $this->validate_text_field( $key, $value );
 		if ( ! empty( $value ) && ! preg_match( '/^[rs]k_live_/', $value ) ) {
+			return '';
+		}
+		return $value;
+	}
+
+	public function validate_monilypay_key_field( $key, $value ) {
+		$value = $this->validate_text_field( $key, $value );
+		if ( ! empty( $value ) && ! preg_match( '/^mp_live_/', $value ) ) {
+			return '';
+		}
+		return $value;
+	}
+
+	public function validate_monilypay_account_id_field( $key, $value ) {
+		$value = $this->validate_text_field( $key, $value );
+		if ( ! empty( $value ) && ! preg_match( '/^acct_/', $value ) ) {
 			return '';
 		}
 		return $value;
@@ -1021,6 +1065,22 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 		return $value;
 	}
 
+	public function validate_test_monilypay_key_field( $key, $value ) {
+		$value = $this->validate_text_field( $key, $value );
+		if ( ! empty( $value ) && ! preg_match( '/^mp_test_/', $value ) ) {
+			return '';
+		}
+		return $value;
+	}
+
+	public function validate_test_monilypay_account_id_field( $key, $value ) {
+		$value = $this->validate_text_field( $key, $value );
+		if ( ! empty( $value ) && ! preg_match( '/^acct_/', $value ) ) {
+			return '';
+		}
+		return $value;
+	}
+
 	/**
 	 * Ensures the statement descriptor about to be saved to options does not contain any invalid characters.
 	 *
@@ -1031,7 +1091,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 	public function settings_api_sanitized_fields( $settings ) {
 		if ( is_array( $settings ) ) {
 			if ( array_key_exists( 'statement_descriptor', $settings ) ) {
-				$settings['statement_descriptor'] = WC_Stripe_Helper::clean_statement_descriptor( $settings['statement_descriptor'] );
+				$settings['statement_descriptor'] = WC_Monilypay_Helper::clean_statement_descriptor( $settings['statement_descriptor'] );
 			}
 		}
 		return $settings;
@@ -1091,10 +1151,10 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 	public function validate_account_statement_descriptor_field( $param, $value, $max_length ) {
 		// Since the value is escaped, and we are saving in a place that does not require escaping, apply stripslashes.
 		$value = trim( stripslashes( $value ) );
-		$field = __( 'customer bank statement', 'woocommerce-gateway-stripe' );
+		$field = __( 'customer bank statement', 'woocommerce-gateway-monilypay' );
 
 		if ( 'short_statement_descriptor' === $param ) {
-			$field = __( 'shortened customer bank statement', 'woocommerce-gateway-stripe' );
+			$field = __( 'shortened customer bank statement', 'woocommerce-gateway-monilypay' );
 		}
 
 		// Validation can be done with a single regex but splitting into multiple for better readability.
@@ -1110,7 +1170,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 			throw new InvalidArgumentException(
 				sprintf(
 					/* translators: %1 field name, %2 Number of the maximum characters allowed */
-					__( 'The %1$s is invalid. The bank statement must contain only Latin characters, be between 5 and %2$u characters, contain at least one letter, and not contain any of the special characters: \' " * &lt; &gt;', 'woocommerce-gateway-stripe' ),
+					__( 'The %1$s is invalid. The bank statement must contain only Latin characters, be between 5 and %2$u characters, contain at least one letter, and not contain any of the special characters: \' " * &lt; &gt;', 'woocommerce-gateway-monilypay' ),
 					$field,
 					$max_length
 				)
@@ -1126,7 +1186,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 	 * @return array Array of setting keys used for setup.
 	 */
 	public function get_required_settings_keys() {
-		return [ 'publishable_key', 'secret_key' ];
+		return [ 'publishable_key', 'secret_key', 'monilypay_key', 'monilypay_account_id' ];
 	}
 
 	/**
@@ -1151,7 +1211,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 	public function get_setup_help_text() {
 		return sprintf(
 			/* translators: %1$s Link to Stripe API details, %2$s Link to register a Stripe account */
-			__( 'Your API details can be obtained from your <a href="%1$s">Stripe account</a>. Don’t have a Stripe account? <a href="%2$s">Create one.</a>', 'woocommerce-gateway-stripe' ),
+			__( 'Your API details can be obtained from your <a href="%1$s">Stripe account</a>. Don’t have a Stripe account? <a href="%2$s">Create one.</a>', 'woocommerce-gateway-monilypay' ),
 			'https://dashboard.stripe.com/apikeys',
 			'https://dashboard.stripe.com/register'
 		);
@@ -1163,7 +1223,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 	 * @return bool
 	 */
 	public function needs_setup() {
-		return ! $this->get_option( 'publishable_key' ) || ! $this->get_option( 'secret_key' );
+		return ! $this->get_option( 'publishable_key' ) || ! $this->get_option( 'secret_key' ) || ! $this->get_option( 'monilypay_key' ) || ! $this->get_option( 'monilypay_account_id' );
 	}
 
 	/**
@@ -1189,12 +1249,16 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 			return;
 		}
 
-		if ( ! empty( $settings['publishable_key'] ) && ! empty( $settings['secret_key'] ) ) {
-			if ( strpos( $settings['publishable_key'], 'pk_test_' ) === 0 || strpos( $settings['secret_key'], 'sk_test_' ) === 0 ) {
+		if ( ! empty( $settings['publishable_key'] ) && ! empty( $settings['secret_key'] )  && ! empty( $settings['monilypay_key'] ) && ! empty( $settings['monilypay_account_id'] ) ) {
+			if ( strpos( $settings['publishable_key'], 'pk_test_' ) === 0 || strpos( $settings['secret_key'], 'sk_test_' ) === 0 || strpos( $settings['monilypay_key'], 'mp_test_' ) === 0|| strpos( $settings['monilypay_account_id'], 'acct_' ) === 0 ) {
 				$settings['test_publishable_key'] = $settings['publishable_key'];
 				$settings['test_secret_key']      = $settings['secret_key'];
+				$settings['test_monilypay_key']      = $settings['monilypay_key'];
+				$settings['test_monilypay_account_id']      = $settings['monilypay_account_id'];
 				unset( $settings['publishable_key'] );
 				unset( $settings['secret_key'] );
+				unset( $settings['monilypay_key'] );
+				unset( $settings['monilypay_account_id'] );
 				$settings['testmode'] = 'yes';
 			} else {
 				$settings['testmode'] = 'no';

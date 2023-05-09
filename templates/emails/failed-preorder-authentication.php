@@ -16,8 +16,8 @@ $billing_phone = $order->get_billing_phone();
 	echo wp_kses(
 		sprintf(
 			// translators: 1) is a link to the payment re-authentication URL.
-			_x( 'Your pre-order is now available, but payment cannot be completed automatically. %1$s', 'In failed SCA authentication for a pre-order.', 'woocommerce-gateway-stripe' ),
-			'<a href="' . esc_url( $authorization_url ) . '">' . esc_html__( 'Authorize the payment now &raquo;', 'woocommerce-gateway-stripe' ) . '</a>'
+			_x( 'Your pre-order is now available, but payment cannot be completed automatically. %1$s', 'In failed SCA authentication for a pre-order.', 'woocommerce-gateway-monilypay' ),
+			'<a href="' . esc_url( $authorization_url ) . '">' . esc_html__( 'Authorize the payment now &raquo;', 'woocommerce-gateway-monilypay' ) . '</a>'
 		),
 		[ 'a' => [ 'href' => true ] ]
 	);
@@ -54,7 +54,7 @@ do_action( 'woocommerce_email_customer_details', $order, $sent_to_admin, $plain_
 
 ?>
 <p>
-<?php esc_html_e( 'Thanks for shopping with us.', 'woocommerce-gateway-stripe' ); ?>
+<?php esc_html_e( 'Thanks for shopping with us.', 'woocommerce-gateway-monilypay' ); ?>
 </p>
 <?php
 

@@ -20,7 +20,7 @@ export function* getPaymentGateway() {
 		yield dispatch( 'core/notices' ).createErrorNotice(
 			__(
 				'Error retrieving payment gateway settings.',
-				'woocommerce-gateway-stripe'
+				'woocommerce-gateway-monilypay'
 			)
 		);
 	}

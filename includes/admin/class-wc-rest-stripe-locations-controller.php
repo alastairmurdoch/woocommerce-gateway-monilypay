@@ -1,6 +1,6 @@
 <?php
 /**
- * Class WC_REST_Stripe_Locations_Controller
+ * Class WC_REST_Monilypay_Locations_Controller
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -8,14 +8,14 @@ defined( 'ABSPATH' ) || exit;
 /**
  * REST controller for terminal locations.
  */
-class WC_REST_Stripe_Locations_Controller extends WC_Stripe_REST_Base_Controller {
+class WC_REST_Monilypay_Locations_Controller extends WC_Monilypay_REST_Base_Controller {
 
 	/**
 	 * Endpoint path.
 	 *
 	 * @var string
 	 */
-	protected $rest_base = 'wc_stripe/terminal/locations';
+	protected $rest_base = 'wc_monilypay/terminal/locations';
 
 	/**
 	 * Configure REST API routes.
@@ -118,7 +118,7 @@ class WC_REST_Stripe_Locations_Controller extends WC_Stripe_REST_Base_Controller
 	 */
 	public function create_location( $request ) {
 		try {
-			$response = WC_Stripe_API::request(
+			$response = WC_Monilypay_API::request(
 				[
 					'display_name' => $request['display_name'],
 					'address'      => $request['address'],
@@ -126,7 +126,7 @@ class WC_REST_Stripe_Locations_Controller extends WC_Stripe_REST_Base_Controller
 				'terminal/locations'
 			);
 			return rest_ensure_response( $response );
-		} catch ( WC_Stripe_Exception $e ) {
+		} catch ( WC_Monilypay_Exception $e ) {
 			return rest_ensure_response( new WP_Error( 'stripe_error', $e->getMessage() ) );
 		}
 	}
@@ -139,7 +139,7 @@ class WC_REST_Stripe_Locations_Controller extends WC_Stripe_REST_Base_Controller
 	public function get_all_locations( $request ) {
 		try {
 			return rest_ensure_response( $this->fetch_locations() );
-		} catch ( WC_Stripe_Exception $e ) {
+		} catch ( WC_Monilypay_Exception $e ) {
 			return rest_ensure_response( new WP_Error( 'stripe_error', $e->getMessage() ) );
 		}
 	}
@@ -151,9 +151,9 @@ class WC_REST_Stripe_Locations_Controller extends WC_Stripe_REST_Base_Controller
 	 */
 	public function delete_location( $request ) {
 		try {
-			$response = WC_Stripe_API::request( [], 'terminal/locations/' . urlencode( $request['location_id'] ), 'DELETE' );
+			$response = WC_Monilypay_API::request( [], 'terminal/locations/' . urlencode( $request['location_id'] ), 'DELETE' );
 			return rest_ensure_response( $response );
-		} catch ( WC_Stripe_Exception $e ) {
+		} catch ( WC_Monilypay_Exception $e ) {
 			return rest_ensure_response( new WP_Error( 'stripe_error', $e->getMessage() ) );
 		}
 	}
@@ -165,9 +165,9 @@ class WC_REST_Stripe_Locations_Controller extends WC_Stripe_REST_Base_Controller
 	 */
 	public function get_location( $request ) {
 		try {
-			$response = WC_Stripe_API::request( [], 'terminal/locations/' . urlencode( $request['location_id'] ), 'GET' );
+			$response = WC_Monilypay_API::request( [], 'terminal/locations/' . urlencode( $request['location_id'] ), 'GET' );
 			return rest_ensure_response( $response );
-		} catch ( WC_Stripe_Exception $e ) {
+		} catch ( WC_Monilypay_Exception $e ) {
 			return rest_ensure_response( new WP_Error( 'stripe_error', $e->getMessage() ) );
 		}
 	}
@@ -223,7 +223,7 @@ class WC_REST_Stripe_Locations_Controller extends WC_Stripe_REST_Base_Controller
 			}
 
 			// Create new location if no location matches display name and address.
-			$response = WC_Stripe_API::request(
+			$response = WC_Monilypay_API::request(
 				[
 					'display_name' => $store_hostname,
 					'address'      => $address,
@@ -231,7 +231,7 @@ class WC_REST_Stripe_Locations_Controller extends WC_Stripe_REST_Base_Controller
 				'terminal/locations'
 			);
 			return rest_ensure_response( $response );
-		} catch ( WC_Stripe_Exception $e ) {
+		} catch ( WC_Monilypay_Exception $e ) {
 			return rest_ensure_response( new WP_Error( 'stripe_error', $e->getMessage() ) );
 		}
 	}
@@ -250,9 +250,9 @@ class WC_REST_Stripe_Locations_Controller extends WC_Stripe_REST_Base_Controller
 			$body['address'] = $request['address'];
 		}
 		try {
-			$response = WC_Stripe_API::request( $body, 'terminal/locations/' . urlencode( $request['location_id'] ), 'POST' );
+			$response = WC_Monilypay_API::request( $body, 'terminal/locations/' . urlencode( $request['location_id'] ), 'POST' );
 			return rest_ensure_response( $response );
-		} catch ( WC_Stripe_Exception $e ) {
+		} catch ( WC_Monilypay_Exception $e ) {
 			return rest_ensure_response( new WP_Error( 'stripe_error', $e->getMessage() ) );
 		}
 	}
@@ -261,7 +261,7 @@ class WC_REST_Stripe_Locations_Controller extends WC_Stripe_REST_Base_Controller
 	 * Fetch terminal locations from Stripe API.
 	 */
 	private function fetch_locations() {
-		$response = (array) WC_Stripe_API::request( [], 'terminal/locations', 'GET' );
+		$response = (array) WC_Monilypay_API::request( [], 'terminal/locations', 'GET' );
 		return $response['data'];
 	}
 }

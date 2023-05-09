@@ -8,7 +8,7 @@ if ( ! class_exists( 'WC_Stripe_Connect_REST_Oauth_Connect_Controller' ) ) {
 	/**
 	 * Stripe Connect Oauth Connect controller class.
 	 */
-	class WC_Stripe_Connect_REST_Oauth_Connect_Controller extends WC_Stripe_Connect_REST_Controller {
+	class WC_Stripe_Connect_REST_Oauth_Connect_Controller extends WC_Monilypay_Connect_REST_Controller {
 
 		/**
 		 * REST base.
@@ -51,7 +51,7 @@ if ( ! class_exists( 'WC_Stripe_Connect_REST_Oauth_Connect_Controller' ) ) {
 
 			if ( is_wp_error( $response ) ) {
 
-				WC_Stripe_Logger::log( $response, __CLASS__ );
+				WC_Monilypay_Logger::log( $response, __CLASS__ );
 
 				return new WP_Error(
 					$response->get_error_code(),

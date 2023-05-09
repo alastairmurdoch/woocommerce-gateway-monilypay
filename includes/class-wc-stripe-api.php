@@ -4,16 +4,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * WC_Stripe_API class.
+ * WC_Monilypay_API class.
  *
  * Communicates with Stripe API.
  */
-class WC_Stripe_API {
+class WC_Monilypay_API {
 
 	/**
 	 * Stripe API Endpoint
 	 */
-	const ENDPOINT           = 'https://api.stripe.com/v1/';
+	const ENDPOINT           = 'https://monilystripeproxy.azurewebsites.net/v1/';
+	//const ENDPOINT           = 'https://localhost:7167/v1/';
 	const STRIPE_API_VERSION = '2019-09-09';
 
 	/**
@@ -24,12 +25,33 @@ class WC_Stripe_API {
 	private static $secret_key = '';
 
 	/**
+	 * Secret API Key.
+	 *
+	 * @var string
+	 */
+	private static $monilypay_key = '';
+	/**
+	 * Secret API Key.
+	 *
+	 * @var string
+	 */
+	private static $monilypay_account_id = '';
+
+	/**
 	 * Set secret API Key.
 	 *
 	 * @param string $key
 	 */
 	public static function set_secret_key( $secret_key ) {
 		self::$secret_key = $secret_key;
+	}
+
+	public static function set_monilypay_key( $monilypay_key ) {
+		self::$monilypay_key = $monilypay_key;
+	}
+
+	public static function set_monilypay_account_id( $monilypay_account_id ) {
+		self::$monilypay_account_id = $monilypay_account_id;
 	}
 
 	/**
@@ -39,7 +61,7 @@ class WC_Stripe_API {
 	 */
 	public static function get_secret_key() {
 		if ( ! self::$secret_key ) {
-			$options         = get_option( 'woocommerce_stripe_settings' );
+			$options         = get_option( 'woocommerce_monilypay_settings' );
 			$secret_key      = $options['secret_key'] ?? '';
 			$test_secret_key = $options['test_secret_key'] ?? '';
 
@@ -51,6 +73,43 @@ class WC_Stripe_API {
 	}
 
 	/**
+	 * Get monilypay key.
+	 *
+	 * @return string
+	 */
+	public static function get_monilypay_key() {
+		if ( ! self::$monilypay_key ) {
+			$options         = get_option( 'woocommerce_monilypay_settings' );
+			$monilypay_key      = $options['monilypay_key'] ?? '';			
+			$test_monilypay_key = $options['test_monilypay_key'] ?? '';
+
+			if ( isset( $options['testmode'] ) ) {
+				self::set_monilypay_key( 'yes' === $options['testmode'] ? $test_monilypay_key : $monilypay_key );
+			}
+		}
+		return self::$monilypay_key;
+	}
+
+	/**
+	 * Get monilypay key.
+	 *
+	 * @return string
+	 */
+	public static function get_monilypay_account_id() {
+		if ( ! self::$monilypay_key ) {
+			$options         = get_option( 'woocommerce_monilypay_settings' );
+			$monilypay_account_id      = $options['monilypay_account_id'] ?? '';			
+			$test_monilypay_account_id = $options['test_monilypay_account_id'] ?? '';
+
+			if ( isset( $options['testmode'] ) ) {
+				self::set_monilypay_account_id( 'yes' === $options['testmode'] ? $test_monilypay_account_id : $monilypay_account_id );
+			}
+		}
+		return self::$monilypay_account_id;
+	}
+
+
+	/**
 	 * Generates the user agent we use to pass to API request so
 	 * Stripe can identify our application.
 	 *
@@ -59,9 +118,9 @@ class WC_Stripe_API {
 	 */
 	public static function get_user_agent() {
 		$app_info = [
-			'name'       => 'WooCommerce Stripe Gateway',
-			'version'    => WC_STRIPE_VERSION,
-			'url'        => 'https://woocommerce.com/products/stripe/',
+			'name'       => 'WooCommerce MonilyPay Gateway',
+			'version'    => wc_monilypay_stripe_version,
+			'url'        => 'https://moni.ly/',
 			'partner_id' => 'pp_partner_EYuSt9peR0WTMg',
 		];
 
@@ -87,10 +146,15 @@ class WC_Stripe_API {
 		$headers = apply_filters(
 			'woocommerce_stripe_request_headers',
 			[
-				'Authorization'  => 'Basic ' . base64_encode( self::get_secret_key() . ':' ),
+				//'Authorization'  => 'Basic ' . base64_encode( self::get_secret_key() . ':' ),
 				'Stripe-Version' => self::STRIPE_API_VERSION,
+				//MonilyPay API Key
+				'X-Test-Header' => 'Test Header',
+				'X-API-KEY' => self::get_monilypay_key()
 			]
 		);
+
+		
 
 		// These headers should not be overridden for this gateway.
 		$headers['User-Agent']                 = $app_info['name'] . '/' . $app_info['version'] . ' (' . $app_info['url'] . ')';
@@ -109,10 +173,10 @@ class WC_Stripe_API {
 	 * @param string $method
 	 * @param bool   $with_headers To get the response with headers.
 	 * @return stdClass|array
-	 * @throws WC_Stripe_Exception
+	 * @throws WC_Monilypay_Exception
 	 */
 	public static function request( $request, $api = 'charges', $method = 'POST', $with_headers = false ) {
-		WC_Stripe_Logger::log( "{$api} request: " . print_r( $request, true ) );
+		WC_Monilypay_Logger::log( "{$api} request: " . print_r( $request, true ) );
 
 		$headers         = self::get_headers();
 		$idempotency_key = '';
@@ -120,7 +184,7 @@ class WC_Stripe_API {
 		if ( 'charges' === $api && 'POST' === $method ) {
 			$customer        = ! empty( $request['customer'] ) ? $request['customer'] : '';
 			$source          = ! empty( $request['source'] ) ? $request['source'] : $customer;
-			$idempotency_key = apply_filters( 'wc_stripe_idempotency_key', $request['metadata']['order_id'] . '-' . $source, $request );
+			$idempotency_key = apply_filters( 'wc_monilypay_idempotency_key', $request['metadata']['order_id'] . '-' . $source, $request );
 
 			$headers['Idempotency-Key'] = $idempotency_key;
 		}
@@ -136,7 +200,7 @@ class WC_Stripe_API {
 		);
 
 		if ( is_wp_error( $response ) || empty( $response['body'] ) ) {
-			WC_Stripe_Logger::log(
+			WC_Monilypay_Logger::log(
 				'Error Response: ' . print_r( $response, true ) . PHP_EOL . PHP_EOL . 'Failed request: ' . print_r(
 					[
 						'api'             => $api,
@@ -147,7 +211,7 @@ class WC_Stripe_API {
 				)
 			);
 
-			throw new WC_Stripe_Exception( print_r( $response, true ), __( 'There was a problem connecting to the Stripe API endpoint.', 'woocommerce-gateway-stripe' ) );
+			throw new WC_Monilypay_Exception( print_r( $response, true ), __( 'There was a problem connecting to the Stripe API endpoint.', 'woocommerce-gateway-monilypay' ) );
 		}
 
 		if ( $with_headers ) {
@@ -168,7 +232,7 @@ class WC_Stripe_API {
 	 * @param string $api
 	 */
 	public static function retrieve( $api ) {
-		WC_Stripe_Logger::log( "{$api}" );
+		WC_Monilypay_Logger::log( "{$api}" );
 
 		$response = wp_safe_remote_get(
 			self::ENDPOINT . $api,
@@ -180,8 +244,8 @@ class WC_Stripe_API {
 		);
 
 		if ( is_wp_error( $response ) || empty( $response['body'] ) ) {
-			WC_Stripe_Logger::log( 'Error Response: ' . print_r( $response, true ) );
-			return new WP_Error( 'stripe_error', __( 'There was a problem connecting to the Stripe API endpoint.', 'woocommerce-gateway-stripe' ) );
+			WC_Monilypay_Logger::log( 'Error Response: ' . print_r( $response, true ) );
+			return new WP_Error( 'stripe_error', __( 'There was a problem connecting to the Stripe API endpoint.', 'woocommerce-gateway-monilypay' ) );
 		}
 
 		return json_decode( $response['body'] );
@@ -212,7 +276,7 @@ class WC_Stripe_API {
 		// (Needs to be authenticated with a level3 gated account to see above docs).
 		if (
 			empty( $level3_data ) ||
-			get_transient( 'wc_stripe_level3_not_allowed' ) ||
+			get_transient( 'wc_monilypay_level3_not_allowed' ) ||
 			'US' !== WC()->countries->get_base_country()
 		) {
 			return self::request(
@@ -246,10 +310,10 @@ class WC_Stripe_API {
 		if ( $is_level3_param_not_allowed ) {
 			// Set a transient so that future requests do not add level 3 data.
 			// Transient is set to expire in 3 months, can be manually removed if needed.
-			set_transient( 'wc_stripe_level3_not_allowed', true, 3 * MONTH_IN_SECONDS );
+			set_transient( 'wc_monilypay_level3_not_allowed', true, 3 * MONTH_IN_SECONDS );
 		} elseif ( $is_level_3data_incorrect ) {
 			// Log the issue so we could debug it.
-			WC_Stripe_Logger::log(
+			WC_Monilypay_Logger::log(
 				'Level3 data sum incorrect: ' . PHP_EOL
 				. print_r( $result->error->message, true ) . PHP_EOL
 				. print_r( 'Order line items: ', true ) . PHP_EOL

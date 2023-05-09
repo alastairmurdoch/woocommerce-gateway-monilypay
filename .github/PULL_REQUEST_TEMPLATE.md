@@ -33,8 +33,8 @@ Testing instructions: How should this be tested and how can a reviewer test the 
 <!--
 Please follow the following guidelines when writing testing instructions:
 
-- Include screenshots if there is no similar flow in the critical flows: https://github.com/woocommerce/woocommerce-gateway-stripe/wiki/Critical-flows
-- Assume instructions will be copied over to the Release Testing Instructions wiki page: https://github.com/woocommerce/woocommerce-gateway-stripe/wiki/Release-Testing-Instructions
+- Include screenshots if there is no similar flow in the critical flows: https://github.com/woocommerce/woocommerce-gateway-monilypay/wiki/Critical-flows
+- Assume instructions will be copied over to the Release Testing Instructions wiki page: https://github.com/woocommerce/woocommerce-gateway-monilypay/wiki/Release-Testing-Instructions
 - Assume instructions will be followed by external testers.
 - Assume tester does not have intimate knowledge of Stripe.
 -->
@@ -47,4 +47,4 @@ Please follow the following guidelines when writing testing instructions:
 
 **Post merge**
 
--   [ ] Added testing instructions to the [Release Testing Instructions wiki page](https://github.com/woocommerce/woocommerce-gateway-stripe/wiki/Release-Testing-Instructions) (or does not apply)
+-   [ ] Added testing instructions to the [Release Testing Instructions wiki page](https://github.com/woocommerce/woocommerce-gateway-monilypay/wiki/Release-Testing-Instructions) (or does not apply)
