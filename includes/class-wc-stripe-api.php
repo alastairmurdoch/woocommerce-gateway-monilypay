@@ -13,8 +13,8 @@ class WC_Monilypay_API {
 	/**
 	 * Stripe API Endpoint
 	 */
-	const ENDPOINT           = 'https://monilystripeproxy.azurewebsites.net/v1/';
-	//const ENDPOINT           = 'https://localhost:7167/v1/';
+	//const ENDPOINT           = 'https://monilystripeproxy.azurewebsites.net/v1/';
+	const ENDPOINT           = 'https://localhost:7167/v1/';
 	const STRIPE_API_VERSION = '2019-09-09';
 
 	/**
@@ -120,14 +120,13 @@ class WC_Monilypay_API {
 		$app_info = [
 			'name'       => 'WooCommerce MonilyPay Gateway',
 			'version'    => wc_monilypay_stripe_version,
-			'url'        => 'https://moni.ly/',
-			'partner_id' => 'pp_partner_EYuSt9peR0WTMg',
+			'url'        => 'https://moni.ly/'			
 		];
 
 		return [
 			'lang'         => 'php',
 			'lang_version' => phpversion(),
-			'publisher'    => 'woocommerce',
+			'publisher'    => 'Monily',
 			'uname'        => function_exists( 'php_uname' ) ? php_uname() : PHP_OS,
 			'application'  => $app_info,
 		];
@@ -149,7 +148,6 @@ class WC_Monilypay_API {
 				//'Authorization'  => 'Basic ' . base64_encode( self::get_secret_key() . ':' ),
 				'Stripe-Version' => self::STRIPE_API_VERSION,
 				//MonilyPay API Key
-				'X-Test-Header' => 'Test Header',
 				'X-API-KEY' => self::get_monilypay_key()
 			]
 		);

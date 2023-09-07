@@ -91,7 +91,7 @@ const MonilyPayKey = () => {
 		<TextControl
 			label={ __( 'Live MonilyPay key', 'woocommerce-gateway-monilypay' ) }
 			help={ __(
-				'Only values starting with "mk_live_" will be saved.',
+				'Only values starting with "mp_live_" will be saved.',
 				'woocommerce-gateway-monilypay'
 			) }
 			value={ value }
@@ -151,7 +151,7 @@ const TestMonilypayKey = () => {
 		<TextControl
 			label={ __( 'Test MonilyPay key', 'woocommerce-gateway-monilypay' ) }
 			help={ __(
-				'Only values starting with "mk_test_" will be saved.',
+				'Only values starting with "mp_test_" will be saved.',
 				'woocommerce-gateway-monilypay'
 			) }
 			value={ value }

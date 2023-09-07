@@ -13,6 +13,9 @@ class WC_Monilypay_Apple_Pay_Registration {
 
 	const DOMAIN_ASSOCIATION_FILE_NAME = 'apple-developer-merchantid-domain-association';
 	const DOMAIN_ASSOCIATION_FILE_DIR  = '.well-known';
+	//const ENDPOINT           = 'https://monilystripeproxy.azurewebsites.net/v1/';
+	const ENDPOINT           = 'https://localhost:7167/v1/';
+	const STRIPE_API_VERSION = '2019-09-09';
 
 	/**
 	 * Enabled.
@@ -101,6 +104,17 @@ class WC_Monilypay_Apple_Pay_Registration {
 	 */
 	private function get_secret_key() {
 		return $this->get_option( 'secret_key' );
+	}
+
+	/**
+	 * Gets the Stripe secret key for the current mode.
+	 *
+	 * @since 4.5.3
+	 * @version 4.9.0
+	 * @return string Secret key.
+	 */
+	private function get_monilypay_key() {
+		return $this->get_option( 'monilypay_key' );
 	}
 
 	/**
@@ -232,7 +246,7 @@ class WC_Monilypay_Apple_Pay_Registration {
 			throw new Exception( __( 'Unable to verify domain - missing secret key.', 'woocommerce-gateway-monilypay' ) );
 		}
 
-		$endpoint = 'https://api.stripe.com/v1/apple_pay/domains';
+		$endpoint = self::ENDPOINT . 'apple_pay/domains';
 
 		$data = [
 			'domain_name' => $this->domain_name,
@@ -240,7 +254,8 @@ class WC_Monilypay_Apple_Pay_Registration {
 
 		$headers = [
 			'User-Agent'    => 'WooCommerce Stripe Apple Pay',
-			'Authorization' => 'Bearer ' . $secret_key,
+			//'Authorization' => 'Bearer ' . $secret_key,
+			'X-API-KEY' => self::get_monilypay_key()
 		];
 
 		$response = wp_remote_post(

@@ -215,7 +215,7 @@ class WC_REST_Monilypay_Account_Keys_Controller extends WC_Monilypay_REST_Base_C
 			$request,
 			$key,
 			[
-				'regex'         => '/^mk_test_/',
+				'regex'         => '/^mp_test_/',
 				'error_message' => __( 'The "Test MonilyPay Key" should start with "sk_test" or "rk_test", enter the correct key.', 'woocommerce-gateway-monilypay' ),
 			]
 		);

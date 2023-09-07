@@ -80,7 +80,7 @@ class WC_Monilypay_UPE_Payment_Method_Link extends WC_Monilypay_UPE_Payment_Meth
 	 */
 	public function is_available() {
 		//if merchant is outside US, Link payment method should not be available
-		$cached_account_data = WC_Stripe::get_instance()->account->get_cached_account_data();
+		$cached_account_data = WC_Monilypay::get_instance()->account->get_cached_account_data();
 		$account_country     = $cached_account_data['country'] ?? null;
 
 		return 'US' === $account_country && parent::is_available();

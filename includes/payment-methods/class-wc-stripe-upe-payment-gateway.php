@@ -485,7 +485,7 @@ class WC_Monilypay_UPE_Payment_Gateway extends WC_Gateway_Monilypay {
 			}
 		} catch ( Exception $e ) {
 			// Output the error message.
-			WC_Monilypay_Logger::log( 'Error: ' . $e->getMessage() );
+ 				WC_Monilypay_Logger::log( 'Error: ' . $e->getMessage() );
 			?>
 			<div>
 				<?php
