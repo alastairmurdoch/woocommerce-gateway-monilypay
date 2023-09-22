@@ -608,10 +608,10 @@ class WC_Gateway_Monilypay extends WC_Monilypay_Payment_Gateway {
 		}
 
 		?>
-
+<!--
 		<tr>
 			<td class="label stripe-payout">
-				<?php echo wc_help_tip( __( 'This represents the net total that will be credited to your Stripe bank account. This may be in the currency that is set in your Stripe account.', 'woocommerce-gateway-monilypay' ) ); // wpcs: xss ok. ?>
+				<?php echo wc_help_tip( __( 'This represents the net total that will be credited to your bank account. This may be in the currency that is set in your Stripe account.', 'woocommerce-gateway-monilypay' ) ); // wpcs: xss ok. ?>
 				<?php esc_html_e( 'Stripe Payout:', 'woocommerce-gateway-monilypay' ); ?>
 			</td>
 			<td width="1%"></td>
@@ -619,7 +619,7 @@ class WC_Gateway_Monilypay extends WC_Monilypay_Payment_Gateway {
 				<?php echo wc_price( $net, [ 'currency' => $currency ] ); // wpcs: xss ok. ?>
 			</td>
 		</tr>
-
+	-->
 		<?php
 	}
 

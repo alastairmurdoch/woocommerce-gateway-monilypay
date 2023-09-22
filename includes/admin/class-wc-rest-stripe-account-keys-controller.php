@@ -179,8 +179,8 @@ class WC_REST_Monilypay_Account_Keys_Controller extends WC_Monilypay_REST_Base_C
 			$request,
 			$key,
 			[
-				'regex'         => '/^mk_live_/',
-				'error_message' => __( 'The "Live MonilyPay Key" should start with "mk_live", enter the correct key.', 'woocommerce-gateway-monilypay' ),
+				'regex'         => '/^mp_live_/',
+				'error_message' => __( 'The "Live MonilyPay Key" should start with "mp_live", enter the correct key.', 'woocommerce-gateway-monilypay' ),
 			]
 		);
 	}

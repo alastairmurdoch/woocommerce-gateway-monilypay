@@ -347,9 +347,9 @@ abstract class WC_Monilypay_Payment_Gateway extends WC_Payment_Gateway_CC {
 	 */
 	public function get_transaction_url( $order ) {
 		if ( $this->testmode ) {
-			$this->view_transaction_url = 'https://monilypay.azurewebsites.net/payments/%s';
+			$this->view_transaction_url = 'https://monilypay.azurewebsites.net/Dashboard/Details/%s';
 		} else {
-			$this->view_transaction_url = 'https://monilypay.azurewebsites.net/payments/%s';
+			$this->view_transaction_url = 'https://monilypay.azurewebsites.net/Dashboard/Details/%s';
 		}
 
 		return parent::get_transaction_url( $order );
