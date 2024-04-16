@@ -37,18 +37,18 @@ class WC_Monilypay_Payment_Gateways_Controller {
 			];
 
 		wp_register_script(
-			'woocommerce_stripe_payment_gateways_page',
+			'woocommerce_monilypay_payment_gateways_page',
 			plugins_url( 'build/payment_gateways.js', WC_MONILYPAY_MAIN_FILE ),
 			$payment_gateways_script_asset['dependencies'],
 			$payment_gateways_script_asset['version'],
 			true
 		);
 		wp_set_script_translations(
-			'woocommerce_stripe_payment_gateways_page',
+			'woocommerce_monilypay_payment_gateways_page',
 			'woocommerce-gateway-monilypay'
 		);
 		wp_register_style(
-			'woocommerce_stripe_payment_gateways_page',
+			'woocommerce_monilypay_payment_gateways_page',
 			plugins_url( 'build/payment_gateways.css', WC_MONILYPAY_MAIN_FILE ),
 			[ 'wc-components' ],
 			$payment_gateways_script_asset['version']
@@ -67,8 +67,8 @@ class WC_Monilypay_Payment_Gateways_Controller {
 		);
 
 		if ( $is_payment_methods_page ) {
-			wp_enqueue_script( 'woocommerce_stripe_payment_gateways_page' );
-			wp_enqueue_style( 'woocommerce_stripe_payment_gateways_page' );
+			wp_enqueue_script( 'woocommerce_monilypay_payment_gateways_page' );
+			wp_enqueue_style( 'woocommerce_monilypay_payment_gateways_page' );
 		}
 	}
 
@@ -76,8 +76,8 @@ class WC_Monilypay_Payment_Gateways_Controller {
 	 * Adds a container to the "payment gateways" page.
 	 * This is where the "Are you sure you want to disable Stripe?" confirmation dialog is rendered.
 	 */
-	public function wc_stripe_gateway_container() {
-		?><div id="wc-stripe-payment-gateways-container" />
+	public function wc_monilypay_gateway_container() {
+		?><div id="wc-monilypay-payment-gateways-container" />
 		<?php
 	}
 

@@ -227,7 +227,7 @@ final class WC_Monilypay_Blocks_Support extends AbstractPaymentMethodType {
 		$js_configuration = [];
 
 		$gateways = WC()->payment_gateways->get_available_payment_gateways();
-		if ( isset( $gateways['mnoilypay'] ) ) {
+		if ( isset( $gateways['monilypay'] ) ) {
 			$js_configuration = $gateways['monilypay']->javascript_params();
 		}
 
