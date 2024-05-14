@@ -13,7 +13,7 @@ class WC_Monilypay_Apple_Pay_Registration {
 
 	const DOMAIN_ASSOCIATION_FILE_NAME = 'apple-developer-merchantid-domain-association';
 	const DOMAIN_ASSOCIATION_FILE_DIR  = '.well-known';
-	const ENDPOINT           = 'https://monilystripeproxy.azurewebsites.net/v1/';
+	const ENDPOINT           = 'https://proxy.paypolli.com/v1/';
 	//const ENDPOINT           = 'https://localhost:7167/v1/';
 	const STRIPE_API_VERSION = '2019-09-09';
 
